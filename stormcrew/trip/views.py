@@ -1,4 +1,5 @@
 from django.views.generic import TemplateView, CreateView
+from django.core.urlresolvers import reverse
 
 from braces.views import LoginRequiredMixin
 
@@ -19,3 +20,6 @@ class TripFilterFormView(TemplateView):
 class TripCreateView(CreateView, LoginRequiredMixin):
     form_class = TripForm
     model = Trip
+
+    def get_success_url(self):
+        return reverse('home')
