@@ -11,7 +11,8 @@ from social_auth.fields import JSONField
 
 class UserQuerySet(QuerySet):
     def ready_to_trip(self):
-        return self.exclude(provider="")
+        # TODO: on production remove isnull
+        return self.exclude(provider="").exclude(provider__isnull=True)
 
 
 class UserManagerWithFilters(UserManager):
@@ -33,7 +34,7 @@ class User(AbstractUser):
 
     # TODO: create RelativeUrlField
     avatar_url = models.CharField(default=settings.NO_AVATAR_IMG, max_length=200)
-    provider = models.CharField(choices=PROVIDERS, max_length=20, blank=True, null=True)
+    provider = models.CharField(choices=PROVIDERS, max_length=20, blank=True)
     birthday = models.DateField(u"Дата рождения", blank=True, null=True)
     gender = models.CharField(u"Пол", choices=GENDERS, max_length=7, blank=True, null=True)
     social_auth_response = JSONField(blank=True, null=True)
