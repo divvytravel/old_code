@@ -22,3 +22,12 @@ urlpatterns = patterns('',
     # Your stuff: custom urls go here
 
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+if settings.OPENSHIFT_GEAR_NAME is not None:
+    urlpatterns += patterns('django.contrib.staticfiles.views',
+        url(r'^static/(?P<path>.*)$', 'serve',
+            {'document_root': settings.STATIC_ROOT, 'insecure': True}),
+        url(r'^media/(?P<path>.*)$', 'serve',
+            {'document_root': settings.MEDIA_ROOT, 'insecure': True}),
+    )

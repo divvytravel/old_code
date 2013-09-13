@@ -241,7 +241,9 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 
 
 ################## PRODUCTION SETTINGS
-if DEBUG and not os.environ.get('OPENSHIFT_GEAR_NAME', None):
+OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
+
+if DEBUG and not OPENSHIFT_GEAR_NAME:
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
