@@ -21,3 +21,18 @@
     </div>
 
 {% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script type="text/javascript">
+        $('#id_start_date').datepicker({
+          format: 'dd.mm.yyyy',
+          weekStart: 1
+        });
+        $('#id_end_date').datepicker({
+          format: 'dd.mm.yyyy',
+          weekStart: 1
+        });
+    </script>
+{% endblock javascript %}
