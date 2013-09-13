@@ -33,7 +33,6 @@
     {% endblock %}
 
     {% block angular %}
-      <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     {% endblock %}
 
   </head>
@@ -48,6 +47,7 @@
         </ul>
         <ul class="nav navbar-nav pull-right">
           {% if request.user.is_authenticated %}
+            <li><a href="{% url 'trip_create' %}">Создать поездку</a></li>
             <li><a href="{% url 'users:profile' %}">Профиль</a></li>
             <li><a href="{% url 'users:logout' %}">Выйти</a></li>
           {% else %}

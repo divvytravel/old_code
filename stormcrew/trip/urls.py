@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 
-from .views import TripFilterFormView
+from .views import TripCreateView
 
 urlpatterns = patterns('',
-    url(r'^$', TripFilterFormView.as_view(), name='home'),
+    url(r'^create/$', TripCreateView.as_view(), name='trip_create'),
 )

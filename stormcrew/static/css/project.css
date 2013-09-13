@@ -27,3 +27,13 @@
 .avatar {
     height: 185px;
 }
+
+
+.form-trip input[type="text"],
+.form-trip select {
+    width: 300px !important;
+}
+
+.form-trip textarea {
+    width: 500px !important;
+}

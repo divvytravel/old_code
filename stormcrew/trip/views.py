@@ -1,5 +1,10 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+
+from braces.views import LoginRequiredMixin
+
 from users.models import User
+from .forms import TripForm
+from .models import Trip
 
 
 class TripFilterFormView(TemplateView):
@@ -11,3 +16,6 @@ class TripFilterFormView(TemplateView):
         }
 
 
+class TripCreateView(CreateView, LoginRequiredMixin):
+    form_class = TripForm
+    model = Trip

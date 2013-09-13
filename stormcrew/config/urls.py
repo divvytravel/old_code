@@ -4,13 +4,15 @@ from __future__ import unicode_literals
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
-
-# Uncomment the next two lines to enable the admin:
 from django.contrib import admin
+
+from trip.views import TripFilterFormView
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', include("trip.urls")),
+    url(r'^$', TripFilterFormView.as_view(), name='home'),
+    url(r'^trip/', include("trip.urls")),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Создание поездки{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>{% block header %}Создать поездку{% endblock %}</h1>
+            <form class="form-horizontal form-trip" method="post" action="">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="control-group">
+                  <div class="controls">
+                    <input type="submit" class="btn btn-primary" value="Создать поездку"/>
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
