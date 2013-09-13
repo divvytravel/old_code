@@ -9,5 +9,8 @@ export DEBUG_DJANGO=True
 export FACEBOOK_APP_ID=510491355692395
 export FACEBOOK_API_SECRET=f08d4934e9d20de0e2a1381fd114af7c
 
-cd $OPENSHIFT_REPO_DIR
-$OPENSHIFT_REPO_DIR/../bin/uwsgi -s $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT --socket-protocol http --module stormcrew.config.wsgi:application --pp $OPENSHIFT_REPO_DIR -d $OPENSHIFT_DIY_LOG_DIR/app.log --pidfile $OPENSHIFT_TMP_DIR/uwsgi.pid
+cd ${OPENSHIFT_REPO_DIR}stormcrew/
+$OPENSHIFT_REPO_DIR/../bin/uwsgi -s $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT --socket-protocol http --module config.wsgi:application --pp $OPENSHIFT_REPO_DIR -d $OPENSHIFT_DIY_LOG_DIR/app.log --pidfile $OPENSHIFT_TMP_DIR/uwsgi.pid
+
+# export PATH=$OPENSHIFT_REPO_DIR/../bin:$PATH
+# cat $OPENSHIFT_DIY_LOG_DIR/app.log
