@@ -155,6 +155,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'users',  # custom users app
     'trip',
+    'utils',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -205,6 +206,8 @@ FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/users/profile/"
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/users/profile/"
 LOGOUT_REDIRECT_URL = "/"
+# TODO provide select of login source here (fb/vk/tw etc.)
+LOGIN_URL = "/accounts/login/facebook/"
 
 # TODO
 SOCIAL_AUTH_DEFAULT_USERNAME = 'new_social_auth_user'

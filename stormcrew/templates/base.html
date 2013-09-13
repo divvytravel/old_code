@@ -60,6 +60,15 @@
 
     <div class="container">
 
+      {% block messages %}
+          {% for message in messages %}
+              <div class="alert alert-dismissable fade in{% if message.tags == 'success' %} alert-success{%endif%}">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <p>{{message}}</p>
+              </div>
+          {% endfor %}
+      {% endblock messages %}
+
       {% block content %}
         <p>Use this document as a way to quick start any new project.</p>
       {% endblock content %}
