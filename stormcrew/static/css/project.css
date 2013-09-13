@@ -1,0 +1,29 @@
+/*! project specific CSS goes here. */
+.form-profile input[type="text"],
+.form-profile select {
+    width: 300px !important;
+}
+
+.center-block {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.users-list {
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+.user-short {
+    display: inline-block;
+    margin:10px;
+    width: 200px;
+}
+
+.user-short div{
+    text-align: center;
+}
+
+.avatar {
+    height: 185px;
+}

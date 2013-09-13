@@ -1,0 +1,15 @@
+*.log
+*.pot
+*.pyc
+local_settings.py
+settings_local.py
+settings_secret.py
+*.sqlite
+*.TODO
+*.log.*
+*.pid
+*.bat
+.idea/
+debug/
+db.sqlite.*
+local_fixtures/

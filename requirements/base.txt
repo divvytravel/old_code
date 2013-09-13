@@ -1,0 +1,36 @@
+# Django
+django==1.5.3
+
+# Views, models, forms, and images fundamentals
+django-braces==1.2.2
+django-model-utils==1.4.0
+django-floppyforms==1.1
+Pillow==2.1.0
+dj-database-url==0.2.2
+django-secure==1.0
+
+# For user registration, either via email or social
+# Well-built with regular release cycles!
+django-social-auth==0.7.28
+facebook-sdk==0.4.0
+
+# Unicode slugification
+unicode-slugify==0.1.1
+django-autoslug==1.7.1
+
+# There are edge cases for South with Django 1.5+ that haven't been addressed yet.
+# Hm, just skipping this warning now (don't know exactly the problem)
+# https://bitbucket.org/andrewgodwin/south/get/59f6bae8b1a501ca14a5f23f8b11c44c42f33147.zip
+South==0.8.2
+
+
+# Useful things
+# django-avatar that work with Django 1.5+
+git+git://github.com/jezdez/django-avatar@6393d25166a6c2d2df0bd28e19f161fac2bb1166
+
+
+# django-crispy-forms with support for Bootstrap 3
+django-crispy-forms==1.4.0
+
+
+# Your custom requirements go here

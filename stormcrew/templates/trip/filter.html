@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    <div class="center-block">
+        <h1>Пользователи:</h1>
+    </div>
+    <div class="users-list">
+        {% for trip_user in trip_users %}
+            <div class="user-short">
+                <div>{{ trip_user.get_avatar }}</div>
+                <div>{{ trip_user.get_full_name }}</div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

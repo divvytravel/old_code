@@ -1,0 +1,21 @@
+#!/bin/bash
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+
+echo "Setting environment variables"
+export DATABASE_URL=postgresql://${OPENSHIFT_POSTGRESQL_DB_USERNAME}:${OPENSHIFT_POSTGRESQL_DB_PASSWORD}@${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT}/${OPENSHIFT_APP_NAME}
+export DEBUG_DJANGO=True
+export FACEBOOK_APP_ID=320855637976774
+export FACEBOOK_API_SECRET=6d86ce4fea96b6d35555570eb4359829
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py syncdb --noinput'"
+$OPENSHIFT_REPO_DIR/../bin/python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py syncdb --noinput
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py migrate'"
+$OPENSHIFT_REPO_DIR/../bin/python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py migrate
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py collectstatic --clear --noinput'"
+$OPENSHIFT_REPO_DIR/../bin/python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py collectstatic --clear --noinput
+
