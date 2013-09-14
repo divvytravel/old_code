@@ -6,7 +6,7 @@ from braces.views import LoginRequiredMixin
 
 from users.models import User
 from .forms import TripForm
-from .models import Trip
+from .models import Trip, TripPicture
 from utils.views import SuccessMessageMixin
 
 
@@ -24,9 +24,11 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Trip
     success_message = u"Поездка создана!"
 
-    def post(self, *args, **kwargs):
-        import pdb; pdb.set_trace()
-        return super(TripCreateView, self).post(*args, **kwargs)
+    def save_images(self):
+        for image_stream in self.request.FILES.getlist('files[]'):
+            pic = TripPicture(file=image_stream, trip=self.object)
+            pic.save()
 
     def get_success_url(self):
+        self.save_images()
         return reverse('home')

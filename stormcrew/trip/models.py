@@ -25,3 +25,16 @@ class Trip(models.Model):
     descr_additional = models.TextField(blank=True)
     descr_company = models.TextField(blank=True)
     trip_type = models.CharField(max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
+
+
+class TripPicture(models.Model):
+    file = models.ImageField(upload_to="trip")
+    trip = models.ForeignKey('trip.Trip')
+
+    def __unicode__(self):
+        return self.file.name
+
+    # remove to leave file.
+    def delete(self, *args, **kwargs):
+        self.file.delete(False)
+        super(TripPicture, self).delete(*args, **kwargs)

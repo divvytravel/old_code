@@ -13,3 +13,4 @@ settings_secret.py
 debug/
 db.sqlite.*
 local_fixtures/
+media/
