@@ -25,6 +25,7 @@ class Trip(models.Model):
     descr_additional = models.TextField(blank=True)
     descr_company = models.TextField(blank=True)
     trip_type = models.CharField(max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
+    owner = models.ForeignKey('users.User')
 
 
 class TripPicture(models.Model):

@@ -12,8 +12,10 @@ class TripForm(forms.ModelForm):
 
     class Meta:
         model = Trip
+        exclude = 'owner',
 
     def __init__(self, *args, **kwargs):
+        self.owner = kwargs.pop('owner')
         super(TripForm, self).__init__(*args, **kwargs)
         self.fields['currency'].empty_label = None
         self.fields['trip_type'].empty_label = None
@@ -35,3 +37,9 @@ class TripForm(forms.ModelForm):
             if self.cleaned_data['start_date'] > self.cleaned_data['end_date']:
                 raise forms.ValidationError(self.trip_errors['end_less_start_date'])
         return self.cleaned_data
+
+    def save(self, commit=False):
+        obj = super(TripForm, self).save(commit)
+        obj.owner = self.owner
+        obj.save()
+        return obj

@@ -24,6 +24,13 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Trip
     success_message = u"Поездка создана!"
 
+    def get_form_kwargs(self):
+        kwargs = super(TripCreateView, self).get_form_kwargs()
+        kwargs.update({
+            'owner': self.request.user,
+        })
+        return kwargs
+
     def save_images(self):
         for image_stream in self.request.FILES.getlist('files[]'):
             pic = TripPicture(file=image_stream, trip=self.object)
