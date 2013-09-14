@@ -37,3 +37,14 @@
 .form-trip textarea {
     width: 500px !important;
 }
+
+.files {
+    margin: 20px 0px;
+}
+
+.fpreview {
+    display: inline-block;
+    text-align: center;
+    width: 150px;
+    overflow: hidden;
+}

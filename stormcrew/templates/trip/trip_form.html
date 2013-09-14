@@ -21,18 +21,12 @@
 
               <span class="btn btn-success fileinput-button">
                   <i class="glyphicon glyphicon-plus"></i>
-                  <span>Add files...</span>
+                  <span>Загрузить фотографии</span>
                   <!-- The file input field used as target for the file upload widget -->
                   <input id="fileupload" type="file" name="files[]" multiple>
               </span>
-              <!-- The global progress bar -->
-              <div id="progress" class="progress">
-                  <div class="progress-bar progress-bar-success"></div>
-              </div>
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
-
-
                 <div class="control-group">
                   <div class="controls">
                     <input type="submit" class="btn btn-primary" value="Создать поездку"/>
@@ -72,42 +66,7 @@
     /*global window, $ */
     $(function () {
         'use strict';
-        // Change this to the location of your server-side upload handler:
-        var url = window.location.hostname === 'blueimp.github.io' ?
-                    '//jquery-file-upload.appspot.com/' : 'server/php/',
-            uploadButton = $('<button/>')
-                .addClass('btn btn-warning cancel')
-                .prop('disabled', true)
-                .text('Processing...')
-                // .attr('data-ng-click', "file.$cancel()")
-                // .attr('data-ng-hide', "!file.$cancel")
-                // .on('click', function () {
-                //     var $this = $(this),
-                //         data = $this.data();
-                //     $this
-                //         .off('click')
-                //         .text('Abort')
-                //         .on('click', function () {
-                //             $this.remove();
-                //             data.abort();
-                //         });
-                //     data.submit().always(function () {
-                //         $this.remove();
-                //     });
-                // });
-                .on('click', function () {
-                    var $this = $(this),
-                    data = $this.data();
-                    $this.remove();
-                    data.abort();
-                    data.submit().always(function () {
-                        $this.remove();
-                    });
-                    return false;
-                });
         $('#fileupload').fileupload({
-            // url: url,
-            // dataType: 'json',
             autoUpload: false,
             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
             maxFileSize: 5000000, // 5 MB
@@ -121,15 +80,10 @@
             previewCrop: true,
             replaceFileInput: false
         }).on('fileuploadadd', function (e, data) {
-            data.context = $('<div/>').appendTo('#files');
+            data.context = $('<div/>').addClass('fpreview').appendTo('#files');
             $.each(data.files, function (index, file) {
                 var node = $('<p/>')
                         .append($('<span/>').text(file.name));
-                if (!index) {
-                    node
-                        .append('<br>')
-                        .append(uploadButton.clone(true).data(data));
-                }
                 node.appendTo(data.context);
             });
         }).on('fileuploadprocessalways', function (e, data) {
@@ -145,11 +99,6 @@
                 node
                     .append('<br>')
                     .append(file.error);
-            }
-            if (index + 1 === data.files.length) {
-                data.context.find('button')
-                    .text('Delete')
-                    .prop('disabled', !!data.files.error);
             }
         }).on('fileuploadprogressall', function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -172,10 +121,11 @@
                     .append('<br>')
                     .append(error);
             });
+        }).on('click', function (e, data) {
+          $("#files").children().remove();
+          $(".fileinput-button span").text("Загрузить фотографии (заново) ...")
         }).prop('disabled', !$.support.fileInput)
           .parent().addClass($.support.fileInput ? undefined : 'disabled');
-        // }).parent().addClass($.support.fileInput ? undefined : 'disabled');
-        // })
     });
     </script>
 
