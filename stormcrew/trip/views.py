@@ -15,7 +15,8 @@ class TripFilterFormView(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         return {
-            'trip_users': User.objects.ready_to_trip().all()[:5]
+            'trip_users': User.objects.ready_to_trip().all()[:5],
+            'trips': Trip.objects.actual().all()[:30]
         }
 
 

@@ -13,4 +13,30 @@
             </div>
         {% endfor %}
     </div>
+    <div class="center-block">
+        <h1>Поездки:</h1>
+    </div>
+    <table class="table">
+        <thead>
+          <tr>
+            <th>Даты</th>
+            <th>Где</th>
+            <th>Что за поездка</th>
+            <th>Бюджет</th>
+            <th>Участвуют</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for trip in trips %}
+              <tr>
+                <td>{{ trip.start_date|date:"j E" }} - {{ trip.end_date|date:"j E" }}</td>
+                <td>{{ trip.city }}</td>
+                <td>{{ trip.title }}</td>
+                <td>{{ trip.price }} {{ trip.currency }}</td>
+                <td></td>
+              </tr>
+            {% endfor %}
+          <tr>
+        </tbody>
+    </table>
 {% endblock content %}

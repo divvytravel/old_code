@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django.db import models
 from model_utils import Choices
+from django.db.models.query import QuerySet
+
+
+class TripQuerySet(QuerySet):
+    def actual(self):
+        return self.filter(start_date__gte=datetime.now().date())
+
+
+class TripManager(models.Manager):
+    def get_query_set(self):
+        return TripQuerySet(self.model)
+    def __getattr__(self, attr, *args):
+        # see https://code.djangoproject.com/ticket/15062 for details
+        if attr.startswith("_"):
+            raise AttributeError
+        return getattr(self.get_query_set(), attr, *args)
 
 
 class Trip(models.Model):
@@ -26,6 +43,8 @@ class Trip(models.Model):
     descr_company = models.TextField(blank=True)
     trip_type = models.CharField(max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
     owner = models.ForeignKey('users.User')
+
+    objects = TripManager()
 
 
 class TripPicture(models.Model):
