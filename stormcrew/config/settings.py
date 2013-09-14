@@ -156,6 +156,7 @@ LOCAL_APPS = (
     'users',  # custom users app
     'trip',
     'utils',
+    'fileupload',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

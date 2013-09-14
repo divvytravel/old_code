@@ -24,5 +24,9 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Trip
     success_message = u"Поездка создана!"
 
+    def post(self, *args, **kwargs):
+        import pdb; pdb.set_trace()
+        return super(TripCreateView, self).post(*args, **kwargs)
+
     def get_success_url(self):
         return reverse('home')
