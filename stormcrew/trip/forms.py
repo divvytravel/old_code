@@ -12,7 +12,7 @@ class TripForm(forms.ModelForm):
 
     class Meta:
         model = Trip
-        exclude = 'owner',
+        exclude = 'owner', 'people', 'potential_people'
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop('owner')
