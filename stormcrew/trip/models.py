@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django.db import models
+from django.conf import settings
+
 from model_utils import Choices
 from django.db.models.query import QuerySet
 
@@ -45,9 +47,8 @@ class Trip(models.Model):
     descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
-    owner = models.ForeignKey('users.User')
-    people = models.ManyToManyField('users.User', related_name='approved_trips', blank=True)
-    potential_people = models.ManyToManyField('users.User', related_name='requested_trips', blank=True)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    people = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='approved_trips', blank=True)
 
     objects = TripManager()
 
