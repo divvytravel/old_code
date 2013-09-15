@@ -32,7 +32,7 @@
                 <td>{{ trip.start_date|date:"j E" }} - {{ trip.end_date|date:"j E" }}</td>
                 <td>{{ trip.city }}</td>
                 <td>{{ trip.title }}</td>
-                <td>{{ trip.price }} {{ trip.currency }}</td>
+                <td>{{ trip.price }} {{ trip.get_currency_display }}</td>
                 <td></td>
               </tr>
             {% endfor %}
