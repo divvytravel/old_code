@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from braces.views import LoginRequiredMixin
 
 from users.models import User
-from .forms import TripForm
+from .forms import TripForm, TripRequestForm
 from .models import Trip, TripPicture
 from utils.views import SuccessMessageMixin
 
@@ -40,3 +40,8 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_success_url(self):
         self.save_images()
         return reverse('home')
+
+
+class TripRequestFormView(SuccessMessageMixin, CreateView):
+    form_class = TripRequestForm
+    success_message = u"Поездка создана!"

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django import forms
 from django.utils import timezone
-from .models import Trip
+from .models import Trip, TripRequest
 
 
 class TripForm(forms.ModelForm):
@@ -47,3 +47,10 @@ class TripForm(forms.ModelForm):
         obj.owner = self.owner
         obj.save()
         return obj
+
+
+class TripRequestForm(forms.ModelForm):
+
+    class Meta:
+        model = TripRequest
+        exclude = 'user', 'date_created'

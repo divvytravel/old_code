@@ -2,6 +2,7 @@
 from datetime import datetime
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 from model_utils import Choices
 from django.db.models.query import QuerySet
@@ -64,3 +65,9 @@ class TripPicture(models.Model):
     def delete(self, *args, **kwargs):
         self.file.delete(False)
         super(TripPicture, self).delete(*args, **kwargs)
+
+
+class TripRequest(models.Model):
+    trip = models.ForeignKey('trip.Trip')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    date_created = models.DateTimeField(default=timezone.now)
