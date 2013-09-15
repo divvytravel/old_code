@@ -133,11 +133,17 @@
     <script type="text/javascript">
         $('#id_start_date').datepicker({
           format: 'dd.mm.yyyy',
-          weekStart: 1
+          weekStart: 1,
+          autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
         });
         $('#id_end_date').datepicker({
           format: 'dd.mm.yyyy',
-          weekStart: 1
+          weekStart: 1,
+          autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
         });
     </script>
 {% endblock javascript %}
