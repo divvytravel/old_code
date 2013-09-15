@@ -31,8 +31,10 @@ class Trip(models.Model):
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     country = models.CharField(u"Страна", max_length=100)
-    city = models.CharField(u"Город", max_length=100)
-    price = models.PositiveIntegerField(u"Бюджет")
+    city = models.CharField(u"Город", max_length=100,
+        help_text=u"если несколько, то первый")
+    price = models.PositiveIntegerField(u"Бюджет",
+        help_text=u"примерный бюджет")
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
     title = models.CharField(u"Название", max_length=200)
