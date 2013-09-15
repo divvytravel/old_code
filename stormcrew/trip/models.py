@@ -7,7 +7,8 @@ from django.db.models.query import QuerySet
 
 class TripQuerySet(QuerySet):
     def actual(self):
-        return self.filter(start_date__gte=datetime.now().date())
+        return self.filter(start_date__gte=datetime.now().date())\
+            .order_by('start_date')
 
 
 class TripManager(models.Manager):
