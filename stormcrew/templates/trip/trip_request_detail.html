@@ -33,7 +33,7 @@
                   </tr>
                   <tr>
                     <td>{{ trip|field_verbose:"price" }}</td>
-                    <td>{{ trip.price }} {{ trip.currency }}</td>
+                    <td>{{ trip.price }} {{ trip.get_currency_display }}</td>
                   </tr>
                   <tr>
                     <td>{{ trip|field_verbose:"includes" }}</td>
