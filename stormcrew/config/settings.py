@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 from os.path import join
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
 ########## DEBUG CONFIGURATION
 if os.environ.get("DEBUG_DJANGO", None):
@@ -91,7 +92,10 @@ USE_TZ = True
 
 ########## MEDIA CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = join(BASE_DIR, 'media')
+if OPENSHIFT_GEAR_NAME:
+    MEDIA_ROOT = join(os.environ.get('OPENSHIFT_DATA_DIR'), 'media')
+else:
+    MEDIA_ROOT = join(BASE_DIR, 'media')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
@@ -245,7 +249,6 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 
 
 ################## PRODUCTION SETTINGS
-OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
 if DEBUG and not OPENSHIFT_GEAR_NAME:
     EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
