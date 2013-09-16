@@ -19,10 +19,6 @@ class TripForm(forms.ModelForm):
         super(TripForm, self).__init__(*args, **kwargs)
         self.fields['currency'].empty_label = None
         self.fields['trip_type'].empty_label = None
-        for field in self.fields.values():
-            if not field.help_text:
-                # place help_text tag to render fields with save height
-                field.help_text = '&nbsp;'
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
