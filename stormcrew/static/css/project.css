@@ -53,7 +53,7 @@
     display: block !important;
 }
 
-.trip-create-submit {
+.create-submit {
     margin-bottom: 30px;
 }
 
@@ -66,4 +66,8 @@
     text-align: center;
     width: 150px;
     overflow: hidden;
+}
+
+.align-center {
+    text-align: center;
 }

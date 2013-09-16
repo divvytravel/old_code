@@ -54,3 +54,14 @@ class TripRequestForm(forms.ModelForm):
     class Meta:
         model = TripRequest
         exclude = 'user', 'date_created'
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')
+        super(TripRequestForm, self).__init__(*args, **kwargs)
+        self.fields['trip'].widget = forms.HiddenInput()
+
+    def save(self, commit=False):
+        obj = super(TripRequestForm, self).save(commit)
+        obj.user = self.user
+        obj.save()
+        return obj

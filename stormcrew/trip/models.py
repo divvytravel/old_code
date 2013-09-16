@@ -3,9 +3,10 @@ from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.core.urlresolvers import reverse
+from django.db.models.query import QuerySet
 
 from model_utils import Choices
-from django.db.models.query import QuerySet
 
 
 class TripQuerySet(QuerySet):
@@ -52,6 +53,12 @@ class Trip(models.Model):
     people = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='approved_trips', blank=True)
 
     objects = TripManager()
+
+    def get_absolute_url(self):
+        return reverse('trip_request_detail', args=[str(self.pk)])
+
+    def __unicode__(self):
+        return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
 
 
 class TripPicture(models.Model):

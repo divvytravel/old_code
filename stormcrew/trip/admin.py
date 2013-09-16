@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Trip, TripPicture
+from .models import Trip, TripPicture, TripRequest
 
 
 class TripAdmin(admin.ModelAdmin):
@@ -12,5 +12,10 @@ class TripPictureAdmin(admin.ModelAdmin):
     pass
 
 
+class TripRequestAdmin(admin.ModelAdmin):
+    list_display = 'trip', 'user', 'date_created'
+
+
 admin.site.register(Trip, TripAdmin)
 admin.site.register(TripPicture, TripPictureAdmin)
+admin.site.register(TripRequest, TripRequestAdmin)

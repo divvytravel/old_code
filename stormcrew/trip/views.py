@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import TemplateView, CreateView
 from django.core.urlresolvers import reverse
+from django.shortcuts import get_object_or_404
 
 from braces.views import LoginRequiredMixin
 
@@ -44,4 +45,34 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class TripRequestFormView(SuccessMessageMixin, CreateView):
     form_class = TripRequestForm
+    template_name = "trip/trip_request_detail.html"
     success_message = u"Поездка создана!"
+
+    def get_trip(self):
+        if not hasattr(self, '_trip_object'):
+            setattr(self, '_trip_object',
+                get_object_or_404(Trip, pk=self.kwargs['pk']))
+        return self._trip_object
+
+    def get_initial(self):
+        initial = {
+            'trip': self.get_trip(),
+        }
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(TripRequestFormView, self).get_form_kwargs()
+        kwargs.update({
+            'user': self.request.user,
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(TripRequestFormView, self).get_context_data(**kwargs)
+        context.update({
+            "trip": self.get_trip()
+        })
+        return context
+
+    def get_success_url(self):
+        return reverse('home')
