@@ -2,6 +2,9 @@
 from django.views.generic import TemplateView, CreateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.contrib import messages
 
 from braces.views import LoginRequiredMixin
 
@@ -46,6 +49,13 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class TripRequestFormView(SuccessMessageMixin, CreateView):
     form_class = TripRequestForm
     template_name = "trip/trip_request_detail.html"
+
+    def post(self, *args, **kwargs):
+        if not self.request.user.is_authenticated():
+            messages.warning(self.request, u"Теперь вы можете подать заявку.")
+            return HttpResponseRedirect("{0}?next={1}".format(
+                settings.LOGIN_URL, self.request.path))
+        return super(TripRequestFormView, self).post(*args, **kwargs)
 
     def get_trip(self):
         if not hasattr(self, '_trip_object'):

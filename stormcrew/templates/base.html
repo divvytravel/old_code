@@ -62,7 +62,7 @@
 
       {% block messages %}
           {% for message in messages %}
-              <div class="alert alert-dismissable fade in{% if message.tags == 'success' %} alert-success{%endif%}">
+              <div class="alert alert-dismissable fade in{% if message.tags == 'success' %} alert-success{% elif message.tags == 'warning' %} alert-warning{%endif%}">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <p>{{message}}</p>
               </div>

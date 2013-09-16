@@ -58,12 +58,16 @@ class Trip(models.Model):
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
 
-    @instance_cache
+    # TODO cache at instance level, but with user
     def is_user_in(self, user, skip_cache=False):
+        if not user.is_authenticated():
+            return False
         return self.people.filter(pk=user.pk).count() > 0
 
-    @instance_cache
+    # TODO cache at instance level, but with user
     def is_user_has_request(self, user, skip_cache=False):
+        if not user.is_authenticated():
+            return False
         return self.user_requests.filter(user=user).count() > 0
 
     def is_open(self):
