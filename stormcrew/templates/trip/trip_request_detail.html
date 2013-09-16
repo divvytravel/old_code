@@ -2,6 +2,7 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% load model_verbose %}
+{% load thumbnail %}
 
 {% block title %}Детали поездки{% endblock %}
 
@@ -78,7 +79,9 @@
             {% for img in trip.images.all %}
             <div class="col-sm-6 col-md-3" style="margin-bottom:10px;">
               <a class="thumbnail" href="{{img.file.url}}" data-lightbox="roadtrip">
-                <img  src="{{img.file.url}}" style="height: 180px; display: block;">
+                {% thumbnail img.file "180x180" crop="noop" as im %}
+                  <img src="{{im.url}}" style="height: {{im.height}}; display: block;">
+                {% endthumbnail %}
               </a>
             </div>
             {% endfor %}

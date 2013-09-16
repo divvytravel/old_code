@@ -149,6 +149,7 @@ THIRD_PARTY_APPS = (
     'south',  # Database migration helpers:
     'crispy_forms',  # Form layouts
     'social_auth',  # registration
+    'sorl.thumbnail', # image thumbnails
 )
 
 # Apps specific for this project go here.
