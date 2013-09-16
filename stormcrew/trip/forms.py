@@ -81,4 +81,6 @@ class TripRequestForm(forms.ModelForm):
         if trip.is_open():
             trip.people.add(self.user)
         trip.notify_owner_about_request(self.user)
+        if trip.is_closed():
+            trip.notify_members_about_request(self.user)
         return obj

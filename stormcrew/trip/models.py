@@ -96,12 +96,47 @@ class Trip(models.Model):
             to = [self.owner.email]
             text_content = render_to_string('emails/new_trip_request.txt', context)
             html_content = render_to_string('emails/new_trip_request.html', context)
-            try:
-                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
-                msg.attach_alternative(html_content, "text/html")
-                msg.send()
-            except:
-                logger.exception("send_mail failed.")
+            self.send_email_alternative(
+                subject, text_content, html_content, from_email, to)
+
+    def notify_users_about_request(self, user_requested):
+        if self.owner.email:
+            context = {
+                'trip': self,
+                'user_requested': user_requested,
+                'domain': "http://" + str(get_current_site(None)),
+            }
+            subject = u"Новая заявка на вашу поездку"
+            from_email = settings.EMAIL_HOST_USER
+            to = [self.owner.email]
+            text_content = render_to_string('emails/new_trip_request.txt', context)
+            html_content = render_to_string('emails/new_trip_request.html', context)
+            self.send_email_alternative(
+                subject, text_content, html_content, from_email, to)
+
+    def notify_members_about_request(self, user_requested):
+        member_emails = self.people.all().values_list('email', flat=True)
+        if member_emails:
+            context = {
+                'trip': self,
+                'user_requested': user_requested,
+                'domain': "http://" + str(get_current_site(None)),
+            }
+            subject = u"Новая заявка на поездку, в которой вы принимаете участие"
+            from_email = settings.EMAIL_HOST_USER
+            to = member_emails
+            text_content = render_to_string('emails/new_trip_member_request.txt', context)
+            html_content = render_to_string('emails/new_trip_member_request.html', context)
+            self.send_email_alternative(
+                subject, text_content, html_content, from_email, to)
+
+    def send_email_alternative(self, subject, text, html, from_email, to):
+        try:
+            msg = EmailMultiAlternatives(subject, text, from_email, to)
+            msg.attach_alternative(html, "text/html")
+            msg.send()
+        except:
+            logger.exception("send_mail failed.")
 
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)

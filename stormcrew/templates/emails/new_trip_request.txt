@@ -4,6 +4,8 @@
 
 Здравствуйте, {{ trip.owner.get_full_name }}!
 
-На вашу поездку "{{ trip }}", {{domain}}{{trip.get_absolute_url}} была подана заявка на участие от пользователя {{user_requested.get_full_name}}, {{domain}}{{user_requested.get_absolute_url}}.{% if not trip.is_open %} Вы можете одобрить заявку по ссылке {{domain}}/#TODO.{% endif %}
+На вашу поездку "{{ trip }}", {{domain}}{{trip.get_absolute_url}} была подана заявка на участие от пользователя {{user_requested.get_full_name}}, {{domain}}{{user_requested.get_absolute_url}}.
+
+{% if not trip.is_open %} Вы можете одобрить заявку по ссылке {{domain}}/#TODO.{% endif %}
 
 {% endblock content %}
