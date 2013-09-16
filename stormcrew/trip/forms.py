@@ -50,6 +50,10 @@ class TripForm(forms.ModelForm):
 
 
 class TripRequestForm(forms.ModelForm):
+    trip_errors = {
+        'already_in': u"Вы уже состоите в участниках поездки",
+        'already_requested': u"Вы уже подали заявку в поездку",
+    }
 
     class Meta:
         model = TripRequest
@@ -60,8 +64,20 @@ class TripRequestForm(forms.ModelForm):
         super(TripRequestForm, self).__init__(*args, **kwargs)
         self.fields['trip'].widget = forms.HiddenInput()
 
+    def clean(self):
+        if self.is_valid():
+            trip = self.cleaned_data['trip']
+            if trip.is_user_in(self.user):
+                raise forms.ValidationError(self['alread_in'])
+            if trip.is_user_has_request(self.user):
+                raise forms.ValidationError(self['already_requested'])
+        return self.cleaned_data
+
     def save(self, commit=False):
         obj = super(TripRequestForm, self).save(commit)
         obj.user = self.user
         obj.save()
+        trip = self.cleaned_data['trip']
+        if trip.is_open():
+            trip.people.add(self.user)
         return obj

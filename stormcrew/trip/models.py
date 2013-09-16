@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
 
 from model_utils import Choices
+from utils.decorators import instance_cache
 
 
 class TripQuerySet(QuerySet):
@@ -57,6 +58,23 @@ class Trip(models.Model):
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
 
+    @instance_cache
+    def is_user_in(self, user, skip_cache=False):
+        return self.people.filter(pk=user.pk).count() > 0
+
+    @instance_cache
+    def is_user_has_request(self, user, skip_cache=False):
+        return self.user_requests.filter(user=user).count() > 0
+
+    def is_open(self):
+        return self.trip_type == self.TRIP_TYPE.open
+
+    def is_invite(self):
+        return self.trip_type == self.TRIP_TYPE.invite
+
+    def is_closed(self):
+        return self.trip_type == self.TRIP_TYPE.closed
+
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
 
@@ -75,6 +93,6 @@ class TripPicture(models.Model):
 
 
 class TripRequest(models.Model):
-    trip = models.ForeignKey('trip.Trip')
+    trip = models.ForeignKey('trip.Trip', related_name='user_requests')
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     date_created = models.DateTimeField(default=timezone.now)

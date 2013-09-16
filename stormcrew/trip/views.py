@@ -68,19 +68,27 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TripRequestFormView, self).get_context_data(**kwargs)
+        trip = self.get_trip()
+        user_in = trip.is_user_in(self.request.user)
+        if user_in:
+            user_has_request = False
+        else:
+            user_has_request =  trip.is_user_has_request(self.request.user)
         context.update({
-            "trip": self.get_trip()
+            "trip": trip,
+            "user_in": user_in,
+            "user_has_request": user_has_request,
         })
         return context
 
     def get_success_message(self):
         trip = self.get_trip()
-        if trip.trip_type == Trip.TRIP_TYPE.open:
+        if trip.is_open():
             return u'Заявка подана успешно! Теперь участвуете в поездке "{0}".'\
                 .format(trip.title)
-        elif trip.trip_type == Trip.TRIP_TYPE.invite:
+        elif trip.is_invite():
             return u'Заявка подана успешно! Ваша заявку будет рассмотрена создателем поездки. Вы получите сообщение на email о результате.'
-        elif trip.trip_type == Trip.TRIP_TYPE.closed:
+        elif trip.is_closed():
             return u'Заявка подана успешно! Ваша заявку будет рассмотрена участниками поездки. Вы получите сообщение на email о результате.'
         else:
             return u'Заявка подана успешно!'

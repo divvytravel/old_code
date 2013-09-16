@@ -76,7 +76,15 @@
             {{ form|crispy }}
             <div class="control-group create-submit align-center">
               <div class="controls">
-                <input type="submit" class="btn btn-primary" value="Оставить заявку на поездку"/>
+                <input type="submit"
+                {% if user_in %}
+                  class="btn btn-success" value="Вы участвуете в поездке" disabled
+                {% elif user_has_request %}
+                  class="btn btn-warning" value="Вы подали заявку на поездку" disabled
+                {% else %}
+                  class="btn btn-primary" value = "Подать заявку на поездку"
+                {% endif %}
+                />
               </div>
             </div>
         </form>
