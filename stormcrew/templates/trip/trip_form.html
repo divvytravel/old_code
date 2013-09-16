@@ -16,8 +16,7 @@
             <h1>{% block header %}Создать поездку{% endblock %}</h1>
             <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
                 {% csrf_token %}
-                {{ form|crispy }}
-
+                {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
 
               <span class="btn btn-success fileinput-button">
                   <i class="glyphicon glyphicon-plus"></i>

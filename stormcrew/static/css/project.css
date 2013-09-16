@@ -31,7 +31,11 @@
 
 .form-trip input[type="text"],
 .form-trip select {
-    width: 300px !important;
+    width: 300px;
+}
+
+.form-trip #id_title {
+    width: 630px !important;
 }
 
 .form-trip textarea {
