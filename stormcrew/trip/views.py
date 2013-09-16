@@ -84,7 +84,7 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
     def get_success_message(self):
         trip = self.get_trip()
         if trip.is_open():
-            return u'Заявка подана успешно! Теперь участвуете в поездке "{0}".'\
+            return u'Заявка подана успешно! Теперь вы участвуете в поездке "{0}".'\
                 .format(trip.title)
         elif trip.is_invite():
             return u'Заявка подана успешно! Ваша заявку будет рассмотрена создателем поездки. Вы получите сообщение на email о результате.'
