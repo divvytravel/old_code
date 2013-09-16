@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+import logging
 from datetime import datetime
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.contrib.sites.models import get_current_site
+from django.core.mail import EmailMultiAlternatives
 
 from model_utils import Choices
-from utils.decorators import instance_cache
 
+logger = logging.getLogger(__name__)
 
 class TripQuerySet(QuerySet):
     def actual(self):
@@ -78,6 +83,25 @@ class Trip(models.Model):
 
     def is_closed(self):
         return self.trip_type == self.TRIP_TYPE.closed
+
+    def notify_owner_about_request(self, user_requested):
+        if self.owner.email:
+            context = {
+                'trip': self,
+                'user_requested': user_requested,
+                'domain': "http://" + str(get_current_site(None)),
+            }
+            subject = u"Новая заявка на вашу поездку"
+            from_email = settings.EMAIL_HOST_USER
+            to = [self.owner.email]
+            text_content = render_to_string('emails/new_trip_request.txt', context)
+            html_content = render_to_string('emails/new_trip_request.html', context)
+            try:
+                msg = EmailMultiAlternatives(subject, text_content, from_email, to)
+                msg.attach_alternative(html_content, "text/html")
+                msg.send()
+            except:
+                logger.exception("send_mail failed.")
 
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)

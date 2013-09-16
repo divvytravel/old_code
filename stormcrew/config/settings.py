@@ -247,8 +247,14 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
 if DEBUG and not OPENSHIFT_GEAR_NAME:
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    email_folder = os.path.join(os.path.dirname(BASE_DIR), 'debug/emails')
+    if not os.path.exists(email_folder):
+        os.makedirs(email_folder)
+    EMAIL_FILE_PATH = email_folder
     EMAIL_HOST = "localhost"
     EMAIL_PORT = 1025
+
     MIDDLEWARE_CLASSES += ('debug_toolbar.middleware.DebugToolbarMiddleware',)
     INSTALLED_APPS += ('debug_toolbar',)
 
@@ -267,23 +273,23 @@ else:
     ALLOWED_HOSTS = ["*"]
     ########## END SITE CONFIGURATION
 
-    ########## EMAIL
-    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL',
-            'stormcrew <stormcrew-noreply@stormcrew.ru>')
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.sendgrid.com')
-    EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', '')
-    EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', '')
-    EMAIL_PORT = os.environ.get('EMAIL_PORT', 587)
-    EMAIL_SUBJECT_PREFIX = os.environ.get('EMAIL_SUBJECT_PREFIX', '[stormcrew] ')
-    EMAIL_USE_TLS = True
-    SERVER_EMAIL = EMAIL_HOST_USER
-    ########## END EMAIL
-
     ########## CACHING
     # from memcacheify import memcacheify
     # CACHES = memcacheify()
     ########## END CACHING
+
+if os.environ.get('EMAIL_HOST', None):
+    ########## EMAIL
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.sendgrid.com')
+    EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME', '')
+    EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD', '')
+    EMAIL_PORT = os.environ.get('EMAIL_PORT', 587)
+    EMAIL_USE_TLS = False
+    if os.environ.get('EMAIL_USE_TLS', False):
+        EMAIL_USE_TLS = True
+    SERVER_EMAIL = EMAIL_HOST_USER
+    ########## END EMAIL
 
 
 ########## TEMPLATE CONFIGURATION

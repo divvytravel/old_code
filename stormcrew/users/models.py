@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
+from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 from social_auth.fields import JSONField
@@ -50,6 +51,15 @@ class User(AbstractUser):
             avatar_url += "?type=large"
             # avatar_url += "?width=180&height=180"
         return mark_safe('<img class="avatar" src="{0}"/>'.format(avatar_url))
+
+    def get_full_name(self, *args, **kwargs):
+        full_name = super(User, self).get_full_name(*args, **kwargs)
+        if not full_name:
+            full_name = self.username
+        return full_name
+
+    def get_absolute_url(self):
+        return reverse('users:detail', args=[str(self.pk)])
 
     def __unicode__(self):
         return self.username

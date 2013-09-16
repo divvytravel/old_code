@@ -4,11 +4,7 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-echo "Setting environment variables"
-export DATABASE_URL=postgresql://${OPENSHIFT_POSTGRESQL_DB_USERNAME}:${OPENSHIFT_POSTGRESQL_DB_PASSWORD}@${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT}/${OPENSHIFT_APP_NAME}
-export DEBUG_DJANGO=True
-export FACEBOOK_APP_ID=510491355692395
-export FACEBOOK_API_SECRET=f08d4934e9d20de0e2a1381fd114af7c
+${OPENSHIFT_DATA_DIR}set_env.sh
 
 cd ${OPENSHIFT_REPO_DIR}stormcrew/
 echo "Executing 'python ${OPENSHIFT_REPO_DIR}stormcrew/manage.py syncdb --noinput'"

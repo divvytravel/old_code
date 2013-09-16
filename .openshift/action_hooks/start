@@ -3,11 +3,7 @@
 # script. The application will work only if it binds to
 # $OPENSHIFT_DIY_IP:8080
 
-echo "Setting environment variables"
-export DATABASE_URL=postgresql://${OPENSHIFT_POSTGRESQL_DB_USERNAME}:${OPENSHIFT_POSTGRESQL_DB_PASSWORD}@${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT}/${OPENSHIFT_APP_NAME}
-export DEBUG_DJANGO=True
-export FACEBOOK_APP_ID=510491355692395
-export FACEBOOK_API_SECRET=f08d4934e9d20de0e2a1381fd114af7c
+${OPENSHIFT_DATA_DIR}set_env.sh
 
 cd ${OPENSHIFT_REPO_DIR}stormcrew/
 $OPENSHIFT_REPO_DIR/../bin/uwsgi -s $OPENSHIFT_DIY_IP:$OPENSHIFT_DIY_PORT --socket-protocol http --module config.wsgi:application --pp $OPENSHIFT_REPO_DIR -d $OPENSHIFT_DIY_LOG_DIR/app.log --pidfile $OPENSHIFT_TMP_DIR/uwsgi.pid
