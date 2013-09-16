@@ -144,7 +144,7 @@ class Trip(models.Model):
 
 class TripPicture(models.Model):
     file = models.ImageField(upload_to="trip")
-    trip = models.ForeignKey('trip.Trip')
+    trip = models.ForeignKey('trip.Trip', related_name='images')
 
     def __unicode__(self):
         return self.file.name

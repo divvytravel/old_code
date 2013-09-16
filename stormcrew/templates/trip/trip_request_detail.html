@@ -3,11 +3,11 @@
 {% load staticfiles %}
 {% load model_verbose %}
 
-{% block title %}Создание поездки{% endblock %}
+{% block title %}Детали поездки{% endblock %}
 
 {% block css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/jquery.fileupload-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'lightbox/css/lightbox.css' %}" type="text/css" media="screen" />
 {% endblock css %}
 
 {% block content %}
@@ -16,61 +16,75 @@
         <div class="col-lg-12">
             <h1 class="align-center">{% block header %}Поездка "{{ trip.title }}"{% endblock %}</h1>
         </div>
-    <table class="table">
-        <tbody>
+        <table class="table">
+            <tbody>
+                  <tr>
+                    <td>Даты</td>
+                    <td>{{ trip.start_date|date:"j E" }} - {{ trip.end_date|date:"j E" }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"country" }}</td>
+                    <td>{{ trip.country }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"city" }}</td>
+                    <td>{{ trip.city }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"price" }}</td>
+                    <td>{{ trip.price }} {{ trip.currency }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"includes" }}</td>
+                    <td>{{ trip.includes }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"people_count" }}</td>
+                    <td>{{ trip.people_count }}</td>
+                  </tr>
+                  <tr>
+                    <td>Описание</td>
+                    <td>{{ trip.descr_main }}</td>
+                  </tr>
+                  {% if trip.descr_share %}
+                    <tr>
+                      <td>Разделяем</td>
+                      <td>{{ trip.descr_share }}</td>
+                    </tr>
+                  {% endif %}
+                  {% if trip.descr_additional %}
+                  <tr>
+                    <td>Доп. информация</td>
+                    <td>{{ trip.descr_additional }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if trip.descr_company %}
+                  <tr>
+                    <td>Кого хотели бы видеть в компании</td>
+                    <td>{{ trip.descr_company }}</td>
+                  </tr>
+                  {% endif %}
+                  <tr>
+                    <td>{{ trip|field_verbose:"trip_type" }}</td>
+                    <td>{{ trip.get_trip_type_display }}</td>
+                  </tr>
               <tr>
-                <td>Даты</td>
-                <td>{{ trip.start_date|date:"j E" }} - {{ trip.end_date|date:"j E" }}</td>
-              </tr>
-              <tr>
-                <td>{{ trip|field_verbose:"country" }}</td>
-                <td>{{ trip.country }}</td>
-              </tr>
-              <tr>
-                <td>{{ trip|field_verbose:"city" }}</td>
-                <td>{{ trip.city }}</td>
-              </tr>
-              <tr>
-                <td>{{ trip|field_verbose:"price" }}</td>
-                <td>{{ trip.price }} {{ trip.currency }}</td>
-              </tr>
-              <tr>
-                <td>{{ trip|field_verbose:"includes" }}</td>
-                <td>{{ trip.includes }}</td>
-              </tr>
-              <tr>
-                <td>{{ trip|field_verbose:"people_count" }}</td>
-                <td>{{ trip.people_count }}</td>
-              </tr>
-              <tr>
-                <td>Описание</td>
-                <td>{{ trip.descr_main }}</td>
-              </tr>
-              {% if trip.descr_share %}
-                <tr>
-                  <td>Разделяем</td>
-                  <td>{{ trip.descr_share }}</td>
-                </tr>
-              {% endif %}
-              {% if trip.descr_additional %}
-              <tr>
-                <td>Доп. информация</td>
-                <td>{{ trip.descr_additional }}</td>
-              </tr>
-              {% endif %}
-              {% if trip.descr_company %}
-              <tr>
-                <td>Кого хотели бы видеть в компании</td>
-                <td>{{ trip.descr_company }}</td>
-              </tr>
-              {% endif %}
-              <tr>
-                <td>{{ trip|field_verbose:"trip_type" }}</td>
-                <td>{{ trip.trip_type }}</td>
-              </tr>
-          <tr>
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row" style="margin-bottom:20px;">
+        <div id="gallery">
+            {% for img in trip.images.all %}
+            <div class="col-sm-6 col-md-3" style="margin-bottom:10px;">
+              <a class="thumbnail" href="{{img.file.url}}" data-lightbox="roadtrip">
+                <img  src="{{img.file.url}}" style="height: 180px; display: block;">
+              </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
         <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
             {% csrf_token %}
             {{ form|crispy }}
@@ -89,5 +103,11 @@
             </div>
         </form>
     </div>
-
 {% endblock %}
+
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script src="{% static 'lightbox/js/lightbox-2.6.min.js' %}"></script>
+{% endblock javascript %}
