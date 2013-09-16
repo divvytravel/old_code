@@ -17,7 +17,7 @@
         <div class="col-lg-12">
             <h1 class="align-center">{% block header %}Поездка "{{ trip.title }}"{% endblock %}</h1>
         </div>
-        <table class="table">
+        <table class="table trip-details-table">
             <tbody>
                   <tr>
                     <td>Даты</td>
@@ -80,7 +80,7 @@
             <div class="col-sm-6 col-md-3" style="margin-bottom:10px;">
               <a class="thumbnail" href="{{img.file.url}}" data-lightbox="roadtrip">
                 {% thumbnail img.file "180x180" crop="noop" as im %}
-                  <img src="{{im.url}}" style="height: {{im.height}}; display: block;">
+                  <img src="{{im.url}}" style="height: {{im.height}}px; display: block;">
                 {% endthumbnail %}
               </a>
             </div>

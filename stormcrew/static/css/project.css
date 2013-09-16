@@ -71,3 +71,7 @@
 .align-center {
     text-align: center;
 }
+
+.trip-details-table td:first-child {
+    min-width: 260px;
+}
