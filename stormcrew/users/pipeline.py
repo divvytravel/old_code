@@ -14,7 +14,7 @@ def get_facebook_birthday(response):
     birthday = response.get('birthday', None)
     if birthday:
         try:
-            birthday = datetime.strptime(birthday, "%d/%m/%Y").date()
+            birthday = datetime.strptime(birthday, "%m/%d/%Y").date()
         except ValueError:
             logger.warning(
                 "Unknown facebook birthday format: '{0}'".format(birthday))
