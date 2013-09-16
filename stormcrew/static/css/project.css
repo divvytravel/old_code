@@ -31,7 +31,11 @@
 
 .form-trip input[type="text"],
 .form-trip select {
-    width: 300px !important;
+    width: 300px;
+}
+
+.form-trip #id_title {
+    width: 630px !important;
 }
 
 .form-trip textarea {
@@ -42,10 +46,15 @@
     margin-right: 15px;
     margin-left: 15px;
     display: inline-block;
+    vertical-align: top;
 }
 
 .form-trip #div_id_trip_type {
     display: block !important;
+}
+
+.trip-create-submit {
+    margin-bottom: 30px;
 }
 
 .files {

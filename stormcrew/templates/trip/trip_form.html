@@ -16,8 +16,7 @@
             <h1>{% block header %}Создать поездку{% endblock %}</h1>
             <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
                 {% csrf_token %}
-                {{ form|crispy }}
-
+                {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
 
               <span class="btn btn-success fileinput-button">
                   <i class="glyphicon glyphicon-plus"></i>
@@ -27,7 +26,7 @@
               </span>
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
-                <div class="control-group">
+                <div class="control-group trip-create-submit">
                   <div class="controls">
                     <input type="submit" class="btn btn-primary" value="Создать поездку"/>
                   </div>
@@ -133,11 +132,17 @@
     <script type="text/javascript">
         $('#id_start_date').datepicker({
           format: 'dd.mm.yyyy',
-          weekStart: 1
+          weekStart: 1,
+          autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
         });
         $('#id_end_date').datepicker({
           format: 'dd.mm.yyyy',
-          weekStart: 1
+          weekStart: 1,
+          autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
         });
     </script>
 {% endblock javascript %}

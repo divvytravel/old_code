@@ -32,6 +32,7 @@ class Trip(models.Model):
         ('closed', u'Участие после одобрения всех участников поездки'),
     )
 
+    title = models.CharField(u"Название", max_length=200)
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     country = models.CharField(u"Страна", max_length=100)
@@ -41,7 +42,6 @@ class Trip(models.Model):
         help_text=u"примерный бюджет")
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
-    title = models.CharField(u"Название", max_length=200)
     people_count = models.PositiveIntegerField(u"Сколько нужно человек")
     descr_main = models.TextField(u"Опишите суть поездки")
     descr_share = models.TextField(u"Опишите, что вы хотите разделить (или зачем вам компания)", blank=True)
