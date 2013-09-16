@@ -46,7 +46,6 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class TripRequestFormView(SuccessMessageMixin, CreateView):
     form_class = TripRequestForm
     template_name = "trip/trip_request_detail.html"
-    success_message = u"Поездка создана!"
 
     def get_trip(self):
         if not hasattr(self, '_trip_object'):
@@ -74,5 +73,16 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         })
         return context
 
+    def get_success_message(self):
+        trip = self.get_trip()
+        if trip.trip_type == Trip.TRIP_TYPE.open:
+            return u'Заявка подана успешно! Теперь участвуете в поездке "{0}".'\
+                .format(trip.title)
+        elif trip.trip_type == Trip.TRIP_TYPE.invite:
+            return u'Заявка подана успешно! Ваша заявку будет рассмотрена создателем поездки. Вы получите сообщение на email о результате.'
+        elif trip.trip_type == Trip.TRIP_TYPE.closed:
+            return u'Заявка подана успешно! Ваша заявку будет рассмотрена участниками поездки. Вы получите сообщение на email о результате.'
+        else:
+            return u'Заявка подана успешно!'
     def get_success_url(self):
         return reverse('home')
