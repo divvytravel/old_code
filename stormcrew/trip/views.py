@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import FormView, CreateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -9,19 +9,33 @@ from django.contrib import messages
 from braces.views import LoginRequiredMixin
 
 from users.models import User
-from .forms import TripForm, TripRequestForm
+from .forms import TripForm, TripRequestForm, TripFilterForm
 from .models import Trip, TripPicture
 from utils.views import SuccessMessageMixin
 
 
-class TripFilterFormView(TemplateView):
+class TripFilterFormView(FormView):
     template_name = "trip/filter.html"
+    form_class = TripFilterForm
+
+    def get_form_kwargs(self):
+        kwargs = super(TripFilterFormView, self).get_form_kwargs()
+        kwargs.update({
+            'users_queryset': User.objects.ready_to_trip().all(),
+        })
+        return kwargs
 
     def get_context_data(self, *args, **kwargs):
-        return {
+        context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
+        context.update({
             'trip_users': User.objects.ready_to_trip().all()[:5],
             'trips': Trip.objects.actual().all()[:30]
-        }
+        })
+        return context
+
+    # def post(self, *args, **kwargs):
+    #     import pdb; pdb.set_trace()
+    #     return super(TripFilterFormView, self).post(*args, **kwargs)
 
 
 class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):

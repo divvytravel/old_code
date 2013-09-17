@@ -1,20 +1,123 @@
 {% extends "base.html" %}
+{% load crispy_forms_field %}
+{% load staticfiles %}
+
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
+{% endblock css %}
 
 {% block content %}
     <div class="center-block">
-        <h1>Пользователи:</h1>
+        <h1>Вписаться в поездку</h1>
     </div>
-    <div class="users-list">
-        {% for trip_user in trip_users %}
-            <div class="user-short">
-                <div>{{ trip_user.get_avatar }}</div>
-                <div>{{ trip_user.get_full_name }}</div>
+    <div class="filter-form-header">
+        <h3>Укажите</h3>
+    </div>
+    <form class="form-inline" method="post" action="">
+        {% csrf_token %}
+        {% include "partials/forms/errors.html" %}
+
+        <div class="row align-center">
+            {% with form.date as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Когда{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
+
+            <div class="form-group">
+                <span>или</span>
             </div>
-        {% endfor %}
+
+            {% with form.where as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Куда{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
+        </div>
+
+        <div class="filter-form-header">
+            <h3>Найдите компанию</h3>
+        </div>
+
+        <div class="row align-center">
+            {% with form.gender as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Пол{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
+
+            <div style="display:inline-block; width: 50px;"></div>
+
+            {% with form.age_from as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Возраст от{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
+
+            {% with form.age_to as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Возраст до{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
+        </div>
+
+
+        <div class="filter-form-header">
+            <h3>Подходят</h3>
+        </div>
+
+        {% with form.users as field %}
+            <div class="users-list">
+                <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users">
+                    {% for choice in form.users.field.choices.queryset %}
+                      <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}">{{ choice.get_full_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endwith %}
+
+        <div class="control-group align-center" style="margin-top:10px;">
+          <div class="controls">
+            <input type="submit" class="btn btn-primary" value="Подобрать"/>
+          </div>
+        </div>
+    </form>
+
+    <div class="filter-form-header">
+        <h3>Впишитесь в поездку!</h3>
     </div>
-    <div class="center-block">
-        <h1>Поездки:</h1>
-    </div>
+
     <table class="table">
         <thead>
           <tr>
@@ -47,3 +150,25 @@
         </tbody>
     </table>
 {% endblock content %}
+
+
+{% block javascript %}
+    {{ block.super }}
+
+    <script src="{% static 'image-picker/image-picker.js' %}"></script>
+
+    <script type="text/javascript">
+        $('#id_date').datepicker({
+          format: 'dd.mm.yyyy',
+          weekStart: 1,
+          autoclose: true
+        }).on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+
+        $("#{{ form.users.auto_id }}").imagepicker({
+          hide_select : true,
+          show_label  : false
+        })
+    </script>
+{% endblock javascript %}

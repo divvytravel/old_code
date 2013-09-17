@@ -2,6 +2,7 @@
 from django import forms
 from django.utils import timezone
 from .models import Trip, TripRequest
+from users.models import User
 
 
 class TripForm(forms.ModelForm):
@@ -84,3 +85,17 @@ class TripRequestForm(forms.ModelForm):
         if trip.is_closed():
             trip.notify_members_about_request(self.user)
         return obj
+
+
+class TripFilterForm(forms.Form):
+    date = forms.DateField(required=False)
+    where = forms.CharField(max_length=100, required=False)
+    gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
+    age_from = forms.IntegerField(required=False)
+    age_to = forms.IntegerField(required=False)
+    users = forms.ModelMultipleChoiceField(queryset=None, required=False)
+
+    def __init__(self, *args, **kwargs):
+        users_queryset = kwargs.pop('users_queryset')
+        super(TripFilterForm, self).__init__(*args, **kwargs)
+        self.fields['users'].queryset = users_queryset

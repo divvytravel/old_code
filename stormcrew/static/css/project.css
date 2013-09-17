@@ -5,13 +5,20 @@
 }
 
 .center-block {
-    padding: 40px 15px;
+    padding: 20px 15px;
     text-align: center;
+}
+
+.filter-form-header {
+    padding: 10px 10px;
+    text-align: center;
+    color: #A7A3A3;
 }
 
 .users-list {
     border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid #E5E5E5;
+    padding-top: 5px;
 }
 
 .user-short {
@@ -74,4 +81,9 @@
 
 .trip-details-table td:first-child {
     min-width: 260px;
+}
+
+.image_picker_descr {
+    text-align: center;
+    margin-top: 3px;
 }

@@ -43,13 +43,17 @@ class User(AbstractUser):
     objects = UserManagerWithFilters()
 
     @property
-    def get_avatar(self):
+    def get_avatar_url(self):
         avatar_url = self.avatar_url
         if self.provider == User.PROVIDERS.facebook:
             # also avaliable ?width=100&height=100
             # also avaliable ?type=large
             avatar_url += "?type=large"
-            # avatar_url += "?width=180&height=180"
+        return avatar_url
+
+    @property
+    def get_avatar(self):
+        avatar_url = self.get_avatar_url
         return mark_safe('<img class="avatar" src="{0}"/>'.format(avatar_url))
 
     def get_full_name(self, *args, **kwargs):
