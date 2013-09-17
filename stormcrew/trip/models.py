@@ -13,6 +13,7 @@ from django.db.models import Q
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
+from utils.helpers import date_yearsago
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,21 @@ class TripQuerySet(QuerySet):
     @self_if_blank_arg
     def with_people(self, users):
         return self.filter(people__in=users)
+
+    @self_if_blank_arg
+    def with_people_gender(self, gender):
+        return self.filter(people__gender__in=[gender, ])
+
+    @self_if_blank_arg
+    def with_age(self, age_from, age_to):
+        qs = self
+        if age_from:
+            b_to = date_yearsago(age_from)
+            qs = qs.filter(people__birthday__lte=b_to)
+        if age_to:
+            b_from = date_yearsago(age_to)
+            qs = qs.filter(people__birthday__gte=b_from)
+        return qs
 
 
 class TripManager(models.Manager):

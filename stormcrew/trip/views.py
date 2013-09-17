@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
-from django.db.models import Q
 
 from braces.views import LoginRequiredMixin
 
@@ -35,10 +34,16 @@ class TripFilterFormView(FormView):
         return context
 
     def get_filtered_trips(self, form):
+        clnd = form.cleaned_data
         return Trip.objects.actual()\
-            .in_date(form.cleaned_data['date'])\
-            .contains_geo(form.cleaned_data['where'])\
-            .with_people(form.cleaned_data['users'])
+            .in_date(clnd['date'])\
+            .contains_geo(clnd['where'])\
+            .with_people_gender(clnd['gender'])\
+            .with_age(clnd['age_from'], clnd['age_to'])\
+            .with_people(clnd['users'])
+
+    def set_filtered_users(self, form):
+        form.fields['users'].queryset = User.objects.ready_to_trip()
 
     def form_valid(self, form):
         trips = self.get_filtered_trips(form)

@@ -1,7 +1,9 @@
+import random
 from django.core.management.base import BaseCommand
 from milkman.dairy import milkman
 from tests.utils import random_date
 from datetime import datetime, timedelta
+from users.models import User
 
 
 class Command(BaseCommand):
@@ -16,7 +18,8 @@ class Command(BaseCommand):
                 birthday=random_date(
                     datetime.now()-timedelta(days=70*365),
                     datetime.now()-timedelta(days=18*365)
-                )
+                ),
+                gender=random.choice((User.GENDERS.male, User.GENDERS.female))
             )
             self.stdout.write("Created user '{0}'".format(user))
 
