@@ -29,7 +29,7 @@ class TripFilterFormView(FormView):
         context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
         if 'GET' in self.request.method:
             context.update({
-                'trips': Trip.objects.actual().all()[:30],
+                'trips': Trip.objects.actual().count_gender().all()[:30],
             })
         return context
 
@@ -40,7 +40,8 @@ class TripFilterFormView(FormView):
             .contains_geo(clnd['where'])\
             .with_people_gender(clnd['gender'])\
             .with_age(clnd['age_from'], clnd['age_to'])\
-            .with_people(clnd['users'])
+            .with_people(clnd['users'])\
+            .count_gender()
 
     def set_filtered_users(self, form, trips):
         form.fields['users'].queryset =\

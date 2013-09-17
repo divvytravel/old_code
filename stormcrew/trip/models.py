@@ -14,6 +14,7 @@ from django.db.models import Q
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
 from utils.helpers import date_yearsago
+from django.db.models import Count
 
 logger = logging.getLogger(__name__)
 
@@ -21,6 +22,24 @@ class TripQuerySet(QuerySet):
     def actual(self):
         return self.filter(start_date__gte=datetime.now().date())\
             .order_by('start_date')
+
+    def count_gender(self):
+        return self.annotate(count_all_people=Count('people'))\
+        .extra(select = {
+            "count_female" : """
+            SELECT COUNT(*)
+            FROM "users_user"
+                LEFT OUTER JOIN "trip_trip_people" ON ("users_user"."id" = "trip_trip_people"."user_id" and "trip_trip_people"."trip_id" = "trip_trip"."id")
+            WHERE "users_user"."gender" = "female" and "trip_trip"."id" = "trip_trip_people"."trip_id"
+            """
+        }).extra(select = {
+            "count_male" : """
+            SELECT COUNT(*)
+            FROM "users_user"
+                LEFT OUTER JOIN "trip_trip_people" ON ("users_user"."id" = "trip_trip_people"."user_id" and "trip_trip_people"."trip_id" = "trip_trip"."id")
+            WHERE "users_user"."gender" = "male" and "trip_trip"."id" = "trip_trip_people"."trip_id"
+            """
+        }).distinct()
 
     @self_if_blank_arg
     def in_date(self, date):

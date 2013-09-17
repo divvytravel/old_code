@@ -37,15 +37,19 @@ class Command(BaseCommand):
                 start_date,
                 start_date+timedelta(days=30)
             )
+            users = []
+            for j in range(random.randint(2, 4)):
+                user = User.objects.order_by('?')[0]
+                if user not in users:
+                    users.append(user)
             trip = milkman.deliver('trip.trip',
                 start_date=start_date, end_date=end_date,
                 country=random.choice(countries),
                 city=random.choice(cities),
-                title=u"Поездка_{0}".format(i)
+                title=u"Поездка_{0}".format(i),
+                people=users,
+                owner=User.objects.all()[0]
             )
-            for j in range(2):
-                user = User.objects.order_by('?')[0]
-                trip.people.add(user)
             self.stdout.write("Created trip '{0}'".format(trip))
 
         self.stdout.write("Successfully created test trips")

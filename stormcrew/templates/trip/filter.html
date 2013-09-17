@@ -148,7 +148,7 @@
                 <td>
                     {{ trip.price }} {{ trip.get_currency_display }}
                 </td>
-                <td></td>
+                <td>{{trip.count_all_people}} человек {% if trip.count_male or trip.count_female %}({% endif %}{% if trip.count_male %}{{trip.count_male}}м{% endif %}{% if trip.count_male and trip.count_female %} {% endif %}{% if trip.count_female %}{{trip.count_female}}ж{% endif %}{% if trip.count_male or trip.count_female %}){% endif %}</td>
               </tr>
             {% endfor %}
           <tr>
