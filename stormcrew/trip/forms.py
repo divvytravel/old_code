@@ -99,3 +99,7 @@ class TripFilterForm(forms.Form):
         users_queryset = kwargs.pop('users_queryset')
         super(TripFilterForm, self).__init__(*args, **kwargs)
         self.fields['users'].queryset = users_queryset
+
+    def clean_where(self):
+        where = self.cleaned_data['where']
+        return where.strip()

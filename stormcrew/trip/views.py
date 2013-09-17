@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
+from django.db.models import Q
 
 from braces.views import LoginRequiredMixin
 
@@ -27,17 +28,30 @@ class TripFilterFormView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
-        context.update({
-            'trip_users': User.objects.ready_to_trip().all()[:5],
-            'trips': Trip.objects.actual().all()[:30],
-        })
+        if 'GET' in self.request.method:
+            context.update({
+                'trips': Trip.objects.actual().all()[:30],
+            })
         return context
 
+    def get_filtered_trips(self, form):
+        trips = Trip.objects.actual()
+        when = form.cleaned_data['date']
+        if when:
+            trips = trips.filter(start_date__lte=when, end_date__gte=when)
+        where = form.cleaned_data['where']
+        if where:
+            trips = trips.filter(
+                Q(city__icontains=where) | Q(country__icontains=where))
+        return trips
+
     def form_valid(self, form):
+        trips = self.get_filtered_trips(form)
         return self.render_to_response(self.get_context_data(
             form=form,
-            selected_users=form.cleaned_data['users'])
-        )
+            selected_users=form.cleaned_data['users'],
+            trips=trips,
+        ))
 
 
 class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
