@@ -98,14 +98,19 @@
         </div>
 
         {% with form.users as field %}
+            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
             <div class="users-list">
                 <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users">
                     {% for choice in form.users.field.choices.queryset %}
-                      <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}">{{ choice.get_full_name }}</option>
+                      <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}"
+                      {%if choice in selected_users %} selected="selected"{%endif%}
+                      >{{ choice.get_full_name }}</option>
                     {% endfor %}
                 </select>
             </div>
         {% endwith %}
+
+
 
         <div class="control-group align-center" style="margin-top:10px;">
           <div class="controls">

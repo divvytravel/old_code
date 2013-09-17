@@ -29,13 +29,15 @@ class TripFilterFormView(FormView):
         context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
         context.update({
             'trip_users': User.objects.ready_to_trip().all()[:5],
-            'trips': Trip.objects.actual().all()[:30]
+            'trips': Trip.objects.actual().all()[:30],
         })
         return context
 
-    # def post(self, *args, **kwargs):
-    #     import pdb; pdb.set_trace()
-    #     return super(TripFilterFormView, self).post(*args, **kwargs)
+    def form_valid(self, form):
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            selected_users=form.cleaned_data['users'])
+        )
 
 
 class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):

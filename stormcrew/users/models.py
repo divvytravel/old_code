@@ -66,4 +66,4 @@ class User(AbstractUser):
         return reverse('users:detail', args=[str(self.pk)])
 
     def __unicode__(self):
-        return self.username
+        return self.get_full_name()
