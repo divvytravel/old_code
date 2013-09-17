@@ -6,12 +6,13 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.sites.models import get_current_site
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Q
 
 from model_utils import Choices
+from utils.decorators import self_if_blank_arg
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +20,19 @@ class TripQuerySet(QuerySet):
     def actual(self):
         return self.filter(start_date__gte=datetime.now().date())\
             .order_by('start_date')
+
+    @self_if_blank_arg
+    def in_date(self, date):
+        return self.filter(start_date__lte=date, end_date__gte=date)
+
+    @self_if_blank_arg
+    def contains_geo(self, geo_name):
+        return self.filter(
+            Q(city__icontains=geo_name) | Q(country__icontains=geo_name))
+
+    @self_if_blank_arg
+    def with_people(self, users):
+        return self.filter(people__in=users)
 
 
 class TripManager(models.Manager):
@@ -56,7 +70,8 @@ class Trip(models.Model):
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    people = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='approved_trips', blank=True)
+    people = models.ManyToManyField(settings.AUTH_USER_MODEL,
+        related_name='approved_trips', blank=True)
 
     objects = TripManager()
 

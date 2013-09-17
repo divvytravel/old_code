@@ -14,3 +14,16 @@ def instance_cache(func):
             setattr(instance, attr_name, value)
             return value
     return wrapped
+
+
+def self_if_blank_arg(func):
+    """
+    Stores returned values as instance attr. On next call will return this attr.
+    """
+    @wraps(func)
+    def wrapped(instance, *args, **kwargs):
+        if any(args) or any(kwargs.values()):
+            return func(instance, *args, **kwargs)
+        else:
+            return instance
+    return wrapped

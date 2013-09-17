@@ -35,15 +35,10 @@ class TripFilterFormView(FormView):
         return context
 
     def get_filtered_trips(self, form):
-        trips = Trip.objects.actual()
-        when = form.cleaned_data['date']
-        if when:
-            trips = trips.filter(start_date__lte=when, end_date__gte=when)
-        where = form.cleaned_data['where']
-        if where:
-            trips = trips.filter(
-                Q(city__icontains=where) | Q(country__icontains=where))
-        return trips
+        return Trip.objects.actual()\
+            .in_date(form.cleaned_data['date'])\
+            .contains_geo(form.cleaned_data['where'])\
+            .with_people(form.cleaned_data['users'])
 
     def form_valid(self, form):
         trips = self.get_filtered_trips(form)
