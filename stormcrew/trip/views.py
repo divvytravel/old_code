@@ -42,11 +42,13 @@ class TripFilterFormView(FormView):
             .with_age(clnd['age_from'], clnd['age_to'])\
             .with_people(clnd['users'])
 
-    def set_filtered_users(self, form):
-        form.fields['users'].queryset = User.objects.ready_to_trip()
+    def set_filtered_users(self, form, trips):
+        form.fields['users'].queryset =\
+            User.objects.ready_to_trip().in_trips(trips)
 
     def form_valid(self, form):
         trips = self.get_filtered_trips(form)
+        self.set_filtered_users(form, trips)
         return self.render_to_response(self.get_context_data(
             form=form,
             selected_users=form.cleaned_data['users'],
