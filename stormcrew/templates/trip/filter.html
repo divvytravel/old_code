@@ -98,7 +98,7 @@
             <div style="display:inline-block; width: 50px;"></div>
 
             {% with form.age_from as field %}
-                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %} age_filter">
                         <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                             Возраст от{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                         </label>
@@ -110,7 +110,7 @@
             {% endwith %}
 
             {% with form.age_to as field %}
-                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %} age_filter">
                         <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                             Возраст до{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                         </label>
