@@ -92,13 +92,14 @@
     margin-top: 3px;
 }
 
-thumbnails .thumbnail>img {
+.thumbnails .thumbnail>img {
     height: 185px;
 }
 
-thumbnails .thumbnail {
-    width: 200px;
+.thumbnails .thumbnail {
+    width: 190px;
 }
+
 .age_filter {
     /*width:100px;*/
 }
