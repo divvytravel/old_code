@@ -22,6 +22,7 @@
     position: relative;
     padding-left: 61px;
     min-width: 1130px;
+    min-height: 240px;
 }
 
 .user-short {
@@ -91,6 +92,13 @@
     margin-top: 3px;
 }
 
-.thumbnails .thumbnail>img {
+thumbnails .thumbnail>img {
     height: 185px;
+}
+
+thumbnails .thumbnail {
+    width: 200px;
+}
+.age_filter {
+    /*width:100px;*/
 }

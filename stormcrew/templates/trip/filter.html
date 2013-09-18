@@ -98,7 +98,7 @@
             <div style="display:inline-block; width: 50px;"></div>
 
             {% with form.age_from as field %}
-                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %} age_filter">
                         <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                             Возраст от{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                         </label>
@@ -110,7 +110,7 @@
             {% endwith %}
 
             {% with form.age_to as field %}
-                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %} age_filter">
                         <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
                             Возраст до{% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
                         </label>
@@ -130,6 +130,7 @@
         {% with form.users as field %}
             {% include 'bootstrap3/layout/help_text_and_errors.html' %}
             <div class="users-list">
+                {% if form.users.field.choices.queryset|length %}
                 <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users" style="display:none;">
                     {% for choice in form.users.field.choices.queryset %}
                       <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}"
@@ -139,6 +140,11 @@
                 </select>
                 <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
                 <a class="next" id="foo2_next" href="#"><span>next</span></a>
+                {% else %}
+                    <h4 style="text-align: center;padding-right:61px;color:#A7A3A3;margin-top: 100px;">
+                        Не найдено
+                    </h4>
+                {% endif %}
             </div>
         {% endwith %}
 
