@@ -5,6 +5,36 @@
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
+  <style type="text/css">
+        a.prev, a.next {
+            background: url({% static 'caroufredsel/miscellaneous_sprite.png' %}) no-repeat transparent;
+            width: 45px;
+            height: 50px;
+            display: block;
+            position: absolute;
+            top: 85px;
+        }
+        a.prev {            left: -22px;
+                            background-position: 0 0; }
+        a.prev:hover {      background-position: 0 -50px; }
+        a.prev.disabled {   background-position: 0 -100px !important;  }
+        a.next {            right: -22px;
+                            background-position: -50px 0; }
+        a.next:hover {      background-position: -50px -50px; }
+        a.next.disabled {   background-position: -50px -100px !important;  }
+        a.prev.disabled, a.next.disabled {
+            cursor: default;
+        }
+
+        a.prev span, a.next span {
+            display: none;
+        }
+        .clearfix {
+            float: none;
+            clear: both;
+        }
+
+  </style>
 {% endblock css %}
 
 {% block content %}
@@ -100,13 +130,15 @@
         {% with form.users as field %}
             {% include 'bootstrap3/layout/help_text_and_errors.html' %}
             <div class="users-list">
-                <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users">
+                <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users" style="display:none;">
                     {% for choice in form.users.field.choices.queryset %}
                       <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}"
                       {%if choice in selected_users %} selected="selected"{%endif%}
                       >{{ choice.get_full_name }}</option>
                     {% endfor %}
                 </select>
+                <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
+                <a class="next" id="foo2_next" href="#"><span>next</span></a>
             </div>
         {% endwith %}
 
@@ -161,8 +193,10 @@
     {{ block.super }}
 
     <script src="{% static 'image-picker/image-picker.js' %}"></script>
+    <script src="{% static 'caroufredsel/jquery.carouFredSel-6.2.1.js' %}"></script>
 
     <script type="text/javascript">
+
         $('#id_date').datepicker({
           format: 'dd.mm.yyyy',
           weekStart: 1,
@@ -171,9 +205,53 @@
             $(this).datepicker('hide');
         });
 
+
         $("#{{ form.users.auto_id }}").imagepicker({
           hide_select : true,
-          show_label  : false
+          show_label  : false,
+          initialized: function(){
+            $('.thumbnails').hide();
+            $('.image_picker_image').load(function(){
+                $('.thumbnails').show();
+                $('.thumbnails').carouFredSel({
+                    circular: false,
+                    infinite: false,
+                    auto    : false,
+                    prev    : {
+                        button  : "#foo2_prev",
+                        key     : "left"
+                    },
+                    next    : {
+                        button  : "#foo2_next",
+                        key     : "right"
+                    },
+                    // pagination  : "#foo2_pag"
+                });
+                $(".caroufredsel_wrapper").css('width', '1025px');
+            });
+            // $('.thumbnails').load(function(){
+            //     alert("LOAD");
+            // });
+            // setTimeout(function() {
+            //         $('.thumbnails').carouFredSel({
+            //             circular: false,
+            //             infinite: false,
+            //             auto    : false,
+            //             prev    : {
+            //                 button  : "#foo2_prev",
+            //                 key     : "left"
+            //             },
+            //             next    : {
+            //                 button  : "#foo2_next",
+            //                 key     : "right"
+            //             },
+            //             // pagination  : "#foo2_pag"
+            //         });
+            //         $(".caroufredsel_wrapper").css('width', '1025px');
+            // }, 350);
+          }
         })
     </script>
+
+
 {% endblock javascript %}

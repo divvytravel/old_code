@@ -19,6 +19,9 @@
     border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid #E5E5E5;
     padding-top: 5px;
+    position: relative;
+    padding-left: 61px;
+    min-width: 1130px;
 }
 
 .user-short {
