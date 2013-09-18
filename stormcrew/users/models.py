@@ -8,7 +8,6 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 from social_auth.fields import JSONField
-from utils.decorators import self_if_blank_arg
 
 
 class UserQuerySet(QuerySet):
@@ -16,7 +15,6 @@ class UserQuerySet(QuerySet):
         # TODO: on production remove isnull
         return self.exclude(provider="").exclude(provider__isnull=True)
 
-    @self_if_blank_arg
     def in_trips(self, trips):
         return self.filter(approved_trips__in=trips).distinct()
 
