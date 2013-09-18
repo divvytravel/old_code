@@ -30,14 +30,14 @@ class TripQuerySet(QuerySet):
             SELECT COUNT(*)
             FROM "users_user"
                 LEFT OUTER JOIN "trip_trip_people" ON ("users_user"."id" = "trip_trip_people"."user_id" and "trip_trip_people"."trip_id" = "trip_trip"."id")
-            WHERE "users_user"."gender" = "female" and "trip_trip"."id" = "trip_trip_people"."trip_id"
+            WHERE "users_user"."gender" = 'female' and "trip_trip"."id" = "trip_trip_people"."trip_id"
             """
         }).extra(select = {
             "count_male" : """
             SELECT COUNT(*)
             FROM "users_user"
                 LEFT OUTER JOIN "trip_trip_people" ON ("users_user"."id" = "trip_trip_people"."user_id" and "trip_trip_people"."trip_id" = "trip_trip"."id")
-            WHERE "users_user"."gender" = "male" and "trip_trip"."id" = "trip_trip_people"."trip_id"
+            WHERE "users_user"."gender" = 'male' and "trip_trip"."id" = "trip_trip_people"."trip_id"
             """
         }).distinct()
 
