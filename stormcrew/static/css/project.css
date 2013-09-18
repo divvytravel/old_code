@@ -90,3 +90,7 @@
     text-align: center;
     margin-top: 3px;
 }
+
+.thumbnails .thumbnail>img {
+    height: 185px;
+}
