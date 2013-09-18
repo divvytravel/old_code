@@ -5,8 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
+from django.core import serializers
 
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
+    JSONResponseMixin
 
 from users.models import User
 from .forms import TripForm, TripRequestForm, TripFilterForm
@@ -14,9 +16,11 @@ from .models import Trip, TripPicture
 from utils.views import SuccessMessageMixin
 
 
-class TripFilterFormView(FormView):
+# class TripFilterFormView(FormView):
+class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
     form_class = TripFilterForm
+    content_type = "text/html"
 
     def get_form_kwargs(self):
         kwargs = super(TripFilterFormView, self).get_form_kwargs()
@@ -43,18 +47,39 @@ class TripFilterFormView(FormView):
             .with_people(clnd['users'])\
             .count_gender()
 
-    def set_filtered_users(self, form, trips):
-        form.fields['users'].queryset =\
-            User.objects.ready_to_trip().in_trips(trips)
+    # def set_filtered_users(self, form, trips):
+    #     form.fields['users'].queryset =\
+    #         User.objects.ready_to_trip().in_trips(trips)
 
-    def form_valid(self, form):
+    def form_valid(self, form, ajax=False):
         trips = self.get_filtered_trips(form)
-        self.set_filtered_users(form, trips)
-        return self.render_to_response(self.get_context_data(
-            form=form,
-            selected_users=form.cleaned_data['users'],
-            trips=trips,
-        ))
+        users = User.objects.ready_to_trip().in_trips(trips)
+        if ajax:
+            return trips, users
+        else:
+            form.fields['users'].queryset = users
+            return self.render_to_response(self.get_context_data(
+                form=form,
+                selected_users=form.cleaned_data['users'],
+                trips=trips,
+            ))
+
+    def post_ajax(self, request, *args, **kwargs):
+        import pdb; pdb.set_trace()
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            trips, users = self.form_valid(form, ajax=True)
+            trips = serializers.serialize("json", trips)
+            users = serializers.serialize("json", users)
+            data = {
+                'trips': trips,
+                'users': users,
+            }
+        else:
+            # TODO
+            data = {}
+        return self.render_json_response(data)
 
 
 class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
