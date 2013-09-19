@@ -10,7 +10,6 @@ from django.db.models.query import QuerySet
 from django.template.loader import render_to_string
 from django.contrib.sites.models import get_current_site
 from django.core.mail import EmailMultiAlternatives
-from django.db.models import Q
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
@@ -54,9 +53,8 @@ class TripQuerySet(QuerySet):
         return self.filter(start_date__gte=start_date, end_date__lte=end_date)
 
     @self_if_blank_arg
-    def contains_geo(self, geo_name):
-        return self.filter(
-            Q(city__icontains=geo_name) | Q(country__icontains=geo_name))
+    def in_country(self, country):
+        return self.filter(country=country)
 
     @self_if_blank_arg
     def with_people(self, users):
@@ -99,7 +97,7 @@ class Trip(models.Model):
     title = models.CharField(u"Название", max_length=200)
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
-    country = models.CharField(u"Страна", max_length=100)
+    country = models.ForeignKey('geo.Country', blank=True, null=True)
     city = models.CharField(u"Город", max_length=100,
         help_text=u"если несколько, то первый")
     price = models.PositiveIntegerField(u"Бюджет",

@@ -4,6 +4,7 @@ from django import forms
 from django.utils import timezone
 from .models import Trip, TripRequest
 from users.models import User
+from geo.models import Country
 
 
 class TripForm(forms.ModelForm):
@@ -12,9 +13,26 @@ class TripForm(forms.ModelForm):
         'low_date': u"Дата не может быть меньше сегодняшней",
     }
 
+    country = forms.CharField(label=u"Страна", max_length=100)
+
     class Meta:
         model = Trip
-        exclude = 'owner', 'people', 'potential_people'
+        fields = (
+            'title',
+            'start_date',
+            'end_date',
+            'country',
+            'city',
+            'price',
+            'currency',
+            'includes',
+            'people_count',
+            'descr_main',
+            'descr_share',
+            'descr_additional',
+            'descr_company',
+            'trip_type',
+        )
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop('owner')
@@ -42,6 +60,9 @@ class TripForm(forms.ModelForm):
         if self.is_valid():
             if self.cleaned_data['start_date'] > self.cleaned_data['end_date']:
                 raise forms.ValidationError(self.trip_errors['end_less_start_date'])
+            self.cleaned_data['country'] =\
+                Country.objects.get_or_create_normalized(
+                    name=self.cleaned_data['country'])
         return self.cleaned_data
 
     def save(self, commit=False):
@@ -90,7 +111,8 @@ class TripRequestForm(forms.ModelForm):
 
 class TripFilterForm(forms.Form):
     month_year = forms.CharField(max_length=10, required=False)
-    where = forms.CharField(max_length=100, required=False)
+    country = forms.ModelChoiceField(queryset=Country.objects.all(),
+        empty_label=u"Не важно", required=False)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
     age_from = forms.IntegerField(required=False)
     age_to = forms.IntegerField(required=False)
@@ -109,7 +131,3 @@ class TripFilterForm(forms.Form):
             except ValueError:
                 raise forms.ValidationError(u"Неверный формат даты")
         return month_year
-
-    def clean_where(self):
-        where = self.cleaned_data['where']
-        return where.strip()
