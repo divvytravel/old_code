@@ -119,7 +119,8 @@
             {% include 'bootstrap3/layout/help_text_and_errors.html' %}
             <div class="users-list">
                 {% if form.users.field.choices.queryset|length %}
-                <select id="{{ field.auto_id }}" multiple="multiple" class="image-picker show-html" name="users" style="display:none;">
+                <select id="{{ field.auto_id }}" class="image-picker show-html" name="users" style="display:none;">
+                    <option value=""></option>
                     {% for choice in form.users.field.choices.queryset %}
                       <option data-img-src="{{ choice.get_avatar_url }}" value="{{choice.pk}}"
                       {%if choice in selected_users %} selected="selected"{%endif%}

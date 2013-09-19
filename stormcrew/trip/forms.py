@@ -124,7 +124,7 @@ class TripFilterForm(forms.Form):
         empty_label=u"Не важно", required=False)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
     age = forms.ChoiceField(choices=AGES, required=False)
-    users = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    users = forms.ModelChoiceField(queryset=None, required=False)
 
     def __init__(self, *args, **kwargs):
         users_queryset = kwargs.pop('users_queryset')

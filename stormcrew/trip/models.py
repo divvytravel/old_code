@@ -15,7 +15,7 @@ from django.core.mail import EmailMultiAlternatives
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
-from utils.helpers import date_yearsago
+from utils.helpers import date_yearsago, wrap_in_iterable
 from django.db.models import Count
 
 logger = logging.getLogger(__name__)
@@ -63,7 +63,7 @@ class TripQuerySet(QuerySet):
 
     @self_if_blank_arg
     def with_people(self, users):
-        return self.filter(people__in=users)
+        return self.filter(people__in=wrap_in_iterable(users))
 
     @self_if_blank_arg
     def with_people_gender(self, gender):

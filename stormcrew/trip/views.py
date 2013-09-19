@@ -12,6 +12,7 @@ from users.models import User
 from .forms import TripForm, TripRequestForm, TripFilterForm
 from .models import Trip, TripPicture
 from utils.views import SuccessMessageMixin
+from utils.helpers import wrap_in_iterable
 
 
 class TripFilterFormView(FormView):
@@ -53,9 +54,13 @@ class TripFilterFormView(FormView):
         self.set_filtered_users(form, trips)
         return self.render_to_response(self.get_context_data(
             form=form,
-            selected_users=form.cleaned_data['users'],
+            selected_users=wrap_in_iterable(form.cleaned_data['users']),
             trips=trips,
         ))
+
+    def form_invalid(self, form):
+        # import pdb; pdb.set_trace()
+        return super(TripFilterFormView, self).form_invalid(form)
 
 
 class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
