@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import calendar
+from datetime import timedelta
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -72,10 +73,10 @@ class TripQuerySet(QuerySet):
     def with_age(self, age_from, age_to):
         qs = self
         if age_from:
-            b_to = date_yearsago(age_from)
+            b_to = date_yearsago(age_from+1) + timedelta(days=1)
             qs = qs.filter(people__birthday__lte=b_to)
         if age_to:
-            b_from = date_yearsago(age_to)
+            b_from = date_yearsago(age_to+1) + timedelta(days=1)
             qs = qs.filter(people__birthday__gte=b_from)
         return qs
 
