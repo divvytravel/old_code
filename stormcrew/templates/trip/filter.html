@@ -130,7 +130,7 @@
                 <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
                 <a class="next" id="foo2_next" href="#"><span>next</span></a>
                 {% else %}
-                    <h4 style="text-align: center;padding-right:61px;color:#A7A3A3;margin-top: 100px;">
+                    <h4 style="text-align: center;color:#A7A3A3;margin-top: 100px;">
                         Не найдено
                     </h4>
                 {% endif %}
@@ -215,6 +215,8 @@
                     circular: false,
                     infinite: false,
                     auto    : false,
+                    width   : "100%",
+                    align   : "center",
                     prev    : {
                         button  : "#foo2_prev",
                         key     : "left"
@@ -225,7 +227,6 @@
                     },
                     // pagination  : "#foo2_pag"
                 });
-                $(".caroufredsel_wrapper").css('width', '1025px');
             });
           }
         })
