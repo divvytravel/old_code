@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.db.models.query import QuerySet
+from django.db.models import Q
 from django.template.loader import render_to_string
 from django.contrib.sites.models import get_current_site
 from django.core.mail import EmailMultiAlternatives
@@ -50,7 +51,10 @@ class TripQuerySet(QuerySet):
         l_day = calendar.monthrange(year, month)[1]
         end_date = datetime.strptime(
             d_fmt.format(l_day, month, year), '%d.%m.%Y').date()
-        return self.filter(start_date__gte=start_date, end_date__lte=end_date)
+        return self.filter(
+            Q(start_date__gte=start_date, start_date__lte=end_date)
+             |
+            Q(start_date__lt=start_date, end_date__gte=start_date))
 
     @self_if_blank_arg
     def in_country(self, country):
@@ -97,7 +101,8 @@ class Trip(models.Model):
     title = models.CharField(u"Название", max_length=200)
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
-    country = models.ForeignKey('geo.Country', blank=True, null=True)
+    country = models.ForeignKey('geo.Country', verbose_name=u'Страна',
+        blank=True, null=True)
     city = models.CharField(u"Город", max_length=100,
         help_text=u"если несколько, то первый")
     price = models.PositiveIntegerField(u"Бюджет",
