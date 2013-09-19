@@ -84,28 +84,42 @@ class TripRequestForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
+        data = kwargs.get('data', None)
+        if data:
+            self.cancel = 'cancel' == data.get('action', None)
+        else:
+            self.cancel = False
+        self.trip_request = None
         super(TripRequestForm, self).__init__(*args, **kwargs)
         self.fields['trip'].widget = forms.HiddenInput()
 
     def clean(self):
-        if self.is_valid():
+        if self.is_valid() and not self.cancel:
             trip = self.cleaned_data['trip']
             if trip.is_user_in(self.user):
-                raise forms.ValidationError(self['alread_in'])
+                raise forms.ValidationError(self.trip_errors['alread_in'])
             if trip.is_user_has_request(self.user):
-                raise forms.ValidationError(self['already_requested'])
+                raise forms.ValidationError(self.trip_errors['already_requested'])
         return self.cleaned_data
 
     def save(self, commit=False):
-        obj = super(TripRequestForm, self).save(commit)
-        obj.user = self.user
-        obj.save()
         trip = self.cleaned_data['trip']
-        if trip.is_open():
-            trip.people.add(self.user)
-        trip.notify_owner_about_request(self.user)
-        if trip.is_closed():
-            trip.notify_members_about_request(self.user)
+        if self.cancel:
+            TripRequest.objects.filter(trip=trip, user=self.user).delete()
+            trip.notify_owner_about_cancel_request(self.user)
+            if trip.is_closed():
+                trip.notify_members_about_cancel_request(self.user)
+            trip.people.remove(self.user)
+            obj = None
+        else:
+            obj = super(TripRequestForm, self).save(commit)
+            obj.user = self.user
+            obj.save()
+            if trip.is_open():
+                trip.people.add(self.user)
+            trip.notify_owner_about_request(self.user)
+            if trip.is_closed():
+                trip.notify_members_about_request(self.user)
         return obj
 
 

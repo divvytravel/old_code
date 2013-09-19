@@ -59,7 +59,6 @@ class TripFilterFormView(FormView):
         ))
 
     def form_invalid(self, form):
-        # import pdb; pdb.set_trace()
         return super(TripFilterFormView, self).form_invalid(form)
 
 
@@ -137,6 +136,8 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
 
     def get_success_message(self):
         trip = self.get_trip()
+        if 'cancel' == self.request.POST.get('action'):
+            return u'Заявка на поездку "{0}" отменена.'.format(trip.title)
         if trip.is_open():
             return u'Заявка подана успешно! Теперь вы участвуете в поездке "{0}".'\
                 .format(trip.title)
@@ -146,5 +147,6 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
             return u'Заявка подана успешно! Ваша заявку будет рассмотрена участниками поездки. Вы получите сообщение на email о результате.'
         else:
             return u'Заявка подана успешно!'
+
     def get_success_url(self):
         return reverse('home')
