@@ -36,7 +36,7 @@ class TripFilterFormView(FormView):
     def get_filtered_trips(self, form):
         clnd = form.cleaned_data
         return Trip.objects.actual()\
-            .in_date(clnd['date'])\
+            .in_month_year(clnd['month_year'])\
             .contains_geo(clnd['where'])\
             .with_people_gender(clnd['gender'])\
             .with_age(clnd['age_from'], clnd['age_to'])\

@@ -6,7 +6,6 @@ def today():
     return timezone.now().date()
 
 
-
 def date_yearsago(years, from_date=None):
     if from_date is None:
         from_date = timezone.now()

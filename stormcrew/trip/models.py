@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import calendar
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -42,8 +43,15 @@ class TripQuerySet(QuerySet):
         }).distinct()
 
     @self_if_blank_arg
-    def in_date(self, date):
-        return self.filter(start_date__lte=date, end_date__gte=date)
+    def in_month_year(self, month_year):
+        month, year = map(int, month_year.split('.'))
+        d_fmt = "{0:>02}.{1:>02}.{2}"
+        start_date = datetime.strptime(
+            d_fmt.format(1, month, year), '%d.%m.%Y').date()
+        l_day = calendar.monthrange(year, month)[1]
+        end_date = datetime.strptime(
+            d_fmt.format(l_day, month, year), '%d.%m.%Y').date()
+        return self.filter(start_date__gte=start_date, end_date__lte=end_date)
 
     @self_if_blank_arg
     def contains_geo(self, geo_name):

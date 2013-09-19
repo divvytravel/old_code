@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
 from django import forms
 from django.utils import timezone
 from .models import Trip, TripRequest
@@ -88,7 +89,7 @@ class TripRequestForm(forms.ModelForm):
 
 
 class TripFilterForm(forms.Form):
-    date = forms.DateField(required=False)
+    month_year = forms.CharField(max_length=10, required=False)
     where = forms.CharField(max_length=100, required=False)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
     age_from = forms.IntegerField(required=False)
@@ -99,6 +100,15 @@ class TripFilterForm(forms.Form):
         users_queryset = kwargs.pop('users_queryset')
         super(TripFilterForm, self).__init__(*args, **kwargs)
         self.fields['users'].queryset = users_queryset
+
+    def clean_month_year(self):
+        month_year = self.cleaned_data['month_year']
+        if month_year:
+            try:
+                datetime.strptime('01.' + month_year, '%d.%m.%Y')
+            except ValueError:
+                raise forms.ValidationError(u"Неверный формат даты")
+        return month_year
 
     def clean_where(self):
         where = self.cleaned_data['where']
