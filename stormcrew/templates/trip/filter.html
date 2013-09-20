@@ -249,9 +249,12 @@
           }
         })
 
-        // $( "#id_where" ).change(function() {
-        //   alert( "Handler for .change() called." );
-        // });
+        $( document ).ready(function() {
+          $('#{{form.country.auto_id}}').change(function(){
+            $(this).post_form_on_change();
+          });
+        });
+
     </script>
 
 

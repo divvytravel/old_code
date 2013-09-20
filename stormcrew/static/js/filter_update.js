@@ -234,7 +234,7 @@
         }
         var form_data = {
           'month_year': date,
-          'country': this_form.find('input[name="country"]').val(),
+          'country': this_form.find('select[name="country"]').val(),
           'gender': this_form.find('select[name="gender"]').val(),
           'age_from': this_form.find('select[name="age_from"]').val(),
           'age_to': this_form.find('select[name="age_to"]').val(),
