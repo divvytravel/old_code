@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 
 class TripQuerySet(QuerySet):
     def actual(self):
-        return self.filter(start_date__gte=get_today())\
+        return self.filter(start_date__gt=get_today())\
             .order_by('start_date')
 
     def passed(self):
