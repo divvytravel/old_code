@@ -13,3 +13,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
 
 
+class UserPkSerializer(serializers.ModelSerializer):
+    pk = serializers.Field(source='pk')
+
+    class Meta:
+        model = User
+        fields = 'pk',

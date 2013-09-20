@@ -5,13 +5,12 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
-from django.core import serializers
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
 
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm
 from .models import Trip, TripPicture
 from .serializers import TripSerializer
@@ -83,6 +82,8 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         form = self.get_form(form_class)
         if form.is_valid():
             trips, users, selected_users = self.form_valid(form, ajax=True)
+            if selected_users:
+                selected_users = UserPkSerializer(selected_users).data
             trips = TripSerializer(trips, many=True).data
             users = UserSerializer(users, many=True).data
             data = {

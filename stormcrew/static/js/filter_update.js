@@ -33,7 +33,7 @@
   })
   // End of set CSRF
 
-  var AJAX_TIMEOUT = 10000;
+  var AJAX_TIMEOUT = 0;
   var DELAY_BEFORE_HIDE = 1000;
   var answerForm = null;
   var currentThreadId = null;
@@ -163,6 +163,42 @@
     answerForm.show();
   }
 
+  $.fn.apply_image_picker_carousel = function(){
+    return this.each(function() {
+      var this_elem = $(this);
+        this_elem.imagepicker({
+          hide_select : true,
+          show_label  : false,
+          initialized: function(){
+            $('.thumbnails').hide();
+            $('.image_picker_image').load(function(){
+                $('.thumbnails').show();
+                $('.thumbnails').carouFredSel({
+                    circular: false,
+                    infinite: false,
+                    auto    : false,
+                    width   : "100%",
+                    align   : "center",
+                    prev    : {
+                        button  : "#foo2_prev",
+                        key     : "left"
+                    },
+                    next    : {
+                        button  : "#foo2_next",
+                        key     : "right"
+                    },
+                    // pagination  : "#foo2_pag"
+                });
+            });
+          },
+          clicked: function(){
+            $(this).post_form_on_change();
+          }
+        })
+      }
+    )
+  }
+
   function render_trips(trip_list_elem, trips){
       for (var k=0; k<trips.length; k++){
         var count_gender = ""
@@ -210,84 +246,30 @@
       }
   }
 
-  $.fn.apply_image_picker_carousel = function(){
-    return this.each(function() {
-      var this_elem = $(this);
-        this_elem.imagepicker({
-          hide_select : true,
-          show_label  : false,
-          initialized: function(){
-            $('.thumbnails').hide();
-            $('.image_picker_image').load(function(){
-                $('.thumbnails').show();
-                $('.thumbnails').carouFredSel({
-                    circular: false,
-                    infinite: false,
-                    auto    : false,
-                    width   : "100%",
-                    align   : "center",
-                    prev    : {
-                        button  : "#foo2_prev",
-                        key     : "left"
-                    },
-                    next    : {
-                        button  : "#foo2_next",
-                        key     : "right"
-                    },
-                    // pagination  : "#foo2_pag"
-                });
-            });
-          }
-        })
-      }
-    )
-  }
-
-  function render_users(user_list_elem, users){
+  function render_users(user_list_elem, users, selected_users){
     $('.caroufredsel_wrapper').remove();
     var user_select = user_list_elem.find('select');
     user_select.find('option').remove();
     user_select.append("<option></option>");
 
     for (var k=0; k<users.length; k++){
+      var selected = "";
+      for (var j=0; j<selected_users.length; j++){
+        if (users[k].pk == selected_users[j].pk){
+          selected = ' selected="selected"';
+          break;
+        }
+      }
       user_select.append(
-        '<option data-img-src="{0}" value="{1}">{2}</option>'.format(
+        '<option data-img-src="{0}" value="{1}"{3}>{2}</option>'.format(
             users[k].get_avatar_url,
             users[k].pk,
-            users[k].get_full_name
+            users[k].get_full_name,
+            selected
           )
       );
     }
-
     user_select.apply_image_picker_carousel();
-
-    // user_select.imagepicker({
-    //   hide_select : true,
-    //   show_label  : false,
-    //   initialized: function(){
-    //     $('.thumbnails').hide();
-    //     $('.image_picker_image').load(function(){
-    //         $('.thumbnails').show();
-    //         $('.thumbnails').carouFredSel({
-    //             circular: false,
-    //             infinite: false,
-    //             auto    : false,
-    //             width   : "100%",
-    //             align   : "center",
-    //             prev    : {
-    //                 button  : "#foo2_prev",
-    //                 key     : "left"
-    //             },
-    //             next    : {
-    //                 button  : "#foo2_next",
-    //                 key     : "right"
-    //             },
-    //             // pagination  : "#foo2_pag"
-    //         });
-    //     });
-    //   }
-    // })
-
   }
 
   $.fn.post_form_on_change = function(given_date){
@@ -339,7 +321,7 @@
               trip_list.find('tr').remove();
               // var trips = JSON.parse(data.trips);
               render_trips(trip_list, data.trips);
-              render_users(user_list, data.users);
+              render_users(user_list, data.users, data.selected_users);
             } else {
               alert("Произошла ошибка: "+data.error)
             }
