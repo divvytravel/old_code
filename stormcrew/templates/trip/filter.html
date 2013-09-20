@@ -151,7 +151,7 @@
 
 
 
-        <div class="control-group align-center" style="margin-top:10px;">
+        <div id="trip-filter-submit" class="control-group align-center" style="margin-top:10px;">
           <div class="controls">
             <input type="submit" class="btn btn-primary" value="Подобрать"/>
           </div>
@@ -233,6 +233,7 @@
           $('#{{form.age_to.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });
+          $('#trip-filter-submit').hide();
         });
 
     </script>
