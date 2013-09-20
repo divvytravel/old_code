@@ -132,7 +132,6 @@
           trips[k].count_all_people,
           count_gender
           ));
-        console.log(trips[k]);
       }
   }
 
@@ -206,8 +205,6 @@
           },
           success: function(data, textStatus) {
             if (!data.error || data.error.length==0){
-              console.log("ajax success")
-              console.log(data)
               trip_list.find('tr').remove();
               // var trips = JSON.parse(data.trips);
               render_trips(trip_list, data.trips);

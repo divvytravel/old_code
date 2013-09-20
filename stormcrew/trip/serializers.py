@@ -12,6 +12,7 @@ class TripSerializer(serializers.ModelSerializer):
     start_date_format = serializers.Field(source='start_date_format')
     end_date_format = serializers.Field(source='end_date_format')
     get_currency_display = serializers.Field(source='get_currency_display')
+    get_absolute_url = serializers.Field(source='get_absolute_url')
 
     class Meta:
         model = Trip
