@@ -40,13 +40,17 @@ class TripFilterFormView(FormView):
             .in_month_year(clnd['month_year'])\
             .in_country(clnd['country'])\
             .with_people_gender(clnd['gender'])\
-            .with_age(clnd['age_from'], clnd['age_to'])\
+            .with_people_age(clnd['age_from'], clnd['age_to'])\
             .with_people(clnd['users'])\
             .count_gender()
 
     def set_filtered_users(self, form, trips):
+        clnd = form.cleaned_data
         form.fields['users'].queryset =\
-            User.objects.ready_to_trip().in_trips(trips)
+            User.objects.ready_to_trip()\
+                .in_trips(trips)\
+                .with_age(clnd['age_from'], clnd['age_to'])\
+                .with_gender(clnd['gender'])
 
     def form_valid(self, form):
         trips = self.get_filtered_trips(form)

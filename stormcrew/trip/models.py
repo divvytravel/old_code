@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 import calendar
-from datetime import timedelta
 from datetime import datetime
 from django.db import models
 from django.conf import settings
@@ -15,10 +14,12 @@ from django.core.mail import EmailMultiAlternatives
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
-from utils.helpers import date_yearsago, wrap_in_iterable
+from utils.helpers import wrap_in_iterable
+from users.models import filter_user_age, filter_user_gender
 from django.db.models import Count
 
 logger = logging.getLogger(__name__)
+
 
 class TripQuerySet(QuerySet):
     def actual(self):
@@ -67,18 +68,11 @@ class TripQuerySet(QuerySet):
 
     @self_if_blank_arg
     def with_people_gender(self, gender):
-        return self.filter(people__gender__in=[gender, ])
+        return filter_user_gender(self, gender, prefix='people')
 
     @self_if_blank_arg
-    def with_age(self, age_from, age_to):
-        qs = self
-        if age_from:
-            b_to = date_yearsago(age_from+1) + timedelta(days=1)
-            qs = qs.filter(people__birthday__lte=b_to)
-        if age_to:
-            b_from = date_yearsago(age_to+1) + timedelta(days=1)
-            qs = qs.filter(people__birthday__gte=b_from)
-        return qs
+    def with_people_age(self, age_from, age_to):
+        return filter_user_age(self, age_from, age_to, prefix='people')
 
 
 class TripManager(models.Manager):
