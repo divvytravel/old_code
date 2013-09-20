@@ -6,12 +6,11 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
-from django.utils import timezone
 
 from model_utils import Choices
 from social_auth.fields import JSONField
 from utils.decorators import self_if_blank_arg
-from utils.helpers import date_yearsago
+from utils.helpers import date_yearsago, get_today
 
 
 def filter_user_age(qs, age_from, age_to, prefix=None):
@@ -108,7 +107,7 @@ class User(AbstractUser):
 
     def get_age(self):
         if self.birthday:
-            today = timezone.now().date()
+            today = get_today()
             born = self.birthday
             try:
                 birthday = born.replace(year=today.year)

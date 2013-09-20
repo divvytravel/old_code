@@ -94,7 +94,11 @@
             <div class="control-group create-submit align-center">
               <div class="controls">
                 <button name="action" type="submit"
-                {% if user_in %}
+                {% if trip.is_finished %}
+                  value="" class="btn btn-default" disabled>Поездка завершена
+                {% elif trip.is_now %}
+                  value="" class="btn btn-default" disabled>Поездка уже началась
+                {% elif user_in %}
                   value="" class="btn btn-success" disabled>Вы участвуете в поездке
                 {% elif user_has_request %}
                   value="" class="btn btn-warning" disabled>Вы подали заявку на поездку
@@ -102,10 +106,12 @@
                   value="submit" class="btn btn-primary">Подать заявку на поездку
                 {% endif %}
               </button>
-                {% if user_in %}
-                  <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить участие</button>
-                {% elif user_has_request %}
-                  <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить заявку</button>
+                {% if trip.is_future %}
+                  {% if user_in %}
+                    <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить участие</button>
+                  {% elif user_has_request %}
+                    <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить заявку</button>
+                  {% endif %}
                 {% endif %}
               </div>
             </div>

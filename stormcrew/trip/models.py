@@ -15,7 +15,7 @@ from django.utils.dateformat import format
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
-from utils.helpers import wrap_in_iterable
+from utils.helpers import wrap_in_iterable, get_today
 from users.models import filter_user_age, filter_user_gender
 from django.db.models import Count
 
@@ -24,11 +24,11 @@ logger = logging.getLogger(__name__)
 
 class TripQuerySet(QuerySet):
     def actual(self):
-        return self.filter(start_date__gte=timezone.now().date())\
+        return self.filter(start_date__gte=get_today())\
             .order_by('start_date')
 
     def passed(self):
-        return self.filter(end_date__lt=timezone.now().date())\
+        return self.filter(end_date__lt=get_today())\
             .order_by('start_date')
 
     def count_gender(self):
@@ -157,13 +157,25 @@ class Trip(models.Model):
     def is_closed(self):
         return self.trip_type == self.TRIP_TYPE.closed
 
+    def is_finished(self, today=None):
+        today = today or get_today()
+        return self.end_date < today
+
+    def is_now(self, today=None):
+        today = today or get_today()
+        return self.start_date <= today <= self.end_date
+
+    def is_future(self, today=None):
+        today = today or get_today()
+        return self.start_date > today
+
     def get_status(self):
         if not self.start_date:
             None
-        today = timezone.now().date()
-        if self.start_date > today:
+        today = get_today()
+        if self.is_future(today):
             return u"будущая"
-        elif self.end_date < today:
+        elif self.is_finished(today):
             return u"завершенная"
         else:
             return u"текущая"

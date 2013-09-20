@@ -3,7 +3,7 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 
 
-def today():
+def get_today():
     return timezone.now().date()
 
 

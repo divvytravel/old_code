@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django import forms
-from django.utils import timezone
 from .models import Trip, TripRequest
 from users.models import User
 from geo.models import Country
+from utils.helpers import get_today
 
 
 class TripForm(forms.ModelForm):
@@ -46,13 +46,13 @@ class TripForm(forms.ModelForm):
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
-        if start_date < timezone.now().date():
+        if start_date < get_today():
             raise forms.ValidationError(self.trip_errors['low_date'])
         return start_date
 
     def clean_end_date(self):
         end_date = self.cleaned_data['end_date']
-        if end_date < timezone.now().date():
+        if end_date < get_today():
             raise forms.ValidationError(self.trip_errors['low_date'])
         return end_date
 
@@ -76,6 +76,8 @@ class TripRequestForm(forms.ModelForm):
     trip_errors = {
         'already_in': u"Вы уже состоите в участниках поездки",
         'already_requested': u"Вы уже подали заявку в поездку",
+        'already_started': u"Поездка уже началась",
+        'already_finished': u"Поездка уже закончилась",
     }
 
     class Meta:
@@ -96,6 +98,10 @@ class TripRequestForm(forms.ModelForm):
     def clean(self):
         if self.is_valid() and not self.cancel:
             trip = self.cleaned_data['trip']
+            if trip.is_now():
+                raise forms.ValidationError(self.trip_errors['already_started'])
+            if trip.is_finished():
+                raise forms.ValidationError(self.trip_errors['already_finished'])
             if trip.is_user_in(self.user):
                 raise forms.ValidationError(self.trip_errors['alread_in'])
             if trip.is_user_has_request(self.user):
