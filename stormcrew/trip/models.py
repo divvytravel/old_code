@@ -11,6 +11,7 @@ from django.db.models import Q
 from django.template.loader import render_to_string
 from django.contrib.sites.models import get_current_site
 from django.core.mail import EmailMultiAlternatives
+from django.utils.dateformat import format
 
 from model_utils import Choices
 from utils.decorators import self_if_blank_arg
@@ -115,6 +116,15 @@ class Trip(models.Model):
         related_name='approved_trips', blank=True)
 
     objects = TripManager()
+
+    def format_date(self, date):
+        return format(date, "j E")
+
+    def start_date_format(self):
+        return self.format_date(self.start_date)
+
+    def end_date_format(self):
+        return self.format_date(self.end_date)
 
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
