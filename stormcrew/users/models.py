@@ -6,6 +6,7 @@ from django.conf import settings
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 
 from model_utils import Choices
 from social_auth.fields import JSONField
@@ -70,7 +71,7 @@ class User(AbstractUser):
     """
     Access to social auth data is done by `social_auth` field.
     """
-    PROVIDERS = Choices('facebook', )
+    PROVIDERS = Choices(('facebook', 'Facebook'), )
     GENDERS = Choices(('male', u'мужской'), ('female', u'женский'))
 
     # TODO: create RelativeUrlField
@@ -104,6 +105,24 @@ class User(AbstractUser):
 
     def get_absolute_url(self):
         return reverse('users:detail', args=[str(self.pk)])
+
+    def get_age(self):
+        if self.birthday:
+            today = timezone.now().date()
+            born = self.birthday
+            try:
+                birthday = born.replace(year=today.year)
+            except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+                birthday = born.replace(year=today.year, day=born.day-1)
+            if birthday > today:
+                return today.year - born.year - 1
+            else:
+                return today.year - born.year
+
+    def get_social_link(self):
+        link = self.social_auth_response.get('link', None)
+        if link:
+            return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
     def __unicode__(self):
         return self.get_full_name()

@@ -24,7 +24,11 @@ logger = logging.getLogger(__name__)
 
 class TripQuerySet(QuerySet):
     def actual(self):
-        return self.filter(start_date__gte=datetime.now().date())\
+        return self.filter(start_date__gte=timezone.now().date())\
+            .order_by('start_date')
+
+    def passed(self):
+        return self.filter(end_date__lt=timezone.now().date())\
             .order_by('start_date')
 
     def count_gender(self):
@@ -117,6 +121,9 @@ class Trip(models.Model):
 
     objects = TripManager()
 
+    class Meta:
+        ordering = 'start_date',
+
     def format_date(self, date):
         return format(date, "j E")
 
@@ -149,6 +156,18 @@ class Trip(models.Model):
 
     def is_closed(self):
         return self.trip_type == self.TRIP_TYPE.closed
+
+    def get_status(self):
+        if not self.start_date:
+            None
+        today = timezone.now().date()
+        if self.start_date > today:
+            return u"будущая"
+        elif self.end_date < today:
+            return u"завершенная"
+        else:
+            return u"текущая"
+
 
     def notify_owner_about_request(self, user_requested):
         if self.owner.email:

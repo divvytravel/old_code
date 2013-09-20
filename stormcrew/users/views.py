@@ -1,28 +1,32 @@
 # -*- coding: utf-8 -*-
-# Import the reverse lookup function
 from django.core.urlresolvers import reverse
-
-# view imports
 from django.views.generic import DetailView
 from django.views.generic import RedirectView
 from django.views.generic import UpdateView
 from django.views.generic import ListView
 
-# Only authenticated users can access views using this.
 from braces.views import LoginRequiredMixin
 
-# Import the form from users/forms.py
 from .forms import UserForm
-
-# Import the customized User model
 from .models import User
+from trip.models import Trip
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
+    context_object_name = 'crew_user'
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = "username"
     slug_url_kwarg = "username"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(UserDetailView, self).get_context_data(*args, **kwargs)
+        user = self.get_object()
+        context.update({
+            'trips_in': Trip.objects.with_people(user).count_gender(),
+            'trips_created': Trip.objects.filter(owner=user).count_gender(),
+        })
+        return context
 
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):

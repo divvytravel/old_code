@@ -1,34 +1,59 @@
 {% extends "base.html" %}
-{% load avatar_tags %}
 {% load static %}
 
-{% block title %}User: {{ object.username }}{% endblock %}
+{% block title %}{{ crew_user.get_full_name }}{% endblock %}
 
 {% block content %}
-<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
 
-  <div class="row">
-    <div class="col-sm-12">
-
-      <h2>{{ object.username }}</h2>
+        </div>
     </div>
-  </div>
-
-{% if object == request.user %}
-<!-- Action buttons -->     
-<div class="row">
-
-  <div class="col-sm-12 ">
-    <a class="btn btn-primary" href="{% url 'users:update' %}">My Info</a>
-    <a class="btn btn-primary" href="{% url 'account_email' %}">E-Mail</a>
-    <a class="btn btn-info" href="{% url 'avatar_change' %}">Avatar</a>
-    <!-- Your Stuff: Custom user template urls -->
-  </div>
-
-</div>
-<!-- End Action buttons -->
-{% endif %}
-
-
-</div>
+    <div class="row">
+        <div class="col-lg-4 align-center" style="margin-bottom: 10px;">
+          {{ crew_user.get_avatar }}
+        </div>
+        <div class="col-lg-8">
+          <table class="table user-details-table">
+              <tbody>
+                    <tr>
+                      <td>Имя</td>
+                      <td>{{ crew_user.first_name|default:"?" }}</td>
+                    </tr>
+                    <tr>
+                      <td>Фамилия</td>
+                      <td>{{ crew_user.last_name|default:"?" }}</td>
+                    </tr>
+                    <tr>
+                      <td>Пол</td>
+                      <td>{{ crew_user.get_gender_display|default:"?" }}</td>
+                    </tr>
+                    <tr>
+                      <td>Возраст</td>
+                      <td>{{ crew_user.get_age|default:"?" }}</td>
+                    </tr>
+                    {% if crew_user.provider %}
+                      <tr>
+                        <td>{{crew_user.get_provider_display}}</td>
+                        <td>{{ crew_user.get_social_link|default:"?" }}</td>
+                      </tr>
+                    {% endif %}
+              </tbody>
+          </table>
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px;">
+      <h2 class="align-center">
+        Участник в поездках
+      </h2>
+      {% include "partials/trip_list.html" with trips=trips_in show_status=True %}
+    </div>
+    {% if trips_created|length %}
+      <div class="row">
+        <h2 class="align-center">
+          Создал поездки
+        </h2>
+        {% include "partials/trip_list.html" with trips=trips_created show_status=True %}
+      </div>
+    {% endif %}
 {% endblock content %}

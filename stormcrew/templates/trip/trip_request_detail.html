@@ -21,7 +21,7 @@
             <tbody>
                   <tr>
                     <td>Даты</td>
-                    <td>{{ trip.start_date|date:"j E" }} - {{ trip.end_date|date:"j E" }}</td>
+                    <td>{{ trip.start_date_format }} - {{ trip.end_date_format }}</td>
                   </tr>
                   <tr>
                     <td>{{ trip|field_verbose:"country" }}</td>

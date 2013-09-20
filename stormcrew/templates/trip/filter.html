@@ -161,38 +161,7 @@
     <div class="filter-form-header">
         <h3>Впишитесь в поездку!</h3>
     </div>
-
-    <table class="table trip-list">
-        <thead>
-          <tr>
-            <th>Даты</th>
-            <th>Где</th>
-            <th>Что за поездка</th>
-            <th>Бюджет</th>
-            <th>Участвуют</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for trip in trips %}
-              <tr>
-                <td>
-                    <a href="{{ trip.get_absolute_url}}">{{ trip.start_date_format }} - {{ trip.end_date_format }}</a>
-                </td>
-                <td>
-                    <a href="{{ trip.get_absolute_url}}">{{ trip.city }}</a>
-                </td>
-                <td>
-                    <a href="{{ trip.get_absolute_url}}">{{ trip.title }}</a>
-                </td>
-                <td>
-                    {{ trip.price }} {{ trip.get_currency_display }}
-                </td>
-                <td>{{trip.count_all_people}} человек {% if trip.count_male or trip.count_female %}({% endif %}{% if trip.count_male %}{{trip.count_male}}м{% endif %}{% if trip.count_male and trip.count_female %} {% endif %}{% if trip.count_female %}{{trip.count_female}}ж{% endif %}{% if trip.count_male or trip.count_female %}){% endif %}</td>
-              </tr>
-            {% endfor %}
-          <tr>
-        </tbody>
-    </table>
+    {% include "partials/trip_list.html" %}
 {% endblock content %}
 
 
