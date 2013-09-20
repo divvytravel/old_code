@@ -18,9 +18,10 @@
 .users-list {
     border-top: 1px solid #E5E5E5;
     border-bottom: 1px solid #E5E5E5;
-    padding-top: 5px;
+    /*padding-top: 5px;*/
     position: relative;
     min-height: 240px;
+    /*text-align: center;*/
 }
 
 .user-short {
@@ -100,4 +101,31 @@
 
 .age_filter {
     /*width:100px;*/
+}
+
+.fade-elem {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 500;
+    background-color: #ECECEC;
+    opacity: 0.5;
+}
+
+.ajax-loader {
+    position:absolute;
+    z-index:1000;
+    left: 44%;
+}
+
+.loader-users {
+    top:20%;
+}
+
+.loader-trips {
+    top:44%;
+}
+
+.trip-list {
+    position: relative;
 }

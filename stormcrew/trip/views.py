@@ -5,8 +5,10 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
+from django.core import serializers
 
-from braces.views import LoginRequiredMixin
+from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
+    JSONResponseMixin
 
 from users.models import User
 from .forms import TripForm, TripRequestForm, TripFilterForm
@@ -15,9 +17,11 @@ from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable
 
 
-class TripFilterFormView(FormView):
+# class TripFilterFormView(FormView):
+class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
     form_class = TripFilterForm
+    content_type = "text/html"
 
     def get_form_kwargs(self):
         kwargs = super(TripFilterFormView, self).get_form_kwargs()
@@ -44,6 +48,13 @@ class TripFilterFormView(FormView):
             .with_people(clnd['users'])\
             .count_gender()
 
+    def get_filtered_users(self, form, trips):
+        clnd = form.cleaned_data
+        return User.objects.ready_to_trip()\
+            .in_trips(trips)\
+            .with_age(clnd['age_from'], clnd['age_to'])\
+            .with_gender(clnd['gender'])
+
     def set_filtered_users(self, form, trips):
         clnd = form.cleaned_data
         form.fields['users'].queryset =\
@@ -52,14 +63,34 @@ class TripFilterFormView(FormView):
                 .with_age(clnd['age_from'], clnd['age_to'])\
                 .with_gender(clnd['gender'])
 
-    def form_valid(self, form):
+    def form_valid(self, form, ajax=False):
         trips = self.get_filtered_trips(form)
-        self.set_filtered_users(form, trips)
-        return self.render_to_response(self.get_context_data(
-            form=form,
-            selected_users=wrap_in_iterable(form.cleaned_data['users']),
-            trips=trips,
-        ))
+        users = self.get_filtered_users(form, trips)
+        if ajax:
+            return trips, users
+        else:
+            form.fields['users'].queryset = users
+            return self.render_to_response(self.get_context_data(
+                form=form,
+                selected_users=wrap_in_iterable(form.cleaned_data['users']),
+                trips=trips,
+            ))
+
+    def post_ajax(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            trips, users = self.form_valid(form, ajax=True)
+            trips = serializers.serialize("json", trips)
+            users = serializers.serialize("json", users)
+            data = {
+                'trips': trips,
+                'users': users,
+            }
+        else:
+            # TODO
+            data = {}
+        return self.render_json_response(data)
 
     def form_invalid(self, form):
         return super(TripFilterFormView, self).form_invalid(form)

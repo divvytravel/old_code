@@ -162,7 +162,7 @@
         <h3>Впишитесь в поездку!</h3>
     </div>
 
-    <table class="table">
+    <table class="table trip-list">
         <thead>
           <tr>
             <th>Даты</th>
@@ -212,7 +212,7 @@
           autoclose: true
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
-            // $(this).post_form_on_change();
+            $(this).post_form_on_change();
         });
 
 
