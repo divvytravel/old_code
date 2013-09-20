@@ -36,12 +36,11 @@ class TripFilterFormView(FormView):
 
     def get_filtered_trips(self, form):
         clnd = form.cleaned_data
-        age_from, age_to = clnd['age']
         return Trip.objects.actual()\
             .in_month_year(clnd['month_year'])\
             .in_country(clnd['country'])\
             .with_people_gender(clnd['gender'])\
-            .with_age(age_from, age_to)\
+            .with_age(clnd['age_from'], clnd['age_to'])\
             .with_people(clnd['users'])\
             .count_gender()
 

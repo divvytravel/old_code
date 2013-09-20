@@ -126,18 +126,21 @@ class TripRequestForm(forms.ModelForm):
 class TripFilterForm(forms.Form):
     AGES = (
         ('', u"Не важно"),
-        ('20-25', '20-25'),
-        ('25-30', '25-30'),
-        ('35-40', '35-40'),
-        ('40-45', '40-45'),
-        ('45-50', '45-50'),
+        (20, 20),
+        (25, 25),
+        (30, 30),
+        (35, 35),
+        (40, 40),
+        (45, 45),
+        (50, 50),
     )
 
     month_year = forms.CharField(max_length=10, required=False)
     country = forms.ModelChoiceField(queryset=Country.objects.all(),
         empty_label=u"Не важно", required=False)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
-    age = forms.ChoiceField(choices=AGES, required=False)
+    age_from = forms.ChoiceField(choices=AGES, required=False)
+    age_to = forms.ChoiceField(choices=AGES, required=False)
     users = forms.ModelChoiceField(queryset=None, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -154,13 +157,16 @@ class TripFilterForm(forms.Form):
                 raise forms.ValidationError(u"Неверный формат даты")
         return month_year
 
-    def clean_age(self):
-        age = self.cleaned_data['age']
+    def _clean_age(self, age):
         if age:
             try:
-                age_from, age_to = map(int, age.split('-'))
+                age = int(age)
             except ValueError:
                 raise forms.ValidationError(u"Неверный формат возраста")
-        else:
-            age_from, age_to = None, None
-        return age_from, age_to
+        return age
+
+    def clean_age_from(self):
+        return self._clean_age(self.cleaned_data['age_from'])
+
+    def clean_age_to(self):
+        return self._clean_age(self.cleaned_data['age_to'])
