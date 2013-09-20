@@ -53,6 +53,41 @@
     };
   }
 
+  $.fn.apply_carousel = function(wait_to_load){
+    return this.each(function() {
+      var this_elem = $(this);
+      if (wait_to_load){
+        this_elem.hide();
+      }
+      function apply_c(){
+        this_elem.show();
+        this_elem.carouFredSel({
+            circular: false,
+            infinite: false,
+            auto    : false,
+            width   : "100%",
+            align   : "center",
+            prev    : {
+                button  : "#foo2_prev",
+                key     : "left"
+            },
+            next    : {
+                button  : "#foo2_next",
+                key     : "right"
+            },
+            // pagination  : "#foo2_pag"
+        });
+      }
+      if (wait_to_load){
+        $('.image_picker_image').load(function(){
+          apply_c();
+        });
+      } else {
+        apply_c();
+      }
+    })
+  }
+
   $.fn.apply_image_picker_carousel = function(){
     return this.each(function() {
       var this_elem = $(this);
@@ -60,26 +95,7 @@
           hide_select : true,
           show_label  : false,
           initialized: function(){
-            $('.thumbnails').hide();
-            $('.image_picker_image').load(function(){
-                $('.thumbnails').show();
-                $('.thumbnails').carouFredSel({
-                    circular: false,
-                    infinite: false,
-                    auto    : false,
-                    width   : "100%",
-                    align   : "center",
-                    prev    : {
-                        button  : "#foo2_prev",
-                        key     : "left"
-                    },
-                    next    : {
-                        button  : "#foo2_next",
-                        key     : "right"
-                    },
-                    // pagination  : "#foo2_pag"
-                });
-            });
+            $('.thumbnails').apply_carousel(true);
           },
           clicked: function(){
             $(this).post_form_on_change();

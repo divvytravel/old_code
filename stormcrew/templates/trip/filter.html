@@ -5,36 +5,6 @@
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
-  <style type="text/css">
-        a.prev, a.next {
-            background: url({% static 'caroufredsel/miscellaneous_sprite.png' %}) no-repeat transparent;
-            width: 45px;
-            height: 50px;
-            display: block;
-            position: absolute;
-            top: 85px;
-        }
-        a.prev {            left: -22px;
-                            background-position: 0 0; }
-        a.prev:hover {      background-position: 0 -50px; }
-        a.prev.disabled {   background-position: 0 -100px !important;  }
-        a.next {            right: -22px;
-                            background-position: -50px 0; }
-        a.next:hover {      background-position: -50px -50px; }
-        a.next.disabled {   background-position: -50px -100px !important;  }
-        a.prev.disabled, a.next.disabled {
-            cursor: default;
-        }
-
-        a.prev span, a.next span {
-            display: none;
-        }
-        .clearfix {
-            float: none;
-            clear: both;
-        }
-
-  </style>
 {% endblock css %}
 
 {% block content %}

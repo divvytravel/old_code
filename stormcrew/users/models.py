@@ -119,9 +119,10 @@ class User(AbstractUser):
                 return today.year - born.year
 
     def get_social_link(self):
-        link = self.social_auth_response.get('link', None)
-        if link:
-            return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
+        if self.social_auth_response:
+            link = self.social_auth_response.get('link', None)
+            if link:
+                return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
     def __unicode__(self):
         return self.get_full_name()

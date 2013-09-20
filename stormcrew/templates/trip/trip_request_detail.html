@@ -9,6 +9,7 @@
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'lightbox/css/lightbox.css' %}" type="text/css" media="screen" />
+  <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
 {% endblock css %}
 
 {% block content %}
@@ -87,6 +88,31 @@
             {% endfor %}
         </div>
     </div>
+
+    {% with trip.people.all as trip_members %}
+      <div class="row" style="margin-bottom:20px;">
+        <h2 class="align-center">Участники</h2>
+      </div>
+      <div class="row">
+        <div class="users-list">
+          <ul class="thumbnails image_picker_selector">
+            {% for member in trip_members %}
+              <li>
+                <div class="thumbnail">
+                  <a href="{{member.get_absolute_url}}">
+                  <img class="image_picker_image" src="{{member.get_avatar_url}}">
+                  <div class="image_picker_descr">{{member.get_full_name}}</div>
+                  </a>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+          <a class="prev" id="foo2_prev" href="#"><span>prev</span></a>
+          <a class="next" id="foo2_next" href="#"><span>next</span></a>
+        </div>
+      </div>
+    {% endwith %}
+
     <div class="row">
         <form enctype="multipart/form-data" class="form-horizontal" method="post" action="">
             {% csrf_token %}
@@ -124,4 +150,12 @@
     {{ block.super }}
 
     <script src="{% static 'lightbox/js/lightbox-2.6.min.js' %}"></script>
+    <script src="{% static 'caroufredsel/jquery.carouFredSel-6.2.1.js' %}"></script>
+    <script src="{% static 'js/filter_update.js' %}"></script>
+
+    <script type="text/javascript">
+      $( window ).ready(function() {
+        $('.thumbnails').apply_carousel();
+      });
+    </script>
 {% endblock javascript %}
