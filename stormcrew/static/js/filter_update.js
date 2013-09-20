@@ -227,10 +227,10 @@
       var this_elem = $(this)
         var this_form = this_elem.closest('form');
         var date;
-        if (given_date){
-          date = given_date;
-        } else {
+        if (typeof given_date === "undefined"){
           date = this_form.find('input[name="month_year"]').val()
+        } else {
+          date = given_date;
         }
         var form_data = {
           'month_year': date,
