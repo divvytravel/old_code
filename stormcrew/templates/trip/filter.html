@@ -218,32 +218,33 @@
         });
 
 
-        $("#{{ form.users.auto_id }}").imagepicker({
-          hide_select : true,
-          show_label  : false,
-          initialized: function(){
-            $('.thumbnails').hide();
-            $('.image_picker_image').load(function(){
-                $('.thumbnails').show();
-                $('.thumbnails').carouFredSel({
-                    circular: false,
-                    infinite: false,
-                    auto    : false,
-                    width   : "100%",
-                    align   : "center",
-                    prev    : {
-                        button  : "#foo2_prev",
-                        key     : "left"
-                    },
-                    next    : {
-                        button  : "#foo2_next",
-                        key     : "right"
-                    },
-                    // pagination  : "#foo2_pag"
-                });
-            });
-          }
-        })
+        $("#{{ form.users.auto_id }}").apply_image_picker_carousel();
+        // $("#{{ form.users.auto_id }}").imagepicker({
+        //   hide_select : true,
+        //   show_label  : false,
+        //   initialized: function(){
+        //     $('.thumbnails').hide();
+        //     $('.image_picker_image').load(function(){
+        //         $('.thumbnails').show();
+        //         $('.thumbnails').carouFredSel({
+        //             circular: false,
+        //             infinite: false,
+        //             auto    : false,
+        //             width   : "100%",
+        //             align   : "center",
+        //             prev    : {
+        //                 button  : "#foo2_prev",
+        //                 key     : "left"
+        //             },
+        //             next    : {
+        //                 button  : "#foo2_next",
+        //                 key     : "right"
+        //             },
+        //             // pagination  : "#foo2_pag"
+        //         });
+        //     });
+        //   }
+        // })
 
         $( document ).ready(function() {
           $('#{{form.country.auto_id}}').change(function(){

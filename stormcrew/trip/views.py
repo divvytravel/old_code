@@ -5,11 +5,13 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
+from django.core import serializers
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
 
 from users.models import User
+from users.serializers import UserSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm
 from .models import Trip, TripPicture
 from .serializers import TripSerializer
@@ -17,7 +19,6 @@ from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable
 
 
-# class TripFilterFormView(FormView):
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
     form_class = TripFilterForm
@@ -66,13 +67,14 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     def form_valid(self, form, ajax=False):
         trips = self.get_filtered_trips(form)
         users = self.get_filtered_users(form, trips)
+        selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
         if ajax:
-            return trips, users
+            return trips, users, selected_users
         else:
             form.fields['users'].queryset = users
             return self.render_to_response(self.get_context_data(
                 form=form,
-                selected_users=wrap_in_iterable(form.cleaned_data['users']),
+                selected_users=selected_users,
                 trips=trips,
             ))
 
@@ -80,13 +82,13 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            trips, users = self.form_valid(form, ajax=True)
+            trips, users, selected_users = self.form_valid(form, ajax=True)
             trips = TripSerializer(trips, many=True).data
-            # trips = serializers.serialize("json", trips)
-            # users = serializers.serialize("json", users)
+            users = UserSerializer(users, many=True).data
             data = {
                 'trips': trips,
-                # 'users': users,
+                'users': users,
+                'selected_users': selected_users,
             }
         else:
             # TODO

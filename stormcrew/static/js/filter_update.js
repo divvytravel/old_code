@@ -210,6 +210,86 @@
       }
   }
 
+  $.fn.apply_image_picker_carousel = function(){
+    return this.each(function() {
+      var this_elem = $(this);
+        this_elem.imagepicker({
+          hide_select : true,
+          show_label  : false,
+          initialized: function(){
+            $('.thumbnails').hide();
+            $('.image_picker_image').load(function(){
+                $('.thumbnails').show();
+                $('.thumbnails').carouFredSel({
+                    circular: false,
+                    infinite: false,
+                    auto    : false,
+                    width   : "100%",
+                    align   : "center",
+                    prev    : {
+                        button  : "#foo2_prev",
+                        key     : "left"
+                    },
+                    next    : {
+                        button  : "#foo2_next",
+                        key     : "right"
+                    },
+                    // pagination  : "#foo2_pag"
+                });
+            });
+          }
+        })
+      }
+    )
+  }
+
+  function render_users(user_list_elem, users){
+    $('.caroufredsel_wrapper').remove();
+    var user_select = user_list_elem.find('select');
+    user_select.find('option').remove();
+    user_select.append("<option></option>");
+
+    for (var k=0; k<users.length; k++){
+      user_select.append(
+        '<option data-img-src="{0}" value="{1}">{2}</option>'.format(
+            users[k].get_avatar_url,
+            users[k].pk,
+            users[k].get_full_name
+          )
+      );
+    }
+
+    user_select.apply_image_picker_carousel();
+
+    // user_select.imagepicker({
+    //   hide_select : true,
+    //   show_label  : false,
+    //   initialized: function(){
+    //     $('.thumbnails').hide();
+    //     $('.image_picker_image').load(function(){
+    //         $('.thumbnails').show();
+    //         $('.thumbnails').carouFredSel({
+    //             circular: false,
+    //             infinite: false,
+    //             auto    : false,
+    //             width   : "100%",
+    //             align   : "center",
+    //             prev    : {
+    //                 button  : "#foo2_prev",
+    //                 key     : "left"
+    //             },
+    //             next    : {
+    //                 button  : "#foo2_next",
+    //                 key     : "right"
+    //             },
+    //             // pagination  : "#foo2_pag"
+    //         });
+    //     });
+    //   }
+    // })
+
+  }
+
   $.fn.post_form_on_change = function(given_date){
     var ajaxFadeElemUsers = $(ajaxFade);
     var user_list = $('.users-list');
@@ -259,6 +339,7 @@
               trip_list.find('tr').remove();
               // var trips = JSON.parse(data.trips);
               render_trips(trip_list, data.trips);
+              render_users(user_list, data.users);
             } else {
               alert("Произошла ошибка: "+data.error)
             }
