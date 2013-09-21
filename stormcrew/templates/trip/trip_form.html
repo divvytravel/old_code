@@ -18,17 +18,19 @@
                 {% csrf_token %}
                 {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
 
+            {% block image_upload %}
               <span class="btn btn-success fileinput-button">
                   <i class="glyphicon glyphicon-plus"></i>
                   <span>Загрузить фотографии</span>
                   <!-- The file input field used as target for the file upload widget -->
                   <input id="fileupload" type="file" name="files[]" multiple>
               </span>
+            {% endblock image_upload %}
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
                 <div class="control-group create-submit">
                   <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="Создать поездку"/>
+                    <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endif %}"/>
                   </div>
                 </div>
             </form>

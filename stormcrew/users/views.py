@@ -12,7 +12,7 @@ from .models import User
 from trip.models import Trip
 
 
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(DetailView):
     context_object_name = 'crew_user'
     model = User
     # These next two lines tell the view to index lookups by username
@@ -27,14 +27,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
             'trips_created': Trip.objects.filter(owner=user).count_gender(),
         })
         return context
-
-
-class UserRedirectView(LoginRequiredMixin, RedirectView):
-    permanent = False
-
-    def get_redirect_url(self):
-        return reverse("users:detail",
-            kwargs={"username": self.request.user.username})
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
@@ -52,10 +44,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         # Only get the User record for the user making the request
         return User.objects.get(username=self.request.user.username)
-
-
-class UserListView(LoginRequiredMixin, ListView):
-    model = User
-    # These next two lines tell the view to index lookups by username
-    slug_field = "username"
-    slug_url_kwarg = "username"
