@@ -1,6 +1,8 @@
 {% include "partials/forms/errors.html" %}
 
 {% for field in form %}
-    {% include "trip/partials/field.html" %}
+    {% if not field.name in form.manual_fields %}
+        {% include "trip/partials/field.html" %}
+    {% endif %}
 {% endfor %}
 

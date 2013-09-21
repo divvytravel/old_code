@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import FormView, CreateView
+from django.views.generic import FormView, CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
 
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
-from .forms import TripForm, TripRequestForm, TripFilterForm
+from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm
 from .models import Trip, TripPicture
 from .serializers import TripSerializer
 from utils.views import SuccessMessageMixin
@@ -100,7 +101,15 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         return super(TripFilterFormView, self).form_invalid(form)
 
 
-class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class SaveImagesMixin(object):
+    def save_images(self):
+        for image_stream in self.request.FILES.getlist('files[]'):
+            pic = TripPicture(file=image_stream, trip=self.object)
+            pic.save()
+
+
+class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
+                                                            SaveImagesMixin):
     form_class = TripForm
     model = Trip
     success_message = u"Поездка создана!"
@@ -111,11 +120,6 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             'owner': self.request.user,
         })
         return kwargs
-
-    def save_images(self):
-        for image_stream in self.request.FILES.getlist('files[]'):
-            pic = TripPicture(file=image_stream, trip=self.object)
-            pic.save()
 
     def get_success_url(self):
         self.save_images()
@@ -188,3 +192,21 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
 
     def get_success_url(self):
         return reverse('home')
+
+
+class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
+                                                            SaveImagesMixin):
+    model = Trip
+    form_class = TripUpdateForm
+    template_name = "trip/trip_update.html"
+    success_message = "Поездка обновлена"
+
+    def get_success_url(self):
+        self.save_images()
+        return self.object.get_absolute_url()
+
+    def get_form_kwargs(self):
+        if self.object.owner != self.request.user:
+            raise PermissionDenied  # return a forbidden response
+        kwargs = super(TripUpdateView, self).get_form_kwargs()
+        return kwargs

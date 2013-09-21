@@ -2,21 +2,35 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
-{% block title %}Создание поездки{% endblock %}
+{% block title %}Редактирование поездки{% endblock %}
 
 {% block css %}
   {{ block.super }}
   <link rel="stylesheet" href="{% static 'css/jquery.fileupload-ui.css' %}">
+  <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
 {% endblock css %}
 
 {% block content %}
 
     <div class="row">
         <div class="col-lg-12">
-            <h1>{% block header %}Создать поездку{% endblock %}</h1>
+            <h1>{% block header %}Редактировать поездку "{{trip.title}}"{% endblock %}</h1>
             <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
                 {% csrf_token %}
                 {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
+
+            <div class="trip_picture_list">
+                <div style="font-weight: bold;margin-left: 16px;">Удалить фотографии:</div>
+                {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                {% with form.images_to_delete as field %}
+                <select id="{{ field.auto_id }}" class="image-picker show-html" name="{{field.name}}" multiple style="display:none;">
+                    {% for choice in field.field.choices.queryset %}
+                      <option data-img-src="{{ choice.file.url }}" value="{{choice.pk}}"
+                      >{{ choice }}</option>
+                    {% endfor %}
+                </select>
+                {% endwith %}
+            </div>
 
             {% block image_upload %}
               <span class="btn btn-success fileinput-button">
@@ -30,7 +44,7 @@
               <div id="files" class="files"></div>
                 <div class="control-group create-submit">
                   <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
+                    <input type="submit" class="btn btn-primary" value="{% block submit_text %}Сохранить{% endblock %}"/>
                   </div>
                 </div>
             </form>
@@ -62,6 +76,9 @@
     <script src="{% static 'js/jquery.fileupload-video.js' %}"></script>
     <!-- The File Upload validation plugin -->
     <script src="{% static 'js/jquery.fileupload-validate.js' %}"></script>
+
+    <script src="{% static 'image-picker/image-picker.js' %}"></script>
+
     <script>
     /*jslint unparam: true, regexp: true */
     /*global window, $ */
@@ -146,5 +163,10 @@
         }).on('changeDate', function (ev) {
             $(this).datepicker('hide');
         });
+
+        $(".image-picker").imagepicker({
+          hide_select : true,
+          show_label  : false,
+        })
     </script>
 {% endblock javascript %}

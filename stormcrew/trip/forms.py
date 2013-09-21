@@ -7,6 +7,24 @@ from geo.models import Country
 from utils.helpers import get_today
 
 
+def get_trip_form_fields():
+    return (
+        'title',
+        'start_date',
+        'end_date',
+        'country',
+        'city',
+        'price',
+        'currency',
+        'includes',
+        'people_count',
+        'descr_main',
+        'descr_share',
+        'descr_additional',
+        'descr_company',
+        'trip_type',
+    )
+
 class TripForm(forms.ModelForm):
     trip_errors = {
         'end_less_start_date': u"Конечная дата не может быть меньше начальной",
@@ -17,25 +35,10 @@ class TripForm(forms.ModelForm):
 
     class Meta:
         model = Trip
-        fields = (
-            'title',
-            'start_date',
-            'end_date',
-            'country',
-            'city',
-            'price',
-            'currency',
-            'includes',
-            'people_count',
-            'descr_main',
-            'descr_share',
-            'descr_additional',
-            'descr_company',
-            'trip_type',
-        )
+        fields = get_trip_form_fields()
 
     def __init__(self, *args, **kwargs):
-        self.owner = kwargs.pop('owner')
+        self.owner = kwargs.pop('owner', None)
         super(TripForm, self).__init__(*args, **kwargs)
         self.fields['currency'].empty_label = None
         self.fields['trip_type'].empty_label = None
@@ -65,11 +68,42 @@ class TripForm(forms.ModelForm):
                     name=self.cleaned_data['country'])
         return self.cleaned_data
 
-    def save(self, commit=False):
+    def save(self, commit=False, wait=False):
         obj = super(TripForm, self).save(commit)
-        obj.owner = self.owner
+        if self.owner:
+            obj.owner = self.owner
         obj.save()
         return obj
+
+
+class TripUpdateForm(TripForm):
+    images_to_delete = forms.ModelMultipleChoiceField(queryset=None, required=False)
+    manual_fields = ('images_to_delete', )
+
+    def __init__(self, *args, **kwargs):
+        super(TripUpdateForm, self).__init__(*args, **kwargs)
+        if hasattr(self, 'instance'):
+            self.fields['images_to_delete'].queryset = self.instance.images.all()
+
+    def clean(self):
+        super(TripUpdateForm, self).clean()
+        if self.is_valid():
+            # check, that images_to_delete belongs to current trip
+            im_to_d = self.cleaned_data['images_to_delete']
+            trip_imgs_len = self.instance.images.filter(
+                pk__in=map(lambda x: x.pk, im_to_d)).count()
+            if trip_imgs_len != len(im_to_d):
+                raise forms.ValidationError(u'Неверное изображение')
+        return self.cleaned_data
+
+    def save(self, commit=False):
+        obj = super(TripUpdateForm, self).save(commit)
+        self.cleaned_data['images_to_delete'].delete()
+        return obj
+
+    class Meta:
+        model = Trip
+        fields = get_trip_form_fields() + ('images_to_delete', )
 
 
 class TripRequestForm(forms.ModelForm):

@@ -135,6 +135,10 @@
     min-width: 260px;
 }
 
+.trip_picture_list .image_picker_descr{
+    overflow: hidden;
+}
+
 
 /* caroufresel */
 a.prev, a.next {

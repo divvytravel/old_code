@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.core.urlresolvers import reverse
-from django.views.generic import DetailView
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, DetailView
 
 from braces.views import LoginRequiredMixin
 
@@ -19,7 +18,7 @@ class UserDetailView(DetailView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(UserDetailView, self).get_context_data(*args, **kwargs)
-        user = self.get_object()
+        user = self.object
         context.update({
             'trips_in': Trip.objects.with_people(user).count_gender(),
             'trips_created': Trip.objects.filter(owner=user).count_gender(),
