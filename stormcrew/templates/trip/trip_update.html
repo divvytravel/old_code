@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "trip/trip_form.html" %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 
@@ -6,164 +6,33 @@
 
 {% block css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/jquery.fileupload-ui.css' %}">
   <link rel="stylesheet" href="{% static 'image-picker/image-picker.css' %}">
 {% endblock css %}
 
-{% block content %}
+    {% block header %}Редактировать поездку "{{trip.title}}"{% endblock %}
 
-    <div class="row">
-        <div class="col-lg-12">
-            <h1>{% block header %}Редактировать поездку "{{trip.title}}"{% endblock %}</h1>
-            <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
-                {% csrf_token %}
-                {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
-
-            <div class="trip_picture_list">
-                <div style="font-weight: bold;margin-left: 16px;">Удалить фотографии:</div>
-                {% include 'bootstrap3/layout/help_text_and_errors.html' %}
-                {% with form.images_to_delete as field %}
-                <select id="{{ field.auto_id }}" class="image-picker show-html" name="{{field.name}}" multiple style="display:none;">
-                    {% for choice in field.field.choices.queryset %}
-                      <option data-img-src="{{ choice.file.url }}" value="{{choice.pk}}"
-                      >{{ choice }}</option>
-                    {% endfor %}
-                </select>
-                {% endwith %}
-            </div>
-
-            {% block image_upload %}
-              <span class="btn btn-success fileinput-button">
-                  <i class="glyphicon glyphicon-plus"></i>
-                  <span>Загрузить фотографии</span>
-                  <!-- The file input field used as target for the file upload widget -->
-                  <input id="fileupload" type="file" name="files[]" multiple>
-              </span>
-            {% endblock image_upload %}
-              <!-- The container for the uploaded files -->
-              <div id="files" class="files"></div>
-                <div class="control-group create-submit">
-                  <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="{% block submit_text %}Сохранить{% endblock %}"/>
-                  </div>
-                </div>
-            </form>
+    {% block additional_fields %}
+        <div class="trip_picture_list">
+            <div style="font-weight: bold;margin-left: 16px;">Удалить фотографии:</div>
+            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+            {% with form.images_to_delete as field %}
+            <select id="{{ field.auto_id }}" class="image-picker show-html" name="{{field.name}}" multiple style="display:none;">
+                {% for choice in field.field.choices.queryset %}
+                  <option data-img-src="{{ choice.file.url }}" value="{{choice.pk}}"
+                  >{{ choice }}</option>
+                {% endfor %}
+            </select>
+            {% endwith %}
         </div>
-    </div>
+    {% endblock additional_fields %}
 
-{% endblock %}
+    {% block submit_text %}Сохранить{% endblock %}
 
 {% block javascript %}
     {{ block.super }}
-
-
-    <script src="{% static 'js/vendor/jquery.ui.widget.js' %}"></script>
-    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-    <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-    <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
-    <!-- The basic File Upload plugin -->
-    <script src="{% static 'js/jquery.fileupload.js' %}"></script>
-    <!-- The File Upload processing plugin -->
-    <script src="{% static 'js/jquery.fileupload-process.js' %}"></script>
-    <!-- The File Upload image preview & resize plugin -->
-    <script src="{% static 'js/jquery.fileupload-image.js' %}"></script>
-    <!-- The File Upload audio preview plugin -->
-    <script src="{% static 'js/jquery.fileupload-audio.js' %}"></script>
-    <!-- The File Upload video preview plugin -->
-    <script src="{% static 'js/jquery.fileupload-video.js' %}"></script>
-    <!-- The File Upload validation plugin -->
-    <script src="{% static 'js/jquery.fileupload-validate.js' %}"></script>
-
     <script src="{% static 'image-picker/image-picker.js' %}"></script>
 
     <script>
-    /*jslint unparam: true, regexp: true */
-    /*global window, $ */
-    $(function () {
-        'use strict';
-        $('#fileupload').fileupload({
-            autoUpload: false,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            maxFileSize: 5000000, // 5 MB
-            // Enable image resizing, except for Android and Opera,
-            // which actually support image resizing, but fail to
-            // send Blob objects via XHR requests:
-            disableImageResize: /Android(?!.*Chrome)|Opera/
-                .test(window.navigator.userAgent),
-            previewMaxWidth: 100,
-            previewMaxHeight: 100,
-            previewCrop: true,
-            replaceFileInput: false
-        }).on('fileuploadadd', function (e, data) {
-            data.context = $('<div/>').addClass('fpreview').appendTo('#files');
-            $.each(data.files, function (index, file) {
-                var node = $('<p/>')
-                        .append($('<span/>').text(file.name));
-                node.appendTo(data.context);
-            });
-        }).on('fileuploadprocessalways', function (e, data) {
-            var index = data.index,
-                file = data.files[index],
-                node = $(data.context.children()[index]);
-            if (file.preview) {
-                node
-                    .prepend('<br>')
-                    .prepend(file.preview);
-            }
-            if (file.error) {
-                node
-                    .append('<br>')
-                    .append(file.error);
-            }
-        }).on('fileuploadprogressall', function (e, data) {
-            var progress = parseInt(data.loaded / data.total * 100, 10);
-            $('#progress .progress-bar').css(
-                'width',
-                progress + '%'
-            );
-        }).on('fileuploaddone', function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                var link = $('<a>')
-                    .attr('target', '_blank')
-                    .prop('href', file.url);
-                $(data.context.children()[index])
-                    .wrap(link);
-            });
-        }).on('fileuploadfail', function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                var error = $('<span/>').text(file.error);
-                $(data.context.children()[index])
-                    .append('<br>')
-                    .append(error);
-            });
-        }).on('click', function (e, data) {
-          $("#files").children().remove();
-          $(".fileinput-button span").text("Загрузить фотографии (заново) ...")
-        }).prop('disabled', !$.support.fileInput)
-          .parent().addClass($.support.fileInput ? undefined : 'disabled');
-    });
-    </script>
-
-
-    <script type="text/javascript">
-        $('#id_start_date').datepicker({
-          format: 'dd.mm.yyyy',
-          weekStart: 1,
-          autoclose: true
-        }).on('changeDate', function (ev) {
-            $(this).datepicker('hide');
-        });
-        $('#id_end_date').datepicker({
-          format: 'dd.mm.yyyy',
-          weekStart: 1,
-          autoclose: true
-        }).on('changeDate', function (ev) {
-            $(this).datepicker('hide');
-        });
-
         $(".image-picker").imagepicker({
           hide_select : true,
           show_label  : false,

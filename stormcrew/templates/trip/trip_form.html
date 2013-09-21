@@ -18,6 +18,8 @@
                 {% csrf_token %}
                 {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
 
+            {% block additional_fields %}{% endblock additional_fields %}
+
             {% block image_upload %}
               <span class="btn btn-success fileinput-button">
                   <i class="glyphicon glyphicon-plus"></i>
