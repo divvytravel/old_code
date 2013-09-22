@@ -1,3 +1,5 @@
+{% load trip_request %}
+
 <table class="table trip-list">
     <thead>
       <tr>
@@ -27,12 +29,16 @@
             </td>
             <td></td>
             <td>
-                <form action="{% url 'trip_request_approve' %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="request_pk" value="{{trip_request.pk}}"/>
-                    <input type="hidden" name="action" value="0"/>
-                    <input type="submit" class="btn btn-primary" value="Принять"/>
-                </form>
+                {% if trip_request|is_approved_by:request.user %}
+                    <button class="btn btn-default" disabled>Ожидает одобрения остальных участников</button>
+                {% else %}
+                    <form action="{% url 'trip_request_approve' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="request_pk" value="{{trip_request.pk}}"/>
+                        <input type="hidden" name="action" value="0"/>
+                        <input type="submit" class="btn btn-primary" value="Принять"/>
+                    </form>
+                {% endif %}
             </td>
             <td>
                 <form action="{% url 'trip_request_approve' %}" method="POST">

@@ -271,5 +271,8 @@ class TripRequest(models.Model):
     def is_approved(self):
         return self.status == TripRequest.STATUS.approved
 
+    def is_approved_by(self, user):
+        return self.users_approved.filter(pk=user.pk).count() > 0
+
     class Meta:
         ordering = '-date_created',
