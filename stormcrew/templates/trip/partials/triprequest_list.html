@@ -6,8 +6,7 @@
         <th>Даты</th>
         <th>Где</th>
         <th>Что за поездка</th>
-        <th>Бюджет</th>
-        <th>Участвуют</th>
+        <th>Заявка от</th>
         <th></th>
         <th></th>
       </tr>
@@ -25,9 +24,8 @@
                 <a href="{{ trip_request.trip.get_absolute_url}}">{{ trip_request.trip.title }}</a>
             </td>
             <td>
-                {{ trip_request.trip.price }} {{ trip_request.trip.get_currency_display }}
+                <a href="{{ trip_request.user.get_absolute_url }}">{{ trip_request.user.get_full_name }}</a>
             </td>
-            <td></td>
             <td>
                 {% if trip_request|is_approved_by:request.user %}
                     <button class="btn btn-default" disabled>Ожидает одобрения остальных участников</button>

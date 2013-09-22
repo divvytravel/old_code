@@ -76,6 +76,9 @@ class TripRequestQuerySet(QuerySet):
     def select_related_trips(self):
         return self.select_related('trip')
 
+    def include_related(self):
+        return self.select_related('trip', 'user')
+
     def with_owner(self, owner):
         return self.filter(trip__owner=owner)
 

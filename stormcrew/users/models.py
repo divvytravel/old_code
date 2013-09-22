@@ -78,13 +78,13 @@ class User(AbstractUser):
         return Trip.objects.filter(owner=self).count_gender()
 
     def trip_requests_to_owner(self):
-        return TripRequest.objects.select_related_trips().active().with_owner(self)
+        return TripRequest.objects.include_related().active().with_owner(self)
 
     def trip_requests_to_member(self):
-        return TripRequest.objects.select_related_trips().active().with_member(self)
+        return TripRequest.objects.include_related().active().with_member(self)
 
     def trip_requests(self):
-        return TripRequest.objects.select_related_trips().active().filter(
+        return TripRequest.objects.include_related().active().filter(
         Q(trip__owner=self) | Q(trip__people=self)).distinct()
 
     def __unicode__(self):
