@@ -238,8 +238,7 @@ class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return kwargs
 
     def form_valid(self, form):
-        form.apply_action()
-        self.form = form
+        self.trip_request = form.apply_action()
         return super(TripRequestApproveView, self).form_valid(form)
 
     def form_invalid(self, form):
@@ -248,8 +247,9 @@ class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return HttpResponseRedirect(self.success_url)
 
     def get_success_message(self):
-        if hasattr(self, 'form'):
-            if self.form.cleaned_data['action'] == TripProcessForm.APPROVE:
+        trip_request = getattr(self, 'trip_request', None)
+        if trip_request is not None:
+            if trip_request.is_approved():
                 return u"Заявка принята"
             else:
                 return u"Заявка отклонена"

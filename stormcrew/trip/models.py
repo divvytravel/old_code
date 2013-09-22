@@ -73,7 +73,7 @@ class Trip(models.Model):
     def is_user_has_request(self, user, skip_cache=False):
         if not user.is_authenticated():
             return False
-        return self.user_requests.filter(user=user).count() > 0
+        return self.user_requests.active().filter(user=user).count() > 0
 
     def is_open(self):
         return self.trip_type == self.TRIP_TYPE.open
@@ -210,18 +210,37 @@ class TripPicture(models.Model):
 
 
 class TripRequest(models.Model):
+
+    STATUS = Choices(
+        ('pending', u'Ожидает одобрения'),
+        ('approved', u'Одобрена'),
+        ('cancelled', u'Отменена'),
+        ('denied', u'Отклонена'),
+    )
+
     trip = models.ForeignKey('trip.Trip', related_name='user_requests')
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     date_created = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10, choices=STATUS,
+        default=STATUS.pending)
 
     objects = TripRequestManager()
 
     def approve(self):
         self.trip.people.add(self.user)
+        self.status = TripRequest.STATUS.approved
+        self.save()
         # TODO
         # 1. send notification to user
         # 2. post on fb wall
         # 3. mark this trip request as approved
+
+    def cancel(self):
+        self.status = TripRequest.STATUS.cancelled
+        self.save()
+
+    def is_approved(self):
+        return self.status == TripRequest.STATUS.approved
 
     class Meta:
         ordering = '-date_created',

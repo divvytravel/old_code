@@ -20,7 +20,7 @@ class TripPictureAdmin(admin.ModelAdmin):
 
 
 class TripRequestAdmin(admin.ModelAdmin):
-    list_display = 'trip', 'user', 'date_created'
+    list_display = 'trip', 'user', 'date_created', 'status'
 
 
 admin.site.register(Trip, TripAdmin)

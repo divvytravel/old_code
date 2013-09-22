@@ -69,9 +69,9 @@ class TripQuerySet(QuerySet):
 
 class TripRequestQuerySet(QuerySet):
     def active(self):
-        # TODO
-        # filter approved requests only
-        return self.filter(trip__start_date__gt=get_today())
+        from .models import TripRequest
+        return self.filter(trip__start_date__gt=get_today(),
+            status=TripRequest.STATUS.pending)
 
     def select_related_trips(self):
         return self.select_related('trip')

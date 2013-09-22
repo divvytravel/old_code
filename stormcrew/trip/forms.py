@@ -116,7 +116,7 @@ class TripRequestForm(forms.ModelForm):
 
     class Meta:
         model = TripRequest
-        exclude = 'user', 'date_created'
+        exclude = 'user', 'date_created', 'status'
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -145,7 +145,9 @@ class TripRequestForm(forms.ModelForm):
     def save(self, commit=False):
         trip = self.cleaned_data['trip']
         if self.cancel:
-            TripRequest.objects.filter(trip=trip, user=self.user).delete()
+            for tr in TripRequest.objects.active()\
+                                            .filter(trip=trip, user=self.user):
+                tr.cancel()
             trip.notify_owner_about_cancel_request(self.user)
             if trip.is_closed():
                 trip.notify_members_about_cancel_request(self.user)
@@ -244,3 +246,5 @@ class TripProcessForm(forms.Form):
     def apply_action(self):
         if self.is_valid():
             self.trip_request.approve()
+            return self.trip_request
+        return None
