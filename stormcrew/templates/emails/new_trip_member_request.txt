@@ -6,6 +6,6 @@
 
 На поездку "{{ trip }}", {{domain}}{{trip.get_absolute_url}}, в которой вы принимаете участие, была подана заявка от пользователя {{user_requested.get_full_name}}, {{domain}}{{user_requested.get_absolute_url}}.
 
-{% if not trip.is_closed %} Вы можете одобрить заявку по ссылке {{domain}}/#TODO.{% endif %}
+{% if not trip.is_closed %} Вы можете одобрить заявку по ссылке {{domain}}{% url 'users:cabinet' %}.{% endif %}
 
 {% endblock content %}

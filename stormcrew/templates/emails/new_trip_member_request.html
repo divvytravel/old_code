@@ -8,7 +8,7 @@
     На поездку <a href="{{domain}}{{trip.get_absolute_url}}">"{{ trip }}"</a>, в которой вы принимаете участие, была подана заявка от пользователя <a href="{{domain}}{{user_requested.get_absolute_url}}">{{user_requested.get_full_name}}</a>.
 </div>
 {% if trip.is_closed %}
-    <div>Вы можете одобрить заявку по <a href="{{domain}}/#TODO">ссылке</a>.</div>
+    <div>Вы можете одобрить заявку по <a href="{{domain}}{% url 'users:cabinet' %}">ссылке</a>.</div>
 {% endif %}
 
 {% endblock content %}
