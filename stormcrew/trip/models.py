@@ -226,6 +226,8 @@ class TripRequest(models.Model):
     users_approved = models.ManyToManyField(settings.AUTH_USER_MODEL,
         related_name='approved_trip_requests', blank=True, null=True)
     approved_by_owner = models.BooleanField(default=False)
+    denied_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
+        blank=True, null=True, related_name='denied_trip_requests')
 
     objects = TripRequestManager()
 
@@ -255,10 +257,11 @@ class TripRequest(models.Model):
         # 1. send notification to user
         # 2. post on fb wall
 
-    def deny(self):
+    def deny(self, by_user):
         # TODO
         # 1. send notification to user
         self.status = TripRequest.STATUS.denied
+        self.denied_by.add(by_user)
         return self.save()
 
     def cancel(self):
