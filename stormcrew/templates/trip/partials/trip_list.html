@@ -13,6 +13,9 @@
             <th></th>
             <th></th>
         {% endif %}
+        {% if show_exit %}
+            <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -42,6 +45,16 @@
                 </td>
                 <td>
                     <a href="{% url 'trip_delete' trip.pk %}" class="btn btn-primary">Удалить</a>
+                </td>
+            {% endif %}
+            {% if show_exit %}
+                <td>
+                <form method="post" action="{% url 'trip_request_detail' trip.pk %}">
+                    {% csrf_token %}
+                    <input name="trip" type="hidden" value="{{ trip.pk }}">
+                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                    <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить участие</button>
+                </form>
                 </td>
             {% endif %}
           </tr>
