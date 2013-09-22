@@ -180,22 +180,6 @@ class Trip(models.Model):
         else:
             return u"текущая"
 
-
-    def notify_owner_about_request(self, user_requested):
-        if self.owner.email:
-            context = {
-                'trip': self,
-                'user_requested': user_requested,
-                'domain': "http://" + str(get_current_site(None)),
-            }
-            subject = u"Новая заявка на вашу поездку"
-            from_email = settings.EMAIL_HOST_USER
-            to = [self.owner.email]
-            text_content = render_to_string('emails/new_trip_request.txt', context)
-            html_content = render_to_string('emails/new_trip_request.html', context)
-            self.send_email_alternative(
-                subject, text_content, html_content, from_email, to)
-
     def get_email_common_data(self, user_requested):
         return {
             'trip': self,
@@ -203,45 +187,75 @@ class Trip(models.Model):
             'domain': "http://" + str(get_current_site(None)),
         }, settings.EMAIL_HOST_USER
 
-    def notify_users_about_request(self, user_requested):
+    def notify_email(self, user, subject, template_base_name, email_to, context={}):
+        base_context, from_email = self.get_email_common_data(user)
+        base_context.update(context)
+        context = base_context
+        template_html = "emails/{0}.html".format(template_base_name)
+        template_txt = "emails/{0}.txt".format(template_base_name)
+        text_content = render_to_string(template_html, context)
+        html_content = render_to_string(template_txt, context)
+        self.send_email_alternative(
+            subject, text_content, html_content, from_email, email_to)
+
+    def notify_owner_about_request(self, user_requested):
         if self.owner.email:
-            context, from_email = self.get_email_common_data(user_requested)
-            subject = u"Новая заявка на вашу поездку"
-            to = [self.owner.email]
-            text_content = render_to_string('emails/new_trip_request.txt', context)
-            html_content = render_to_string('emails/new_trip_request.html', context)
-            self.send_email_alternative(
-                subject, text_content, html_content, from_email, to)
+            self.notify_email(
+                user_requested,
+                u"Новая заявка на вашу поездку",
+                "new_trip_request",
+                [self.owner.email],
+            )
 
     def notify_members_about_request(self, user_requested):
-        member_emails = self.people.all().values_list('email', flat=True)
-        if member_emails:
-            context, from_email = self.get_email_common_data(user_requested)
-            subject = u"Новая заявка на поездку, в которой вы принимаете участие"
-            to = member_emails
-            text_content = render_to_string('emails/new_trip_member_request.txt', context)
-            html_content = render_to_string('emails/new_trip_member_request.html', context)
-            self.send_email_alternative(
-                subject, text_content, html_content, from_email, to)
+        members = self.people.exclude(email__isnull=True, email__exact='')
+        for member in members:
+            context = {"member": member}
+            self.notify_email(
+                user_requested,
+                u"Новая заявка на поездку, в которой вы принимаете участие",
+                "new_trip_member_request",
+                [member.email],
+                context
+            )
 
     def notify_owner_about_cancel_request(self, user_requested):
         if self.owner.email:
-            context, from_email = self.get_email_common_data(user_requested)
-            to = [self.owner.email]
             if self.is_open() or self.is_user_in(user_requested):
                 subject = u"Отмена участия в поездке"
                 user_was_in = True
             else:
                 subject = u"Отмена заявки на вашу поездку"
                 user_was_in = False
-            context.update({'user_was_in': user_was_in})
-            text_content = render_to_string('emails/cancel_trip_request.txt', context)
-            html_content = render_to_string('emails/cancel_trip_request.html', context)
-            self.send_email_alternative(
-                subject, text_content, html_content, from_email, to)
+            context = {'user_was_in': user_was_in}
+            self.notify_email(
+                user_requested,
+                subject,
+                "cancel_trip_request",
+                [self.owner.email],
+                context
+            )
 
     def notify_members_about_cancel_request(self, user_requested):
+        # TODO
         pass
+
+    def notify_members_about_delete(self, user_requested):
+        if self.owner.email:
+            if self.is_open() or self.is_user_in(user_requested):
+                subject = u"Отмена участия в поездке"
+                user_was_in = True
+            else:
+                subject = u"Отмена заявки на вашу поездку"
+                user_was_in = False
+            context = {'user_was_in': user_was_in}
+            self.notify_email(
+                user_requested,
+                subject,
+                "cancel_trip_request",
+                [self.owner.email],
+                context
+            )
 
     def send_email_alternative(self, subject, text, html, from_email, to):
         try:

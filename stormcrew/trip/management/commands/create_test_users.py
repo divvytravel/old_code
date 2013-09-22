@@ -15,6 +15,7 @@ class Command(BaseCommand):
         for i in range(amount):
             gender = random.choice((User.GENDERS.male, User.GENDERS.female))
             user = milkman.deliver('users.user',
+                email="test_{0}@mail.com".format(i),
                 provider="facebook",
                 birthday=random_date(
                     datetime.now()-timedelta(days=70*365),
