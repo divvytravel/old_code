@@ -210,3 +210,32 @@ class TripFilterForm(forms.Form):
 
     def clean_age_to(self):
         return self._clean_age(self.cleaned_data['age_to'])
+
+
+class TripProcessForm(forms.Form):
+    APPROVE, DENY = 0, 1
+    errors = {
+        'bad_request': u'Неверная заявка',
+    }
+
+    request_pk = forms.IntegerField()
+    action = forms.ChoiceField(choices=[APPROVE, DENY])
+
+    def __init__(self, *args, **kwargs):
+        self.owner = kwargs.pop('owner')
+        super(TripProcessForm, self).__init__(*args, **kwargs)
+
+    def clean_request_pk(self):
+        request_pk = self.cleaned_data['request_pk']
+        try:
+            self.trip_request = TripRequest.objects\
+                .active()\
+                .select_related_trips()\
+                .with_owner(self.owner)\
+                .get(pk=request_pk)
+        except TripRequest.DoesNotExist:
+            raise forms.ValidationError(self.errors['bad_request'])
+
+    def apply_action(self):
+        if self.is_valid():
+            self.trip_request.approve()

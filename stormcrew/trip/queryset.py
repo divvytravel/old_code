@@ -65,3 +65,20 @@ class TripQuerySet(QuerySet):
     @self_if_blank_arg
     def with_people_age(self, age_from, age_to):
         return filter_user_age(self, age_from, age_to, prefix='people')
+
+
+class TripRequestQuerySet(QuerySet):
+    def active(self):
+        # TODO
+        # filter approved requests only
+        return self.filter(trip__start_date__gt=get_today())
+
+    def select_related_trips(self):
+        return self.select_related('trip')
+
+    def with_owner(self, owner):
+        return self.filter(trip__owner=owner)
+
+    def with_member(self, member):
+        return self.filter(trip__people=member)
+

@@ -11,7 +11,7 @@ from django.utils.dateformat import format
 
 from model_utils import Choices
 from utils.helpers import get_today
-from .managers import TripManager
+from .managers import TripManager, TripRequestManager
 
 
 logger = logging.getLogger(__name__)
@@ -213,3 +213,15 @@ class TripRequest(models.Model):
     trip = models.ForeignKey('trip.Trip', related_name='user_requests')
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     date_created = models.DateTimeField(default=timezone.now)
+
+    objects = TripRequestManager()
+
+    def approve(self):
+        self.trip.poeple.add(self.user)
+        # TODO
+        # 1. send notification to user
+        # 2. post on fb wall
+        # 3. mark this trip request as approved
+
+    class Meta:
+        ordering = '-date_created',

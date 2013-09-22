@@ -1,0 +1,44 @@
+<table class="table trip-list">
+    <thead>
+      <tr>
+        <th>Даты</th>
+        <th>Где</th>
+        <th>Что за поездка</th>
+        <th>Бюджет</th>
+        <th>Участвуют</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for trip_request in trip_requests %}
+          <tr>
+            <td>
+                <a href="{{ trip_request.trip.get_absolute_url}}">{{ trip_request.trip.start_date_format }} - {{ trip_request.trip.end_date_format }}</a>
+            </td>
+            <td>
+                <a href="{{ trip_request.trip.get_absolute_url}}">{{ trip_request.trip.city }}</a>
+            </td>
+            <td>
+                <a href="{{ trip_request.trip.get_absolute_url}}">{{ trip_request.trip.title }}</a>
+            </td>
+            <td>
+                {{ trip_request.trip.price }} {{ trip_request.trip.get_currency_display }}
+            </td>
+            <td></td>
+            <td>
+                <form action="/todo/" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_pk" value="{{trip_request.pk}}"/>
+                    <input type="hidden" name="action" value="0"/>
+                    <input type="submit" class="btn btn-primary" value="Принять"/>
+                </form>
+            </td>
+            <td>
+
+            </td>
+          </tr>
+        {% endfor %}
+      <tr>
+    </tbody>
+</table>

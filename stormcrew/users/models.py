@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from model_utils import Choices
 from social_auth.fields import JSONField
 from utils.helpers import get_today
-from trip.models import Trip
+from trip.models import Trip, TripRequest
 from .managers import UserManagerWithFilters
 
 
@@ -72,11 +72,16 @@ class User(AbstractUser):
                 return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
     def trips_in(self):
-
         return Trip.objects.with_people(self).count_gender()
 
     def trips_created(self):
         return Trip.objects.filter(owner=self).count_gender()
+
+    def trip_requests_to_owner(self):
+        return TripRequest.objects.select_related_trips().active().with_owner(self)
+
+    def trip_requests_to_member(self):
+        return TripRequest.objects.select_related_trips().acitive().with_member(self)
 
     def __unicode__(self):
         return self.get_full_name()
