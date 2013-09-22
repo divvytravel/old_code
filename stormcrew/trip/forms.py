@@ -116,7 +116,7 @@ class TripRequestForm(forms.ModelForm):
 
     class Meta:
         model = TripRequest
-        exclude = 'user', 'date_created', 'status'
+        fields = 'trip',
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')
@@ -223,13 +223,14 @@ class TripProcessForm(forms.Form):
 
     request_errors = {
         'bad_request': u'Неверная заявка',
+        'bad_user': u'У вас нет прав на это действие',
     }
 
     request_pk = forms.IntegerField()
     action = forms.ChoiceField(choices=APPROVE_CHOICES)
 
     def __init__(self, *args, **kwargs):
-        self.owner = kwargs.pop('owner')
+        self.user = kwargs.pop('user')
         super(TripProcessForm, self).__init__(*args, **kwargs)
 
     def clean_request_pk(self):
@@ -238,17 +239,23 @@ class TripProcessForm(forms.Form):
             self.trip_request = TripRequest.objects\
                 .active()\
                 .select_related_trips()\
-                .with_owner(self.owner)\
                 .get(pk=request_pk)
         except TripRequest.DoesNotExist:
             raise forms.ValidationError(self.request_errors['bad_request'])
+        trip = self.trip_request.trip
+        if trip.is_invite():
+            if trip.user != self.user:
+                raise forms.ValidationError(self.request_errors['bad_user'])
+        elif trip.is_closed():
+            if trip.people.filter(pk=self.user.pk).count() == 0:
+                raise forms.ValidationError(self.request_errors['bad_user'])
 
     def apply_action(self):
         if self.is_valid():
             action = self.cleaned_data['action']
             if action == TripProcessForm.APPROVE:
-                self.trip_request.approve()
+                self.trip_request.approve(self.user)
             else:
-                self.trip_request.deny()
+                self.trip_request.deny(self.user)
             return self.trip_request
         return None

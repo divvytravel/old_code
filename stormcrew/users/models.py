@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 from django.utils.safestring import mark_safe
-
+from django.db.models import Q
 from django.core.urlresolvers import reverse
 
 from model_utils import Choices
@@ -81,7 +81,11 @@ class User(AbstractUser):
         return TripRequest.objects.select_related_trips().active().with_owner(self)
 
     def trip_requests_to_member(self):
-        return TripRequest.objects.select_related_trips().acitive().with_member(self)
+        return TripRequest.objects.select_related_trips().active().with_member(self)
+
+    def trip_requests(self):
+        return TripRequest.objects.select_related_trips().active().filter(
+        Q(trip__owner=self) | Q(trip__people=self)).distinct()
 
     def __unicode__(self):
         return self.get_full_name()

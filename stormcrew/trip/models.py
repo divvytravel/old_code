@@ -223,17 +223,37 @@ class TripRequest(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=10, choices=STATUS,
         default=STATUS.pending)
+    users_approved = models.ManyToManyField(settings.AUTH_USER_MODEL,
+        related_name='approved_trip_requests', blank=True, null=True)
+    approved_by_owner = models.BooleanField(default=False)
 
     objects = TripRequestManager()
 
-    def approve(self):
-        self.trip.people.add(self.user)
-        self.status = TripRequest.STATUS.approved
-        return self.save()
+    def approve(self, by_user):
+        approved = False
+        if self.trip.is_invite() and by_user == self.trip.owner:
+            self.approved_by_owner = True
+            approved = True
+        elif self.trip.is_closed():
+            if by_user == self.trip.owner:
+                self.approved_by_owner = True
+                self.save()
+            member = self.trip.people.filter(pk=by_user.pk)
+            if len(member) > 0:
+                member = member[0]
+                self.users_approved.add(by_user)
+            if self.users_approved.count() == self.trip.people.count()\
+                    and self.approved_by_owner:
+                approved = True
+
+        if approved:
+            self.trip.people.add(self.user)
+            self.status = TripRequest.STATUS.approved
+            self.save()
+        return approved
         # TODO
         # 1. send notification to user
         # 2. post on fb wall
-        # 3. mark this trip request as approved
 
     def deny(self):
         # TODO

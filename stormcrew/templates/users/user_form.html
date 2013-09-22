@@ -20,7 +20,7 @@
             <h2 class="align-center">Заявки, требующие рассмотрения:</h2>
         </div>
 
-        {% include "trip/partials/triprequest_list.html" with trip_requests=user.trip_requests_to_owner %}
+        {% include "trip/partials/triprequest_list.html" with trip_requests=user.trip_requests %}
     </div>
 
     <div class="row">
