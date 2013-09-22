@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}Профиль: {{ user.username }}{% endblock %}
+{% block title %}Личный кабинет: {{ user.username }}{% endblock %}
 
 {% block content %}
-
+    <div class="row">
+        <h1 class="align-center">Личный кабинет ({{ user.get_full_name }})</h1>
+    </div>
     <div class="row">
         <div class="col-lg-12">
-            <h1>{% block header %}Ваши данные:{% endblock %}</h1>
-            {{ user.get_avatar }}
-            <form class="form-horizontal form-profile" method="post" action="">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <div class="control-group">
-                  <div class="controls">
-                    <!--<button type="submit" class="btn">Update</button>-->
-                  </div>
-                </div>
-            </form>
+            <div class="pull-right">
+                <a href="{% url 'users:detail' user.pk %}" class="btn btn-primary">Ваши данные</a>
+            </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="align-center">Созданные поездки:</h2>
+        </div>
+        {% include "trip/partials/trip_list.html" with trips=user.trips_created show_status=True show_edit=True %}
     </div>
 
 {% endblock %}

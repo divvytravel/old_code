@@ -6,7 +6,6 @@ from braces.views import LoginRequiredMixin
 
 from .forms import UserForm
 from .models import User
-from trip.models import Trip
 
 
 class UserDetailView(DetailView):
@@ -15,15 +14,6 @@ class UserDetailView(DetailView):
     # These next two lines tell the view to index lookups by username
     slug_field = "username"
     slug_url_kwarg = "username"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(UserDetailView, self).get_context_data(*args, **kwargs)
-        user = self.object
-        context.update({
-            'trips_in': Trip.objects.with_people(user).count_gender(),
-            'trips_created': Trip.objects.filter(owner=user).count_gender(),
-        })
-        return context
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):

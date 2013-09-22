@@ -9,6 +9,10 @@
         {% if show_status %}
             <th>Статус</th>
         {% endif %}
+        {% if show_edit %}
+            <th></th>
+            <th></th>
+        {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -30,6 +34,14 @@
             {% if show_status %}
                 <td>
                     {{trip.get_status|default:"?"}}
+                </td>
+            {% endif %}
+            {% if show_edit %}
+                <td>
+                    <a href="{% url 'trip_update' trip.pk %}" class="btn btn-primary">Редактировать</a>
+                </td>
+                <td>
+                    <a href="{% url 'trip_delete' trip.pk %}" class="btn btn-primary">Удалить</a>
                 </td>
             {% endif %}
           </tr>

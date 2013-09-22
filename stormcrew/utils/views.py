@@ -11,3 +11,8 @@ class SuccessMessageMixin(object):
         if self.get_success_message():
             messages.success(self.request, self.get_success_message())
         return super(SuccessMessageMixin, self).form_valid(form)
+
+    def delete(self, *args, **kwargs):
+        if self.get_success_message():
+            messages.success(self.request, self.get_success_message())
+        return super(SuccessMessageMixin, self).delete(*args, **kwargs)

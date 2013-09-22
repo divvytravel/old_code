@@ -49,7 +49,7 @@
         <ul class="nav navbar-nav pull-right">
           {% if request.user.is_authenticated %}
             <li><a href="{% url 'trip_create' %}">Создать поездку</a></li>
-            <li><a href="{% url 'users:profile' %}">Профиль</a></li>
+            <li><a href="{% url 'users:cabinet' %}">Личный кабинет</a></li>
             <li><a href="{% url 'users:logout' %}">Выйти</a></li>
           {% else %}
             <li><a class="btn fb-login" href="{% url 'socialauth_begin' 'facebook' %}"></a></li>

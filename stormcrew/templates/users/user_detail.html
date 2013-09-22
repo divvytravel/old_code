@@ -46,14 +46,14 @@
       <h2 class="align-center">
         Участник в поездках
       </h2>
-      {% include "trip/partials/trip_list.html" with trips=trips_in show_status=True %}
+      {% include "trip/partials/trip_list.html" with trips=crew_user.trips_in show_status=True %}
     </div>
-    {% if trips_created|length %}
+    {% if crew_user.trips_created|length %}
       <div class="row">
         <h2 class="align-center">
           Создал поездки
         </h2>
-        {% include "trip/partials/trip_list.html" with trips=trips_created show_status=True %}
+        {% include "trip/partials/trip_list.html" with trips=crew_user.trips_created show_status=True %}
       </div>
     {% endif %}
 {% endblock content %}

@@ -124,5 +124,13 @@ class User(AbstractUser):
             if link:
                 return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
+    def trips_in(self):
+        from trip.models import Trip
+        return Trip.objects.with_people(self).count_gender()
+
+    def trips_created(self):
+        from trip.models import Trip
+        return Trip.objects.filter(owner=self).count_gender()
+
     def __unicode__(self):
         return self.get_full_name()

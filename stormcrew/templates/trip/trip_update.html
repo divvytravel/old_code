@@ -12,21 +12,26 @@
     {% block header %}Редактировать поездку "{{trip.title}}"{% endblock %}
 
     {% block additional_fields %}
-        <div class="trip_picture_list">
-            <div style="font-weight: bold;margin-left: 16px;">Удалить фотографии:</div>
-            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
-            {% with form.images_to_delete as field %}
-            <select id="{{ field.auto_id }}" class="image-picker show-html" name="{{field.name}}" multiple style="display:none;">
-                {% for choice in field.field.choices.queryset %}
-                  <option data-img-src="{{ choice.file.url }}" value="{{choice.pk}}"
-                  >{{ choice }}</option>
-                {% endfor %}
-            </select>
-            {% endwith %}
-        </div>
+      {% with form.images_to_delete as field %}
+        {% if field.field.choices.queryset|length %}
+          <div class="trip_picture_list">
+              <div style="font-weight: bold;margin-left: 16px;">Удалить фотографии:</div>
+              {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+              <select id="{{ field.auto_id }}" class="image-picker show-html" name="{{field.name}}" multiple style="display:none;">
+                  {% for choice in field.field.choices.queryset %}
+                    <option data-img-src="{{ choice.file.url }}" value="{{choice.pk}}"
+                    >{{ choice }}</option>
+                  {% endfor %}
+              </select>
+          </div>
+        {% endif %}
+      {% endwith %}
     {% endblock additional_fields %}
 
     {% block submit_text %}Сохранить{% endblock %}
+    {% block actions %}
+        <a href="{% url 'trip_delete' trip.pk %}" class="btn btn-primary">Удалить поездку</a>
+    {% endblock actions %}
 
 {% block javascript %}
     {{ block.super }}

@@ -209,8 +209,8 @@ FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'user_birthday', 'publish_stream']
 FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 
 # TODO
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/users/profile/"
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/users/profile/"
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = "/users/cabinet/"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/users/cabinet/"
 LOGOUT_REDIRECT_URL = "/"
 # TODO provide select of login source here (fb/vk/tw etc.)
 LOGIN_URL = "/accounts/login/facebook/"

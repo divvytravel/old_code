@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from django.views.generic import FormView, CreateView, UpdateView
-from django.core.urlresolvers import reverse
+from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.conf import settings
@@ -199,7 +199,7 @@ class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
     model = Trip
     form_class = TripUpdateForm
     template_name = "trip/trip_update.html"
-    success_message = "Поездка обновлена"
+    success_message = u"Поездка обновлена"
 
     def get_success_url(self):
         self.save_images()
@@ -210,3 +210,15 @@ class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
             raise PermissionDenied  # return a forbidden response
         kwargs = super(TripUpdateView, self).get_form_kwargs()
         return kwargs
+
+
+class TripDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+    model = Trip
+    success_message = u"Поездка удалена"
+    success_url = reverse_lazy('users:cabinet')
+
+    def get_object(self):
+        obj = super(TripDeleteView, self).get_object()
+        if obj.owner != self.request.user:
+            raise PermissionDenied
+        return obj

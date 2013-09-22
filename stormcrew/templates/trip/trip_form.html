@@ -10,10 +10,9 @@
 {% endblock css %}
 
 {% block content %}
-
     <div class="row">
         <div class="col-lg-12">
-            <h1>{% block header %}Создать поездку{% endblock %}</h1>
+            <h1 class="align-center">{% block header %}Создать поездку{% endblock %}</h1>
             <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
                 {% csrf_token %}
                 {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
@@ -33,6 +32,7 @@
                 <div class="control-group create-submit">
                   <div class="controls">
                     <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
+                    {% block actions %}{% endblock actions %}
                   </div>
                 </div>
             </form>
