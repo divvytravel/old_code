@@ -87,5 +87,8 @@ class User(AbstractUser):
         return TripRequest.objects.include_related().active().filter(
         Q(trip__owner=self) | Q(trip__people=self)).distinct()
 
+    def outgoing_trip_requests(self):
+        return TripRequest.objects.include_related().active().filter(user=self)
+
     def __unicode__(self):
         return self.get_full_name()

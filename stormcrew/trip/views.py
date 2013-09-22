@@ -192,7 +192,8 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
             return u'Заявка подана успешно!'
 
     def get_success_url(self):
-        return reverse('home')
+        next = self.request.POST.get('next', None)
+        return next or reverse('home')
 
 
 class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
