@@ -229,15 +229,21 @@ class TripRequest(models.Model):
     def approve(self):
         self.trip.people.add(self.user)
         self.status = TripRequest.STATUS.approved
-        self.save()
+        return self.save()
         # TODO
         # 1. send notification to user
         # 2. post on fb wall
         # 3. mark this trip request as approved
 
+    def deny(self):
+        # TODO
+        # 1. send notification to user
+        self.status = TripRequest.STATUS.denied
+        return self.save()
+
     def cancel(self):
         self.status = TripRequest.STATUS.cancelled
-        self.save()
+        return self.save()
 
     def is_approved(self):
         return self.status == TripRequest.STATUS.approved

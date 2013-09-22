@@ -245,6 +245,10 @@ class TripProcessForm(forms.Form):
 
     def apply_action(self):
         if self.is_valid():
-            self.trip_request.approve()
+            action = self.cleaned_data['action']
+            if action == TripProcessForm.APPROVE:
+                self.trip_request.approve()
+            else:
+                self.trip_request.deny()
             return self.trip_request
         return None

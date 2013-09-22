@@ -35,7 +35,12 @@
                 </form>
             </td>
             <td>
-
+                <form action="{% url 'trip_request_approve' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_pk" value="{{trip_request.pk}}"/>
+                    <input type="hidden" name="action" value="1"/>
+                    <input type="submit" class="btn btn-primary" value="Отклонить"/>
+                </form>
             </td>
           </tr>
         {% endfor %}
