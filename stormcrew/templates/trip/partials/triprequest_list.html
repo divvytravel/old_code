@@ -27,7 +27,7 @@
             </td>
             <td></td>
             <td>
-                <form action="/todo/" method="POST">
+                <form action="{% url 'trip_request_approve' %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="request_pk" value="{{trip_request.pk}}"/>
                     <input type="hidden" name="action" value="0"/>

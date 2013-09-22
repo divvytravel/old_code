@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, url
 
 from .views import TripCreateView, TripRequestFormView, TripUpdateView,\
-    TripDeleteView
+    TripDeleteView, TripRequestApproveView
 
 urlpatterns = patterns('',
     url(r'^create/$', TripCreateView.as_view(), name='trip_create'),
@@ -12,4 +12,6 @@ urlpatterns = patterns('',
         name='trip_update'),
     url(r'^delete/(?P<pk>\d+)/$', TripDeleteView.as_view(),
         name='trip_delete'),
+    url(r'^request/approve/$', TripRequestApproveView.as_view(),
+        name='trip_request_approve'),
 )

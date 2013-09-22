@@ -217,7 +217,7 @@ class TripRequest(models.Model):
     objects = TripRequestManager()
 
     def approve(self):
-        self.trip.poeple.add(self.user)
+        self.trip.people.add(self.user)
         # TODO
         # 1. send notification to user
         # 2. post on fb wall

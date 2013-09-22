@@ -12,7 +12,8 @@ from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
 
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
-from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm
+from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
+    TripProcessForm
 from .models import Trip, TripPicture
 from .serializers import TripSerializer
 from utils.views import SuccessMessageMixin
@@ -222,3 +223,33 @@ class TripDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
         if obj.owner != self.request.user:
             raise PermissionDenied
         return obj
+
+
+class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+    form_class = TripProcessForm
+    success_url = reverse_lazy('users:cabinet')
+
+    def get(self, *args, **kwargs):
+        raise PermissionDenied
+
+    def get_form_kwargs(self):
+        kwargs = super(TripRequestApproveView, self).get_form_kwargs()
+        kwargs.update({'owner': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        form.apply_action()
+        self.form = form
+        return super(TripRequestApproveView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        # TODO
+        # create error message
+        return HttpResponseRedirect(self.success_url)
+
+    def get_success_message(self):
+        if hasattr(self, 'form'):
+            if self.form.cleaned_data['action'] == TripProcessForm.APPROVE:
+                return u"Заявка принята"
+            else:
+                return u"Заявка отклонена"

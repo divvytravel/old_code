@@ -213,13 +213,18 @@ class TripFilterForm(forms.Form):
 
 
 class TripProcessForm(forms.Form):
-    APPROVE, DENY = 0, 1
-    errors = {
+    APPROVE, DENY = '0', '1'
+    APPROVE_CHOICES = (
+        (APPROVE, APPROVE),
+        (DENY, DENY),
+    )
+
+    request_errors = {
         'bad_request': u'Неверная заявка',
     }
 
     request_pk = forms.IntegerField()
-    action = forms.ChoiceField(choices=[APPROVE, DENY])
+    action = forms.ChoiceField(choices=APPROVE_CHOICES)
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop('owner')
@@ -234,7 +239,7 @@ class TripProcessForm(forms.Form):
                 .with_owner(self.owner)\
                 .get(pk=request_pk)
         except TripRequest.DoesNotExist:
-            raise forms.ValidationError(self.errors['bad_request'])
+            raise forms.ValidationError(self.request_errors['bad_request'])
 
     def apply_action(self):
         if self.is_valid():
