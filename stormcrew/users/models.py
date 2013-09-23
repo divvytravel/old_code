@@ -29,6 +29,9 @@ class User(AbstractUser):
 
     objects = UserManagerWithFilters()
 
+    def __unicode__(self):
+        return self.get_full_name()
+
     @property
     def get_avatar_url(self):
         avatar_url = self.avatar_url
@@ -90,5 +93,10 @@ class User(AbstractUser):
     def outgoing_trip_requests(self):
         return TripRequest.objects.include_related().active().filter(user=self)
 
-    def __unicode__(self):
-        return self.get_full_name()
+    def notify_about_approve(self, trip):
+        pass
+
+    def post_approve_on_fb_wall(self, trip):
+        pass
+
+
