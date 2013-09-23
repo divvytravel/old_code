@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
@@ -244,8 +245,8 @@ class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
         return super(TripRequestApproveView, self).form_valid(form)
 
     def form_invalid(self, form):
-        # TODO
-        # create error message
+        for form_error in form.errors.values():
+            messages.error(self.request, form_error)
         return HttpResponseRedirect(self.success_url)
 
     def get_success_message(self):

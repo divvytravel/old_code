@@ -4,8 +4,6 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django.template.loader import render_to_string
-from django.contrib.sites.models import get_current_site
 from django.utils.dateformat import format
 
 from model_utils import Choices
@@ -109,24 +107,6 @@ class Trip(models.Model):
             return u"завершенная"
         else:
             return u"текущая"
-
-    # def get_email_common_data(self, user_requested):
-    #     return {
-    #         'trip': self,
-    #         'user_requested': user_requested,
-    #         'domain': "http://" + str(get_current_site(None)),
-    #     }, settings.EMAIL_HOST_USER
-
-    # def notify_email(self, user, subject, template_base_name, email_to, context={}):
-    #     base_context, from_email = self.get_email_common_data(user)
-    #     base_context.update(context)
-    #     context = base_context
-    #     template_html = "emails/{0}.html".format(template_base_name)
-    #     template_txt = "emails/{0}.txt".format(template_base_name)
-    #     text_content = render_to_string(template_html, context)
-    #     html_content = render_to_string(template_txt, context)
-    #     send_email_alternatives(
-    #         subject, text_content, html_content, from_email, email_to)
 
     def notify_owner_about_request(self, user_requested):
         if self.owner.email:

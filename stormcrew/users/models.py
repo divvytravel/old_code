@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from model_utils import Choices
 from social_auth.fields import JSONField
 from utils.helpers import get_today
+from utils.email import send_common_email
 from trip.models import Trip, TripRequest
 from .managers import UserManagerWithFilters
 
@@ -94,7 +95,14 @@ class User(AbstractUser):
         return TripRequest.objects.include_related().active().filter(user=self)
 
     def notify_about_approve(self, trip):
-        pass
+        if self.email:
+            send_common_email(
+                user=self,
+                trip=trip,
+                subject=u"Ваша заявка одобрена",
+                template_base_name="trip_request_approved",
+                email_to=[self.email],
+            )
 
     def post_approve_on_fb_wall(self, trip):
         pass

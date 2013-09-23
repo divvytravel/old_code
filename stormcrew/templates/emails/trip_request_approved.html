@@ -1,0 +1,10 @@
+{% extends "emails/base.html" %}
+
+{% block content %}
+
+<div>Здравствуйте, {{ user_requested.get_full_name }}!</div>
+<br/>
+<div>
+    Ваша заявка на поездку <a href="{{domain}}{{trip.get_absolute_url}}">"{{ trip }}"</a> одобрена!
+
+{% endblock content %}

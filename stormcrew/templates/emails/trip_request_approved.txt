@@ -1,0 +1,9 @@
+{% extends "emails/base.txt" %}
+
+{% block content %}
+
+Здравствуйте, {{ user_requested.get_full_name }}!
+
+Ваша заявка на поездку "{{ trip }}", {{domain}}{{trip.get_absolute_url}} одобрена!
+
+{% endblock content %}

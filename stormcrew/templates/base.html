@@ -1,4 +1,4 @@
-{% load staticfiles i18n %}<!DOCTYPE html>
+{% load staticfiles i18n bootstrap_helpers %}<!DOCTYPE html>
 <html lang="en" ng-app>
   <head>
     <meta charset="utf-8">
@@ -62,7 +62,7 @@
 
       {% block messages %}
           {% for message in messages %}
-              <div class="alert alert-dismissable fade in{% if message.tags == 'success' %} alert-success{% elif message.tags == 'warning' %} alert-warning{%endif%}">
+              <div class="alert alert-dismissable fade in alert-{{ message.tags|adopt_alert_tag }}">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   <p>{{message}}</p>
               </div>
