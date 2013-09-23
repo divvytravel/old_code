@@ -1,0 +1,1 @@
+Подтверждено мое участие в поездке "{{trip}}". {{domain}}{{trip.get_absolute_url}}

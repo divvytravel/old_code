@@ -144,6 +144,7 @@ class TripRequestForm(forms.ModelForm):
 
     def save(self, commit=False):
         trip = self.cleaned_data['trip']
+        obj = None
         if self.cancel:
             for tr in TripRequest.objects.active()\
                                             .filter(trip=trip, user=self.user):
@@ -152,10 +153,11 @@ class TripRequestForm(forms.ModelForm):
             if trip.is_closed():
                 trip.notify_members_about_cancel_request(self.user)
             trip.people.remove(self.user)
-            obj = None
         else:
             if trip.is_open():
                 trip.people.add(self.user)
+                self.user.notify_about_approve(trip)
+                self.user.post_approve_on_fb_wall(trip)
             else:
                 obj = super(TripRequestForm, self).save(commit)
                 obj.user = self.user

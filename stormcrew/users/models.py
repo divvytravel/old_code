@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
@@ -8,11 +9,15 @@ from django.core.urlresolvers import reverse
 
 from model_utils import Choices
 from social_auth.fields import JSONField
+
 from utils.helpers import get_today
 from utils.email import send_common_email
+from utils.social_fb import post_on_fb_wall
 from trip.models import Trip, TripRequest
 from .managers import UserManagerWithFilters
 
+
+logger = logging.getLogger(__name__)
 
 class User(AbstractUser):
     """
@@ -105,6 +110,5 @@ class User(AbstractUser):
             )
 
     def post_approve_on_fb_wall(self, trip):
-        pass
-
-
+        if self.provider == User.PROVIDERS.facebook:
+            post_on_fb_wall(self, trip)

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 from django.core.mail import EmailMultiAlternatives
-from django.contrib.sites.models import get_current_site
 from django.conf import settings
 from django.template.loader import render_to_string
+from .helpers import get_domain
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ def get_email_common_data(trip, user_requested):
     return {
         'trip': trip,
         'user_requested': user_requested,
-        'domain': "http://" + str(get_current_site(None)),
+        'domain': get_domain(),
     }, settings.EMAIL_HOST_USER
 
 

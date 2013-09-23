@@ -1,5 +1,6 @@
 import collections
 from django.utils import timezone
+from django.contrib.sites.models import get_current_site
 from dateutil.relativedelta import relativedelta
 
 
@@ -17,3 +18,7 @@ def wrap_in_iterable(obj):
     if not isinstance(obj, collections.Iterable):
         obj = [obj, ]
     return obj
+
+
+def get_domain():
+    return "http://" + str(get_current_site(None))
