@@ -169,3 +169,8 @@ a.prev span, a.next span {
     clear: both;
 }
 /* caroufresel end */
+
+.blank-message {
+    text-align: center;
+    color: #A7A3A3;
+}
