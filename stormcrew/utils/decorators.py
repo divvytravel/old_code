@@ -27,3 +27,13 @@ def self_if_blank_arg(func):
         else:
             return instance
     return wrapped
+
+
+def sort_trips_by_time_status(func):
+    # TODO
+    # apply sorting using db query
+    @wraps(func)
+    def wrapped(instance, *args, **kwargs):
+        trips = func(instance, *args, **kwargs)
+        return sorted(trips, key=lambda t: 1 if t.is_finished() else 0)
+    return wrapped

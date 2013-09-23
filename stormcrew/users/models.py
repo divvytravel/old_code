@@ -13,6 +13,7 @@ from social_auth.fields import JSONField
 from utils.helpers import get_today
 from utils.email import send_common_email
 from utils.social_fb import post_on_fb_wall
+from utils.decorators import sort_trips_by_time_status
 from trip.models import Trip, TripRequest
 from .managers import UserManagerWithFilters
 
@@ -80,9 +81,11 @@ class User(AbstractUser):
             if link:
                 return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
+    @sort_trips_by_time_status
     def trips_in(self):
         return Trip.objects.with_people(self).count_gender()
 
+    @sort_trips_by_time_status
     def trips_created(self):
         return Trip.objects.filter(owner=self).count_gender()
 

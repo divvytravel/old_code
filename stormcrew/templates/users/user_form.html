@@ -42,7 +42,7 @@
             <h2 class="align-center">Участник в поездках:</h2>
         </div>
         {% if user.trips_in|length %}
-            {% include "trip/partials/trip_list.html" with trips=user.trips_in show_exit=True %}
+            {% include "trip/partials/trip_list.html" with trips=user.trips_in show_exit=True show_status=True %}
         {% else %}
             <h3 class="blank-message">нет</h3>
         {% endif %}
