@@ -154,11 +154,12 @@ class TripRequestForm(forms.ModelForm):
             trip.people.remove(self.user)
             obj = None
         else:
-            obj = super(TripRequestForm, self).save(commit)
-            obj.user = self.user
-            obj.save()
             if trip.is_open():
                 trip.people.add(self.user)
+            else:
+                obj = super(TripRequestForm, self).save(commit)
+                obj.user = self.user
+                obj.save()
             trip.notify_owner_about_request(self.user)
             if trip.is_closed():
                 trip.notify_members_about_request(self.user)

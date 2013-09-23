@@ -248,7 +248,8 @@ class TripRequest(models.Model):
         return self.status == TripRequest.STATUS.approved
 
     def is_approved_by(self, user):
-        return self.users_approved.filter(pk=user.pk).count() > 0
+        return self.users_approved.filter(pk=user.pk).count() > 0\
+            or (self.trip.owner == user and self.approved_by_owner)
 
     class Meta:
         ordering = '-date_created',
