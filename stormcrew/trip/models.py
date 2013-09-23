@@ -108,6 +108,9 @@ class Trip(models.Model):
         else:
             return u"текущая"
 
+    def get_emailable_members(self):
+        return self.people.exclude(email__isnull=True, email__exact='')
+
     def notify_owner_about_request(self, user_requested):
         if self.owner.email:
             send_common_email(
@@ -119,8 +122,7 @@ class Trip(models.Model):
             )
 
     def notify_members_about_request(self, user_requested):
-        members = self.people.exclude(email__isnull=True, email__exact='')
-        for member in members:
+        for member in self.get_emailable_members():
             context = {"member": member}
             send_common_email(
                 user=user_requested,
@@ -150,8 +152,16 @@ class Trip(models.Model):
             )
 
     def notify_members_about_cancel_request(self, user_requested):
-        # TODO
-        pass
+        for member in self.get_emailable_members():
+            context = {"member": member}
+            send_common_email(
+                user=user_requested,
+                trip=self,
+                subject=u"Изменение состава поездки",
+                template_base_name="cancel_trip_request_member",
+                email_to=[member.email],
+                context=context
+            )
 
     def notify_members_about_delete(self, user_requested):
         if self.owner.email:

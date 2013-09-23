@@ -205,6 +205,7 @@ NO_AVATAR_IMG = STATIC_URL + 'img/no-avatar.jpg'
 ########## SOCIAL AUTH CONFIGURATION
 FACEBOOK_APP_ID = os.environ.get('FACEBOOK_APP_ID', '')
 FACEBOOK_API_SECRET = os.environ.get('FACEBOOK_API_SECRET', '')
+FACEBOOK_SKIP_POST_ON_WALL = os.environ.get('FACEBOOK_SKIP_POST_ON_WALL', False)
 FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'user_birthday', 'publish_stream']
 FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 

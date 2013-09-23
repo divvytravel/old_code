@@ -2,7 +2,7 @@
 
 {% block content %}
 
-Здравствуйте, {{ trip.owner.get_full_name }}!
+Здравствуйте, {{ member.get_full_name }}!
 
 На поездку "{{ trip }}", {{domain}}{{trip.get_absolute_url}}, в которой вы принимаете участие, была подана заявка от пользователя {{user_requested.get_full_name}}, {{domain}}{{user_requested.get_absolute_url}}.
 

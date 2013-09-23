@@ -1,0 +1,9 @@
+{% extends "emails/base.txt" %}
+
+{% block content %}
+
+Здравствуйте, {{ member.get_full_name }}!
+
+Пользователь {{user_requested.get_full_name}}, {{domain}}{{user_requested.get_absolute_url}} отменил заявку на участие в поездке "{{ trip }}", {{domain}}{{trip.get_absolute_url}}, в которой вы принимаете участие.
+
+{% endblock content %}
