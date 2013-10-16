@@ -38,21 +38,27 @@ class TripQuerySet(QuerySet):
 
     @self_if_blank_arg
     def in_month_year(self, month_year):
-        month, year = map(int, month_year.split('.'))
-        d_fmt = "{0:>02}.{1:>02}.{2}"
-        start_date = datetime.strptime(
-            d_fmt.format(1, month, year), '%d.%m.%Y').date()
-        l_day = calendar.monthrange(year, month)[1]
-        end_date = datetime.strptime(
-            d_fmt.format(l_day, month, year), '%d.%m.%Y').date()
-        return self.filter(
-            Q(start_date__gte=start_date, start_date__lte=end_date)
-             |
-            Q(start_date__lt=start_date, end_date__gte=start_date))
+        start_date, end_date = self._parse_start_end_date(month_year)
+        Q_start_date, Q_end_date = self._get_Q_start_end_dates(start_date, end_date)
+        return self.filter(Q_start_date | Q_end_date)
 
     @self_if_blank_arg
     def in_country(self, country):
         return self.filter(country=country)
+
+    @self_if_blank_arg
+    def in_month_year_or_in_country(self, month_year, country):
+        if month_year:
+            start_date, end_date = self._parse_start_end_date(month_year)
+            Q_start_date, Q_end_date = self._get_Q_start_end_dates(start_date, end_date)
+            q_date = Q(Q_start_date | Q_end_date)
+        else:
+            q_date = Q()
+        if country:
+            q_country = Q(country=country)
+        else:
+            q_country = Q()
+        return self.filter(q_date | q_country)
 
     @self_if_blank_arg
     def with_people(self, users):
@@ -65,6 +71,20 @@ class TripQuerySet(QuerySet):
     @self_if_blank_arg
     def with_people_age(self, age_from, age_to):
         return filter_user_age(self, age_from, age_to, prefix='people')
+
+    def _parse_start_end_date(self, month_year):
+        month, year = map(int, month_year.split('.'))
+        d_fmt = "{0:>02}.{1:>02}.{2}"
+        start_date = datetime.strptime(
+            d_fmt.format(1, month, year), '%d.%m.%Y').date()
+        l_day = calendar.monthrange(year, month)[1]
+        end_date = datetime.strptime(
+            d_fmt.format(l_day, month, year), '%d.%m.%Y').date()
+        return start_date, end_date
+
+    def _get_Q_start_end_dates(self, start_date, end_date):
+        return (Q(start_date__gte=start_date, start_date__lte=end_date),
+            Q(start_date__lt=start_date, end_date__gte=start_date))
 
 
 class TripRequestQuerySet(QuerySet):

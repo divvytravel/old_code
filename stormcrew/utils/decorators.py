@@ -18,7 +18,8 @@ def instance_cache(func):
 
 def self_if_blank_arg(func):
     """
-    Stores returned values as instance attr. On next call will return this attr.
+    If all of function kwargs are False in python way, then return self.
+    Otherwise, return applied function
     """
     @wraps(func)
     def wrapped(instance, *args, **kwargs):

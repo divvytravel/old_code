@@ -44,8 +44,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     def get_filtered_trips(self, form):
         clnd = form.cleaned_data
         return Trip.objects.actual()\
-            .in_month_year(clnd['month_year'])\
-            .in_country(clnd['country'])\
+            .in_month_year_or_in_country(clnd['month_year'], clnd['country'])\
             .with_people_gender(clnd['gender'])\
             .with_people_age(clnd['age_from'], clnd['age_to'])\
             .with_people(clnd['users'])\
