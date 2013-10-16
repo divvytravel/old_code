@@ -25,6 +25,12 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     form_class = TripFilterForm
     content_type = "text/html"
 
+    def get(self, request, *args, **kwargs):
+        if 'clear' in request.GET:
+            self.clear_session_form_data()
+            return HttpResponseRedirect(self.request.path)
+        return super(TripFilterFormView, self).get(request, *args, **kwargs)
+
     def get_form_kwargs(self):
         kwargs = super(TripFilterFormView, self).get_form_kwargs()
         kwargs.update({
@@ -39,12 +45,10 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         if session_form_data:
             users = session_form_data.get('users', None)
             if users:
-                users = users.pk
-                session_form_data['users'] = users
+                session_form_data['users'] = users.pk
             country = session_form_data.get('country', None)
             if country:
-                country = country.pk
-                session_form_data['country'] = country
+                session_form_data['country'] = country.pk
             kwargs.setdefault('data', session_form_data)
 
     def get_context_data(self, *args, **kwargs):
@@ -67,8 +71,10 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         return self.request.session.get('trip_form_data', {})
 
     def set_session_form_data(self, form):
-        self.request.session['trip_form_data'] = form.cleaned_data
-        self.request.session['trip_form_users'] = form.cleaned_data.get('users', [])
+        self.request.session['trip_form_data'] = form.get_normalized_initial()
+
+    def clear_session_form_data(self):
+        return self.request.session.pop('trip_form_data', None)
 
     def get_initial(self):
         return self.get_session_form_data()
@@ -109,6 +115,8 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             ))
 
     def post_ajax(self, request, *args, **kwargs):
+        if 'clear' in self.request.POST:
+            self.clear_session_form_data()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():

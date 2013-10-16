@@ -223,6 +223,18 @@ class TripFilterForm(forms.Form):
     def clean_age_to(self):
         return self._clean_age(self.cleaned_data['age_to'])
 
+    def normalize_initial(self, initial):
+        if not initial.get('age_from', None):
+            initial['age_from'] = self.AGES[0][0]
+        if not initial.get('age_to', None):
+            initial['age_to'] = self.AGES[-1][0]
+        return initial
+
+    def get_normalized_initial(self):
+        if self.is_valid():
+            return self.normalize_initial(self.cleaned_data)
+        return {}
+
 
 class TripProcessForm(forms.Form):
     APPROVE, DENY = '0', '1'

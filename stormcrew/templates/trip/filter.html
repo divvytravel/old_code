@@ -92,6 +92,9 @@
             {% endwith %}
         </div>
 
+        <div class="row align-center" style="padding-top:20px;">
+            <a id="clear_form" href="{{ request.get_full_path }}?clear" class="btn btn-primary">Сбросить все</a>
+        </div>
 
         <div class="filter-form-header">
             <h3>Подходят</h3>
@@ -151,9 +154,9 @@
             clearBtn: true,
             autoclose: true
         }).on('changeDate', function (ev) {
-            $(this).post_form_on_change(ev.format);
+            $(this).post_form_on_change({given_date: ev.format});
         }).on('clearDate', function (ev) {
-            $(this).post_form_on_change("");
+            $(this).post_form_on_change({given_date: ""});
         });
 
 
@@ -171,6 +174,10 @@
           });
           $('#{{form.age_to.auto_id}}').change(function(){
             $(this).post_form_on_change();
+          });
+          $('#clear_form').click(function(){
+            $(this).post_form_on_change({clear_data: true})
+            return false;
           });
           $('#trip-filter-submit').hide();
         });

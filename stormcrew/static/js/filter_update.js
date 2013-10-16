@@ -177,7 +177,18 @@
     user_select.apply_image_picker_carousel();
   }
 
-  $.fn.post_form_on_change = function(given_date){
+  $.fn.post_form_on_change = function(options){
+    // default values for supported options
+    var opts = {}
+    if (typeof options === 'undefined'){
+      opts.given_date = undefined
+      opts.clear_data = undefined
+    } else {
+      opts.given_date = options.given_date || undefined
+      opts.clear_data = options.clear_data || undefined
+    }
+    // end of options
+
     var ajaxFadeElemUsers = $(ajaxFade);
     var user_list = $('.users-list');
     user_list.prepend(ajaxFadeElemUsers);
@@ -193,22 +204,33 @@
     return this.each(function() {
       var this_elem = $(this)
         var this_form = this_elem.closest('form');
-        var date;
-        if (typeof given_date === "undefined"){
-          date = this_form.find('input[name="month_year"]').val()
+        var form_data;
+        if (typeof opts.clear_data === "undefined"){
+          var date;
+          if (typeof opts.given_date === "undefined"){
+            date = this_form.find('input[name="month_year"]').val()
+          } else {
+            date = opts.given_date;
+          }
+          form_data = {
+            'month_year': date,
+            'country': this_form.find('select[name="country"]').val(),
+            'gender': this_form.find('select[name="gender"]').val(),
+            'age_from': this_form.find('select[name="age_from"]').val(),
+            'age_to': this_form.find('select[name="age_to"]').val(),
+          }
+          var users = this_form.find('select[name="users"]').val()
+          if (users !== null){
+            form_data['users'] = users;
+          } 
         } else {
-          date = given_date;
-        }
-        var form_data = {
-          'month_year': date,
-          'country': this_form.find('select[name="country"]').val(),
-          'gender': this_form.find('select[name="gender"]').val(),
-          'age_from': this_form.find('select[name="age_from"]').val(),
-          'age_to': this_form.find('select[name="age_to"]').val(),
-        }
-        var users = this_form.find('select[name="users"]').val()
-        if (users !== null){
-          form_data['users'] = users;
+          form_data = {'clear': true};
+          this_form.find('#id_month_year').val('');
+          this_form.find('#id_country').val('');
+          this_form.find('#id_gender').val('');
+          this_form.find('#id_age_from').val(20);
+          this_form.find('#id_age_to').val(50);
+          // this_form.reset();
         }
         $.ajax({
           async: true,
