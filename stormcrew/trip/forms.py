@@ -170,7 +170,6 @@ class TripRequestForm(forms.ModelForm):
 
 class TripFilterForm(forms.Form):
     AGES = (
-        ('', u"Не важно"),
         (20, 20),
         (25, 25),
         (30, 30),
@@ -184,8 +183,8 @@ class TripFilterForm(forms.Form):
     country = forms.ModelChoiceField(queryset=Country.objects.all(),
         empty_label=u"Не важно", required=False)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
-    age_from = forms.ChoiceField(choices=AGES, required=False)
-    age_to = forms.ChoiceField(choices=AGES, required=False)
+    age_from = forms.ChoiceField(choices=AGES, initial=AGES[0][0], required=False)
+    age_to = forms.ChoiceField(choices=AGES, initial=AGES[-1][0], required=False)
     users = forms.ModelChoiceField(queryset=None, required=False)
 
     def __init__(self, *args, **kwargs):

@@ -1,26 +1,42 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 from django.db.models.query import QuerySet
+from django.db.models import Q
 from utils.helpers import date_yearsago
 from utils.decorators import self_if_blank_arg
 
 
+def is_default_age_range(age_from, age_to):
+    from trip.forms import TripFilterForm
+    age_choices = TripFilterForm.AGES
+    if age_from == age_choices[0][0] and age_to == age_choices[-1][0]:
+        return True
+    else:
+        return False
+
+
 def filter_user_age(qs, age_from, age_to, prefix=None):
+    if is_default_age_range(age_from, age_to):
+        return qs
     if age_from:
         b_to = date_yearsago(age_from+1) + timedelta(days=1)
         if prefix:
             kwargs = {'{0}__birthday__lte'.format(prefix): b_to}
         else:
             kwargs = {'birthday__lte': b_to}
-        qs = qs.filter(**kwargs)
+        q_from = Q(**kwargs)
+    else:
+        q_from = Q()
     if age_to:
         b_from = date_yearsago(age_to+1) + timedelta(days=1)
         if prefix:
             kwargs = {'{0}__birthday__gte'.format(prefix): b_from}
         else:
             kwargs = {'birthday__gte': b_from}
-        qs = qs.filter(**kwargs)
-    return qs
+        q_to = Q(**kwargs)
+    else:
+        q_to = Q()
+    return qs.filter(q_from & q_to)
 
 
 def filter_user_gender(qs, gender, prefix=None):
