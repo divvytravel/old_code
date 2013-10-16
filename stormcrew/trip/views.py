@@ -30,15 +30,48 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         kwargs.update({
             'users_queryset': User.objects.ready_to_trip().all(),
         })
+        if self.request.method == 'GET':
+            self.udpate_form_kwargs_from_session(kwargs)
         return kwargs
+
+    def udpate_form_kwargs_from_session(self, kwargs):
+        session_form_data = self.get_session_form_data()
+        if session_form_data:
+            users = session_form_data.get('users', None)
+            if users:
+                users = users.pk
+                session_form_data['users'] = users
+            country = session_form_data.get('country', None)
+            if country:
+                country = country.pk
+                session_form_data['country'] = country
+            kwargs.setdefault('data', session_form_data)
 
     def get_context_data(self, *args, **kwargs):
         context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
         if 'GET' in self.request.method:
+            form = context.get('form', None)
+            if form is not None and form.is_valid():
+                trips, users, selected_users = self.get_queries_data(form)
+                form.fields['users'].queryset = users
+            else:
+                trips = Trip.objects.actual().count_gender().all()[:30]
+                selected_users = []
             context.update({
-                'trips': Trip.objects.actual().count_gender().all()[:30],
+                'trips': trips,
+                'selected_users': selected_users,
             })
         return context
+
+    def get_session_form_data(self):
+        return self.request.session.get('trip_form_data', {})
+
+    def set_session_form_data(self, form):
+        self.request.session['trip_form_data'] = form.cleaned_data
+        self.request.session['trip_form_users'] = form.cleaned_data.get('users', [])
+
+    def get_initial(self):
+        return self.get_session_form_data()
 
     def get_filtered_trips(self, form):
         clnd = form.cleaned_data
@@ -56,19 +89,16 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             .with_age(clnd['age_from'], clnd['age_to'])\
             .with_gender(clnd['gender'])
 
-    def set_filtered_users(self, form, trips):
-        clnd = form.cleaned_data
-        form.fields['users'].queryset =\
-            User.objects.ready_to_trip()\
-                .in_trips(trips)\
-                .with_age(clnd['age_from'], clnd['age_to'])\
-                .with_gender(clnd['gender'])
-
-    def form_valid(self, form, ajax=False):
+    def get_queries_data(self, form):
         trips = self.get_filtered_trips(form)
         users = self.get_filtered_users(form, trips)
         selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
-        if ajax:
+        return trips, users, selected_users
+
+    def form_valid(self, form, data_only=False):
+        self.set_session_form_data(form)
+        trips, users, selected_users = self.get_queries_data(form)
+        if data_only:
             return trips, users, selected_users
         else:
             form.fields['users'].queryset = users
@@ -82,7 +112,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            trips, users, selected_users = self.form_valid(form, ajax=True)
+            trips, users, selected_users = self.form_valid(form, data_only=True)
             if selected_users:
                 selected_users = UserPkSerializer(selected_users).data
             trips = TripSerializer(trips, many=True).data
