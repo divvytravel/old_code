@@ -2,6 +2,7 @@
 from django.core.management.base import BaseCommand
 from milkman.dairy import milkman
 from users.models import User
+from geo.models import Country
 from tests.utils import random_date
 from datetime import datetime, timedelta
 import random
@@ -42,9 +43,14 @@ class Command(BaseCommand):
                 user = User.objects.order_by('?')[0]
                 if user not in users:
                     users.append(user)
+            try:
+                country = Country.objects.order_by('?')[0]
+            except IndexError:
+                country = Country.objects.get_or_create_normalized(
+                    name=random.choice(countries))
             trip = milkman.deliver('trip.trip',
                 start_date=start_date, end_date=end_date,
-                country=random.choice(countries),
+                country=country,
                 city=random.choice(cities),
                 title=u"Поездка_{0}".format(i),
                 people=users,
