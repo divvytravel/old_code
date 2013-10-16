@@ -20,8 +20,7 @@
     border-bottom: 1px solid #E5E5E5;
     padding-top: 5px;
     position: relative;
-    min-height: 240px;
-    /*text-align: center;*/
+    min-height: 150px;
 }
 
 .user-short {
@@ -92,16 +91,34 @@
     margin-top: 3px;
 }
 
-.thumbnails .thumbnail>img {
-    height: 185px;
-}
 
 .thumbnails .thumbnail {
-    width: 190px;
+}
+
+.thumbnails .thumbnail>img {
+}
+
+.image_picker_image_wrapper {
+    width: 110px;
+    height: 110px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+.image_picker_image_wrapper > img {
+    width: 110px;
+}
+
+.image_picker_descr{
+    overflow: hidden;
+    width: 110px;
+    height: 20px;
+    font-size: 12px;
 }
 
 .age_filter {
-    /*width:100px;*/
 }
 
 .fade-elem {
@@ -135,11 +152,6 @@
     min-width: 260px;
 }
 
-.trip_picture_list .image_picker_descr{
-    overflow: hidden;
-}
-
-
 /* caroufresel */
 a.prev, a.next {
     background: url('/static/caroufredsel/miscellaneous_sprite.png') no-repeat transparent;
@@ -147,7 +159,7 @@ a.prev, a.next {
     height: 50px;
     display: block;
     position: absolute;
-    top: 85px;
+    top: 50px;
 }
 a.prev {            left: -22px;
                     background-position: 0 0; }

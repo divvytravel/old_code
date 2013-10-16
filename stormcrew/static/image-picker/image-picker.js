@@ -258,7 +258,9 @@
       }, function(event) {
         return event.data.option.clicked();
       });
-      thumbnail.append(image);
+      var image_wrapper = jQuery("<div class='image_picker_image_wrapper'>");
+      image_wrapper.append(image);
+      thumbnail.append(image_wrapper);
       description = jQuery("<div class='image_picker_descr'/>");
       description.text(this.option.text())
       thumbnail.append(description);

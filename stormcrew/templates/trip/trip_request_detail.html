@@ -107,7 +107,9 @@
               <li>
                 <div class="thumbnail">
                   <a href="{{member.get_absolute_url}}">
-                  <img class="image_picker_image" src="{{member.get_avatar_url}}">
+                  <div class="image_picker_image_wrapper">
+                    <img class="image_picker_image" src="{{member.get_avatar_url}}">
+                  </div>
                   <div class="image_picker_descr">{{member.get_full_name}}</div>
                   </a>
                 </div>
