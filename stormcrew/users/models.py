@@ -81,6 +81,17 @@ class User(AbstractUser):
             if link:
                 return mark_safe(u'<a href="{0}">{1}</a>'.format(link, u'профиль'))
 
+    def is_satisfy(self, gender, age_from, age_to):
+        if self.gender and gender and self.gender != gender:
+            return False
+        age = self.get_age()
+        if age:
+            if age_from and age_from > age:
+                return False
+            if age_to and age_to < age:
+                return False
+        return True
+
     @sort_trips_by_time_status
     def trips_in(self):
         return Trip.objects.with_people(self).count_gender()

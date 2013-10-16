@@ -17,7 +17,7 @@ from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
 from .models import Trip, TripPicture
 from .serializers import TripSerializer
 from utils.views import SuccessMessageMixin
-from utils.helpers import wrap_in_iterable
+from utils.helpers import wrap_in_iterable, is_iterable
 
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
@@ -70,23 +70,48 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     def get_session_form_data(self):
         return self.request.session.get('trip_form_data', {})
 
-    def set_session_form_data(self, form):
-        self.request.session['trip_form_data'] = form.get_normalized_initial()
+    def set_session_form_data(self, form, data=None):
+        if data is None:
+            data = form.get_normalized_initial()
+        self.request.session['trip_form_data'] = data
 
     def clear_session_form_data(self):
         return self.request.session.pop('trip_form_data', None)
 
+    def remove_user_from_session_form_data(self):
+        session_form_data = self.get_session_form_data()
+        session_form_data['users'] = []
+        self.set_session_form_data(form=None, data=session_form_data)
+
     def get_initial(self):
         return self.get_session_form_data()
 
+    def is_user_satisfy(self, user_pk, gender, age_from, age_to):
+        if isinstance(user_pk, User):
+            user = user_pk
+        else:
+            try:
+                user = User.objects.get(pk=user_pk)
+            except User.DoesNotExist:
+                return False
+        return user.is_satisfy(gender, age_from, age_to)
+
     def get_filtered_trips(self, form):
         clnd = form.cleaned_data
-        return Trip.objects.actual()\
+        trip_qs = Trip.objects.actual()\
             .in_month_year_or_in_country(clnd['month_year'], clnd['country'])\
             .with_people_gender(clnd['gender'])\
             .with_people_age(clnd['age_from'], clnd['age_to'])\
-            .with_people(clnd['users'])\
             .count_gender()
+        user_pk = clnd['users']
+        if is_iterable(clnd['users']):
+            user_pk = user_pk[0]
+        if self.is_user_satisfy(user_pk, clnd['gender'],
+                                        clnd['age_from'], clnd['age_to']):
+            trip_qs = trip_qs.with_people(clnd['users'])
+        else:
+            self.remove_user_from_session_form_data()
+        return trip_qs
 
     def get_filtered_users(self, form, trips):
         clnd = form.cleaned_data

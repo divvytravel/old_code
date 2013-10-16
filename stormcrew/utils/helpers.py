@@ -14,8 +14,12 @@ def date_yearsago(years, from_date=None):
     return (from_date - relativedelta(years=years)).date()
 
 
+def is_iterable(obj):
+    return isinstance(obj, collections.Iterable)
+
+
 def wrap_in_iterable(obj):
-    if not isinstance(obj, collections.Iterable):
+    if not is_iterable(obj):
         obj = [obj, ]
     return obj
 
