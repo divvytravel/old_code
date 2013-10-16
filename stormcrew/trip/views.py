@@ -34,7 +34,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super(TripFilterFormView, self).get_form_kwargs()
         kwargs.update({
-            'users_queryset': User.objects.ready_to_trip().all(),
+            'users_queryset': User.objects.ready_to_trip().have_trip().all(),
         })
         if self.request.method == 'GET':
             self.udpate_form_kwargs_from_session(kwargs)
@@ -90,7 +90,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 
     def get_filtered_users(self, form, trips):
         clnd = form.cleaned_data
-        return User.objects.ready_to_trip()\
+        return User.objects.ready_to_trip().have_trip()\
             .in_trips(trips)\
             .with_age(clnd['age_from'], clnd['age_to'])\
             .with_gender(clnd['gender'])

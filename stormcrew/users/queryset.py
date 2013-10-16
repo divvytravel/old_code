@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 from django.db.models import Q
 from utils.helpers import date_yearsago
 from utils.decorators import self_if_blank_arg
+from utils.helpers import get_today
 
 
 def is_default_age_range(age_from, age_to):
@@ -51,6 +52,9 @@ class UserQuerySet(QuerySet):
     def ready_to_trip(self):
         # TODO: on production remove isnull
         return self.exclude(provider="").exclude(provider__isnull=True)
+
+    def have_trip(self):
+        return self.filter(approved_trips__start_date__gt=get_today()).distinct()
 
     def in_trips(self, trips):
         return self.filter(approved_trips__in=trips).distinct()
