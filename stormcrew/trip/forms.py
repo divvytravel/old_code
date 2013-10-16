@@ -32,6 +32,8 @@ class TripForm(forms.ModelForm):
     }
 
     country = forms.CharField(label=u"Страна", max_length=100)
+    author_in = forms.BooleanField(label=u"Я участвую в этой поездке",
+        initial=True, required=False)
 
     class Meta:
         model = Trip
@@ -66,6 +68,10 @@ class TripForm(forms.ModelForm):
             self.cleaned_data['country'] =\
                 Country.objects.get_or_create_normalized(
                     name=self.cleaned_data['country'])
+        else:
+            self.cleaned_data['country'] = \
+                Country.objects.get_normalized_or_none(
+                    name=self.cleaned_data['country'])
         return self.cleaned_data
 
     def save(self, commit=False, wait=False):
@@ -73,6 +79,8 @@ class TripForm(forms.ModelForm):
         if self.owner:
             obj.owner = self.owner
         obj.save()
+        if self.cleaned_data.get('author_in', False):
+            obj.people.add(obj.owner)
         return obj
 
 

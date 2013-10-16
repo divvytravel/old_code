@@ -6,7 +6,6 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.contrib import messages
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
