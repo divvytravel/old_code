@@ -266,7 +266,7 @@ class TripProcessForm(forms.Form):
             raise forms.ValidationError(self.request_errors['bad_request'])
         trip = self.trip_request.trip
         if trip.is_invite():
-            if trip.user != self.user:
+            if trip.owner != self.user:
                 raise forms.ValidationError(self.request_errors['bad_user'])
         elif trip.is_closed():
             if trip.people.filter(pk=self.user.pk).count() == 0\
