@@ -1,3 +1,5 @@
+{% load math_filters %}
+
 <table class="table trip-list">
     <thead>
       <tr>
@@ -7,6 +9,8 @@
         <th>Бюджет</th>
         <th>Участвуют</th>
         <th>Коммерческая</th>
+        <th>Набор до</th>
+        <th>Осталось мест</th>
         {% if show_status %}
             <th>Статус</th>
         {% endif %}
@@ -37,6 +41,12 @@
             <td>{{trip.count_all_people}} человек {% if trip.count_male or trip.count_female %}({% endif %}{% if trip.count_male %}{{trip.count_male}}м{% endif %}{% if trip.count_male and trip.count_female %} {% endif %}{% if trip.count_female %}{{trip.count_female}}ж{% endif %}{% if trip.count_male or trip.count_female %}){% endif %}</td>
             <td>
                 {{ trip.show_price_type }}
+            </td>
+            <td>
+                {{ trip.end_people_date_format }}
+            </td>
+            <td>
+                {{ trip.people_max_count|minus:trip.count_all_people }}
             </td>
             {% if show_status %}
                 <td>

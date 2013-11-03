@@ -75,6 +75,9 @@ class Trip(models.Model):
     def end_date_format(self):
         return self.format_date(self.end_date)
 
+    def end_people_date_format(self):
+        return self.format_date(self.end_people_date)
+
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
 
