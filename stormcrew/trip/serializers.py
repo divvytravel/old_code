@@ -38,6 +38,7 @@ class TripSerializer(serializers.ModelSerializer):
 
 
 class TripCategorySerializer(serializers.ModelSerializer):
+    pk = serializers.Field(source='pk')
 
     class Meta:
         model = TripCategory

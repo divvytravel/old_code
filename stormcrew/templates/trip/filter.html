@@ -201,6 +201,9 @@
           $('#{{form.age_to.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });
+          $('#{{form.category.auto_id}}').change(function(){
+            $(this).post_form_on_change();
+          });
           $('#clear_form').click(function(){
             $(this).post_form_on_change({clear_data: true})
             return false;

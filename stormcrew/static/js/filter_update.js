@@ -183,14 +183,20 @@
     user_select.apply_image_picker_carousel();
   }
 
-  function render_trip_categories(trip_category_elem, trip_categories){
-    trip_category_elem.find('option').remove();
-    trip_category_elem.append("<option>выберите категорию</option>");
-
+  function render_trip_categories(trip_category_elem, trip_categories, selected_category){
+    trip_category_elem.find('option').slice(1).remove();
+    // trip_category_elem.append("<option>выберите категорию</option>");
+    var selected = "";
     for (var k=0; k<trip_categories.length; k++){
+      if (selected_category !== undefined && selected_category == trip_categories[k].pk){
+        selected = 'selected="selected"';
+      } else {
+        selected = '';
+      }
       trip_category_elem.append(
-        '<option value="{0}">{1}</option>'.format(
+        '<option value="{0}" {1}>{2}</option>'.format(
             trip_categories[k].pk,
+            selected,
             trip_categories[k].title
           )
       );
@@ -241,6 +247,7 @@
             'gender': this_form.find('select[name="gender"]').val(),
             'age_from': this_form.find('select[name="age_from"]').val(),
             'age_to': this_form.find('select[name="age_to"]').val(),
+            'category': this_form.find('select[name="category"]').val(),
           }
           var users = this_form.find('select[name="users"]').val()
           if (users !== null){
@@ -254,6 +261,7 @@
           this_form.find('#id_gender').val('');
           this_form.find('#id_age_from').val(20);
           this_form.find('#id_age_to').val(50);
+          this_form.find('#id_category').val('');
           // this_form.reset();
         }
         $.ajax({
@@ -271,7 +279,8 @@
               // var trips = JSON.parse(data.trips);
               render_trips(trip_list, data.trips);
               render_users(user_list, data.users, data.selected_users);
-              render_trip_categories(trip_category_elem, data.trip_categories)
+              render_trip_categories(trip_category_elem, data.trip_categories,
+                data.selected_category)
             } else {
               alert("Произошла ошибка: "+data.error)
             }

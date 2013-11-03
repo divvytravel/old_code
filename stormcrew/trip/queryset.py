@@ -47,6 +47,10 @@ class TripQuerySet(QuerySet):
         return self.filter(country=country)
 
     @self_if_blank_arg
+    def with_category(self, category):
+        return self.filter(category=category)
+
+    @self_if_blank_arg
     def with_price_type(self, price_type):
         return self.filter(price_type=price_type)
 

@@ -47,9 +47,14 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             users = session_form_data.get('users', None)
             if users:
                 session_form_data['users'] = users.pk
+
             country = session_form_data.get('country', None)
             if country:
                 session_form_data['country'] = country.pk
+
+            category = session_form_data.get('category', None)
+            if category and isinstance(category, TripCategory):
+                session_form_data['category'] = category.pk
             kwargs.setdefault('data', session_form_data)
 
     def get_context_data(self, *args, **kwargs):
@@ -105,6 +110,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             .with_price_type(clnd['price_type'])\
             .with_people_gender(clnd['gender'])\
             .with_people_age(clnd['age_from'], clnd['age_to'])\
+            .with_category(clnd['category'])\
             .count_gender()
         user_pk = clnd['users']
         if is_iterable(clnd['users']):
@@ -159,11 +165,17 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             trips = TripSerializer(trips, many=True).data
             users = UserSerializer(users, many=True).data
             trip_categories = TripCategorySerializer(trip_categories, many=True).data
+            selected_category = form.cleaned_data['category']
+            if is_iterable(selected_category):
+                selected_category = selected_category[0]
+            if selected_category:
+                selected_category = selected_category.pk
             data = {
                 'trips': trips,
                 'users': users,
                 'selected_users': selected_users,
                 'trip_categories': trip_categories,
+                'selected_category': selected_category,
             }
         else:
             # TODO
