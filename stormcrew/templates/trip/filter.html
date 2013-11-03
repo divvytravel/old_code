@@ -141,12 +141,21 @@
             <input type="submit" class="btn btn-primary" value="Подобрать"/>
           </div>
         </div>
-    </form>
+    
 
-    <div class="filter-form-header">
-        <h3>Впишитесь в поездку!</h3>
-    </div>
-    {% include "trip/partials/trip_list.html" %}
+        <div class="filter-form-header">
+            <h3>Впишитесь в поездку!</h3>
+            {% with form.category as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                    <div class="controls {{ field_class }}">
+                        {% crispy_field field %}
+                        {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                    </div>
+                </div>
+            {% endwith %}
+        </div>
+        {% include "trip/partials/trip_list.html" %}
+    </form>
 {% endblock content %}
 
 

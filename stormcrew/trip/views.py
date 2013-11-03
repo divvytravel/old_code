@@ -14,8 +14,8 @@ from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm
-from .models import Trip, TripPicture
-from .serializers import TripSerializer
+from .models import Trip, TripPicture, TripCategory
+from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
 
@@ -35,6 +35,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         kwargs = super(TripFilterFormView, self).get_form_kwargs()
         kwargs.update({
             'users_queryset': User.objects.ready_to_trip().have_trip().all(),
+            'category_queryset': TripCategory.objects.all(),
         })
         if self.request.method == 'GET':
             self.udpate_form_kwargs_from_session(kwargs)
@@ -56,8 +57,9 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         if 'GET' in self.request.method:
             form = context.get('form', None)
             if form is not None and form.is_valid():
-                trips, users, selected_users = self.get_queries_data(form)
+                trips, users, selected_users, trip_categories = self.get_queries_data(form)
                 form.fields['users'].queryset = users
+                form.fields['category'].queryset = trip_categories
             else:
                 trips = Trip.objects.actual().count_gender().all()[:30]
                 selected_users = []
@@ -121,19 +123,24 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             .with_age(clnd['age_from'], clnd['age_to'])\
             .with_gender(clnd['gender'])
 
+    def get_filtered_categories(self, trips):
+        return TripCategory.objects.filter(trips__in=trips)
+
     def get_queries_data(self, form):
         trips = self.get_filtered_trips(form)
         users = self.get_filtered_users(form, trips)
+        trip_categories = self.get_filtered_categories(trips)
         selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
-        return trips, users, selected_users
+        return trips, users, selected_users, trip_categories
 
     def form_valid(self, form, data_only=False):
         self.set_session_form_data(form)
-        trips, users, selected_users = self.get_queries_data(form)
+        trips, users, selected_users, trip_categories = self.get_queries_data(form)
         if data_only:
-            return trips, users, selected_users
+            return trips, users, selected_users, trip_categories
         else:
             form.fields['users'].queryset = users
+            form.fields['category'].queryset = trip_categories
             return self.render_to_response(self.get_context_data(
                 form=form,
                 selected_users=selected_users,
@@ -146,15 +153,17 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            trips, users, selected_users = self.form_valid(form, data_only=True)
+            trips, users, selected_users, trip_categories = self.form_valid(form, data_only=True)
             if selected_users:
                 selected_users = UserPkSerializer(selected_users).data
             trips = TripSerializer(trips, many=True).data
             users = UserSerializer(users, many=True).data
+            trip_categories = TripCategorySerializer(trip_categories, many=True).data
             data = {
                 'trips': trips,
                 'users': users,
                 'selected_users': selected_users,
+                'trip_categories': trip_categories,
             }
         else:
             # TODO

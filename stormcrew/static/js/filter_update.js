@@ -183,6 +183,20 @@
     user_select.apply_image_picker_carousel();
   }
 
+  function render_trip_categories(trip_category_elem, trip_categories){
+    trip_category_elem.find('option').remove();
+    trip_category_elem.append("<option>выберите категорию</option>");
+
+    for (var k=0; k<trip_categories.length; k++){
+      trip_category_elem.append(
+        '<option value="{0}">{1}</option>'.format(
+            trip_categories[k].pk,
+            trip_categories[k].title
+          )
+      );
+    }
+  }
+
   $.fn.post_form_on_change = function(options){
     // default values for supported options
     var opts = {}
@@ -206,6 +220,8 @@
     trip_list.prepend(ajaxFadeElemTrips);
     var ajaxLoaderElemTrips=$(ajaxLoaderImgTrips);
     trip_list.prepend(ajaxLoaderElemTrips);
+
+    var trip_category_elem = $('#id_category');
 
     return this.each(function() {
       var this_elem = $(this)
@@ -255,6 +271,7 @@
               // var trips = JSON.parse(data.trips);
               render_trips(trip_list, data.trips);
               render_users(user_list, data.users, data.selected_users);
+              render_trip_categories(trip_category_elem, data.trip_categories)
             } else {
               alert("Произошла ошибка: "+data.error)
             }

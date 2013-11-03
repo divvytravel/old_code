@@ -196,11 +196,15 @@ class TripFilterForm(forms.Form):
     age_from = forms.ChoiceField(choices=AGES, initial=AGES[0][0], required=False)
     age_to = forms.ChoiceField(choices=AGES, initial=AGES[-1][0], required=False)
     users = forms.ModelChoiceField(queryset=None, required=False)
+    category = forms.ModelChoiceField(queryset=None, required=False,
+        empty_label=u"выберите категорию")
 
     def __init__(self, *args, **kwargs):
         users_queryset = kwargs.pop('users_queryset')
+        category_queryset = kwargs.pop('category_queryset')
         super(TripFilterForm, self).__init__(*args, **kwargs)
         self.fields['users'].queryset = users_queryset
+        self.fields['category'].queryset = category_queryset
 
     def clean_month_year(self):
         month_year = self.cleaned_data['month_year']

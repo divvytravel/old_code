@@ -19,6 +19,9 @@ logger = logging.getLogger(__name__)
 class TripCategory(models.Model):
     title = models.CharField(_(u"Название"), max_length=100)
 
+    def __unicode__(self):
+        return self.title
+
 
 class Trip(models.Model):
     CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
@@ -34,7 +37,8 @@ class Trip(models.Model):
     )
 
     title = models.CharField(u"Название", max_length=200)
-    category = models.ForeignKey(TripCategory, blank=True, null=True)
+    category = models.ForeignKey(TripCategory, blank=True, null=True,
+        related_name="trips")
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     end_people_date = models.DateField(_(u"Дата окончания набора группы"))

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
-from .models import Trip
+from .models import Trip, TripCategory
 
 
 class TripSerializer(serializers.ModelSerializer):
@@ -35,3 +35,9 @@ class TripSerializer(serializers.ModelSerializer):
         if hasattr(obj, 'count_all_people'):
             return obj.count_all_people
         return None
+
+
+class TripCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = TripCategory
