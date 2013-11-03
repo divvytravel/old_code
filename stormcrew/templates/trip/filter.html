@@ -154,6 +154,7 @@
             clearBtn: true,
             autoclose: true
         }).on('changeDate', function (ev) {
+            $('#{{form.country.auto_id}}').val('')
             $(this).post_form_on_change({given_date: ev.format});
         }).on('clearDate', function (ev) {
             $(this).post_form_on_change({given_date: ""});
@@ -164,6 +165,7 @@
 
         $( document ).ready(function() {
           $('#{{form.country.auto_id}}').change(function(){
+            $('#id_month_year').val("").change();
             $(this).post_form_on_change();
           });
           $('#{{form.gender.auto_id}}').change(function(){
