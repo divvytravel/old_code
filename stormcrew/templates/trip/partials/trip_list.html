@@ -46,7 +46,7 @@
                 {{ trip.end_people_date_format }}
             </td>
             <td>
-                {{ trip.people_max_count|minus:trip.count_all_people }}
+                {{ trip.show_people_places_left }}
             </td>
             {% if show_status %}
                 <td>

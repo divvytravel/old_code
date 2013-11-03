@@ -120,6 +120,12 @@ class Trip(models.Model):
         else:
             return u"o"
 
+    def show_people_places_left(self):
+        if hasattr(self, 'count_all_people'):
+            return self.people_max_count - self.count_all_people
+        else:
+            return "#TODO"
+
     def get_status(self):
         if not self.start_date:
             None

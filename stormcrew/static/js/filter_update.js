@@ -136,6 +136,9 @@
       {5} {6}\
   </td>\
   <td>{7} человек {8}</td>\
+  <td>{9}</td>\
+  <td>{10}</td>\
+  <td>{11}</td>\
 </tr>\
 '.format(
           trips[k].get_absolute_url,
@@ -146,7 +149,10 @@
           trips[k].price,
           trips[k].get_currency_display,
           trips[k].count_all_people,
-          count_gender
+          count_gender,
+          trips[k].show_price_type,
+          trips[k].end_people_date_format,
+          trips[k].show_people_places_left
           ));
       }
   }
