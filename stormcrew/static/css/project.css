@@ -186,3 +186,7 @@ a.prev span, a.next span {
     text-align: center;
     color: #A7A3A3;
 }
+
+#div_id_price_type {
+    margin-left: 30px;
+}

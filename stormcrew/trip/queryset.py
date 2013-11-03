@@ -47,6 +47,10 @@ class TripQuerySet(QuerySet):
         return self.filter(country=country)
 
     @self_if_blank_arg
+    def with_price_type(self, price_type):
+        return self.filter(price_type=price_type)
+
+    @self_if_blank_arg
     def in_month_year_or_in_country(self, month_year, country):
         if month_year:
             start_date, end_date = self._parse_start_end_date(month_year)

@@ -46,6 +46,18 @@
                         </div>
                 </div>
             {% endwith %}
+
+            {% with form.price_type as field %}
+                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label {{ label_class }}{% if field.field.required %} requiredField{% endif %}">
+                            Тип {% if field.field.required %}<span class="asteriskField">*</span>{% endif %}
+                        </label>
+                        <div class="controls {{ field_class }}">
+                            {% crispy_field field %}
+                            {% include 'bootstrap3/layout/help_text_and_errors.html' %}
+                        </div>
+                </div>
+            {% endwith %}
         </div>
 
         <div class="filter-form-header">
@@ -166,6 +178,9 @@
         $( document ).ready(function() {
           $('#{{form.country.auto_id}}').change(function(){
             $('#id_month_year').val("").change();
+            $(this).post_form_on_change();
+          });
+          $('#{{form.price_type.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });
           $('#{{form.gender.auto_id}}').change(function(){

@@ -221,6 +221,7 @@
           form_data = {
             'month_year': date,
             'country': this_form.find('select[name="country"]').val(),
+            'price_type': this_form.find('select[name="price_type"]').val(),
             'gender': this_form.find('select[name="gender"]').val(),
             'age_from': this_form.find('select[name="age_from"]').val(),
             'age_to': this_form.find('select[name="age_to"]').val(),
@@ -233,6 +234,7 @@
           form_data = {'clear': true};
           this_form.find('#id_month_year').val('');
           this_form.find('#id_country').val('');
+          this_form.find('#id_price_type').val('');
           this_form.find('#id_gender').val('');
           this_form.find('#id_age_from').val(20);
           this_form.find('#id_age_to').val(50);

@@ -190,6 +190,8 @@ class TripFilterForm(forms.Form):
     month_year = forms.CharField(max_length=10, required=False)
     country = forms.ModelChoiceField(queryset=Country.objects.all(),
         empty_label=u"Не важно", required=False)
+    price_type = forms.ChoiceField(required=False,
+        choices=[("", u"Не важно"), ]+Trip.PRICE_TYPE._choices)
     gender = forms.ChoiceField(choices=[("", u"Не важно"), ]+User.GENDERS._choices, required=False)
     age_from = forms.ChoiceField(choices=AGES, initial=AGES[0][0], required=False)
     age_to = forms.ChoiceField(choices=AGES, initial=AGES[-1][0], required=False)
