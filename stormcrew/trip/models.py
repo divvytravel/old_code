@@ -5,6 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.utils.dateformat import format
+from django.utils.translation import ugettext_lazy as _
 
 from model_utils import Choices
 from utils.helpers import get_today
@@ -15,17 +16,28 @@ from .managers import TripManager, TripRequestManager
 logger = logging.getLogger(__name__)
 
 
+class TripCategory(models.Model):
+    title = models.CharField(_(u"Название"), max_length=100)
+
+
 class Trip(models.Model):
     CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
     TRIP_TYPE = Choices(
-        ('open', u'Участие открытое'),
-        ('invite', u'Участие после одобрения создателя поездки'),
-        ('closed', u'Участие после одобрения всех участников поездки'),
+        ('open', _(u'Участие открытое')),
+        ('invite', _(u'Участие после одобрения создателя поездки')),
+        ('closed', _(u'Участие после одобрения всех участников поездки')),
+    )
+
+    PRICE_TYPE = Choices(
+        ('noncom', _(u'некоммерческая')),
+        ('comm', _(u'коммерческая')),
     )
 
     title = models.CharField(u"Название", max_length=200)
+    category = models.ForeignKey(TripCategory, blank=True, null=True)
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
+    end_people_date = models.DateField(_(u"Дата окончания набора группы"))
     country = models.ForeignKey('geo.Country', verbose_name=u'Страна',
         blank=True, null=True)
     city = models.CharField(u"Город", max_length=100,
@@ -34,12 +46,14 @@ class Trip(models.Model):
         help_text=u"примерный бюджет")
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
-    people_count = models.PositiveIntegerField(u"Сколько нужно человек")
+    people_count = models.PositiveIntegerField(u"Минимальное количество человек")
+    people_max_count = models.PositiveIntegerField(u"Максимальное количество человек")
     descr_main = models.TextField(u"Опишите суть поездки")
     descr_share = models.TextField(u"Опишите, что вы хотите разделить (или зачем вам компания)", blank=True)
     descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
+    price_type = models.CharField(_(u"Коммеречкая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
         related_name='approved_trips', blank=True)
