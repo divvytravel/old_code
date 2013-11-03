@@ -103,18 +103,26 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
                 return False
         return user.is_satisfy(gender, age_from, age_to)
 
-    def get_filtered_trips(self, form):
+    def get_filtered_trips(self, form, category=True, count_gender=True):
         clnd = form.cleaned_data
-        trip_qs = Trip.objects.actual()\
+        trip_qs = Trip.objects
+        if count_gender:
+            # have to apply count first. For some reason, if apply lately,
+            # count will show bad values
+            trip_qs = trip_qs.count_gender()
+        trip_qs = trip_qs.actual()\
             .in_month_year_or_in_country(clnd['month_year'], clnd['country'])\
             .with_price_type(clnd['price_type'])\
             .with_people_gender(clnd['gender'])\
-            .with_people_age(clnd['age_from'], clnd['age_to'])\
-            .with_category(clnd['category'])\
-            .count_gender()
+            .with_people_age(clnd['age_from'], clnd['age_to'])
+        if category:
+            trip_qs = trip_qs.with_category(clnd['category'])
         user_pk = clnd['users']
         if is_iterable(clnd['users']):
-            user_pk = user_pk[0]
+            try:
+                user_pk = user_pk[0]
+            except IndexError:
+                user_pk = None
         if self.is_user_satisfy(user_pk, clnd['gender'],
                                         clnd['age_from'], clnd['age_to']):
             trip_qs = trip_qs.with_people(clnd['users'])
@@ -134,8 +142,13 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 
     def get_queries_data(self, form):
         trips = self.get_filtered_trips(form)
+        if not form.cleaned_data['category']:
+            trips_for_categories = trips
+        else:
+            trips_for_categories = self.get_filtered_trips(form,
+                category=False, count_gender=False)
         users = self.get_filtered_users(form, trips)
-        trip_categories = self.get_filtered_categories(trips)
+        trip_categories = self.get_filtered_categories(trips_for_categories)
         selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
         return trips, users, selected_users, trip_categories
 

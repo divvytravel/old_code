@@ -185,7 +185,6 @@
 
   function render_trip_categories(trip_category_elem, trip_categories, selected_category){
     trip_category_elem.find('option').slice(1).remove();
-    // trip_category_elem.append("<option>выберите категорию</option>");
     var selected = "";
     for (var k=0; k<trip_categories.length; k++){
       if (selected_category !== undefined && selected_category == trip_categories[k].pk){
