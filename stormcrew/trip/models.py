@@ -111,6 +111,12 @@ class Trip(models.Model):
         today = today or get_today()
         return self.start_date > today
 
+    def show_price_type(self):
+        if self.price_type == self.PRICE_TYPE.comm:
+            return u"$"
+        else:
+            return u"o"
+
     def get_status(self):
         if not self.start_date:
             None
