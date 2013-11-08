@@ -210,7 +210,12 @@
   function post_on_category_list_click(category_sel, category_parent){
     category_parent.find('a').click(function(){
       var curr_a = $(this);
-      var selected_value = curr_a.attr('data-value');
+      var selected_value;
+      if (curr_a.hasClass('cat_active')){
+        selected_value = '';
+      } else {
+        selected_value = curr_a.attr('data-value');
+      }
       category_sel.val(selected_value).change();
       return false;
     });
