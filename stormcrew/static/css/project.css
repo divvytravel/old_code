@@ -190,3 +190,20 @@ a.prev span, a.next span {
 #div_id_price_type {
     margin-left: 30px;
 }
+
+.category_list{
+    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
+    width: 100%;
+    min-height: 23px;
+}
+
+.category_list a{
+    margin-left: 10px;
+    padding: 3px;
+}
+
+.cat_active {
+    text-decoration: underline;
+    background-color: #EBEBF0;
+}

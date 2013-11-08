@@ -146,7 +146,7 @@
         <div class="filter-form-header">
             <h3>Впишитесь в поездку!</h3>
             {% with form.category as field %}
-                <div id="div_{{ field.auto_id }}" class="form-group{% if field.errors %} has-error{% endif %}">
+                <div id="div_{{ field.auto_id }}" class="form-group category_list{% if field.errors %} has-error{% endif %}">
                     <div class="controls {{ field_class }}">
                         {% crispy_field field %}
                         {% include 'bootstrap3/layout/help_text_and_errors.html' %}
@@ -201,6 +201,9 @@
           $('#{{form.age_to.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });
+
+          $('#{{form.category.auto_id}}').hide();
+          $('#{{form.category.auto_id}}').render_trip_categories_as_list();
           $('#{{form.category.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });

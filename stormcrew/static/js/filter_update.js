@@ -53,6 +53,10 @@
     };
   }
 
+  String.prototype.capitalize = function() {
+      return this.charAt(0).toUpperCase() + this.slice(1);
+  }
+
   $.fn.apply_carousel = function(wait_to_load){
     return this.each(function() {
       var this_elem = $(this);
@@ -200,6 +204,34 @@
           )
       );
     }
+    trip_category_elem.render_trip_categories_as_list();
+  }
+
+  function post_on_category_list_click(category_sel, category_parent){
+    category_parent.find('a').click(function(){
+      var curr_a = $(this);
+      var selected_value = curr_a.attr('data-value');
+      category_sel.val(selected_value).change();
+      return false;
+    });
+  }
+
+  $.fn.render_trip_categories_as_list = function(){
+    var sel = $(this);
+    var sel_parent = $(this).parent();
+    sel_parent.find('a').remove();
+    var sel_options = sel.find('option').slice(1);
+    for (var k=0; k<sel_options.length; k++){
+      var cls = "";
+      if (sel_options[k].selected){
+        cls = ' class="cat_active"';
+      }
+      var a_category = '<a href="#" data-value="{0}"{1}>{2}</a>'.format(
+        sel_options[k].value, cls, sel_options[k].text.capitalize()
+      );
+      sel_parent.append(a_category);
+    }
+    post_on_category_list_click(sel, sel_parent);
   }
 
   $.fn.post_form_on_change = function(options){
