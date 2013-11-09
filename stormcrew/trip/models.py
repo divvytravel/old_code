@@ -222,6 +222,19 @@ class Trip(models.Model):
             )
 
 
+class TripPointType(models.Model):
+    title = models.CharField(u'Название', max_length=100)
+    many = models.BooleanField(u'Много или один', default=False)
+    category = models.ForeignKey(TripCategory, verbose_name=u'Категория')
+
+
+class TripPoint(models.Model):
+    p_type = models.ForeignKey(TripPointType, verbose_name=u'Тип')
+    description = models.TextField(u"Описание", blank=True)
+    price = models.PositiveIntegerField(u"Цена")
+    trip = models.ForeignKey(Trip, verbose_name=u'Поездка')
+
+
 class TripPicture(models.Model):
     file = models.ImageField(upload_to="trip")
     trip = models.ForeignKey('trip.Trip', related_name='images')
