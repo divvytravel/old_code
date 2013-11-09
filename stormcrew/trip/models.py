@@ -19,12 +19,13 @@ logger = logging.getLogger(__name__)
 class TripCategory(models.Model):
     APPLICABLE = Choices(
         ('all', u"все"),
-        ('comm', u"коммерческая"),
         ('noncom', u"некоммерческая"),
+        ('comm', u"коммерческая"),
     )
     title = models.CharField(_(u"Название"), max_length=100)
     applicable = models.CharField(u"применимость", max_length=10,
         choices=APPLICABLE, default=APPLICABLE.all)
+    slug = models.SlugField(u"Вид в url", unique=True)
 
     def __unicode__(self):
         return self.title

@@ -30,6 +30,7 @@ class TripPointAdmin(admin.ModelAdmin):
 
 class TripCategoryAdmin(admin.ModelAdmin):
     list_display = 'title',
+    prepopulated_fields = {"slug": ("title",)}
 
 
 class TripRequestAdmin(admin.ModelAdmin):

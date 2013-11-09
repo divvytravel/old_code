@@ -13,7 +13,7 @@ from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
-    TripProcessForm
+    TripProcessForm, TripCreateStepOne
 from .models import Trip, TripPicture, TripCategory
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
@@ -206,14 +206,30 @@ class SaveImagesMixin(object):
             pic.save()
 
 
-class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
+class TripCreateStepOneView(LoginRequiredMixin, FormView):
+    template_name = 'trip/create_step_1.html'
+    form_class = TripCreateStepOne
+
+    def form_valid(self, form):
+        self.price_type = form.cleaned_data['price_type']
+        self.category = form.cleaned_data['category']
+        return super(TripCreateStepOneView, self).form_valid(form)
+        
+
+    def get_success_url(self):
+        return reverse('trip_create_step_two', kwargs={
+            'price_type': self.price_type,
+            'category_slug': self.category.slug})
+
+
+class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
                                                             SaveImagesMixin):
     form_class = TripForm
     model = Trip
     success_message = u"Поездка создана!"
 
     def get_form_kwargs(self):
-        kwargs = super(TripCreateView, self).get_form_kwargs()
+        kwargs = super(TripCreateStepTwoView, self).get_form_kwargs()
         kwargs.update({
             'owner': self.request.user,
         })
@@ -222,6 +238,7 @@ class TripCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
     def get_success_url(self):
         self.save_images()
         return reverse('home')
+
 
 
 class TripRequestFormView(SuccessMessageMixin, CreateView):

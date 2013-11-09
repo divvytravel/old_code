@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block title %}Выбор категории и типа поездки{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="align-center">{% block header %}Выбор категории и типа поездки{% endblock %}</h1>
+            <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
+                {% csrf_token %}
+                {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
+            <div class="control-group create-submit align-center">
+              <div class="controls">
+                <input type="submit" class="btn btn-primary" value="{% block submit_text %}Далее{% endblock %}"/>
+                {% block actions %}{% endblock actions %}
+              </div>
+            </div>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ block.super }}
+{% endblock javascript %}

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django import forms
-from .models import Trip, TripRequest
+from django.utils.translation import ugettext_lazy as _
+from .models import Trip, TripRequest, TripCategory
 from users.models import User
 from geo.models import Country
 from utils.helpers import get_today
@@ -24,6 +25,39 @@ def get_trip_form_fields():
         'descr_company',
         'trip_type',
     )
+
+
+class TripCreateStepOne(forms.Form):
+    price_type = forms.ChoiceField(label=u"Тип поездки",
+        choices=Trip.PRICE_TYPE._choices)
+    category = forms.ModelChoiceField(label=u"Категория",
+        queryset=TripCategory.objects.all(),
+        empty_label=None)
+
+    form_errors = {
+        "unapplicable": u"Выбранные тип и категория несовместимы",
+    }
+
+    def is_comm(self, obj):
+        if isinstance(obj, TripCategory):
+            return obj.applicable == obj.APPLICABLE.comm
+        else:
+            return obj == Trip.PRICE_TYPE.comm
+
+    def is_noncom(self, obj):
+        if isinstance(obj, TripCategory):
+            return obj.applicable == obj.APPLICABLE.noncom
+        else:
+            return obj == Trip.PRICE_TYPE.noncomm
+
+    def clean(self):
+        price_type = self.cleaned_data['price_type']
+        category = self.cleaned_data['category']
+        if self.is_comm(category) and self.is_noncom(price_type)\
+          or self.is_noncom(category) and self.is_comm(price_type):
+            raise forms.ValidationError(self.form_errors['unapplicable'])
+        return self.cleaned_data
+
 
 class TripForm(forms.ModelForm):
     trip_errors = {
