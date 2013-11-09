@@ -224,8 +224,11 @@ class Trip(models.Model):
 
 class TripPointType(models.Model):
     title = models.CharField(u'Название', max_length=100)
-    many = models.BooleanField(u'Много или один', default=False)
+    many = models.BooleanField(u'Несколько', default=False)
     category = models.ForeignKey(TripCategory, verbose_name=u'Категория')
+
+    def __unicode__(self):
+        return u"{0} ({1})".format(self.title, self.category)
 
 
 class TripPoint(models.Model):
