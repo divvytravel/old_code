@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 from .models import Trip, TripRequest, TripCategory
 from users.models import User
 from geo.models import Country
@@ -13,12 +12,14 @@ def get_trip_form_fields():
         'title',
         'start_date',
         'end_date',
+        'end_people_date',
         'country',
         'city',
         'price',
         'currency',
         'includes',
         'people_count',
+        'people_max_count',
         'descr_main',
         'descr_share',
         'descr_additional',
@@ -63,6 +64,8 @@ class TripForm(forms.ModelForm):
     trip_errors = {
         'end_less_start_date': u"Конечная дата не может быть меньше начальной",
         'low_date': u"Дата не может быть меньше сегодняшней",
+        'people_max_count': u"Минимальное количество человек не может быть больше максимального",
+        'end_people_date': u"Дата окончания набора группы не может быть позже начала поездки",
     }
 
     country = forms.CharField(label=u"Страна", max_length=100)
@@ -75,13 +78,20 @@ class TripForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.owner = kwargs.pop('owner', None)
+        self.category = kwargs.pop('category', None)
+        self.price_type = kwargs.pop('price_type', None)
         super(TripForm, self).__init__(*args, **kwargs)
-        self.fields['currency'].empty_label = None
         self.fields['trip_type'].empty_label = None
         for field in self.fields.values():
             if not field.help_text:
                 # place help_text tag to render fields with save height
                 field.help_text = '&nbsp;'
+        if self.price_type == Trip.PRICE_TYPE.noncom\
+          or (self.price_type is None and self.instance and self.instance.is_noncom):
+            del self.fields['price']
+            del self.fields['currency']
+        else:
+            self.fields['currency'].empty_label = None
 
     def clean_start_date(self):
         start_date = self.cleaned_data['start_date']
@@ -96,22 +106,32 @@ class TripForm(forms.ModelForm):
         return end_date
 
     def clean(self):
+        clnd = self.cleaned_data
         if self.is_valid():
-            if self.cleaned_data['start_date'] > self.cleaned_data['end_date']:
+            if clnd['start_date'] > clnd['end_date']:
+                del clnd['country']
                 raise forms.ValidationError(self.trip_errors['end_less_start_date'])
-            self.cleaned_data['country'] =\
+            if clnd['people_count'] > clnd['people_max_count']:
+                del clnd['country']
+                raise forms.ValidationError(self.trip_errors['people_max_count'])
+            if clnd['end_people_date'] > clnd['start_date']:
+                del clnd['country']
+                raise forms.ValidationError(self.trip_errors['end_people_date'])
+            clnd['country'] =\
                 Country.objects.get_or_create_normalized(
-                    name=self.cleaned_data['country'])
+                    name=clnd['country'])
         else:
-            self.cleaned_data['country'] = \
-                Country.objects.get_normalized_or_none(
-                    name=self.cleaned_data['country'])
-        return self.cleaned_data
+            del clnd['country']
+        return clnd
 
     def save(self, commit=False, wait=False):
         obj = super(TripForm, self).save(commit)
         if self.owner:
             obj.owner = self.owner
+        if self.category is not None:
+            obj.category = self.category
+        if self.price_type is not None:
+            obj.price_type = self.price_type
         obj.save()
         if self.cleaned_data.get('author_in', False):
             obj.people.add(obj.owner)

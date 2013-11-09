@@ -29,3 +29,4 @@ South==0.8.2
 django-crispy-forms==1.4.0
 
 # Your custom requirements go here
+-e git://github.com/st4lk/django-relish.git@#egg=django-relish-dev

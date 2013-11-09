@@ -6,6 +6,7 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
@@ -18,6 +19,7 @@ from .models import Trip, TripPicture, TripCategory
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
+from relish.decorators import instance_cache
 
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
@@ -232,13 +234,37 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
         kwargs = super(TripCreateStepTwoView, self).get_form_kwargs()
         kwargs.update({
             'owner': self.request.user,
+            'category': self.category,
+            'price_type': self.price_type,
         })
         return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(TripCreateStepTwoView, self).get_context_data(**kwargs)
+        context['category'] = self.category
+        #TODO get text from Trip.PRICE_TYPE
+        if self.price_type == Trip.PRICE_TYPE.comm:
+            context['price_type'] = u'коммерческая'
+        else:
+            context['price_type'] = u'некоммерческая'
+        return context
 
     def get_success_url(self):
         self.save_images()
         return reverse('home')
 
+    @property
+    @instance_cache
+    def category(self):
+        return get_object_or_404(TripCategory, slug=self.kwargs['category_slug'])
+
+    @property
+    @instance_cache
+    def price_type(self):
+        price_type = self.kwargs['price_type']
+        if price_type not in map(lambda x: x[0], Trip.PRICE_TYPE._choices):
+            raise Http404
+        return price_type
 
 
 class TripRequestFormView(SuccessMessageMixin, CreateView):

@@ -55,7 +55,7 @@ class Trip(models.Model):
     city = models.CharField(u"Город", max_length=100,
         help_text=u"если несколько, то первый")
     price = models.PositiveIntegerField(u"Бюджет",
-        help_text=u"примерный бюджет")
+        help_text=u"примерный бюджет", blank=True, null=True)
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
     people_count = models.PositiveIntegerField(u"Минимальное количество человек")
@@ -65,7 +65,7 @@ class Trip(models.Model):
     descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
-    price_type = models.CharField(_(u"Коммеречкая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
+    price_type = models.CharField(_(u"Коммерческая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
         related_name='approved_trips', blank=True)
@@ -126,8 +126,16 @@ class Trip(models.Model):
         today = today or get_today()
         return self.start_date > today
 
+    @property
+    def is_comm(self):
+        return self.price_type == self.PRICE_TYPE.comm
+
+    @property
+    def is_noncom(self):
+        return not self.is_comm()
+
     def show_price_type(self):
-        if self.price_type == self.PRICE_TYPE.comm:
+        if self.is_comm:
             return u"$"
         else:
             return u"o"
