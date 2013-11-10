@@ -271,6 +271,13 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
             inlines.append((TripPointInline, {'point_type': point_type, }))
         return inlines
 
+    def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
+        point_type = inline_kwargs.get('point_type', None)
+        is_many = False
+        if point_type:
+            is_many = point_type.many
+        setattr(inline_formset, 'is_many', is_many)
+
     def construct_inlines(self):
         """
         Returns the inline formset instances
@@ -279,6 +286,7 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
         for inline_class, inline_kwargs in self.get_inlines():
             inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
             inline_formset = inline_instance.construct_formset()
+            self.define_many_for_inline_formset(inline_formset, inline_kwargs)
             inline_formsets.append(inline_formset)
         return inline_formsets
 

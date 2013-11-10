@@ -36,18 +36,17 @@
 
               {% for formset in inlines %}
                 {{ formset.management_form }}
-                {% for inline_form in formset %}
-                    {% if forloop.first %}
-                        <div class="inline_title">{{ inline_form.show_title }}</div>
-                    {% endif %}
-                    {% if inline_form.is_many %}
-                        <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
-                    {% endif %}
-                    {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
-                    {% if forloop.last and inline_form.is_many %}
-                        <div><a href="#">Добавить еще</a></div>
-                    {% endif %}
-                {% endfor %}
+                <div class="{% if formset.is_many %}inline_many{% endif %}">
+                    {% for inline_form in formset %}
+                        {% if forloop.first %}
+                            <div class="inline_title">{{ inline_form.show_title }}</div>
+                        {% endif %}
+                        {% if inline_form.is_many %}
+                            <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
+                        {% endif %}
+                        {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
+                    {% endfor %}
+                </div>
               {% endfor %}
 
 
@@ -87,6 +86,8 @@
     <script src="{% static 'js/jquery.fileupload-video.js' %}"></script>
     <!-- The File Upload validation plugin -->
     <script src="{% static 'js/jquery.fileupload-validate.js' %}"></script>
+
+    <script src="{% static 'js/dynamic-formset/jquery.formset.js' %}"></script>
     <script>
     /*jslint unparam: true, regexp: true */
     /*global window, $ */
@@ -179,6 +180,14 @@
             $(this).datepicker('hide');
         });
     </script>
+    <script type="text/javascript">
+       $(function() {
+           $('.inline_many').formset({
+                prefix: 'trippointtype5'
+            });
+       })
+    </script>
+
     {% if fill_test_data %}
         <script type="text/javascript">
             $('#fill_test_data').click(function(){
