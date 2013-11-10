@@ -363,6 +363,7 @@ class TripPointForm(forms.ModelForm):
         super(TripPointForm, self).__init__(*args, **kwargs)
         if self.price_type == Trip.PRICE_TYPE.comm:
             del self.fields['price']
+            del self.fields['currency']
         elif self.price_type is not None:
             self.fields['price'].required = True
             self.fields['currency'].required = True
