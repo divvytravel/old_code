@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
+import logging
 from datetime import datetime
 from django import forms
-from .models import Trip, TripRequest, TripCategory
+from .models import Trip, TripRequest, TripCategory, TripPoint
 from users.models import User
 from geo.models import Country
 from utils.helpers import get_today
+
+l = logging.getLogger(__name__)
 
 
 def get_trip_form_fields():
@@ -105,23 +108,27 @@ class TripForm(forms.ModelForm):
             raise forms.ValidationError(self.trip_errors['low_date'])
         return end_date
 
+    def remove_country(self):
+        if 'country' in self.cleaned_data:
+            del self.cleaned_data['country']
+
     def clean(self):
         clnd = self.cleaned_data
         if self.is_valid():
             if clnd['start_date'] > clnd['end_date']:
-                del clnd['country']
+                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['end_less_start_date'])
             if clnd['people_count'] > clnd['people_max_count']:
-                del clnd['country']
+                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['people_max_count'])
             if clnd['end_people_date'] > clnd['start_date']:
-                del clnd['country']
+                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['end_people_date'])
             clnd['country'] =\
                 Country.objects.get_or_create_normalized(
                     name=clnd['country'])
         else:
-            del clnd['country']
+            self.remove_country()
         return clnd
 
     def save(self, commit=False, wait=False):
@@ -342,3 +349,37 @@ class TripProcessForm(forms.Form):
                 self.trip_request.deny(self.user)
             return self.trip_request
         return None
+
+
+class TripPointForm(forms.ModelForm):
+
+    class Meta:
+        model = TripPoint
+        fields = 'description', 'link', 'price', 'currency', 'trip'
+    
+    def __init__(self, *args, **kwargs):
+        self.point_type = kwargs.pop('point_type', None)
+        self.price_type = kwargs.pop('price_type', None)
+        super(TripPointForm, self).__init__(*args, **kwargs)
+        if self.price_type == Trip.PRICE_TYPE.comm:
+            del self.fields['price']
+        elif self.price_type is not None:
+            self.fields['price'].required = True
+            self.fields['currency'].required = True
+            self.fields['currency'].empty_label = None
+
+    def show_title(self):
+        title = u''
+        if self.point_type is not None:
+            title = self.point_type.get_title()
+        else:
+            l.warning('{0}.show_title is called without provided "point_type"'.format(
+                self.__class__.__name__))
+        return title
+
+    def save(self, commit=True):
+        obj = super(TripPointForm, self).save(commit=False)
+        obj.p_type = self.point_type
+        if commit:
+            obj.save()
+        return obj

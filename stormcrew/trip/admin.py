@@ -25,7 +25,7 @@ class TripPointTypeAdmin(admin.ModelAdmin):
 
 
 class TripPointAdmin(admin.ModelAdmin):
-    pass
+    list_display = 'p_type', 'price', 'trip'
 
 
 class TripCategoryAdmin(admin.ModelAdmin):

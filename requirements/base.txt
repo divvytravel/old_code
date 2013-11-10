@@ -10,6 +10,7 @@ dj-database-url==0.2.2
 django-secure==1.0
 sorl-thumbnail==11.12
 djangorestframework==2.3.8
+django-extra-views==0.6.3
 
 # For user registration, either via email or social
 # Well-built with regular release cycles!

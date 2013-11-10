@@ -14,13 +14,15 @@ from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
-    TripProcessForm, TripCreateStepOne
-from .models import Trip, TripPicture, TripCategory
+    TripProcessForm, TripCreateStepOne, TripPointForm
+from .models import Trip, TripPicture, TripCategory, TripPoint, TripPointType
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
 from relish.decorators import instance_cache
 
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSet
+from extra_views.generic import GenericInlineFormSet
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
@@ -224,11 +226,53 @@ class TripCreateStepOneView(LoginRequiredMixin, FormView):
             'category_slug': self.category.slug})
 
 
-class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateView,
+
+class TripPointInline(InlineFormSet):
+    max_num = 1
+    model = TripPoint
+    form_class = TripPointForm
+    point_type = None
+
+    def __init__(self, *args, **kwargs):
+        self.point_type = kwargs.pop('point_type', None)
+        super(TripPointInline, self).__init__(*args, **kwargs)
+
+    def get_extra_form_kwargs(self):
+        return {
+            'point_type': self.point_type,
+            'price_type': self.view.price_type,
+        }
+
+    def get_formset_kwargs(self):
+        kwargs = super(TripPointInline, self).get_formset_kwargs()
+        if self.point_type:
+            kwargs['prefix'] = self.point_type.get_form_prefix()
+        return kwargs
+
+
+class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView,
                                                             SaveImagesMixin):
     form_class = TripForm
     model = Trip
     success_message = u"Поездка создана!"
+    template_name = 'trip/create_step_2.html'
+
+    def get_inlines(self):
+        inlines = []
+        for point_type in self.category.get_point_types():
+            inlines.append((TripPointInline, {'point_type': point_type, }))
+        return inlines
+
+    def construct_inlines(self):
+        """
+        Returns the inline formset instances
+        """
+        inline_formsets = []
+        for inline_class, inline_kwargs in self.get_inlines():
+            inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
+            inline_formset = inline_instance.construct_formset()
+            inline_formsets.append(inline_formset)
+        return inline_formsets
 
     def get_form_kwargs(self):
         kwargs = super(TripCreateStepTwoView, self).get_form_kwargs()

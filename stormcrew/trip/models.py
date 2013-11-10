@@ -14,7 +14,7 @@ from .managers import TripManager, TripRequestManager
 
 
 logger = logging.getLogger(__name__)
-
+DEFAUTL_CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
 
 class TripCategory(models.Model):
     APPLICABLE = Choices(
@@ -30,9 +30,12 @@ class TripCategory(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_point_types(self):
+        return self.point_types.all()
+
 
 class Trip(models.Model):
-    CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
+    CURRENCY = DEFAUTL_CURRENCY
     TRIP_TYPE = Choices(
         ('open', _(u'Участие открытое')),
         ('invite', _(u'Участие после одобрения создателя поездки')),
@@ -234,16 +237,28 @@ class Trip(models.Model):
 class TripPointType(models.Model):
     title = models.CharField(u'Название', max_length=100)
     many = models.BooleanField(u'Несколько', default=False)
-    category = models.ForeignKey(TripCategory, verbose_name=u'Категория')
+    category = models.ForeignKey(TripCategory, verbose_name=u'Категория',
+        related_name='point_types')
 
     def __unicode__(self):
         return u"{0} ({1})".format(self.title, self.category)
 
+    def get_title(self):
+        return self.title.capitalize()
+
+    def get_form_prefix(self):
+        return "{0}{1}".format(self.__class__.__name__.lower(), self.pk)
+
 
 class TripPoint(models.Model):
+    CURRENCY = DEFAUTL_CURRENCY
+
     p_type = models.ForeignKey(TripPointType, verbose_name=u'Тип')
     description = models.TextField(u"Описание", blank=True)
-    price = models.PositiveIntegerField(u"Цена")
+    price = models.PositiveIntegerField(u"Цена", blank=True, null=True)
+    currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
+        blank=True, null=True)
+    link = models.URLField(u"Ссылка", blank=True, null=True)
     trip = models.ForeignKey(Trip, verbose_name=u'Поездка')
 
 

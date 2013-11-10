@@ -30,12 +30,24 @@
             {% endblock image_upload %}
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
-                <div class="control-group create-submit">
-                  <div class="controls">
-                    <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
-                    {% block actions %}{% endblock actions %}
-                  </div>
+
+              {% for formset in inlines %}
+                {{ formset.management_form }}
+                <table>
+                    {% for inline_form in formset %}
+                        {% include "trip/partials/inline_form.html" %}
+                    {% endfor %}
+                </table>
+              {% endfor %}
+
+
+
+              <div class="control-group create-submit">
+                <div class="controls">
+                  <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
+                  {% block actions %}{% endblock actions %}
                 </div>
+              </div>
             </form>
         </div>
     </div>
