@@ -294,6 +294,7 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
         return context
 
     def get_success_url(self):
+        self.set_success_message()
         self.save_images()
         return reverse('home')
 
