@@ -13,11 +13,15 @@
     <![endif]-->
 
     {% block css %}
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    {% if cache_bootstrap %}
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cached.bootstrap.min.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/cached.bootstrap-theme.min.css' %}">
+    {% else %}
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
+    {% endif %}
 
     <!-- Your stuff: Third-party css libraries go here -->
 

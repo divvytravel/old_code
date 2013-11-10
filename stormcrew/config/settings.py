@@ -270,6 +270,8 @@ if DEBUG and not OPENSHIFT_GEAR_NAME:
         'INTERCEPT_REDIRECTS': False,
         'SHOW_TEMPLATE_CONTEXT': True,
     }
+    FILL_TEST_DATA = True
+    CACHE_BOOTSTRAP = True
 else:
     TEMPLATE_DEBUG = DEBUG
 
@@ -283,6 +285,8 @@ else:
     # from memcacheify import memcacheify
     # CACHES = memcacheify()
     ########## END CACHING
+    FILL_TEST_DATA = False
+    CACHE_BOOTSTRAP = False
 
 if os.environ.get('EMAIL_HOST', None):
     ########## EMAIL
@@ -310,6 +314,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
+    'utils.context_processors.custom_settings',
     # Your stuff: custom template context processers go here
 )
 

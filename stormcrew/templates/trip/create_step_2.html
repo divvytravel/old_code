@@ -12,6 +12,9 @@
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
+            {% if fill_test_data %}
+                <div><a href="#" id="fill_test_data">Заполнить тестовыми данными</a></div>
+            {% endif %}
             <h1 class="align-center">{% block header %}Создать поездку ({{ price_type }}, {{ category|lower }}){% endblock %}</h1>
             <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
                 {% csrf_token %}
@@ -169,4 +172,22 @@
             $(this).datepicker('hide');
         });
     </script>
+    {% if fill_test_data %}
+        <script type="text/javascript">
+            $('#fill_test_data').click(function(){
+                $('#{{form.title.auto_id}}').val('test_trip');
+                $('#{{form.start_date.auto_id}}').val('22.12.2013');
+                $('#{{form.end_date.auto_id}}').val('28.12.2013');
+                $('#{{form.end_people_date.auto_id}}').val('01.12.2013');
+                $('#{{form.country.auto_id}}').val('Россия');
+                $('#{{form.city.auto_id}}').val('Москва');
+                $('#{{form.price.auto_id}}').val('550');
+                $('#{{form.includes.auto_id}}').val('Все');
+                $('#{{form.people_count.auto_id}}').val('10');
+                $('#{{form.people_max_count.auto_id}}').val('12');
+                $('#{{form.descr_main.auto_id}}').val('Бла бла');
+                return false;
+            })
+        </script>
+    {% endif %}
 {% endblock javascript %}
