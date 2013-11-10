@@ -215,3 +215,9 @@ a.prev span, a.next span {
     font-size: 16px;
     color: #428BCA;
 }
+
+.inline_count_title{
+    margin: 0px 0px 0px 10px;
+    font-size: 14px;
+    font-weight: bold;
+}

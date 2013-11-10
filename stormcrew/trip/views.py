@@ -229,6 +229,7 @@ class TripCreateStepOneView(LoginRequiredMixin, FormView):
 
 class TripPointInline(InlineFormSet):
     max_num = 1
+    extra = 1
     model = TripPoint
     form_class = TripPointForm
     point_type = None
@@ -247,6 +248,13 @@ class TripPointInline(InlineFormSet):
         kwargs = super(TripPointInline, self).get_formset_kwargs()
         if self.point_type:
             kwargs['prefix'] = self.point_type.get_form_prefix()
+        return kwargs
+
+    def get_factory_kwargs(self):
+        kwargs = super(TripPointInline, self).get_factory_kwargs()
+        if self.point_type:
+            if self.point_type.many:
+                kwargs['max_num'] = None
         return kwargs
 
 

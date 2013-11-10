@@ -378,6 +378,12 @@ class TripPointForm(forms.ModelForm):
                 self.__class__.__name__))
         return title
 
+    @property
+    def is_many(self):
+        if self.point_type:
+            return self.point_type.many
+        return False
+
     def save(self, commit=True):
         obj = super(TripPointForm, self).save(commit=False)
         obj.p_type = self.point_type

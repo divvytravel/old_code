@@ -21,7 +21,7 @@ class TripPictureAdmin(admin.ModelAdmin):
 
 
 class TripPointTypeAdmin(admin.ModelAdmin):
-    list_display = 'title', 'category'
+    list_display = 'title', 'category', 'many'
 
 
 class TripPointAdmin(admin.ModelAdmin):
