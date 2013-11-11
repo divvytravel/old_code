@@ -42,12 +42,14 @@
                                 {% if forloop.first %}
                                     <div class="inline_title">{{ inline_form.show_title }}</div>
                         <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %}>
+                            <div>
                                 {% endif %}
                                 {% if inline_form.is_many %}
                                     <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
                                 {% endif %}
                                 {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
                             {% endfor %}
+                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -70,10 +72,15 @@
 
 
     <script src="{% static 'js/vendor/jquery.ui.widget.js' %}"></script>
-    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+    {% if cache_bootstrap %}
+        <script src="{% static 'js/cache/load-image.min.js' %}"></script>
+        <script src="{% static 'js/cache/canvas-to-blob.min.js' %}"></script>
+    {% else %}
+        <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+        <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
+        <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+        <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+    {% endif %}
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
     <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
     <!-- The basic File Upload plugin -->
@@ -89,7 +96,7 @@
     <!-- The File Upload validation plugin -->
     <script src="{% static 'js/jquery.fileupload-validate.js' %}"></script>
 
-    <script src="{% static 'js/dynamic-formset/jquery.formset.js' %}"></script>
+    <script src="{% static 'js/dynamic-formset/jquery.formset.custom.js' %}"></script>
     <script>
     /*jslint unparam: true, regexp: true */
     /*global window, $ */
@@ -189,7 +196,8 @@
                $('#{{ formset.id_for_many }}').formset({
                     prefix: '{{ formset.custom_prefix }}',
                     min_num: 1,
-                    formCssClass: '{{ formset.form_css_class }}'
+                    formCssClass: '{{ formset.form_css_class }}',
+                    headerCssClass: 'inline_count_title',
                 });
            {% endif %}
          {% endfor %}
