@@ -352,6 +352,8 @@ class TripProcessForm(forms.Form):
 
 
 class TripPointForm(forms.ModelForm):
+    currency = forms.ChoiceField(label=u"Валюта",
+        choices=TripPoint.CURRENCY._choices)
 
     class Meta:
         model = TripPoint
@@ -367,7 +369,6 @@ class TripPointForm(forms.ModelForm):
         elif self.price_type is not None:
             self.fields['price'].required = True
             self.fields['currency'].required = True
-            self.fields['currency'].empty_label = None
 
     def show_title(self):
         title = u''
