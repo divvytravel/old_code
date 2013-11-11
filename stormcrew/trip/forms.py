@@ -368,9 +368,11 @@ class TripPointForm(forms.ModelForm):
         if self.price_type == Trip.PRICE_TYPE.comm:
             del self.fields['price']
             del self.fields['currency']
+            self.contains_price = False
         elif self.price_type is not None:
             self.fields['price'].required = True
             self.fields['currency'].required = True
+            self.contains_price = True
 
     def show_title(self):
         title = u''

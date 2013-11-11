@@ -10,14 +10,14 @@
 {% endblock css %}
 
 {% block content %}
+    <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
+    {% csrf_token %}
     <div class="row">
         <div class="col-lg-12">
             {% if fill_test_data %}
                 <div><a href="#" id="fill_test_data">Заполнить тестовыми данными</a></div>
             {% endif %}
             <h1 class="align-center">{% block header %}Создать поездку ({{ price_type }}, {{ category|lower }}){% endblock %}</h1>
-            <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
-                {% csrf_token %}
                 {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
 
             {% block additional_fields %}{% endblock additional_fields %}
@@ -81,9 +81,9 @@
                   {% block actions %}{% endblock actions %}
                 </div>
               </div>
-            </form>
         </div>
     </div>
+    </form>
 
 {% endblock %}
 
