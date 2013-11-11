@@ -74,7 +74,7 @@
 
     <div class="row">
         <div class="col-lg-12">
-              <div class="control-group create-submit">
+              <div class="control-group create-submit" style="text-align:center;">
                 <div class="controls">
                   <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
                   {% block actions %}{% endblock actions %}
@@ -217,6 +217,8 @@
                     min_num: 1,
                     formCssClass: '{{ formset.form_css_class }}',
                     headerCssClass: 'inline_count_title',
+                    addText: 'Добавить еще',
+                    deleteText: 'Удалить',
                 });
            {% endif %}
          {% endfor %}

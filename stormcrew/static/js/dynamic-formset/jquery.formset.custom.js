@@ -58,9 +58,13 @@
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
-                    row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
+                    row.append(
+                    '<div class="row"><span class="btn btn-danger delete ' + options.deleteCssClass + '">\
+                        <i class="glyphicon glyphicon-trash"></i>\
+                        <span>' + options.deleteText + '</span>\
+                    </span></div>');
                 }
-                row.find('a.' + options.deleteCssClass).click(function() {
+                row.find('.' + options.deleteCssClass).click(function() {
                     var row = $(this).parents('.' + options.formCssClass),
                         del = row.find('input:hidden[id $= "-DELETE"]');
                     if (options.beforeremove) options.beforeremove(row)
@@ -168,7 +172,11 @@
                 addButton.parents('tr').addClass(options.formCssClass + '-add');
             } else {
                 // Otherwise, insert it immediately after the last form:
-                $$.filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
+                $$.filter(':last').after(
+                '<span class="btn btn-success ' + options.addCssClass + '">\
+                    <i class="glyphicon glyphicon-plus"></i>\
+                    <span>' + options.addText + '</span>\
+                </span>');
                 addButton = $$.filter(':last').next();
             }
             addButton.click(function() {

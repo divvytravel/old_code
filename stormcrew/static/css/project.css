@@ -236,3 +236,9 @@ a.prev span, a.next span {
     margin-top: 10px;
     border: 1px solid #E5E5E5;
 }
+
+.delete-row {
+    float:right;
+    margin-right: 50px;
+    margin-bottom: 10px;
+}
