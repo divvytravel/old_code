@@ -255,6 +255,7 @@ class TripPointInline(InlineFormSet):
         if self.point_type:
             if self.point_type.many:
                 kwargs['max_num'] = None
+        kwargs['can_delete'] = False
         return kwargs
 
 
@@ -277,6 +278,9 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
         if point_type:
             is_many = point_type.many
         setattr(inline_formset, 'is_many', is_many)
+        setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
+        setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
+        setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
 
     def construct_inlines(self):
         """

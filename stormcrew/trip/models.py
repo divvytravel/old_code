@@ -249,6 +249,9 @@ class TripPointType(models.Model):
     def get_form_prefix(self):
         return "{0}{1}".format(self.__class__.__name__.lower(), self.pk)
 
+    def get_form_css_class(self):
+        return "css_{0}".format(self.get_form_prefix())
+
 
 class TripPoint(models.Model):
     CURRENCY = DEFAUTL_CURRENCY

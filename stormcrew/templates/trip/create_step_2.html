@@ -34,22 +34,24 @@
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
 
-              {% for formset in inlines %}
-                {{ formset.management_form }}
-                <div class="{% if formset.is_many %}inline_many{% endif %}">
-                    {% for inline_form in formset %}
-                        {% if forloop.first %}
-                            <div class="inline_title">{{ inline_form.show_title }}</div>
-                        {% endif %}
-                        {% if inline_form.is_many %}
-                            <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
-                        {% endif %}
-                        {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
-                    {% endfor %}
-                </div>
-              {% endfor %}
-
-
+              <div class="inline_points">
+                {% for formset in inlines %}
+                    <div class="inline_point">
+                        {{ formset.management_form }}
+                            {% for inline_form in formset %}
+                                {% if forloop.first %}
+                                    <div class="inline_title">{{ inline_form.show_title }}</div>
+                        <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %}>
+                                {% endif %}
+                                {% if inline_form.is_many %}
+                                    <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
+                                {% endif %}
+                                {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+              </div>
 
               <div class="control-group create-submit">
                 <div class="controls">
@@ -182,9 +184,15 @@
     </script>
     <script type="text/javascript">
        $(function() {
-           $('.inline_many').formset({
-                prefix: 'trippointtype5'
-            });
+         {% for formset in inlines %}
+           {% if formset.is_many %}
+               $('#{{ formset.id_for_many }}').formset({
+                    prefix: '{{ formset.custom_prefix }}',
+                    min_num: 1,
+                    formCssClass: '{{ formset.form_css_class }}'
+                });
+           {% endif %}
+         {% endfor %}
        })
     </script>
 
