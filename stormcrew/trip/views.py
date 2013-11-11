@@ -15,7 +15,7 @@ from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
-from .formsets import TripPointInlineFormSet
+from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
 from .models import Trip, TripPicture, TripCategory, TripPoint, TripPointType
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
@@ -314,6 +314,13 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
         else:
             context['price_type'] = u'некоммерческая'
         return context
+
+    def forms_valid(self, form, inlines):
+        inlines = TripPointInlinesWrapper(inlines)
+        if not inlines.clean():
+            return self.forms_invalid(form, inlines)
+        else:
+            return super(TripCreateStepTwoView, self).forms_valid(form, inlines)
 
     def get_success_url(self):
         self.set_success_message()

@@ -37,6 +37,9 @@
     </div>
     {% for formset in inlines %}
         <div>
+            {% if forloop.first %}
+                {% include "partials/formsets/non_formset_errors.html" %}
+            {% endif %}
             {{ formset.management_form }}
                 {% for inline_form in formset %}
                     {% if forloop.first %}

@@ -17,9 +17,9 @@ class SuccessMessageMixin(object):
                 messages.success(self.request, self.get_success_message())
             self.is_success_message_set = True
 
-    def form_valid(self, form):
+    def form_valid(self, *args, **kwargs):
         self.set_success_message()
-        return super(SuccessMessageMixin, self).form_valid(form)
+        return super(SuccessMessageMixin, self).form_valid(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
         self.set_success_message()
