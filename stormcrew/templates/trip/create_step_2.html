@@ -47,7 +47,7 @@
                     {% if inline_form.is_many %}
                 <div class="row inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
                     {% endif %}
-                <div class="row">
+                <div class="row inline_form_row">
                     {# form fields #}
                     {% with form_show_labels=True form_show_errors=True %}
                         {% include "partials/forms/errors.html" with form=inline_form %}

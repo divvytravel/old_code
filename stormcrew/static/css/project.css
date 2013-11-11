@@ -243,3 +243,7 @@ a.prev span, a.next span {
     margin-right: 50px;
     margin-bottom: 10px;
 }
+
+.inline_form_row {
+    padding: 10px;
+}
