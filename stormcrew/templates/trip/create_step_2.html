@@ -41,7 +41,7 @@
                             {% for inline_form in formset %}
                                 {% if forloop.first %}
                                     <div class="row inline_title">{{ inline_form.show_title }}</div>
-                        <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %}>
+                        <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %} class="inline_point_row">
                                 {% endif %}
                                 {% if inline_form.is_many %}
                             <div class="row inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>

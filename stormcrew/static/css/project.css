@@ -217,7 +217,22 @@ a.prev span, a.next span {
 }
 
 .inline_count_title{
-    margin: 0px 0px 0px 10px;
+    margin: 10px;
+    text-decoration: underline;
     font-size: 14px;
     font-weight: bold;
+    text-align: center;
+}
+
+.inline_point_row {
+    border-bottom: 1px solid #E5E5E5;
+    border-top: 1px solid #E5E5E5;
+}
+
+.inline_point_row {
+    background: #EDF3FE;
+    margin-bottom: 10px;
+    padding-left: 30px;
+    margin-top: 10px;
+    border: 1px solid #E5E5E5;
 }
