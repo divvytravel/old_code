@@ -15,6 +15,7 @@ from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
+from .formsets import TripPointInlineFormSet
 from .models import Trip, TripPicture, TripCategory, TripPoint, TripPointType
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
@@ -256,6 +257,7 @@ class TripPointInline(InlineFormSet):
             if self.point_type.many:
                 kwargs['max_num'] = None
         kwargs['can_delete'] = False
+        kwargs['formset'] = TripPointInlineFormSet
         return kwargs
 
 

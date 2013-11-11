@@ -355,6 +355,8 @@ class TripPointForm(forms.ModelForm):
     currency = forms.ChoiceField(label=u"Валюта",
         choices=TripPoint.CURRENCY._choices)
 
+    auto_fields = 'trip',
+
     class Meta:
         model = TripPoint
         fields = 'description', 'link', 'price', 'currency', 'trip'
@@ -378,6 +380,13 @@ class TripPointForm(forms.ModelForm):
             l.warning('{0}.show_title is called without provided "point_type"'.format(
                 self.__class__.__name__))
         return title
+
+    @property
+    def is_blanked(self):
+        for field_name in filter(lambda x: x not in self.auto_fields, self.fields):
+            if field_name in self.cleaned_data and self.cleaned_data[field_name]:
+                return False
+        return True
 
     @property
     def is_many(self):
