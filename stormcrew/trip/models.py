@@ -257,7 +257,7 @@ class TripPoint(models.Model):
     CURRENCY = DEFAUTL_CURRENCY
 
     p_type = models.ForeignKey(TripPointType, verbose_name=u'Тип')
-    description = models.TextField(u"Описание", blank=True)
+    description = models.TextField(u"Описание")
     price = models.PositiveIntegerField(u"Цена", blank=True, null=True)
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
         blank=True, null=True)
