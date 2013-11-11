@@ -6,7 +6,7 @@ from .views import TripCreateStepOneView, TripRequestFormView, TripUpdateView,\
 
 urlpatterns = patterns('',
     url(r'^create/$', TripCreateStepOneView.as_view(), name='trip_create'),
-    url(r'^create/(?P<price_type>[\w_]+)/(?P<category_slug>[\w_]+)/$',
+    url(r'^create/(?P<price_type>[\w_-]+)/(?P<category_slug>[\w_-]+)/$',
         TripCreateStepTwoView.as_view(), name="trip_create_step_two"),
     url(r'^detail/(?P<pk>\d+)/$', TripRequestFormView.as_view(),
         name='trip_request_detail'),
