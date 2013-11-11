@@ -33,28 +33,47 @@
             {% endblock image_upload %}
               <!-- The container for the uploaded files -->
               <div id="files" class="files"></div>
-
-              <div class="inline_points">
-                {% for formset in inlines %}
-                    <div class="inline_point">
+        </div>
+    </div>
+    {% for formset in inlines %}
+        <div>
                         {{ formset.management_form }}
                             {% for inline_form in formset %}
                                 {% if forloop.first %}
-                                    <div class="inline_title">{{ inline_form.show_title }}</div>
+                                    <div class="row inline_title">{{ inline_form.show_title }}</div>
                         <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %}>
-                            <div>
                                 {% endif %}
                                 {% if inline_form.is_many %}
-                                    <div class="inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
+                            <div class="row inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
                                 {% endif %}
-                                {% include "trip/partials/form_fields.html" with form=inline_form form_show_labels=True form_show_errors=True %}
+                            <div class="row">
+                                {# form fields #}
+                                {% with form_show_labels=True form_show_errors=True %}
+                                    {% include "partials/forms/errors.html" %}
+
+                                    {% for field in inline_form %}
+                                        {% if forloop.first %}
+                                            <div class="col-lg-6">
+                                        {% endif %}
+                                        {% if not field.name in form.manual_fields %}
+                                            {% include "trip/partials/field.html" %}
+                                        {% endif %}
+                                        {% if forloop.first %}
+                                            </div><div class="col-lg-4">
+                                        {% endif %}
+                                    {% endfor %}
+                                        </div>
+
+                                {% endwith %}
+                                {# end form fields #}
                             {% endfor %}
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-              </div>
+        </div>
+    {% endfor %}
 
+    <div class="row">
+        <div class="col-lg-12">
               <div class="control-group create-submit">
                 <div class="controls">
                   <input type="submit" class="btn btn-primary" value="{% block submit_text %}Создать поездку{% endblock %}"/>
