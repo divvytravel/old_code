@@ -27,6 +27,10 @@ class TripCategory(models.Model):
         choices=APPLICABLE, default=APPLICABLE.all)
     slug = models.SlugField(u"Вид в url", unique=True)
 
+    class Meta:
+        verbose_name = u"Категория"
+        verbose_name_plural = u"Категории"
+
     def __unicode__(self):
         return self.title
 
@@ -77,6 +81,8 @@ class Trip(models.Model):
 
     class Meta:
         ordering = 'start_date',
+        verbose_name = u"Поездка"
+        verbose_name_plural = u"Поездки"
 
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
@@ -240,6 +246,10 @@ class TripPointType(models.Model):
     category = models.ForeignKey(TripCategory, verbose_name=u'Категория',
         related_name='point_types')
 
+    class Meta:
+        verbose_name = u"Тип поля поездки"
+        verbose_name_plural = u"Типы полей поездки"
+
     def __unicode__(self):
         return u"{0} ({1})".format(self.title, self.category)
 
@@ -264,10 +274,17 @@ class TripPoint(models.Model):
     link = models.URLField(u"Ссылка", blank=True, null=True)
     trip = models.ForeignKey(Trip, verbose_name=u'Поездка')
 
+    class Meta:
+        verbose_name = u"Поле поездки"
+        verbose_name_plural = u"Поля поездки"
 
 class TripPicture(models.Model):
     file = models.ImageField(upload_to="trip")
     trip = models.ForeignKey('trip.Trip', related_name='images')
+
+    class Meta:
+        verbose_name = u"Фото"
+        verbose_name_plural = u"Фото"
 
     def __unicode__(self):
         return self.file.name
@@ -299,6 +316,11 @@ class TripRequest(models.Model):
         blank=True, null=True, related_name='denied_trip_requests')
 
     objects = TripRequestManager()
+
+    class Meta:
+        verbose_name = u"Запрос в поездку"
+        verbose_name_plural = u"Запросы в поездку"
+        ordering = '-date_created',
 
     def approve(self, by_user):
         approved = False
@@ -343,6 +365,3 @@ class TripRequest(models.Model):
     def is_approved_by(self, user):
         return self.users_approved.filter(pk=user.pk).count() > 0\
             or (self.trip.owner == user and self.approved_by_owner)
-
-    class Meta:
-        ordering = '-date_created',
