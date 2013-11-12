@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import itertools
 from django.views.generic import FormView, CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
@@ -267,6 +268,14 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
     model = Trip
     success_message = u"Поездка создана!"
     template_name = 'trip/create_step_2.html'
+
+    def get(self, request, *args, **kwargs):
+        import pdb; pdb.set_trace()
+        step_one_form = TripCreateStepOne(data=kwargs)
+        if not step_one_form.is_valid():
+            self.set_error_messages(itertools.chain(step_one_form.errors.values()))
+            return HttpResponseRedirect(reverse('trip_create'))
+        return super(TripCreateStepTwoView, self).get(request, *args, **kwargs)
 
     def get_inlines(self):
         inlines = []

@@ -1,6 +1,7 @@
 from django.contrib import messages
 
 
+#TODO: rename to just MessageMixin
 class SuccessMessageMixin(object):
     success_message = None
 
@@ -16,6 +17,10 @@ class SuccessMessageMixin(object):
             if self.get_success_message():
                 messages.success(self.request, self.get_success_message())
             self.is_success_message_set = True
+
+    def set_error_messages(self, err_msgs):
+        for err_msg in err_msgs:
+            messages.error(self.request, err_msg)
 
     def form_valid(self, *args, **kwargs):
         self.set_success_message()

@@ -42,6 +42,19 @@ class TripCreateStepOne(forms.Form):
         "unapplicable": u"Выбранные тип и категория несовместимы",
     }
 
+    def __init__(self, *args, **kwargs):
+        category_slug = kwargs.get('data', {}).get('category_slug', None)
+        if category_slug:
+            try:
+                #TODO: this approach will touch DB twice, here and during
+                # internal clean_category method. Look for django forms
+                # clean chain.
+                kwargs['data']['category'] = TripCategory.objects.get(
+                    slug=category_slug).pk
+            except TripCategory.DoesNotExist:
+                pass
+        super(TripCreateStepOne, self).__init__(*args, **kwargs)
+
     def is_comm(self, obj):
         if isinstance(obj, TripCategory):
             return obj.applicable == obj.APPLICABLE.comm
