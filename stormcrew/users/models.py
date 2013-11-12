@@ -28,11 +28,14 @@ class User(AbstractUser):
     GENDERS = Choices(('male', u'мужской'), ('female', u'женский'))
 
     # TODO: create RelativeUrlField
-    avatar_url = models.CharField(default=settings.NO_AVATAR_IMG, max_length=200)
-    provider = models.CharField(choices=PROVIDERS, max_length=20, blank=True)
+    avatar_url = models.CharField(u"Url аватарки",
+        default=settings.NO_AVATAR_IMG, max_length=200)
+    provider = models.CharField(u"Источник", choices=PROVIDERS,
+        max_length=20, blank=True)
     birthday = models.DateField(u"Дата рождения", blank=True, null=True)
     gender = models.CharField(u"Пол", choices=GENDERS, max_length=7, blank=True, null=True)
-    social_auth_response = JSONField(blank=True, null=True)
+    social_auth_response = JSONField(u"Данные из источника", blank=True,
+        null=True)
 
     objects = UserManagerWithFilters()
 

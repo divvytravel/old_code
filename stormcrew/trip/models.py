@@ -53,7 +53,7 @@ class Trip(models.Model):
 
     title = models.CharField(u"Название", max_length=200)
     category = models.ForeignKey(TripCategory, blank=True, null=True,
-        related_name="trips")
+        related_name="trips", verbose_name=u'Категория')
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     end_people_date = models.DateField(_(u"Дата окончания набора группы"))
@@ -73,9 +73,9 @@ class Trip(models.Model):
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
     price_type = models.CharField(_(u"Коммерческая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'Создатель')
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        related_name='approved_trips', blank=True)
+        related_name='approved_trips', blank=True, verbose_name=u'Участники')
 
     objects = TripManager()
 
@@ -279,12 +279,13 @@ class TripPoint(models.Model):
         verbose_name_plural = u"Поля поездки"
 
 class TripPicture(models.Model):
-    file = models.ImageField(upload_to="trip")
-    trip = models.ForeignKey('trip.Trip', related_name='images')
+    file = models.ImageField("Изображение", upload_to="trip")
+    trip = models.ForeignKey('trip.Trip', related_name='images',
+        verbose_name=u'Поездка')
 
     class Meta:
-        verbose_name = u"Фото"
-        verbose_name_plural = u"Фото"
+        verbose_name = u"Изображение"
+        verbose_name_plural = u"Изображения"
 
     def __unicode__(self):
         return self.file.name
@@ -304,16 +305,21 @@ class TripRequest(models.Model):
         ('denied', u'Отклонена'),
     )
 
-    trip = models.ForeignKey('trip.Trip', related_name='user_requests')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    date_created = models.DateTimeField(default=timezone.now)
-    status = models.CharField(max_length=10, choices=STATUS,
+    trip = models.ForeignKey('trip.Trip', related_name='user_requests',
+        verbose_name=u'Поездка')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+        verbose_name=u'Пользователь')
+    date_created = models.DateTimeField(u"", default=timezone.now)
+    status = models.CharField(u"Статус", max_length=10, choices=STATUS,
         default=STATUS.pending)
     users_approved = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        related_name='approved_trip_requests', blank=True, null=True)
-    approved_by_owner = models.BooleanField(default=False)
+        related_name='approved_trip_requests', blank=True, null=True,
+        verbose_name=u'Одобрена пользователями')
+    approved_by_owner = models.BooleanField(u"Одобрена создателем",
+        default=False)
     denied_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        blank=True, null=True, related_name='denied_trip_requests')
+        blank=True, null=True, related_name='denied_trip_requests',
+        verbose_name=u'Отклонена пользователями')
 
     objects = TripRequestManager()
 
