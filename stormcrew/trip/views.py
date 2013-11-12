@@ -17,14 +17,13 @@ from users.serializers import UserSerializer, UserPkSerializer
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
 from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
-from .models import Trip, TripPicture, TripCategory, TripPoint, TripPointType
+from .models import Trip, TripPicture, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
 from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
 from relish.decorators import instance_cache
 
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView, InlineFormSet
-from extra_views.generic import GenericInlineFormSet
+from extra_views import CreateWithInlinesView, InlineFormSet
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
