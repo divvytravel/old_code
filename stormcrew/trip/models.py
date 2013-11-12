@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.utils.dateformat import format
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import post_save
 
 from model_utils import Choices
 from utils.helpers import get_today
@@ -99,6 +100,19 @@ class Trip(models.Model):
     def end_people_date_format(self):
         return self.format_date(self.end_people_date)
 
+    @staticmethod
+    def point_is_added(sender, instance, **kwargs):
+        trip = instance.trip
+        price = 0
+        currency = u""
+        for count, point in enumerate(trip.points.all()):
+            price += point.price
+            if count == 0:
+                currency = point.currency
+        trip.price = price
+        trip.currency = currency
+        trip.save()
+
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
 
@@ -141,7 +155,7 @@ class Trip(models.Model):
 
     @property
     def is_noncom(self):
-        return not self.is_comm()
+        return not self.is_comm
 
     def show_price_type(self):
         if self.is_comm:
@@ -272,7 +286,7 @@ class TripPoint(models.Model):
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
         blank=True, null=True)
     link = models.URLField(u"Ссылка", blank=True, null=True)
-    trip = models.ForeignKey(Trip, verbose_name=u'Поездка')
+    trip = models.ForeignKey(Trip, verbose_name=u'Поездка', related_name='points')
 
     class Meta:
         verbose_name = u"Поле поездки"
@@ -281,6 +295,7 @@ class TripPoint(models.Model):
     def __unicode__(self):
         return u"{0}, {1}, {2}".format(self.p_type, self.trip, self.description[:15])
 
+post_save.connect(Trip.point_is_added, sender=TripPoint)
 
 class TripPicture(models.Model):
     file = models.ImageField("Изображение", upload_to="trip")
