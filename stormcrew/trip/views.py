@@ -328,7 +328,16 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
         if not inlines.clean():
             return self.forms_invalid(form, inlines)
         else:
-            return super(TripCreateStepTwoView, self).forms_valid(form, inlines)
+            #TODO next code is copied from extra_views.advanced.ModelFormWithInlinesMixin
+            # and modified. Here name of form field 'trip' is known.
+            # for contributing try to understand, how to assign
+            # self.object (now it has pk) to form in general case
+            self.object = form.save()
+            for formset in inlines:
+                for inl_form in formset.extra_forms:
+                    inl_form.trip = self.object
+                formset.save()
+            return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         self.set_success_message()

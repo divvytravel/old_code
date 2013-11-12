@@ -156,7 +156,7 @@ class TripForm(forms.ModelForm):
             self.remove_country()
         return clnd
 
-    def save(self, commit=False, wait=False):
+    def save(self, commit=True):
         obj = super(TripForm, self).save(commit)
         if self.owner:
             obj.owner = self.owner
@@ -164,9 +164,11 @@ class TripForm(forms.ModelForm):
             obj.category = self.category
         if self.price_type is not None:
             obj.price_type = self.price_type
-        obj.save()
-        if self.cleaned_data.get('author_in', False):
-            obj.people.add(obj.owner)
+        if commit:
+            obj.save()
+        if obj.pk:
+            if self.cleaned_data.get('author_in', False):
+                obj.people.add(obj.owner)
         return obj
 
 
@@ -190,7 +192,7 @@ class TripUpdateForm(TripForm):
                 raise forms.ValidationError(u'Неверное изображение')
         return self.cleaned_data
 
-    def save(self, commit=False):
+    def save(self, commit=True):
         obj = super(TripUpdateForm, self).save(commit)
         self.cleaned_data['images_to_delete'].delete()
         return obj
@@ -236,7 +238,7 @@ class TripRequestForm(forms.ModelForm):
                 raise forms.ValidationError(self.trip_errors['already_requested'])
         return self.cleaned_data
 
-    def save(self, commit=False):
+    def save(self, commit=True):
         trip = self.cleaned_data['trip']
         obj = None
         if self.cancel:
@@ -255,6 +257,7 @@ class TripRequestForm(forms.ModelForm):
             else:
                 obj = super(TripRequestForm, self).save(commit)
                 obj.user = self.user
+                #TODO: respect commit arg
                 obj.save()
             trip.notify_owner_about_request(self.user)
             if trip.is_closed():
