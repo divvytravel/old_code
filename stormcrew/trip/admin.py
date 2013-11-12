@@ -17,7 +17,11 @@ class TripAdmin(admin.ModelAdmin):
 
 
 class TripPictureAdmin(admin.ModelAdmin):
-    pass
+    list_display = 'file_name', 'trip'
+
+    def file_name(self, obj):
+        return obj.file.name
+    file_name.short_description = u"Имя файла"
 
 
 class TripPointTypeAdmin(admin.ModelAdmin):

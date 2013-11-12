@@ -9,6 +9,11 @@ from .models import User
 class UserAdmin(admin.ModelAdmin):
     create_form_class = UserCreationForm
     update_form_class = UserChangeForm
+    list_display = 'full_name', 'email', 'provider'
+
+    def full_name(self, obj):
+        return obj.get_full_name()
+    full_name.short_description = u"Полное имя"
 
 
 admin.site.register(User, UserAdmin)
