@@ -278,6 +278,10 @@ class TripPoint(models.Model):
         verbose_name = u"Поле поездки"
         verbose_name_plural = u"Поля поездки"
 
+    def __unicode__(self):
+        return u"{0}, {1}, {2}".format(self.p_type, self.trip, self.description[:15])
+
+
 class TripPicture(models.Model):
     file = models.ImageField("Изображение", upload_to="trip")
     trip = models.ForeignKey('trip.Trip', related_name='images',
@@ -322,6 +326,9 @@ class TripRequest(models.Model):
         verbose_name=u'Отклонена пользователями')
 
     objects = TripRequestManager()
+
+    def __unicode__(self):
+        return u"{0}, {1}".format(self.trip, self.user)
 
     class Meta:
         verbose_name = u"Запрос в поездку"

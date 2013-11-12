@@ -5,8 +5,14 @@ from .models import Trip, TripPicture, TripRequest, TripCategory,\
     TripPointType, TripPoint
 
 
+class TripPointInline(admin.TabularInline):
+    model = TripPoint
+    extra = 0
+
+
 class TripAdmin(admin.ModelAdmin):
     list_display = 'title', 'get_country', 'city', 'start_date', 'end_date'
+    inlines = TripPointInline, 
 
     def get_country(self, obj):
         try:
