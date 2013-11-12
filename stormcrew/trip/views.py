@@ -270,7 +270,6 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
     template_name = 'trip/create_step_2.html'
 
     def get(self, request, *args, **kwargs):
-        import pdb; pdb.set_trace()
         step_one_form = TripCreateStepOne(data=kwargs)
         if not step_one_form.is_valid():
             self.set_error_messages(itertools.chain(step_one_form.errors.values()))
