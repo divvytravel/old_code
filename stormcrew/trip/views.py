@@ -144,7 +144,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             .with_gender(clnd['gender'])
 
     def get_filtered_categories(self, trips):
-        return TripCategory.objects.filter(trips__in=trips)
+        return TripCategory.objects.filter(trips__in=trips).distinct()
 
     def get_queries_data(self, form):
         trips = self.get_filtered_trips(form)
