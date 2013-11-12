@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import itertools
 from datetime import datetime
 from django import forms
 from .models import Trip, TripRequest, TripCategory, TripPoint
@@ -43,16 +44,19 @@ class TripCreateStepOne(forms.Form):
     }
 
     def __init__(self, *args, **kwargs):
-        category_slug = kwargs.get('data', {}).get('category_slug', None)
+        data = kwargs.get('data', {})
+        category_slug = data.get('category_slug', None)
+        #TODO: this approach will touch DB twice, here and during
+        # internal clean_category method. Look for django forms
+        # clean chain.
         if category_slug:
             try:
-                #TODO: this approach will touch DB twice, here and during
-                # internal clean_category method. Look for django forms
-                # clean chain.
-                kwargs['data']['category'] = TripCategory.objects.get(
+                data['category'] = TripCategory.objects.get(
                     slug=category_slug).pk
             except TripCategory.DoesNotExist:
                 pass
+        if isinstance(data.get('category', None), TripCategory):
+            data['category'] = kwargs['data']['category'].pk
         super(TripCreateStepOne, self).__init__(*args, **kwargs)
 
     def is_comm(self, obj):
@@ -137,6 +141,14 @@ class TripForm(forms.ModelForm):
             if clnd['end_people_date'] > clnd['start_date']:
                 self.remove_country()
                 raise forms.ValidationError(self.trip_errors['end_people_date'])
+            if self.category and self.price_type:
+                step_one_form = TripCreateStepOne(data={
+                    'category': self.category,
+                    'price_type': self.price_type})
+                if not step_one_form.is_valid():
+                    self.remove_country()
+                    for err_msg in itertools.chain(step_one_form.errors.values()):
+                        raise forms.ValidationError(err_msg)
             clnd['country'] =\
                 Country.objects.get_or_create_normalized(
                     name=clnd['country'])
