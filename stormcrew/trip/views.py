@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import itertools
-from django.views.generic import FormView, CreateView, UpdateView, DeleteView
+from django.views.generic import FormView, CreateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
@@ -23,7 +23,8 @@ from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
 from relish.decorators import instance_cache
 
-from extra_views import CreateWithInlinesView, InlineFormSet
+from extra_views import CreateWithInlinesView, InlineFormSet,\
+    UpdateWithInlinesView
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
@@ -256,7 +257,8 @@ class TripPointInline(InlineFormSet):
         if self.point_type:
             if self.point_type.many:
                 kwargs['max_num'] = None
-        kwargs['can_delete'] = False
+        if self.object is None:
+            kwargs['can_delete'] = False
         kwargs['formset'] = TripPointInlineFormSet
         return kwargs
 
@@ -426,12 +428,40 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         return next or reverse('home')
 
 
-class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
+class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView,
                                                             SaveImagesMixin):
     model = Trip
     form_class = TripUpdateForm
     template_name = "trip/trip_update.html"
     success_message = u"Поездка обновлена"
+
+    def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
+        point_type = inline_kwargs.get('point_type', None)
+        is_many = False
+        if point_type:
+            is_many = point_type.many
+        setattr(inline_formset, 'is_many', is_many)
+        setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
+        setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
+        setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
+
+    def construct_inlines(self):
+        """
+        Returns the inline formset instances
+        """
+        inline_formsets = []
+        for inline_class, inline_kwargs in self.get_inlines():
+            inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
+            inline_formset = inline_instance.construct_formset()
+            self.define_many_for_inline_formset(inline_formset, inline_kwargs)
+            inline_formsets.append(inline_formset)
+        return inline_formsets
+
+    def get_inlines(self):
+        inlines = []
+        for point_type in self.object.category.get_point_types():
+            inlines.append((TripPointInline, {'point_type': point_type, }))
+        return inlines
 
     def get_success_url(self):
         self.save_images()
@@ -442,6 +472,11 @@ class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView,
             raise PermissionDenied  # return a forbidden response
         kwargs = super(TripUpdateView, self).get_form_kwargs()
         return kwargs
+
+    @property
+    @instance_cache
+    def price_type(self):
+        return self.object.price_type
 
 
 class TripDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
