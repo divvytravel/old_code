@@ -47,6 +47,7 @@
                         {% include "partials/formsets/errors.html" %}
             <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %} class="inline_point_row">
                     {% endif %}
+                <div class="inline_form_wrapper">
                     {% if inline_form.is_many %}
                 <div class="row inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
                     {% endif %}
@@ -70,8 +71,11 @@
 
                     {% endwith %}
                     {# end form fields #}
+                    {% if inline_form.is_many %}
+                        </div>
+                    {% endif %}
+                    </div>
                 {% endfor %}
-                </div>
             </div>
         </div>
     {% endfor %}
