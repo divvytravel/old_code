@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.utils.dateformat import format
 from django.utils.translation import ugettext_lazy as _
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 
 from model_utils import Choices
 from utils.helpers import get_today
@@ -101,7 +101,7 @@ class Trip(models.Model):
         return self.format_date(self.end_people_date)
 
     @staticmethod
-    def point_is_added(sender, instance, **kwargs):
+    def points_updated(sender, instance, **kwargs):
         trip = instance.trip
         price = 0
         currency = u""
@@ -295,7 +295,8 @@ class TripPoint(models.Model):
     def __unicode__(self):
         return u"{0}, {1}, {2}".format(self.p_type, self.trip, self.description[:15])
 
-post_save.connect(Trip.point_is_added, sender=TripPoint)
+post_save.connect(Trip.points_updated, sender=TripPoint)
+post_delete.connect(Trip.points_updated, sender=TripPoint)
 
 class TripPicture(models.Model):
     file = models.ImageField("Изображение", upload_to="trip")
