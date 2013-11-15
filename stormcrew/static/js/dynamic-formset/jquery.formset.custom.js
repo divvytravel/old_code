@@ -123,7 +123,7 @@
                 // If you specify "can_delete = True" when creating an inline formset,
                 // Django adds a checkbox to each form in the formset.
                 // Replace the default checkbox with a hidden field:
-                $(del).closest('.form-group').hide();
+                del.closest('.form-group').hide();
                 del.before('<input type="hidden" name="' + del.attr('name') +'" id="' + del.attr('id') +'" />');
                 del.remove();
             }
