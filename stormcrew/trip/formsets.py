@@ -18,6 +18,7 @@ class TripPointInlineFormSet(BaseInlineFormSet):
         self.contains_price = False
         self.currency = None
         if self.forms[0].contains_price:
+            "if first form contains price, then all forms shall contain price"
             self.contains_price = True
             currency_set = set()
             for form in self.forms:
@@ -26,6 +27,14 @@ class TripPointInlineFormSet(BaseInlineFormSet):
                 if currency_set and currency not in currency_set:
                     raise forms.ValidationError(self.text_errors['currency'])
                 currency_set.add(currency)
+
+    # def get_queryset(self):
+    #     ## See get_queryset method of django.forms.models.BaseModelFormSet
+    #     if not hasattr(self, '_queryset'):
+    #         self._queryset = self.queryset.filter(type__startswith='xyz'))
+    #         if not self._queryset.ordered:
+    #             self._queryset = self._queryset.order_by(self.model._meta.pk.name)                
+    #     return self._queryset
 
 
 class TripPointInlinesWrapper(list):

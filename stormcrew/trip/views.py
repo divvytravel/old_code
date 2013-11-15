@@ -234,6 +234,7 @@ class TripPointInline(InlineFormSet):
     extra = 1
     model = TripPoint
     form_class = TripPointForm
+    formset_class = TripPointInlineFormSet
     point_type = None
 
     def __init__(self, *args, **kwargs):
@@ -259,7 +260,6 @@ class TripPointInline(InlineFormSet):
                 kwargs['max_num'] = None
         if self.object is None:
             kwargs['can_delete'] = False
-        kwargs['formset'] = TripPointInlineFormSet
         return kwargs
 
 
@@ -428,6 +428,16 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         return next or reverse('home')
 
 
+class TripPointUpdateInline(TripPointInline):
+    extra = 0
+
+    def get_formset_kwargs(self):
+        kwargs = super(TripPointUpdateInline, self).get_formset_kwargs()
+        if self.point_type:
+            kwargs['queryset'] = TripPoint.objects.filter(p_type=self.point_type)
+        return kwargs
+
+
 class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView,
                                                             SaveImagesMixin):
     model = Trip
@@ -458,12 +468,16 @@ class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesV
         return inline_formsets
 
     def get_inlines(self):
+        """
+        Returns inline classes
+        """
         inlines = []
         for point_type in self.object.category.get_point_types():
-            inlines.append((TripPointInline, {'point_type': point_type, }))
+            inlines.append((TripPointUpdateInline, {'point_type': point_type, }))
         return inlines
 
     def get_success_url(self):
+        self.set_success_message()
         self.save_images()
         return self.object.get_absolute_url()
 
