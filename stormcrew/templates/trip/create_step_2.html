@@ -220,7 +220,7 @@
        $(function() {
          {% for formset in inlines %}
            {% if formset.is_many %}
-               $('#{{ formset.id_for_many }}').formset({
+               $('#{{ formset.id_for_many }} .inline_form_wrapper').formset({
                     prefix: '{{ formset.custom_prefix }}',
                     min_num: 1,
                     formCssClass: '{{ formset.form_css_class }}',

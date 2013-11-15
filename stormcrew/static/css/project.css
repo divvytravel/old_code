@@ -226,17 +226,17 @@ a.prev span, a.next span {
 }
 
 .inline_point_row {
-    border-bottom: 1px solid #E5E5E5;
-    border-top: 1px solid #E5E5E5;
+    /*border-bottom: 1px solid #E5E5E5;*/
+    /*border-top: 1px solid #E5E5E5;*/
+    /*padding-left: 30px;*/
 }
 
-.inline_point_row {
-    background: #EDF3FE;
-    margin-bottom: 10px;
-    padding-left: 30px;
-    margin-top: 10px;
-    border: 1px solid #E5E5E5;
-}
+/*.inline_point_row {*/
+    /*background: #EDF3FE;*/
+    /*margin-bottom: 10px;*/
+    /*margin-top: 10px;*/
+    /*border: 1px solid #E5E5E5;*/
+/*}*/
 
 .delete-row {
     float:right;
@@ -246,4 +246,11 @@ a.prev span, a.next span {
 
 .inline_form_row {
     padding: 10px;
+}
+
+.inline_form_wrapper{
+    background: #EDF3FE;
+    border: 1px solid #E5E5E5;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
