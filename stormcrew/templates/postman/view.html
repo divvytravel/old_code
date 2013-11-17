@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load i18n %}{% load postman_tags %}
+{% load collection_filters %}
+{% block content %}
+    <h1 class="align-center">{% if pm_messages|length > 1 %}{% trans "Conversation" %} <span class="msg_title_subject">({{ pm_messages.0.subject }})</span>{% else %}{% trans "Message" %}{% endif %}</h1>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <a class="btn btn-default" href="{{ next_url }}">{% trans "Back" %}</a>
+        </div>
+        <div class="col-lg-8">
+            <div class="pull-right">
+                {% if pm_messages|length %}
+                    {% with pm_messages|last_qs_item as message %}
+                        <form action="" method="post">{% csrf_token %}
+                            <input type="hidden" {% if pm_messages|length > 1 and message.thread_id %}name="tpks" value="{{ message.thread_id }}"{% else %}name="pks" value="{{ message.pk }}"{% endif %} />
+                            <button class="btn btn-primary" type="submit" onclick="this.form.action='{% url 'postman_delete' %}?next={{ next_url|urlencode }}'">{% trans "Delete" %}</button>
+                            {% if not archived %}
+                                <button class="btn btn-primary" type="submit" onclick="this.form.action='{% url 'postman_archive' %}?next={{ next_url|urlencode }}'">{% trans "Archive" %}</button>
+                            {% endif %}
+                        </form>
+                    {% endwith %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Отправитель</th>
+                    <th>Сообщение</th>
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in pm_messages %}
+                    <tr>
+                        <td>{{ message.obfuscated_sender|or_me:user }} &raquo; {{ message.obfuscated_recipient|or_me:user }}</td>
+                        <td>{{ message.body|linebreaksbr }}</td>
+                        <td>{{ message.sent_at|date:"DATETIME_FORMAT"}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% if reply_to_pk %}
+        <hr />
+        <h2 class="align-center">{% trans 'Reply' %}</h2>
+        <div class="row">
+            <form action="{% url 'postman_reply' reply_to_pk %}?next={{ next_url|urlencode }}" method="post">{% csrf_token %}
+            {% with form_show_labels=False form_show_errors=True %}
+                {% include "partials/forms/errors.html" %}
+                {% with form.body as field %}
+                    {% include "partials/forms/field.html" %}
+                {% endwith %}
+            {% endwith %}
+            <button class="btn btn-primary" type="submit">{% trans 'Reply' %}</button>
+            </form>
+        </div>
+    {% endif %}
+    <div class="row" style="height: 50px;">
+    </div>
+{% endblock %}

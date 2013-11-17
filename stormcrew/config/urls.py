@@ -8,6 +8,11 @@ from django.contrib import admin
 
 from trip.views import TripFilterFormView
 
+from postman.forms import AnonymousWriteForm
+from postman.views import WriteView
+from postman_custom.forms import WriteFormHideRecipients
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -21,8 +26,11 @@ urlpatterns = patterns('',
     url(r'^users/', include("users.urls", namespace="users")),
     url(r'^accounts/', include('social_auth.urls')),
 
-    # Your stuff: custom urls go here
-
+    url(r'^messages/write/(?:(?P<recipients>[\w.@+-:]+)/)?$',
+        WriteView.as_view(
+            form_classes=(WriteFormHideRecipients, AnonymousWriteForm)),
+        name='postman_write'),
+    url(r'^messages/', include('postman.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

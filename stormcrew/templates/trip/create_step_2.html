@@ -10,6 +10,11 @@
 {% endblock css %}
 
 {% block content %}
+    {% block suggestion %}
+        <div class="row">
+            <a class="btn btn-success pull-right" href="{% url 'postman_write' admins %}?subject=Предложение/вопрос по улучшению формы добавления поездки" title='Если у вас есть идеи по улучшению формы добавления поездки - напишите, внесем.'>Предложение/вопрос</a>
+        </div>
+    {% endblock suggestion %}
     <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
     {% csrf_token %}
     <div class="row">

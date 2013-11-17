@@ -8,10 +8,11 @@
         <h1 class="align-center">Личный кабинет ({{ user.get_full_name }})</h1>
     </div>
     <div class="row">
-        <div class="col-lg-12">
-            <div class="pull-right">
-                <a href="{% url 'users:detail' user.pk %}" class="btn btn-primary">Ваши данные</a>
-            </div>
+        <div class="pull-right">
+            <a href="{% url 'postman_inbox' %}" class="btn btn-success">Входящие сообщения{% if postman_unread_count %} ({{postman_unread_count}}){% endif %}</a>
+            <a href="{% url 'postman_sent' %}" class="btn btn-success">Отправленные сообщения</a>
+            <a href="{% url 'postman_archives' %}" class="btn btn-success">Архив сообщений</a>
+            <a href="{% url 'users:detail' user.pk %}" class="btn btn-primary">Ваши данные</a>
         </div>
     </div>
 

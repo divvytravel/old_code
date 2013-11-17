@@ -322,6 +322,7 @@ class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithI
             context['price_type'] = u'коммерческая'
         else:
             context['price_type'] = u'некоммерческая'
+        context['admins'] = ":".join(User.objects.admins().as_list('username'))
         return context
 
     def forms_valid(self, form, inlines):

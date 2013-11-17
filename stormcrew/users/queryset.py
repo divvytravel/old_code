@@ -66,3 +66,9 @@ class UserQuerySet(QuerySet):
     @self_if_blank_arg
     def with_gender(self, gender):
         return filter_user_gender(self, gender)
+
+    def admins(self):
+        return self.filter(is_superuser=True)
+
+    def as_list(self, field_name):
+        return self.values_list(field_name, flat=True)

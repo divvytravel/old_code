@@ -76,6 +76,11 @@ TIME_ZONE = 'America/Los_Angeles'
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = 'ru-RU'
 
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+)
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 
@@ -154,6 +159,8 @@ THIRD_PARTY_APPS = (
     'crispy_forms',  # Form layouts
     'social_auth',  # registration
     'sorl.thumbnail', # image thumbnails
+    'postman_custom',
+    'postman',
 )
 
 # Apps specific for this project go here.
@@ -249,6 +256,9 @@ AUTH_USER_MODEL = "users.User"
 AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 ########## END SLUGLIFIER
 
+########## POSTMAN
+POSTMAN_AUTO_MODERATE_AS = True
+########## END POSTMAN
 
 ################## PRODUCTION SETTINGS
 
@@ -315,6 +325,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.messages.context_processors.messages',
     'django.core.context_processors.request',
     'utils.context_processors.custom_settings',
+    'postman.context_processors.inbox',
     # Your stuff: custom template context processers go here
 )
 

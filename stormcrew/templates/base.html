@@ -52,6 +52,9 @@
         </ul>
         <ul class="nav navbar-nav pull-right">
           {% if request.user.is_authenticated %}
+            {% if postman_unread_count %}
+              <li><a href="{% url 'postman_inbox' %}"><span><i class="msg_notif glyphicon glyphicon-envelope"></i> <span>({{ postman_unread_count }})</span></span></a></li>
+            {% endif %}
             <li><a href="{% url 'trip_create' %}">Создать поездку</a></li>
             <li><a href="{% url 'users:cabinet' %}">Личный кабинет</a></li>
             <li><a href="{% url 'users:logout' %}">Выйти</a></li>
