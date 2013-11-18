@@ -148,7 +148,7 @@
           trips[k].get_absolute_url,
           trips[k].start_date_format,
           trips[k].end_date_format,
-          trips[k].city,
+          trips[k].city_name,
           trips[k].title,
           trips[k].price,
           trips[k].get_currency_display,

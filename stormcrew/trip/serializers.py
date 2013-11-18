@@ -16,10 +16,11 @@ class TripSerializer(serializers.ModelSerializer):
     get_absolute_url = serializers.Field(source='get_absolute_url')
     show_price_type = serializers.Field(source='show_price_type')
     show_people_places_left = serializers.Field(source='show_people_places_left')
+    city_name = serializers.RelatedField(source='city')
 
     class Meta:
         model = Trip
-        exclude = ('people', )
+        exclude = ('people', 'city')
 
     def get_count_female(self, obj):
         if hasattr(obj, 'count_female'):

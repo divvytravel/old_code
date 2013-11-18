@@ -44,7 +44,7 @@ class TripQuerySet(QuerySet):
 
     @self_if_blank_arg
     def in_country(self, country):
-        return self.filter(country=country)
+        return self.filter(city__country=country)
 
     @self_if_blank_arg
     def with_category(self, category):
@@ -63,7 +63,7 @@ class TripQuerySet(QuerySet):
         else:
             q_date = Q()
         if country:
-            q_country = Q(country=country)
+            q_country = Q(city__country=country)
         else:
             q_country = Q()
         return self.filter(q_date | q_country)

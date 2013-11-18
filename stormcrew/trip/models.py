@@ -58,12 +58,10 @@ class Trip(models.Model):
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     end_people_date = models.DateField(_(u"Дата окончания набора группы"))
-    country = models.ForeignKey('geo.Country', verbose_name=u'Страна',
-        blank=True, null=True)
-    city = models.CharField(u"Город", max_length=100,
-        help_text=u"если несколько, то первый")
     price = models.PositiveIntegerField(u"Бюджет",
         help_text=u"примерный бюджет", blank=True, null=True)
+    city = models.ForeignKey('geo.City', verbose_name=u'Город',
+        help_text=u"если несколько, то первый")
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
     people_count = models.PositiveIntegerField(u"Минимальное количество человек")

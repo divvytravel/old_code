@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from .managers import CountryManager
+from .managers import CountryManager, CityManager
 
 
 class Country(models.Model):
@@ -14,3 +14,17 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class City(models.Model):
+    name = models.CharField(u"Название", max_length=100, unique=True)
+    country = models.ForeignKey(Country, verbose_name=u'Страна')
+
+    objects = CityManager()
+
+    class Meta:
+        verbose_name = u"Город"
+        verbose_name_plural = u"Города"
+
+    def __unicode__(self):
+        return u"{0}, {1}".format(self.country, self.name)

@@ -17,7 +17,6 @@ def get_trip_form_fields():
         'start_date',
         'end_date',
         'end_people_date',
-        'country',
         'city',
         'price',
         'currency',

@@ -1,5 +1,5 @@
 from django.db import models
-from .queryset import CountryQuerySet
+from .queryset import CountryQuerySet, CityQuerySet
 
 
 class CountryManager(models.Manager):
@@ -35,3 +35,14 @@ class CountryManager(models.Manager):
             country = self.model(name=name)
             country.save(using=self._db)
         return country
+
+
+class CityManager(models.Manager):
+    def get_query_set(self):
+        return CityQuerySet(self.model)
+
+    def __getattr__(self, attr, *args):
+        # see https://code.djangoproject.com/ticket/15062 for details
+        if attr.startswith("_"):
+            raise AttributeError
+        return getattr(self.get_query_set(), attr, *args)
