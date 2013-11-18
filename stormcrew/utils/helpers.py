@@ -24,5 +24,5 @@ def wrap_in_iterable(obj):
     return obj
 
 
-def get_domain():
-    return "http://" + str(get_current_site(None))
+def get_domain(request=None):
+    return "http://" + str(get_current_site(request))

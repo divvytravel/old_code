@@ -6,7 +6,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Отправить сообщение</h4>
+        <h4 class="modal-title" id="myModalLabel">{% trans "Отправить сообщение" %}</h4>
       </div>
     <form id="write_msg_form" action="{% url 'postman_write' %}" method="post">{% csrf_token %}
       <div class="modal-body">
@@ -15,7 +15,7 @@
       <div class="modal-footer">
         <button id="modal_send" class="btn btn-primary" type="submit">{% trans "Send" %}</button>
 
-        <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Close" %}</button>
       </div>
     </form>
     </div><!-- /.modal-content -->
