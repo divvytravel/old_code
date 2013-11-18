@@ -4,6 +4,7 @@
     var AJAX_LOADER_SMALL = $("<img class='ajax-loader-small' src='/static/img/loading_small.gif'/>");
     var AJAX_LOADER_BIG = $("<img class='ajax-loader-big' src='/static/img/loading.gif'/>");
     var ajaxFade = "<div class='fade-elem'></div>"
+    var ERR_CLASSES = ["has-error", "error"];
 
     // First, checks if it isn't implemented yet.
     if (!String.prototype.format) {
@@ -28,6 +29,15 @@
         }
     }
 
+    function clearErr(frm){
+        var frm_field_wrapper = frm.find('.form-group');
+        for (var i=0; i<frm_field_wrapper.length; i++){
+            for (var j=0; j<ERR_CLASSES.length; j++){
+                $(frm_field_wrapper[i]).removeClass(ERR_CLASSES[j]);
+            }
+            frm_field_wrapper.find('.controls p').remove();
+        }
+    }
 
     function showRequest(formData, jqForm, options) { 
         $(".modal-footer").prepend(AJAX_LOADER_SMALL);
@@ -55,19 +65,23 @@
         var resp = JSON.parse(responseText);
         var frm = $('#myModal');
         if (resp.result == 'success'){
-        //     clearErr(frm);
-            show_success(resp.messages);
+            clearErr(frm);
             frm.modal('toggle');
+            show_success(resp.messages);
         } else {
-        //     clearErr(frm);
-        //     for (var err in resp.errors){
-        //         if (err == 'avatar'){
-        //             $('#addPhoto').addClass("err");
-        //         } else {
-        //             var fail_elem = frm.find('[name=' + err + ']');
-        //             fail_elem.addClass("err");
-        //         }
-        //     }
+            clearErr(frm);
+            var cnt = 1;
+            for (var err in resp.errors){
+                var fail_elem = frm.find('#div_id_' + err);
+                var fail_control = fail_elem.find('.controls');
+                for (var j=0; j<ERR_CLASSES.length; j++){
+                    fail_elem.addClass(ERR_CLASSES[j]);
+                }
+                fail_control.append('<p id="error_{0}_id_subject" class="help-block"><strong>{1}</strong></p>'.format(
+                    cnt, resp.errors[err]
+                ))
+                cnt += 1;
+            }
         } 
     } 
 
