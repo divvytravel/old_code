@@ -9,7 +9,7 @@ from django.contrib import admin
 from trip.views import TripFilterFormView
 
 from postman.forms import AnonymousWriteForm
-from postman.views import WriteView
+from postman_custom.views import AjaxWriteView
 from postman_custom.forms import WriteFormHideRecipients
 
 
@@ -27,7 +27,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('social_auth.urls')),
 
     url(r'^messages/write/(?:(?P<recipients>[\w.@+-:]+)/)?$',
-        WriteView.as_view(
+        AjaxWriteView.as_view(
             form_classes=(WriteFormHideRecipients, AnonymousWriteForm)),
         name='postman_write'),
     url(r'^messages/', include('postman.urls')),

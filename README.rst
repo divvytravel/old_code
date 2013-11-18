@@ -20,3 +20,9 @@ Run this script: (TODO - automate this)
     site.domain = "stormcrew.ru"
     site.name = "stormcrew"
     site.save()
+
+I18N processing
+---------------
+
+    python manage.py makemessages -l ru --settings=config.settings
+    python manage.py compilemessages --settings=config.settings

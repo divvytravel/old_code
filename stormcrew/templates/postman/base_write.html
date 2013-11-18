@@ -25,16 +25,8 @@
 {% block content %}
 <div id="postman">
 <h1>{% block pm_write_title %}{% endblock %}</h1>
-<form action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
-    {% block pm_write_recipient %}{% endblock %}
-    {% block sent_form %}
-        {% with form_show_labels=True form_show_errors=True %}
-            {% include "partials/forms/errors.html" %}
-            {% for field in form %}
-                {% include "partials/forms/field.html" %}
-            {% endfor %}
-        {% endwith %}
-    {% endblock sent_form %}
+<form id="write_msg_form" action="{% if next_url %}?next={{ next_url|urlencode }}{% endif %}" method="post">{% csrf_token %}
+    {% include "postman/partials/write_form.html" %}
     <button class="btn btn-primary" type="submit">{% trans "Send" %}</button>
 </form>
 </div>

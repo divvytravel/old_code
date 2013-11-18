@@ -12,7 +12,7 @@
 {% block content %}
     {% block suggestion %}
         <div class="row">
-            <a class="btn btn-success pull-right" href="{% url 'postman_write' admins %}?subject=Предложение/вопрос по улучшению формы добавления поездки" title='Если у вас есть идеи по улучшению формы добавления поездки - напишите, внесем.'>Предложение/вопрос</a>
+            <a id="suggest" class="btn btn-success pull-right" href="{% url 'postman_write' admins %}?subject=Предложение/вопрос по улучшению формы добавления поездки" title='Если у вас есть идеи по улучшению формы добавления поездки - напишите, внесем.'>Предложение/вопрос</a>
         </div>
     {% endblock suggestion %}
     <form enctype="multipart/form-data" class="form-horizontal form-trip" method="post" action="">
@@ -236,6 +236,22 @@
            {% endif %}
          {% endfor %}
        })
+    </script>
+
+    <script type="text/javascript">
+        $("#suggest").click(function(){
+            var btn = $(this);
+            var modal_elem = $("#myModal");
+            if (modal_elem.length == 0){
+                $.get(btn.attr('href'), function(data){
+                    $(data).appendTo('body');
+                    $('#myModal').modal();
+                });
+            } else {
+                modal_elem.modal('toggle');
+            }
+            return false;
+        })
     </script>
 
     {% if fill_test_data %}

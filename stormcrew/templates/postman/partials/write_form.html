@@ -1,0 +1,9 @@
+{% block pm_write_recipient %}{% endblock %}
+{% block sent_form %}
+    {% with form_show_labels=True form_show_errors=True %}
+        {% include "partials/forms/errors.html" %}
+        {% for field in form %}
+            {% include "partials/forms/field.html" %}
+        {% endfor %}
+    {% endwith %}
+{% endblock sent_form %}
