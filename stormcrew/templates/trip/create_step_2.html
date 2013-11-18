@@ -107,11 +107,14 @@
     {% if cache_bootstrap %}
         <script src="{% static 'js/cache/load-image.min.js' %}"></script>
         <script src="{% static 'js/cache/canvas-to-blob.min.js' %}"></script>
+        <script src="{% static 'js/cache/jquery.form.js' %}"></script>
     {% else %}
         <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
         <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
         <!-- The Canvas to Blob plugin is included for image resizing functionality -->
         <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+        <!-- ajax load form -->
+        <script src="http://malsup.github.com/jquery.form.js"></script>
     {% endif %}
     <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
     <script src="{% static 'js/jquery.iframe-transport.js' %}"></script>
@@ -245,7 +248,9 @@
             if (modal_elem.length == 0){
                 $.get(btn.attr('href'), function(data){
                     $(data).appendTo('body');
-                    $('#myModal').modal();
+                    modal_elem = $("#myModal");
+                    modal_elem.ajax_send_message();
+                    modal_elem.modal();
                 });
             } else {
                 modal_elem.modal('toggle');
