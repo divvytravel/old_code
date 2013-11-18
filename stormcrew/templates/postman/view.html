@@ -3,7 +3,7 @@
 {% load i18n %}{% load postman_tags %}
 {% load collection_filters %}
 {% block content %}
-    <h1 class="align-center">{% if pm_messages|length > 1 %}{% trans "Conversation" %} <span class="msg_title_subject">({{ pm_messages.0.subject }})</span>{% else %}{% trans "Message" %}{% endif %}</h1>
+    <h1 class="align-center">{% if pm_messages|length > 1 %}{% trans "Conversation" %}</span>{% else %}{% trans "Message" %}{% endif %}  <span class="msg_title_subject">({{ pm_messages.0.subject }})</h1>
 
     <div class="row">
         <div class="col-lg-4">
