@@ -314,6 +314,7 @@ if os.environ.get('EMAIL_HOST', None):
     if os.environ.get('EMAIL_USE_TLS', False):
         EMAIL_USE_TLS = True
     SERVER_EMAIL = EMAIL_HOST_USER
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
     ########## END EMAIL
 
 
