@@ -108,7 +108,7 @@ class TripForm(forms.ModelForm):
         initial=True, required=False)
 
     fields_before_formset = get_trip_form_fields(before_formsets=True)
-    fields_after_formset = get_trip_form_fields(after_formsets=True)
+    fields_after_formset = get_trip_form_fields(after_formsets=True) + ['author_in', ]
 
     class Meta:
         model = Trip
