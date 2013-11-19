@@ -70,7 +70,7 @@ class Trip(models.Model):
     descr_share = models.TextField(u"Опишите, что вы хотите разделить (или зачем вам компания)", blank=True)
     descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
-    trip_type = models.CharField(u"Тип поездки", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
+    trip_type = models.CharField(u"Участие", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
     price_type = models.CharField(_(u"Коммерческая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'Создатель')
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
