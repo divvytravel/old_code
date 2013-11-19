@@ -11,8 +11,8 @@ from utils.helpers import get_today
 l = logging.getLogger(__name__)
 
 
-def get_trip_form_fields():
-    return (
+def get_trip_form_fields(before_formsets=False, after_formsets=False):
+    all_fields = [
         'title',
         'start_date',
         'end_date',
@@ -28,7 +28,24 @@ def get_trip_form_fields():
         'descr_additional',
         'descr_company',
         'trip_type',
-    )
+    ]
+    if before_formsets:
+        before_fields = []
+        for f in all_fields:
+            if f == "descr_share":
+                break
+            before_fields.append(f)
+        return before_fields
+
+    if after_formsets:
+        after_fields = []
+        started = False
+        for f in all_fields:
+            started = started or f == "descr_share"
+            if started:
+                after_fields.append(f)
+        return after_fields
+    return all_fields
 
 
 class TripCreateStepOne(forms.Form):
@@ -89,6 +106,9 @@ class TripForm(forms.ModelForm):
 
     author_in = forms.BooleanField(label=u"Я участвую в этой поездке",
         initial=True, required=False)
+
+    fields_before_formset = get_trip_form_fields(before_formsets=True)
+    fields_after_formset = get_trip_form_fields(after_formsets=True)
 
     class Meta:
         model = Trip
@@ -185,7 +205,7 @@ class TripUpdateForm(TripForm):
 
     class Meta:
         model = Trip
-        fields = get_trip_form_fields() + ('images_to_delete', )
+        fields = get_trip_form_fields() + ['images_to_delete', ]
 
 
 class TripRequestForm(forms.ModelForm):

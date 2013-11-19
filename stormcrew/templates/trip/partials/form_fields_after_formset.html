@@ -1,0 +1,15 @@
+{% for field in form %}
+    {% if field.name == "descr_share" %}
+        <div class="row">
+            <a id="subcat_button" href="#"><i class="glyphicon glyphicon-plus"></i> <span>Показать остальные поля</span></a>
+        </div>
+        <div id="additional_fields_wrapper">
+    {% endif %}
+    {% if field.name in form.fields_after_formset and not field.name in form.manual_fields %}
+        {% include "trip/partials/field.html" %}
+    {% endif %}
+    {% if field.name == "descr_company" %}
+        </div>
+    {% endif %}
+{% endfor %}
+

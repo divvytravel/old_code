@@ -1,0 +1,6 @@
+{% for field in form %}
+    {% if field.name in form.fields_before_formset and not field.name in form.manual_fields %}
+        {% include "trip/partials/field.html" %}
+    {% endif %}
+{% endfor %}
+

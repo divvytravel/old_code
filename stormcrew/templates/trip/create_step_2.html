@@ -23,7 +23,14 @@
                 <div><a href="#" id="fill_test_data">Заполнить тестовыми данными</a></div>
             {% endif %}
             <h1 class="align-center">{% block header %}Создать поездку ({{ price_type }}, {{ category|lower }}){% endblock %}</h1>
-                {% include "trip/partials/form_fields.html" with form=form form_show_labels=True form_show_errors=True %}
+
+            {% include "partials/forms/errors.html" %}
+
+            {% include "trip/partials/form_fields_before_formset.html" with form=form form_show_labels=True form_show_errors=True %}
+
+            {% include "trip/partials/formsets.html" %}
+
+            {% include "trip/partials/form_fields_after_formset.html" with form=form form_show_labels=True form_show_errors=True %}
 
             {% block additional_fields %}{% endblock additional_fields %}
 
@@ -40,50 +47,6 @@
               <div id="files" class="files"></div>
         </div>
     </div>
-    {% for formset in inlines %}
-        <div>
-            {% if forloop.first %}
-                {% include "partials/formsets/non_formset_errors.html" %}
-            {% endif %}
-            {{ formset.management_form }}
-                {% for inline_form in formset %}
-                    {% if forloop.first %}
-                        <div class="row inline_title">{{ inline_form.show_title }}</div>
-                        {% include "partials/formsets/errors.html" %}
-            <div {% if formset.is_many %}id="{{ formset.id_for_many }}"{% endif %} class="inline_point_row">
-                    {% endif %}
-                <div class="inline_form_wrapper">
-                    {% if inline_form.is_many %}
-                <div class="row inline_count_title">{{ inline_form.show_title }} - {{ forloop.counter }}</div>
-                    {% endif %}
-                <div class="row inline_form_row">
-                    {# form fields #}
-                    {% with form_show_labels=True form_show_errors=True %}
-                        {% include "partials/forms/errors.html" with form=inline_form %}
-
-                        {% for field in inline_form %}
-                            {% if forloop.first %}
-                                <div class="col-lg-6">
-                            {% endif %}
-                            {% if not field.name in form.manual_fields %}
-                                {% include "trip/partials/field.html" %}
-                            {% endif %}
-                            {% if forloop.first %}
-                                </div><div class="col-lg-4">
-                            {% endif %}
-                        {% endfor %}
-                            </div>
-
-                    {% endwith %}
-                    {# end form fields #}
-                    {% if inline_form.is_many %}
-                        </div>
-                    {% endif %}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    {% endfor %}
 
     <div class="row">
         <div class="col-lg-12">
