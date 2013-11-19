@@ -21,9 +21,6 @@ class TripQuerySet(QuerySet):
     def geo_related(self):
         return self.select_related("city", "city__country")
 
-    def category_related(self):
-        return self.select_related("category")
-
     def count_people(self):
         return self.annotate(count_all_people=Count('people'))
 
@@ -46,7 +43,7 @@ class TripQuerySet(QuerySet):
         }).distinct()
 
     def detail_related(self):
-        return self.geo_related().category_related()
+        return self.select_related('city', 'city__country', 'owner')
 
     @self_if_blank_arg
     def in_month_year(self, month_year):
