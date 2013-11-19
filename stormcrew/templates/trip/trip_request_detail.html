@@ -105,6 +105,10 @@
                   </tr>
                   {% endif %}
                   <tr>
+                    <td>{{ trip|field_verbose:"trip_type" }}</td>
+                    <td>{{ trip.get_trip_type_display }}</td>
+                  </tr>
+                  <tr>
                     <td>Организатор</td>
                     <td>
                         <div class="thumbnail" style="width:124px;">
@@ -118,10 +122,28 @@
                     </td>
                   </tr>
                   <tr>
-                    <td>{{ trip|field_verbose:"trip_type" }}</td>
-                    <td>{{ trip.get_trip_type_display }}</td>
+                    <td>Стоимость с учетом перелета</td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>Затраты</td>
+                                <td>{{ trip.price_for_one_person }} {{ trip.get_currency_display }}</td>
+                            </tr>
+                            <tr>
+                                <td>Перелет</td>
+                                <td>100 {{ trip.get_currency_display }}</td>
+                            </tr>
+                            <tr>
+                                <td>Сумма</td>
+                                <td>200 {{ trip.get_currency_display }}</td>
+                            </tr>
+                            <tr>
+                                <td><a href="#">Поиск на aviasales</a></td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </td>
                   </tr>
-              <tr>
             </tbody>
         </table>
     </div>
