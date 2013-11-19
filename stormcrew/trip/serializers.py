@@ -15,7 +15,7 @@ class TripSerializer(serializers.ModelSerializer):
     get_currency_display = serializers.Field(source='get_currency_display')
     get_absolute_url = serializers.Field(source='get_absolute_url')
     show_price_type = serializers.Field(source='show_price_type')
-    show_people_places_left = serializers.Field(source='count_free_slots')
+    count_free_slots = serializers.Field(source='count_free_slots')
     city_name = serializers.RelatedField(source='city')
 
     class Meta:
