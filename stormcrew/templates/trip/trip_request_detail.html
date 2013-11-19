@@ -105,6 +105,19 @@
                   </tr>
                   {% endif %}
                   <tr>
+                    <td>Организатор</td>
+                    <td>
+                        <div class="thumbnail" style="width:124px;">
+                          <a href="{{trip.owner.get_absolute_url}}">
+                          <div class="image_picker_image_wrapper">
+                            <img class="image_picker_image" src="{{trip.owner.get_avatar_url}}">
+                          </div>
+                          <div class="image_picker_descr">{{trip.owner.get_full_name}}</div>
+                          </a>
+                        </div>
+                    </td>
+                  </tr>
+                  <tr>
                     <td>{{ trip|field_verbose:"trip_type" }}</td>
                     <td>{{ trip.get_trip_type_display }}</td>
                   </tr>
