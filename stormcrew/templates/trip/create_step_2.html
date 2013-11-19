@@ -133,6 +133,7 @@
 
     <script src="{% static 'js/dynamic-formset/jquery.formset.custom.js' %}"></script>
     <script>
+    // fileupload
     /*jslint unparam: true, regexp: true */
     /*global window, $ */
     $(function () {
@@ -202,6 +203,7 @@
 
 
     <script type="text/javascript">
+        //datepicker
         $('#{{ form.start_date.auto_id }}').datepicker({
           format: 'dd.mm.yyyy',
           weekStart: 1,
@@ -225,6 +227,7 @@
         });
     </script>
     <script type="text/javascript">
+       // formsets
        $(function() {
          {% for formset in inlines %}
            {% if formset.is_many %}
@@ -242,6 +245,7 @@
     </script>
 
     <script type="text/javascript">
+        // suggestion modal form
         var loader_small = $("<img class='ajax-loader-small pull-right get-msg-frm-loader' src='/static/img/loading_small.gif'/>");
         $("#suggest").click(function(){
             var btn = $(this);
@@ -262,6 +266,29 @@
             }
             return false;
         })
+    </script>
+
+    <script type="text/javascript">
+        // hide additional fields
+        var subcat_fields = $('#additional_fields_wrapper');
+        subcat_fields.hide();
+        var subcat_button = $('#subcat_button');
+        var subcat_icon = subcat_button.find('i');
+        subcat_button.click(function(){
+            if (subcat_icon.hasClass('glyphicon-plus')){
+                subcat_button.find('span').html("Скрыть");
+                subcat_icon.removeClass('glyphicon-plus');
+                subcat_icon.addClass('glyphicon-minus');
+            } else if (subcat_icon.hasClass('glyphicon-minus')){
+                subcat_button.find('span').html("Показать остальные поля");
+                subcat_icon.removeClass('glyphicon-minus');
+                subcat_icon.addClass('glyphicon-plus');
+            }
+            subcat_fields.slideToggle("fast", function() {
+                // animation complete
+            })
+            return false;
+        });
     </script>
 
     {% if fill_test_data %}
