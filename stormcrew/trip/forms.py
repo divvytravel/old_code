@@ -87,7 +87,6 @@ class TripForm(forms.ModelForm):
         'end_people_date': u"Дата окончания набора группы не может быть позже начала поездки",
     }
 
-    # country = forms.CharField(label=u"Страна", max_length=100)
     author_in = forms.BooleanField(label=u"Я участвую в этой поездке",
         initial=True, required=False)
 
