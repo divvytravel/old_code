@@ -202,6 +202,10 @@
                     addText: 'Добавить еще',
                     deleteText: 'Удалить',
                 });
+           {% else %}
+                {% if forloop.last %}
+                    $(".inline_point_row").find('input:checkbox[id $= "-DELETE"]').closest(".form-group").hide();
+                {% endif %}
            {% endif %}
          {% endfor %}
        })
