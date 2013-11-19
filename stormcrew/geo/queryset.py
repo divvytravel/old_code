@@ -6,4 +6,6 @@ class CountryQuerySet(QuerySet):
 
 
 class CityQuerySet(QuerySet):
-    pass
+
+    def common_related(self):
+        return self.select_related('country')

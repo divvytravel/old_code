@@ -9,7 +9,7 @@ class CountryAdmin(admin.ModelAdmin):
 
 
 class CityAdmin(admin.ModelAdmin):
-    list_display = 'name',
+    list_display = 'name', "country"
 
 
 admin.site.register(Country, CountryAdmin)

@@ -32,12 +32,12 @@
                     <td>{{ trip.start_date_format }} - {{ trip.end_date_format }}</td>
                   </tr>
                   <tr>
-                    <td>{{ trip|field_verbose:"country" }}</td>
-                    <td>{{ trip_country }}</td>
+                    <td>Страна</td>
+                    <td>{{ trip.city.country }}</td>
                   </tr>
                   <tr>
                     <td>{{ trip|field_verbose:"city" }}</td>
-                    <td>{{ trip.city }}</td>
+                    <td>{{ trip.city.name }}</td>
                   </tr>
                   <tr>
                     <td>{{ trip|field_verbose:"price" }}</td>

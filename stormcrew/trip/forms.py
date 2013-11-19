@@ -5,7 +5,7 @@ from datetime import datetime
 from django import forms
 from .models import Trip, TripRequest, TripCategory, TripPoint
 from users.models import User
-from geo.models import Country
+from geo.models import Country, City
 from utils.helpers import get_today
 
 l = logging.getLogger(__name__)
@@ -87,7 +87,7 @@ class TripForm(forms.ModelForm):
         'end_people_date': u"Дата окончания набора группы не может быть позже начала поездки",
     }
 
-    country = forms.CharField(label=u"Страна", max_length=100)
+    # country = forms.CharField(label=u"Страна", max_length=100)
     author_in = forms.BooleanField(label=u"Я участвую в этой поездке",
         initial=True, required=False)
 
@@ -101,6 +101,7 @@ class TripForm(forms.ModelForm):
         self.price_type = kwargs.pop('price_type', None)
         super(TripForm, self).__init__(*args, **kwargs)
         self.fields['trip_type'].empty_label = None
+        self.fields['city'].queryset = City.objects.common_related()
         for field in self.fields.values():
             if not field.help_text:
                 # place help_text tag to render fields with save height
@@ -124,35 +125,22 @@ class TripForm(forms.ModelForm):
             raise forms.ValidationError(self.trip_errors['low_date'])
         return end_date
 
-    def remove_country(self):
-        if 'country' in self.cleaned_data:
-            del self.cleaned_data['country']
-
     def clean(self):
         clnd = self.cleaned_data
         if self.is_valid():
             if clnd['start_date'] > clnd['end_date']:
-                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['end_less_start_date'])
             if clnd['people_count'] > clnd['people_max_count']:
-                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['people_max_count'])
             if clnd['end_people_date'] > clnd['start_date']:
-                self.remove_country()
                 raise forms.ValidationError(self.trip_errors['end_people_date'])
             if self.category and self.price_type:
                 step_one_form = TripCreateStepOne(data={
                     'category': self.category,
                     'price_type': self.price_type})
                 if not step_one_form.is_valid():
-                    self.remove_country()
                     for err_msg in itertools.chain(step_one_form.errors.values()):
                         raise forms.ValidationError(err_msg)
-            clnd['country'] =\
-                Country.objects.get_or_create_normalized(
-                    name=clnd['country'])
-        else:
-            self.remove_country()
         return clnd
 
     def save(self, commit=True):

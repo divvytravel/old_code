@@ -398,13 +398,8 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
             user_has_request = False
         else:
             user_has_request =  trip.is_user_has_request(self.request.user)
-        try:
-            country = trip.country
-        except:
-            country = u""
         context.update({
             "trip": trip,
-            "trip_country": country,
             "user_in": user_in,
             "user_has_request": user_has_request,
         })
