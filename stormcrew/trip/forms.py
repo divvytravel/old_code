@@ -393,7 +393,7 @@ class TripPointForm(forms.ModelForm):
 
     class Meta:
         model = TripPoint
-        fields = 'description', 'link', 'price', 'currency', 'trip'
+        fields = 'title', 'description', 'link', 'price', 'currency', 'trip'
     
     def __init__(self, *args, **kwargs):
         self.point_type = kwargs.pop('point_type', None)
@@ -407,6 +407,9 @@ class TripPointForm(forms.ModelForm):
             self.fields['price'].required = True
             self.fields['currency'].required = True
             self.contains_price = True
+        self.fields['title'].help_text = None
+        if self.point_type:
+            self.fields['title'].label = self.point_type.point_title_name
 
     def show_title(self):
         title = u''

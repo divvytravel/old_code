@@ -254,6 +254,9 @@ class Trip(models.Model):
 
 class TripPointType(models.Model):
     title = models.CharField(u'Название', max_length=100)
+    point_title_name = models.CharField(u'Название поля для заглавия',
+        max_length=100,
+        help_text=u"Например, 'Модель' для яхты, 'ФИО' для шкипера")
     many = models.BooleanField(u'Несколько', default=False)
     category = models.ForeignKey(TripCategory, verbose_name=u'Категория',
         related_name='point_types')
@@ -279,6 +282,8 @@ class TripPoint(models.Model):
     CURRENCY = DEFAUTL_CURRENCY
 
     p_type = models.ForeignKey(TripPointType, verbose_name=u'Тип')
+    title = models.CharField(u"Заглавие", max_length=50,
+        help_text=u"Фактическое название поля береться из выбранного типа")
     description = models.TextField(u"Описание")
     price = models.PositiveIntegerField(u"Цена", blank=True, null=True)
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
