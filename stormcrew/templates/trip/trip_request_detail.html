@@ -40,9 +40,23 @@
                     <td>{{ trip.city.name }}</td>
                   </tr>
                   <tr>
+                    <td>{{ trip|field_verbose:"category" }}</td>
+                    <td>{{ trip.category }}</td>
+                  </tr>
+                  <tr>
                     <td>{{ trip|field_verbose:"price" }}</td>
                     <td>{{ trip.price }} {{ trip.get_currency_display }}</td>
                   </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"price_type" }}</td>
+                    <td>{{ trip.get_price_type_display }}</td>
+                  </tr>
+                  {% if trip.is_noncom %}
+                      <tr>
+                        <td>Цена на одного человека (с учетом набранных заявок)</td>
+                        <td>{{ trip.price_for_one_person }} {{ trip.get_currency_display }}</td>
+                      </tr>
+                  {% endif %}
                   <tr>
                     <td>{{ trip|field_verbose:"includes" }}</td>
                     <td>{{ trip.includes }}</td>
@@ -50,6 +64,23 @@
                   <tr>
                     <td>{{ trip|field_verbose:"people_count" }}</td>
                     <td>{{ trip.people_count }}</td>
+                  </tr>
+                  <tr>
+                    <td>{{ trip|field_verbose:"end_people_date" }}</td>
+                    <td>{{ trip.end_people_date_format }}</td>
+                  </tr>
+                  <tr>
+                    <td>До окончания набора осталось дней</td>
+                    <td>{{ trip.invite_days_left }}</td>
+                  </tr>
+                  <tr>
+                  <tr>
+                    <td>Набрано заявок</td>
+                    <td>{{ trip.count_all_people }}</td>
+                  </tr>
+                  <tr>
+                    <td>Осталось свободных мест</td>
+                    <td>{{ trip.count_free_slots }}</td>
                   </tr>
                   <tr>
                     <td>Описание</td>

@@ -71,7 +71,7 @@ class Trip(models.Model):
     descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
     trip_type = models.CharField(u"Участие", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
-    price_type = models.CharField(_(u"Коммерческая"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
+    price_type = models.CharField(_(u"Тип поездки"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'Создатель')
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
         related_name='approved_trips', blank=True, verbose_name=u'Участники')
@@ -97,6 +97,28 @@ class Trip(models.Model):
 
     def end_people_date_format(self):
         return self.format_date(self.end_people_date)
+
+    def invite_days_left(self):
+        today = get_today()
+        if today >= self.end_people_date:
+            return 0
+        else:
+            return (self.end_people_date - today).days
+
+    def count_members(self):
+        cnt_members = getattr(self, 'count_all_people', None)
+        if cnt_members is None:
+            cnt_members = self.people.count()
+        return cnt_members
+
+    def count_free_slots(self):
+        return self.people_max_count - self.count_members()
+
+    def price_for_one_person(self):
+        if self.is_noncom:
+            return self.price / self.count_members()
+        else:
+            return self.price
 
     @staticmethod
     def points_updated(sender, instance, **kwargs):
@@ -160,12 +182,6 @@ class Trip(models.Model):
             return u"$"
         else:
             return u"o"
-
-    def show_people_places_left(self):
-        if hasattr(self, 'count_all_people'):
-            return self.people_max_count - self.count_all_people
-        else:
-            return "#TODO"
 
     def get_status(self):
         if not self.start_date:

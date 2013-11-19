@@ -375,7 +375,9 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
     def get_trip(self):
         if not hasattr(self, '_trip_object'):
             setattr(self, '_trip_object',
-                get_object_or_404(Trip, pk=self.kwargs['pk']))
+                get_object_or_404(
+                    Trip.objects.count_people().detail_related(),
+                    pk=self.kwargs['pk']))
         return self._trip_object
 
     def get_initial(self):

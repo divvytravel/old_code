@@ -156,7 +156,7 @@
           count_gender,
           trips[k].show_price_type,
           trips[k].end_people_date_format,
-          trips[k].show_people_places_left
+          trips[k].count_free_slots
           ));
       }
   }
