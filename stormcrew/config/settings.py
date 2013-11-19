@@ -249,6 +249,11 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ########## END AUTHENTICATION CONFIGURATION
 
+########## TRAVELPAYOUTS
+TRAVELPAYOUTS_TOKEN = os.environ.get('TRAVELPAYOUTS_TOKEN', '')
+TRAVELPAYOUTS_MARKER = os.environ.get('TRAVELPAYOUTS_MARKER', '')
+
+########## END TRAVELPAYOUTS
 
 ########## Custom user app defaults
 # Select the correct user model

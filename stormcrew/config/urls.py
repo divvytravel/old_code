@@ -18,6 +18,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', TripFilterFormView.as_view(), name='home'),
     url(r'^trip/', include("trip.urls")),
+    url(r'^geo/', include("geo.urls")),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),

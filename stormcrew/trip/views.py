@@ -11,20 +11,22 @@ from django.http import Http404
 
 from braces.views import LoginRequiredMixin, AjaxResponseMixin,\
     JSONResponseMixin
+from relish.decorators import instance_cache
+from extra_views import CreateWithInlinesView, InlineFormSet,\
+    UpdateWithInlinesView
 
+from utils.views import SuccessMessageMixin
+from utils.helpers import wrap_in_iterable, is_iterable
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
+from geo.forms import CheapostFlightForm
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
 from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
 from .models import Trip, TripPicture, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
-from utils.views import SuccessMessageMixin
-from utils.helpers import wrap_in_iterable, is_iterable
-from relish.decorators import instance_cache
 
-from extra_views import CreateWithInlinesView, InlineFormSet,\
-    UpdateWithInlinesView
+
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
     template_name = "trip/filter.html"
@@ -393,6 +395,17 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         })
         return kwargs
 
+    def get_form_kwargs_for_cheapest(self, trip):
+        return {
+            'initial': {
+                'origin': trip.city.iata,
+                'destination': "ROM",
+                'departure_at': trip.start_date,
+                'return_at': trip.end_date,
+                'currency': trip.currency
+            }
+        }
+
     def get_context_data(self, **kwargs):
         context = super(TripRequestFormView, self).get_context_data(**kwargs)
         trip = self.get_trip()
@@ -401,10 +414,13 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
             user_has_request = False
         else:
             user_has_request =  trip.is_user_has_request(self.request.user)
+        cheapest_form = CheapostFlightForm(
+            **self.get_form_kwargs_for_cheapest(trip))
         context.update({
             "trip": trip,
             "user_in": user_in,
             "user_has_request": user_has_request,
+            "cheapest_form": cheapest_form
         })
         return context
 

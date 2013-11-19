@@ -2,6 +2,7 @@
   'use strict'
 
     var AJAX_LOADER_SMALL = $("<img class='ajax-loader-small' src='/static/img/loading_small.gif'/>");
+    var AJAX_LOADER_SMALL_2;
     var AJAX_LOADER_BIG = $("<img class='ajax-loader-big' src='/static/img/loading.gif'/>");
     var ajaxFade = "<div class='fade-elem'></div>"
     var ERR_CLASSES = ["has-error", "error"];
@@ -101,6 +102,39 @@
      
             // $.ajax options can be used here too, for example: 
             //timeout:   3000 
+        };
+        return this.each(function() {
+            $(this).ajaxForm(options);
+            return false;
+          })
+    }
+
+    function showRequestCheapest(formData, jqForm, options) {
+        AJAX_LOADER_SMALL_2 = AJAX_LOADER_SMALL.clone();
+        $("#payments_flight").prepend(AJAX_LOADER_SMALL);
+        $("#payments_total").prepend(AJAX_LOADER_SMALL_2);
+        AJAX_LOADER_SMALL.show();
+        AJAX_LOADER_SMALL_2.show();
+        return true; 
+    } 
+
+    function showResponseCheapest(responseText, statusText, xhr, $form)  {
+        AJAX_LOADER_SMALL.hide();
+        AJAX_LOADER_SMALL_2.hide();
+        var resp = responseText;
+        if (resp.result == 'success'){
+            $("#payments_flight").html(resp.price);
+            $("#payments_total").html("TODO");
+        } else {
+            $("#payments_flight").html("TODO no-data");
+            $("#payments_total").html("TODO no-data");
+        }
+    } 
+
+    $.fn.ajax_cheapest_flight_price = function(){
+        var options = { 
+            beforeSubmit:  showRequestCheapest,
+            success:       showResponseCheapest
         };
         return this.each(function() {
             $(this).ajaxForm(options);

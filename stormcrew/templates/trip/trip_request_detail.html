@@ -131,17 +131,23 @@
                             </tr>
                             <tr>
                                 <td>Перелет</td>
-                                <td>100 {{ trip.get_currency_display }}</td>
+                                <td id="payments_flight"></td>
                             </tr>
                             <tr>
                                 <td>Сумма</td>
-                                <td>200 {{ trip.get_currency_display }}</td>
+                                <td id="payments_total"></td>
                             </tr>
                             <tr>
                                 <td><a href="#">Поиск на aviasales</a></td>
                                 <td></td>
                             </tr>
                         </table>
+                        {# <div id="cheapest_flight" style="display:none;"> #}
+                            <form action="{% url 'cheapestflight' %}" method="POST" id="cheapest_flight" style="display:none;">
+                                {% csrf_token %}
+                                {{ cheapest_form.as_p }}
+                            </form>
+                        {# </div> #}
                     </td>
                   </tr>
             </tbody>
@@ -222,15 +228,30 @@
 
 
 {% block javascript %}
+
     {{ block.super }}
 
     <script src="{% static 'lightbox/js/lightbox-2.6.min.js' %}"></script>
     <script src="{% static 'caroufredsel/jquery.carouFredSel-6.2.1.js' %}"></script>
     <script src="{% static 'js/filter_update.js' %}"></script>
 
+    {% if cache_bootstrap %}
+        <script src="{% static 'js/cache/jquery.form.js' %}"></script>
+    {% else %}
+        <!-- ajax load form -->
+        <script src="http://malsup.github.com/jquery.form.js"></script>
+    {% endif %}
+
     <script type="text/javascript">
       $( window ).ready(function() {
         $('.thumbnails').apply_carousel();
       });
+    </script>
+
+    <script type="text/javascript">
+        // cheapest flight price
+        $( document ).ready(function() {
+          $("#cheapest_flight").ajax_cheapest_flight_price().submit();
+        });
     </script>
 {% endblock javascript %}
