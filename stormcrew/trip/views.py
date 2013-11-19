@@ -134,6 +134,7 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
             trip_qs = trip_qs.with_people(clnd['users'])
         else:
             self.remove_user_from_session_form_data()
+        trip_qs = trip_qs.geo_related()
         return trip_qs
 
     def get_filtered_users(self, form, trips):

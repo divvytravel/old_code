@@ -18,6 +18,9 @@ class TripQuerySet(QuerySet):
         return self.filter(end_date__lt=get_today())\
             .order_by('start_date')
 
+    def geo_related(self):
+        return self.select_related("city", "city__country")
+
     def count_gender(self):
         return self.annotate(count_all_people=Count('people'))\
         .extra(select = {
