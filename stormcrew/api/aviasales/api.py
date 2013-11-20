@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import requests
+import urllib
 from django.conf import settings
 
 l = logging.getLogger('api_aviasales')
@@ -8,6 +9,7 @@ l = logging.getLogger('api_aviasales')
 
 class AviasalesManger(object):
     api_url = 'http://api.aviasales.ru/v1'
+    search_url = 'http://search.aviasales.ru/searches/new'
     # TODO: avoid repeating currency codes
     currency_dict = {
         'euro': 'EUR',
@@ -51,3 +53,19 @@ class AviasalesManger(object):
                 return min_price
         l.debug('response not success')
         return None
+
+    def get_cheapest_search_link(self, origin, destination, departure_at, return_at):
+        payload = {
+            'adults': 1,
+            'children': 0,
+            'depart_date': self.date_format(departure_at),
+            'destination_iata': destination,
+            'infants': 0,
+            'origin_iata': origin,
+            'range': 0,
+            'return_date': self.date_format(return_at),
+            'trip_class': 0,
+            'with_request': 'true',
+            'marker': self.marker,
+        }
+        return "{0}?{1}".format(self.search_url, urllib.urlencode(payload))

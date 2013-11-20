@@ -22,8 +22,13 @@ class CheapestFlightView(JSONResponseMixin, AjaxResponseMixin, FormView):
         form = self.get_form(form_class)
         data = {'result': u"Нет данных"}
         if form.is_valid():
+            data['result'] = 'success'
             price = form.get_cheapest_price()
             if price:
-                data['result'] = 'success'
                 data['price'] = price
+                data['price_result'] = u"success"
+            else:
+                data['price'] = 0
+                data['price_result'] = u"Нет данных"
+            data['search_link'] = form.get_cheapest_search_link()
         return self.render_json_response(data)

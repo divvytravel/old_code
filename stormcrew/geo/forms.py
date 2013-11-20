@@ -1,4 +1,5 @@
 from django import forms
+from relish.decorators import instance_cache
 from trip.models import Trip
 from api.aviasales import AviasalesManger
 
@@ -16,7 +17,7 @@ class CheapestFlightForm(forms.Form):
             return 'MOW'
 
     def get_cheapest_price(self):
-        av = AviasalesManger()
+        av = self.get_av()
         return av.get_cheapest_price(
             origin=self.get_origin_iata(),
             destination=self.cleaned_data['destination_iata'],
@@ -24,3 +25,15 @@ class CheapestFlightForm(forms.Form):
             return_at=self.cleaned_data['return_at'],
             currency=self.cleaned_data['currency'],
         )
+
+    def get_cheapest_search_link(self):
+        return self.get_av().get_cheapest_search_link(
+            origin=self.get_origin_iata(),
+            destination=self.cleaned_data['destination_iata'],
+            departure_at=self.cleaned_data['departure_at'],
+            return_at=self.cleaned_data['return_at'],
+        )
+
+    @instance_cache
+    def get_av(self):
+        return AviasalesManger()

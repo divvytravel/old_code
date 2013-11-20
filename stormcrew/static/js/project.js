@@ -138,11 +138,17 @@
         var payments_trip = getTripPayments();
 
         if (resp.result == 'success'){
-            $("#payments_flight").html(resp.price + " " + payments_trip[1]);
+            if (resp.price_result == 'success'){
+                $("#payments_flight").html(resp.price + " " + payments_trip[1]);
+            } else {
+                $("#payments_flight").html(resp.price_result);
+            }
             $("#payments_total").html(showCheapestTotal(resp.price, payments_trip));
+            $("#payments_search").find('a').attr('href', resp.search_link);
         } else {
             $("#payments_flight").html(resp.result);
             $("#payments_total").html(showCheapestTotal(0, payments_trip));
+            $("#payments_search").find('a').hide();
         }
     } 
 
