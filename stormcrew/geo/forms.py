@@ -21,13 +21,16 @@ class CheapestFlightForm(forms.Form):
 
     @instance_cache
     def get_origin_iata(self):
+        l_avia.debug("------------------- Start get_origin_iata ------------")
         request = self.request
         iata = None
         l_avia.debug(request)
         if request and settings.GEOIP_PATH:
             l_avia.debug("GEOIP found")
             from django.contrib.gis.geoip import GeoIP
-            ip_address = request.META.get('REMOTE_ADDR')
+            ip_address = request.META.get('HTTP_X_CLIENT_IP', None)
+            if not ip_address:
+                ip_address = request.META.get('REMOTE_ADDR')
             g = GeoIP()
             city_info = g.city(ip_address) or dict()
             city = city_info.get('city', None)
@@ -42,10 +45,11 @@ class CheapestFlightForm(forms.Form):
             )
         if iata:
             l_avia.debug('Origin iata found: {0}'.format(iata))
-            return iata
         else:
             l_avia.debug('Origin iata NOT found... Iata: {0}'.format(iata))
-            return 'MOW' # Moscow
+            iata = 'MOW' # Moscow
+        l_avia.debug("------------------- End get_origin_iata ------------")
+        return iata
 
     def get_cheapest_price(self):
         av = self.get_av()
