@@ -144,12 +144,11 @@
                 $("#payments_flight").html(resp.price_result);
             }
             $("#payments_total").html(showCheapestTotal(resp.price, payments_trip));
-            $("#payments_search").find('a').attr('href', resp.search_link);
         } else {
             $("#payments_flight").html(resp.result);
             $("#payments_total").html(showCheapestTotal(0, payments_trip));
-            $("#payments_search").find('a').hide();
         }
+        $("#payments_search").find('a').attr('href', resp.search_link);
     } 
 
     $.fn.ajax_cheapest_flight_price = function(){

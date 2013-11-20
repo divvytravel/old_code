@@ -34,6 +34,9 @@ class CheapestFlightForm(forms.Form):
             return_at=self.cleaned_data['return_at'],
         )
 
+    def get_blanked_search_link(self):
+        return self.get_av().get_blanked_search_link()
+
     @instance_cache
     def get_av(self):
         return AviasalesManger()

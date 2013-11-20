@@ -31,4 +31,6 @@ class CheapestFlightView(JSONResponseMixin, AjaxResponseMixin, FormView):
                 data['price'] = 0
                 data['price_result'] = u"Нет данных"
             data['search_link'] = form.get_cheapest_search_link()
+        else:
+            data['search_link'] = form.get_blanked_search_link()
         return self.render_json_response(data)

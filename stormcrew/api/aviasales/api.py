@@ -10,6 +10,7 @@ l = logging.getLogger('api_aviasales')
 class AviasalesManger(object):
     api_url = 'http://api.aviasales.ru/v1'
     search_url = 'http://search.aviasales.ru/searches/new'
+    partner_search_url = 'http://www.aviasales.ru/'
     # TODO: avoid repeating currency codes
     currency_dict = {
         'euro': 'EUR',
@@ -69,3 +70,7 @@ class AviasalesManger(object):
             'marker': self.marker,
         }
         return "{0}?{1}".format(self.search_url, urllib.urlencode(payload))
+
+    def get_blanked_search_link(self):
+        return "{0}?{1}".format(self.partner_search_url,
+            urllib.urlencode({'marker': self.marker,}))
