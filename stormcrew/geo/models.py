@@ -94,7 +94,7 @@ class Country(models.Model):
     objects = CountryManager()
 
     def __unicode__(self):
-        return u"{0} ({1})".format(self.name, self.name_en)
+        return u"{0}".format(self.name)
 
 
 class City(models.Model):
@@ -113,7 +113,7 @@ class City(models.Model):
         ordering = "country__name", "name"
 
     def __unicode__(self):
-        return u"{0}, {1} ({2})".format(self.country, self.name, self.name_en)
+        return u"{0}, {1}".format(self.country, self.name)
 
     def get_iata(self):
         return self.iata
