@@ -122,16 +122,20 @@ class Trip(models.Model):
 
     @staticmethod
     def points_updated(sender, instance, **kwargs):
-        trip = instance.trip
-        price = 0
-        currency = u""
-        for count, point in enumerate(trip.points.all()):
-            price += point.price
-            if count == 0:
-                currency = point.currency
-        trip.price = price
-        trip.currency = currency
-        trip.save()
+        try:
+            trip = instance.trip
+        except Trip.DoesNotExist:
+            trip = None
+        if not trip is None:
+            price = 0
+            currency = u""
+            for count, point in enumerate(trip.points.all()):
+                price += point.price
+                if count == 0:
+                    currency = point.currency
+            trip.price = price
+            trip.currency = currency
+            trip.save()
 
     def get_absolute_url(self):
         return reverse('trip_request_detail', args=[str(self.pk)])
