@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save, pre_delete
 from model_utils import Choices
-from .managers import CountryManager, CityManager
+from .managers import CountryManager, CityManager, AirportIATAManager
 
 
 class AirportIATA(models.Model):
@@ -17,6 +17,8 @@ class AirportIATA(models.Model):
     coordinates = models.CharField(max_length=100, blank=True)
     timezone = models.CharField(max_length=100, blank=True)
     parent_name_en = models.CharField(max_length=100, blank=True, db_index=True)
+
+    objects = AirportIATAManager()
 
     class Meta:
         verbose_name = _(u'IATA')
@@ -121,15 +123,12 @@ class City(models.Model):
     @staticmethod
     def update_iata(sender, instance, *args, **kwargs):
         if not instance.iata:
-            iata_codes = AirportIATA.objects.filter(parent_name_en=instance.country.name_en)
-            if instance.name_en:
-                iata_codes = iata_codes.filter(name_en=instance.name_en)
-            else:
-                iata_codes = iata_codes.filter(name_ru=instance.name)
-            try:
-                instance.iata = iata_codes[0].iata
-            except IndexError:
-                # TODO: add error to messages
-                pass
+            iata = AirportIATA.objects.find_iata(
+                country_en=instance.country.name_en,
+                city_en=instance.name_en,
+                city_ru=instance.name,
+            )
+            if iata:
+                instance.iata = iata
 
 pre_save.connect(City.update_iata, sender=City)

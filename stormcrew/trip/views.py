@@ -395,14 +395,9 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         })
         return kwargs
 
-    def get_city_from_request(self):
-        # TODO
-        return "Moscow"
-
     def get_form_kwargs_for_cheapest(self, trip):
         return {
             'initial': {
-                'origin_text': self.get_city_from_request(),
                 'destination_iata': trip.city.get_iata(),
                 'departure_at': trip.start_date,
                 'return_at': trip.end_date,

@@ -325,6 +325,15 @@ if os.environ.get('EMAIL_HOST', None):
     DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
     ########## END EMAIL
 
+######### GEOIP
+if OPENSHIFT_GEAR_NAME:
+    GEOIP_PATH = join(os.environ.get('OPENSHIFT_DATA_DIR'), 'geoip')
+elif LOCAL:
+    GEOIP_PATH = None
+else:
+    GEOIP_PATH = '/usr/share/GeoIP'
+######### END GEOIP
+
 
 ########## TEMPLATE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-context-processors
