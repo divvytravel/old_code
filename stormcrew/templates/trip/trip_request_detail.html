@@ -14,11 +14,13 @@
 
 {% block content %}
 
-  {% if request.user == trip.owner %}
     <div class="row">
+    {% if request.user == trip.owner %}
       <a href="{% url 'trip_update' trip.pk %}" class="btn btn-primary pull-right">Редактировать</a>
+    {% else %}
+      <a id="suggest" class="btn btn-success pull-right" href="{% url 'postman_write' trip.owner.username %}?subject=Вопрос по поездке '{{ trip.title }}'" title='Задать вопрос организатору поездки.'>Вопрос организатору</a>
+    {% endif %}
     </div>
-  {% endif %}
     <div class="row">
         <div class="col-lg-12">
             <h1 class="align-center">{% block header %}Поездка "{{ trip.title }}"{% endblock %}</h1>
@@ -253,5 +255,10 @@
         $( document ).ready(function() {
           $("#cheapest_flight").ajax_cheapest_flight_price().submit();
         });
+    </script>
+
+    <script type="text/javascript">
+        // suggestion modal form
+        $("#suggest").question_form_ajax();
     </script>
 {% endblock javascript %}

@@ -162,5 +162,31 @@
           })
     }
 
+    $.fn.question_form_ajax = function(){
+        // suggestion modal form
+        var loader_small = $("<img class='ajax-loader-small pull-right get-msg-frm-loader' src='/static/img/loading_small.gif'/>");
+        return this.each(function(){
+            $(this).click(function(){
+                var btn = $(this);
+                var modal_elem = $("#myModal");
+                if (modal_elem.length == 0){
+                    loader_small.insertAfter(btn);
+                    btn.addClass('disabled');
+                    $.get(btn.attr('href'), function(data){
+                        $(data).appendTo('body');
+                        modal_elem = $("#myModal");
+                        modal_elem.ajax_send_message();
+                        modal_elem.modal();
+                        btn.removeClass('disabled');
+                        loader_small.hide();
+                    });
+                } else {
+                    modal_elem.modal('toggle');
+                }
+                return false;
+            })
+        })
+    }
+
 })(jQuery);
 
