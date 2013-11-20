@@ -3,47 +3,14 @@ import traceback
 import csv
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.db.models.signals import pre_save, pre_delete
 from model_utils import Choices
 from .managers import CountryManager, CityManager
-from django.db.models.signals import pre_save, pre_delete
-
-
-class Country(models.Model):
-    name = models.CharField(u"Название", max_length=100, unique=True)
-
-    class Meta:
-        verbose_name = u"Страна"
-        verbose_name_plural = u"Страны"
-
-    objects = CountryManager()
-
-    def __unicode__(self):
-        return self.name
-
-
-class City(models.Model):
-    name = models.CharField(u"Название", max_length=100, db_index=True)
-    country = models.ForeignKey(Country, verbose_name=u'Страна')
-
-    def get_iata(self):
-        # TODO
-        return "ROM"
-
-    objects = CityManager()
-
-    class Meta:
-        verbose_name = u"Город"
-        verbose_name_plural = u"Города"
-        unique_together = "name", "country"
-        ordering = "country__name", "name"
-
-    def __unicode__(self):
-        return u"{0}, {1}".format(self.country, self.name)
 
 
 class AirportIATA(models.Model):
 
-    iata = models.CharField(max_length=100, blank=True)
+    iata = models.CharField(max_length=3, blank=True)
     type = models.CharField(max_length=100, blank=True)
     name_ru = models.CharField(max_length=100, blank=True, db_index=True)
     name_en = models.CharField(max_length=100, blank=True, db_index=True)
@@ -114,3 +81,55 @@ class UploadIATA(models.Model):
 
 pre_save.connect(UploadIATA.process_uploaded_csv, sender=UploadIATA)
 pre_delete.connect(UploadIATA.process_deleted_csv, sender=UploadIATA)
+
+
+class Country(models.Model):
+    name = models.CharField(u"Название", max_length=100, unique=True)
+    name_en = models.CharField(u"Название (англ.)", max_length=100, unique=True, null=True, blank=True)
+
+    class Meta:
+        verbose_name = u"Страна"
+        verbose_name_plural = u"Страны"
+
+    objects = CountryManager()
+
+    def __unicode__(self):
+        return u"{0} ({1})".format(self.name, self.name_en)
+
+
+class City(models.Model):
+    name = models.CharField(u"Название", max_length=100, db_index=True)
+    name_en = models.CharField(u"Название (англ.)", max_length=100, unique=True, null=True, blank=True)
+    country = models.ForeignKey(Country, verbose_name=u'Страна')
+    iata = models.CharField(u"IATA код", max_length=3, blank=True,
+        help_text=u"Если пусто, при сохранении будет попытка поиска IATA кода в базе. Если заполнено, то будет сохранено введенное значение")
+
+    objects = CityManager()
+
+    class Meta:
+        verbose_name = u"Город"
+        verbose_name_plural = u"Города"
+        unique_together = "name", "country"
+        ordering = "country__name", "name"
+
+    def __unicode__(self):
+        return u"{0}, {1} ({2})".format(self.country, self.name, self.name_en)
+
+    def get_iata(self):
+        return self.iata
+
+    @staticmethod
+    def update_iata(sender, instance, *args, **kwargs):
+        if not instance.iata:
+            iata_codes = AirportIATA.objects.filter(parent_name_en=instance.country.name_en)
+            if instance.name_en:
+                iata_codes = iata_codes.filter(name_en=instance.name_en)
+            else:
+                iata_codes = iata_codes.filter(name_ru=instance.name)
+            try:
+                instance.iata = iata_codes[0].iata
+            except IndexError:
+                # TODO: add error to messages
+                pass
+
+pre_save.connect(City.update_iata, sender=City)

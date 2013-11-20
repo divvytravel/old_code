@@ -5,11 +5,11 @@ from .models import Country, City, AirportIATA, UploadIATA
 
 
 class CountryAdmin(admin.ModelAdmin):
-    list_display = 'name',
+    list_display = 'name', 'name_en'
 
 
 class CityAdmin(admin.ModelAdmin):
-    list_display = 'name', "country"
+    list_display = 'name', 'name_en', "country", 'iata'
 
 
 class AirportIATAAdmin(admin.ModelAdmin):
