@@ -39,3 +39,9 @@ Helpers
 Create fixtures:
 
     python manage.py dumpdata --indent=4 > initial_data.json
+
+
+GeoIP
+-----
+
+put GeoLiteCity.dat into settings.GEOIP_PATH
