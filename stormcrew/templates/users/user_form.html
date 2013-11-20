@@ -16,48 +16,40 @@
         </div>
     </div>
 
+    {% if user.trip_requests|length %}
     <div class="row">
         <div class="col-lg-12">
             <h2 class="align-center">Заявки, требующие рассмотрения:</h2>
         </div>
-        {% if user.trip_requests|length %}
             {% include "trip/partials/triprequest_list.html" with trip_requests=user.trip_requests %}
-        {% else %}
-            <h3 class="blank-message">нет</h3>
-        {% endif %}
     </div>
+    {% endif %}
 
+    {% if user.outgoing_trip_requests|length %}
     <div class="row">
         <div class="col-lg-12">
             <h2 class="align-center">Ваши заявки:</h2>
         </div>
-        {% if user.outgoing_trip_requests|length %}
-            {% include "trip/partials/outgoing_request_list.html" with trip_requests=user.outgoing_trip_requests %}
-        {% else %}
-            <h3 class="blank-message">нет</h3>
-        {% endif %}
+        {% include "trip/partials/outgoing_request_list.html" with trip_requests=user.outgoing_trip_requests %}
     </div>
+    {% endif %}
 
+    {% if user.trips_in|length %}
     <div class="row">
         <div class="col-lg-12">
             <h2 class="align-center">Участник в поездках:</h2>
         </div>
-        {% if user.trips_in|length %}
-            {% include "trip/partials/trip_list.html" with trips=user.trips_in show_exit=True show_status=True %}
-        {% else %}
-            <h3 class="blank-message">нет</h3>
-        {% endif %}
+        {% include "trip/partials/trip_list.html" with trips=user.trips_in show_exit=True show_status=True %}
     </div>
+    {% endif %}
 
+    {% if user.trips_created|length %}
     <div class="row">
         <div class="col-lg-12">
             <h2 class="align-center">Созданные поездки:</h2>
         </div>
-        {% if user.trips_created|length %}
-            {% include "trip/partials/trip_list.html" with trips=user.trips_created show_status=True show_edit=True %}
-        {% else %}
-            <h3 class="blank-message">нет</h3>
-        {% endif %}
+        {% include "trip/partials/trip_list.html" with trips=user.trips_created show_status=True show_edit=True %}
     </div>
+    {% endif %}
 
 {% endblock %}
