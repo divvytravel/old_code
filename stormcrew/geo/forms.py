@@ -23,6 +23,7 @@ class CheapestFlightForm(forms.Form):
     def get_origin_iata(self):
         request = self.request
         iata = None
+        l_avia.debug(request)
         if request and settings.GEOIP_PATH:
             l_avia.debug("GEOIP found")
             from django.contrib.gis.geoip import GeoIP
