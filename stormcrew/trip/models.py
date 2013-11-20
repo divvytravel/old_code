@@ -157,6 +157,10 @@ class Trip(models.Model):
     def is_closed(self):
         return self.trip_type == self.TRIP_TYPE.closed
 
+    def is_recruit_finished(self, today=None):
+        today = today or get_today()
+        return self.end_people_date < today
+
     def is_finished(self, today=None):
         today = today or get_today()
         return self.end_date < today

@@ -211,6 +211,8 @@
                   value="" class="btn btn-success" disabled>Вы участвуете в поездке
                 {% elif user_has_request %}
                   value="" class="btn btn-warning" disabled>Вы подали заявку на поездку
+                {% elif trip.is_recruit_finished %}
+                  value="" class="btn btn-default" disabled>Набор уже закончен
                 {% else %}
                   value="submit" class="btn btn-primary">Подать заявку на поездку
                 {% endif %}

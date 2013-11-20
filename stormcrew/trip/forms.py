@@ -214,6 +214,7 @@ class TripRequestForm(forms.ModelForm):
         'already_requested': u"Вы уже подали заявку в поездку",
         'already_started': u"Поездка уже началась",
         'already_finished': u"Поездка уже закончилась",
+        'recruit_finished': u"Набор в поездку уже завершен",
     }
 
     class Meta:
@@ -242,6 +243,8 @@ class TripRequestForm(forms.ModelForm):
                 raise forms.ValidationError(self.trip_errors['alread_in'])
             if trip.is_user_has_request(self.user):
                 raise forms.ValidationError(self.trip_errors['already_requested'])
+            if trip.is_recruit_finished():
+                raise forms.ValidationError(self.trip_errors['recruit_finished'])
         return self.cleaned_data
 
     def save(self, commit=True):
