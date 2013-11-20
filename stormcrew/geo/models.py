@@ -20,10 +20,9 @@ class City(models.Model):
     name = models.CharField(u"Название", max_length=100, db_index=True)
     country = models.ForeignKey(Country, verbose_name=u'Страна')
 
-    #TODO
-    @property
-    def iata(self):
-        return "MOW"
+    def get_iata(self):
+        # TODO
+        return "ROM"
 
     objects = CityManager()
 

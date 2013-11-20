@@ -173,6 +173,7 @@ LOCAL_APPS = (
     'trip',
     'utils',
     'geo',
+    'api.aviasales',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -269,6 +270,8 @@ AUTOSLUG_SLUGIFY_FUNCTION = "slugify.slugify"
 POSTMAN_AUTO_MODERATE_AS = True
 POSTMAN_DISALLOW_ANONYMOUS = True
 ########## END POSTMAN
+
+LOCAL = os.environ.get("DJANGO_LOCAL", False)
 
 ################## PRODUCTION SETTINGS
 
@@ -377,6 +380,9 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_local_true': {
+            '()': 'config.log.RequireLocalTrue'
         }
     },
     'formatters': {
@@ -412,18 +418,38 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'main_formatter',
+            'filters': ['require_local_true'],
         },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'api_aviasales_file':{
+            'level' : 'DEBUG',
+            'class' : 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, '../logs/api_aviasales.log'),
+            'when' : 'midnight',
+            'interval' :    1,  # day
+            'backupCount' : 7,
+            'formatter': 'main_formatter',
+        },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'api_aviasales': {
+            'handlers': ['api_aviasales_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'requests.packages.urllib3': {
+            'handlers': ['api_aviasales_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
         },
         '': {
             'handlers': ['rotate_file'],

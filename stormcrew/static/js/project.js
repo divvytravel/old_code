@@ -109,6 +109,19 @@
           })
     }
 
+    function getTripPayments(){
+        var payments_trip = $("#payments_trip").html().split(' ');
+        if (payments_trip.length == 2){
+            return payments_trip;
+        }
+        return [0, ""]
+    }
+
+    function showCheapestTotal(flight_price, payments_trip){
+        var total_price = parseInt(payments_trip[0]) + flight_price;
+        return total_price + " " + payments_trip[1];
+    }
+
     function showRequestCheapest(formData, jqForm, options) {
         AJAX_LOADER_SMALL_2 = AJAX_LOADER_SMALL.clone();
         $("#payments_flight").prepend(AJAX_LOADER_SMALL);
@@ -122,12 +135,14 @@
         AJAX_LOADER_SMALL.hide();
         AJAX_LOADER_SMALL_2.hide();
         var resp = responseText;
+        var payments_trip = getTripPayments();
+
         if (resp.result == 'success'){
-            $("#payments_flight").html(resp.price);
-            $("#payments_total").html("TODO");
+            $("#payments_flight").html(resp.price + " " + payments_trip[1]);
+            $("#payments_total").html(showCheapestTotal(resp.price, payments_trip));
         } else {
-            $("#payments_flight").html("TODO no-data");
-            $("#payments_total").html("TODO no-data");
+            $("#payments_flight").html(resp.result);
+            $("#payments_total").html(showCheapestTotal(0, payments_trip));
         }
     } 
 

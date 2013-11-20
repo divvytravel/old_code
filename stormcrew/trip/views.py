@@ -19,7 +19,7 @@ from utils.views import SuccessMessageMixin
 from utils.helpers import wrap_in_iterable, is_iterable
 from users.models import User
 from users.serializers import UserSerializer, UserPkSerializer
-from geo.forms import CheapostFlightForm
+from geo.forms import CheapestFlightForm
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
 from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
@@ -395,11 +395,15 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
         })
         return kwargs
 
+    def get_city_from_request(self):
+        # TODO
+        return "Moscow"
+
     def get_form_kwargs_for_cheapest(self, trip):
         return {
             'initial': {
-                'origin': trip.city.iata,
-                'destination': "ROM",
+                'origin_text': self.get_city_from_request(),
+                'destination_iata': trip.city.get_iata(),
                 'departure_at': trip.start_date,
                 'return_at': trip.end_date,
                 'currency': trip.currency
@@ -414,7 +418,7 @@ class TripRequestFormView(SuccessMessageMixin, CreateView):
             user_has_request = False
         else:
             user_has_request =  trip.is_user_has_request(self.request.user)
-        cheapest_form = CheapostFlightForm(
+        cheapest_form = CheapestFlightForm(
             **self.get_form_kwargs_for_cheapest(trip))
         context.update({
             "trip": trip,
