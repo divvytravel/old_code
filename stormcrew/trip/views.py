@@ -501,6 +501,13 @@ class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesV
         kwargs = super(TripUpdateView, self).get_form_kwargs()
         return kwargs
 
+    def forms_valid(self, form, inlines):
+        inlines = TripPointInlinesWrapper(inlines)
+        if not inlines.clean():
+            return self.forms_invalid(form, inlines)
+        else:
+            return super(TripUpdateView, self).forms_valid(form, inlines)
+
     @property
     @instance_cache
     def price_type(self):
