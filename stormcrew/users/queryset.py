@@ -8,6 +8,10 @@ from utils.helpers import get_today
 
 
 def is_default_age_range(age_from, age_to):
+    # TODO check, if age is selected manually, then do exactly filter
+    # for that age. And if age is just default (never set or for is
+    # cleared), then treat as not age filter.
+    # currently, if both bounds are set, it is treated as not age filter at all
     from trip.forms import TripFilterForm
     age_choices = TripFilterForm.AGES
     if age_from == age_choices[0][0] and age_to == age_choices[-1][0]:

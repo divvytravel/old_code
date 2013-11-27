@@ -16,9 +16,11 @@ from utils.social_fb import post_on_fb_wall
 from utils.decorators import sort_trips_by_time_status
 from trip.models import Trip, TripRequest
 from .managers import UserManagerWithFilters
+from .queryset import is_default_age_range
 
 
 logger = logging.getLogger(__name__)
+
 
 class User(AbstractUser):
     """
@@ -88,7 +90,7 @@ class User(AbstractUser):
         if self.gender and gender and self.gender != gender:
             return False
         age = self.get_age()
-        if age:
+        if age and not is_default_age_range(age_from, age_to):
             if age_from and age_from > age:
                 return False
             if age_to and age_to < age:
