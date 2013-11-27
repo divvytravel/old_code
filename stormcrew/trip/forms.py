@@ -85,7 +85,7 @@ class TripCreateStepOne(forms.Form):
         if isinstance(obj, TripCategory):
             return obj.applicable == obj.APPLICABLE.noncom
         else:
-            return obj == Trip.PRICE_TYPE.noncomm
+            return obj == Trip.PRICE_TYPE.noncom
 
     def clean(self):
         price_type = self.cleaned_data['price_type']
