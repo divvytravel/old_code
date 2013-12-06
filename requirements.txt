@@ -1,3 +1,37 @@
-# This file is here because many Platforms as a Service look for
-#	requirements.txt in the root directory of a project.
--r requirements/production.txt
+# Django
+django==1.5.3
+
+# Views, models, forms, and images fundamentals
+django-braces==1.2.2
+django-model-utils==1.4.0
+django-floppyforms==1.1
+Pillow==2.1.0
+dj-database-url==0.2.2
+django-secure==1.0
+sorl-thumbnail==11.12
+djangorestframework==2.3.8
+django-extra-views==0.6.3
+
+# For user registration, either via email or social
+# Well-built with regular release cycles!
+django-social-auth==0.7.28
+facebook-sdk==0.4.0
+
+# Unicode slugification
+unicode-slugify==0.1.1
+django-autoslug==1.7.1
+
+# There are edge cases for South with Django 1.5+ that haven't been addressed yet.
+# Hm, just skipping this warning now (don't know exactly the problem)
+# https://bitbucket.org/andrewgodwin/south/get/59f6bae8b1a501ca14a5f23f8b11c44c42f33147.zip
+South==0.8.2
+
+# django-crispy-forms with support for Bootstrap 3
+django-crispy-forms==1.4.0
+
+# Your custom requirements go here
+-e git://github.com/st4lk/django-relish.git@#egg=django-relish-dev
+-e hg+https://bitbucket.org/psam/django-postman/@92ede1fd0c32f4e5acc6c78b25804dc047267d3e#egg=django_postman-dev
+requests==2.0.1
+
+psycopg2==2.5
