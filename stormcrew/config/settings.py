@@ -478,3 +478,8 @@ if DEBUG:
 
 
 ########## Your stuff: Below this line define 3rd party libary settings
+
+try:
+    from settings_local import *
+except ImportError:
+    pass
