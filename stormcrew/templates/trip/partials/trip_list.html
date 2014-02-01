@@ -1,78 +1,94 @@
 {% load math_filters %}
 
-<table class="table trip-list">
-    <thead>
-      <tr>
-        <th>Даты</th>
-        <th>Где</th>
-        <th>Что за поездка</th>
-        <th>Бюджет</th>
-        <th>Участвуют</th>
-        <th>Коммерческая</th>
-        <th>Набор до</th>
-        <th>Осталось мест</th>
-        {% if show_status %}
-            <th>Статус</th>
-        {% endif %}
-        {% if show_edit %}
-            <th></th>
-            <th></th>
-        {% endif %}
-        {% if show_exit %}
-            <th></th>
-        {% endif %}
-      </tr>
-    </thead>
-    <tbody>
-        {% for trip in trips %}
-          <tr>
-            <td>
-                <a href="{{ trip.get_absolute_url}}">{{ trip.start_date_format }} - {{ trip.end_date_format }}</a>
-            </td>
-            <td>
-                <a href="{{ trip.get_absolute_url}}">{{ trip.city }}</a>
-            </td>
-            <td>
-                <a href="{{ trip.get_absolute_url}}">{{ trip.title }}</a>
-            </td>
-            <td>
-                {{ trip.price }} {{ trip.get_currency_display }}
-            </td>
-            <td>{{trip.count_all_people}} человек {% if trip.count_male or trip.count_female %}({% endif %}{% if trip.count_male %}{{trip.count_male}}м{% endif %}{% if trip.count_male and trip.count_female %} {% endif %}{% if trip.count_female %}{{trip.count_female}}ж{% endif %}{% if trip.count_male or trip.count_female %}){% endif %}</td>
-            <td>
-                {{ trip.show_price_type }}
-            </td>
-            <td>
-                {{ trip.end_people_date_format }}
-            </td>
-            <td>
-                {{ trip.count_free_slots }}
-            </td>
-            {% if show_status %}
-                <td>
-                    {{trip.get_status|default:"?"}}
-                </td>
-            {% endif %}
-            {% if show_edit %}
-                <td>
-                    <a href="{% url 'trip_update' trip.pk %}" class="btn btn-primary">Редактировать</a>
-                </td>
-                <td>
-                    <a href="{% url 'trip_delete' trip.pk %}" class="btn btn-primary">Удалить</a>
-                </td>
-            {% endif %}
-            {% if show_exit %}
-                <td>
-                <form method="post" action="{% url 'trip_request_detail' trip.pk %}">
-                    {% csrf_token %}
-                    <input name="trip" type="hidden" value="{{ trip.pk }}">
-                    <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                    <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить участие</button>
-                </form>
-                </td>
-            {% endif %}
-          </tr>
-        {% endfor %}
-      <tr>
-    </tbody>
-</table>
+<ul id="trip-list">
+    <script id="trip-template" type="text/template">
+        <div class="trip-item">
+            <%= title %>
+{#            <div class="view">#}
+{#                <input class="done-toggle" type="checkbox" <%= complete ? "checked" : "" %>>#}
+{#                <label><%= title %></label>#}
+{#                <button class="destroy">X</button>#}
+{#            </div>#}
+{#            <div class="edit">#}
+{#                <input type="text" value="<%= title %>">#}
+{#            </div>#}
+        </div>
+    </script>
+</ul>
+
+{#<table class="table trip-list">#}
+{#    <thead>#}
+{#      <tr>#}
+{#        <th>Даты</th>#}
+{#        <th>Где</th>#}
+{#        <th>Что за поездка</th>#}
+{#        <th>Бюджет</th>#}
+{#        <th>Участвуют</th>#}
+{#        <th>Коммерческая</th>#}
+{#        <th>Набор до</th>#}
+{#        <th>Осталось мест</th>#}
+{#        {% if show_status %}#}
+{#            <th>Статус</th>#}
+{#        {% endif %}#}
+{#        {% if show_edit %}#}
+{#            <th></th>#}
+{#            <th></th>#}
+{#        {% endif %}#}
+{#        {% if show_exit %}#}
+{#            <th></th>#}
+{#        {% endif %}#}
+{#      </tr>#}
+{#    </thead>#}
+{#    <tbody>#}
+{#        {% for trip in trips %}#}
+{#          <tr>#}
+{#            <td>#}
+{#                <a href="{{ trip.get_absolute_url}}">{{ trip.start_date_format }} - {{ trip.end_date_format }}</a>#}
+{#            </td>#}
+{#            <td>#}
+{#                <a href="{{ trip.get_absolute_url}}">{{ trip.city }}</a>#}
+{#            </td>#}
+{#            <td>#}
+{#                <a href="{{ trip.get_absolute_url}}">{{ trip.title }}</a>#}
+{#            </td>#}
+{#            <td>#}
+{#                {{ trip.price }} {{ trip.get_currency_display }}#}
+{#            </td>#}
+{#            <td>{{trip.count_all_people}} человек {% if trip.count_male or trip.count_female %}({% endif %}{% if trip.count_male %}{{trip.count_male}}м{% endif %}{% if trip.count_male and trip.count_female %} {% endif %}{% if trip.count_female %}{{trip.count_female}}ж{% endif %}{% if trip.count_male or trip.count_female %}){% endif %}</td>#}
+{#            <td>#}
+{#                {{ trip.show_price_type }}#}
+{#            </td>#}
+{#            <td>#}
+{#                {{ trip.end_people_date_format }}#}
+{#            </td>#}
+{#            <td>#}
+{#                {{ trip.count_free_slots }}#}
+{#            </td>#}
+{#            {% if show_status %}#}
+{#                <td>#}
+{#                    {{trip.get_status|default:"?"}}#}
+{#                </td>#}
+{#            {% endif %}#}
+{#            {% if show_edit %}#}
+{#                <td>#}
+{#                    <a href="{% url 'trip_update' trip.pk %}" class="btn btn-primary">Редактировать</a>#}
+{#                </td>#}
+{#                <td>#}
+{#                    <a href="{% url 'trip_delete' trip.pk %}" class="btn btn-primary">Удалить</a>#}
+{#                </td>#}
+{#            {% endif %}#}
+{#            {% if show_exit %}#}
+{#                <td>#}
+{#                <form method="post" action="{% url 'trip_request_detail' trip.pk %}">#}
+{#                    {% csrf_token %}#}
+{#                    <input name="trip" type="hidden" value="{{ trip.pk }}">#}
+{#                    <input name="next" type="hidden" value="{{ request.get_full_path }}">#}
+{#                    <button name="action" type="submit" class="btn btn-primary" value="cancel">Отменить участие</button>#}
+{#                </form>#}
+{#                </td>#}
+{#            {% endif %}#}
+{#          </tr>#}
+{#        {% endfor %}#}
+{#      <tr>#}
+{#    </tbody>#}
+{#</table>#}

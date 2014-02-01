@@ -15,12 +15,17 @@ from os.path import join
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
-########## DEBUG CONFIGURATION
-if os.environ.get("DEBUG_DJANGO", None):
-    # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
-    DEBUG = True
-else:
-    DEBUG = False
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+SERVER = True
+DEBUG = False
+
+# ########## DEBUG CONFIGURATION
+# if os.environ.get("DEBUG_DJANGO", None):
+#     # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
+#     DEBUG = True
+# else:
+#     DEBUG = False
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
 TEMPLATE_DEBUG = DEBUG
@@ -55,18 +60,18 @@ MANAGERS = ADMINS
 ########## END MANAGER CONFIGURATION
 
 
-########## DATABASE CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-import dj_database_url
-DATABASES = {'default': dj_database_url.config()}
-if DATABASES == {'default': {}}:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': "db.sqlite",
-        }
-    }
-########## END DATABASE CONFIGURATION
+# ########## DATABASE CONFIGURATION
+# # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# import dj_database_url
+# DATABASES = {'default': dj_database_url.config()}
+# if DATABASES == {'default': {}}:
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': "db.sqlite",
+#         }
+#     }
+# ########## END DATABASE CONFIGURATION
 
 
 ########## GENERAL CONFIGURATION
@@ -101,10 +106,12 @@ USE_TZ = True
 
 ########## MEDIA CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-if OPENSHIFT_GEAR_NAME:
-    MEDIA_ROOT = join(os.environ.get('OPENSHIFT_DATA_DIR'), 'media')
-else:
-    MEDIA_ROOT = join(BASE_DIR, 'media')
+# if OPENSHIFT_GEAR_NAME:
+#     MEDIA_ROOT = join(os.environ.get('OPENSHIFT_DATA_DIR'), 'media')
+# else:
+#     MEDIA_ROOT = join(BASE_DIR, 'media')
+
+MEDIA_ROOT = os.path.join(os.path.dirname(PROJECT_ROOT), 'media').replace('\\', '/')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = '/media/'
@@ -124,7 +131,7 @@ MIDDLEWARE_CLASSES = (
 
 ########## STATIC FILE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = os.path.join(os.path.dirname(PROJECT_ROOT), 'static').replace('\\', '/')
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = '/static/'
@@ -145,6 +152,7 @@ STATICFILES_FINDERS = (
 ########## APP CONFIGURATION
 DJANGO_APPS = (
     # Default Django apps:
+    'suit',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -165,6 +173,7 @@ THIRD_PARTY_APPS = (
     'sorl.thumbnail', # image thumbnails
     'postman_custom',
     'postman',
+    'tastypie'
 )
 
 # Apps specific for this project go here.
@@ -173,7 +182,7 @@ LOCAL_APPS = (
     'trip',
     'utils',
     'geo',
-    'api.aviasales',
+    'party_api.aviasales',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -480,6 +489,9 @@ if DEBUG:
 ########## Your stuff: Below this line define 3rd party libary settings
 
 try:
-    from settings_local import *
+    from local_settings import *
 except ImportError:
     pass
+
+if SERVER:
+    from server_settings import *

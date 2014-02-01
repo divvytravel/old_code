@@ -33,3 +33,4 @@ django-crispy-forms==1.4.0
 -e git://github.com/st4lk/django-relish.git@#egg=django-relish-dev
 -e hg+https://bitbucket.org/psam/django-postman/@92ede1fd0c32f4e5acc6c78b25804dc047267d3e#egg=django_postman-dev
 requests==2.0.1
+django-suit==0.2.5

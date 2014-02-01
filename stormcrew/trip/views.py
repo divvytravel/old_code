@@ -27,9 +27,8 @@ from .models import Trip, TripPicture, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
 
 
-
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
-    template_name = "trip/filter.html"
+    template_name = "trip/new_filter.html"
     form_class = TripFilterForm
     content_type = "text/html"
 
@@ -229,7 +228,6 @@ class TripCreateStepOneView(LoginRequiredMixin, FormView):
         return reverse('trip_create_step_two', kwargs={
             'price_type': self.price_type,
             'category_slug': self.category.slug})
-
 
 
 class TripPointInline(InlineFormSet):

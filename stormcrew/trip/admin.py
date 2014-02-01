@@ -2,7 +2,7 @@
 from django.contrib import admin
 
 from .models import Trip, TripPicture, TripRequest, TripCategory,\
-    TripPointType, TripPoint
+    TripPointType, TripPoint, Tags
 
 
 class TripPointInline(admin.TabularInline):
@@ -53,3 +53,4 @@ admin.site.register(TripRequest, TripRequestAdmin)
 admin.site.register(TripCategory, TripCategoryAdmin)
 admin.site.register(TripPoint, TripPointAdmin)
 admin.site.register(TripPointType, TripPointTypeAdmin)
+admin.site.register(Tags)

@@ -8,13 +8,14 @@
 {% endblock css %}
 
 {% block content %}
+
     <div class="center-block">
         <h1>Вписаться в поездку</h1>
     </div>
     <div class="filter-form-header">
         <h3>Укажите</h3>
     </div>
-    <form class="form-inline" method="post" action="">
+    <form class="form-inline"method="post" id="filter-app" action="">
         {% csrf_token %}
         {% include "partials/forms/errors.html" %}
 
@@ -105,7 +106,8 @@
         </div>
 
         <div class="row align-center" style="padding-top:20px;">
-            <a id="clear_form" href="{{ request.get_full_path }}?clear" class="btn btn-primary">Сбросить все</a>
+{#            <a id="clear_form" href="{{ request.get_full_path }}?clear" class="btn btn-primary">Сбросить все</a>#}
+            <a id="clear_form" href="#" class="btn btn-primary">Сбросить все</a>
         </div>
 
         <div class="filter-form-header">
@@ -164,6 +166,8 @@
     <script src="{% static 'image-picker/image-picker.js' %}"></script>
     <script src="{% static 'caroufredsel/jquery.carouFredSel-6.2.1.js' %}"></script>
     <script src="{% static 'js/filter_update.js' %}"></script>
+    <script src="{% static 'js/backbone.queryparams.js' %}"></script>
+    <script src="{% static 'js/my.js' %}"></script>
 
     <script type="text/javascript">
 
@@ -184,32 +188,32 @@
         $("#{{ form.users.auto_id }}").apply_image_picker_carousel();
 
         $( document ).ready(function() {
-          $('#{{form.country.auto_id}}').change(function(){
-            $('#id_month_year').val("").change();
-            $(this).post_form_on_change();
-          });
-          $('#{{form.price_type.auto_id}}').change(function(){
-            $(this).post_form_on_change();
-          });
-          $('#{{form.gender.auto_id}}').change(function(){
-            $(this).post_form_on_change();
-          });
-          $('#{{form.age_from.auto_id}}').change(function(){
-            $(this).post_form_on_change();
-          });
-          $('#{{form.age_to.auto_id}}').change(function(){
-            $(this).post_form_on_change();
-          });
-
+{#          $('#{{form.country.auto_id}}').change(function(){#}
+{#            $('#id_month_year').val("").change();#}
+{#            $(this).post_form_on_change();#}
+{#          });#}
+{#          $('#{{form.price_type.auto_id}}').change(function(){#}
+{#            $(this).post_form_on_change();#}
+{#          });#}
+{#          $('#{{form.gender.auto_id}}').change(function(){#}
+{#            $(this).post_form_on_change();#}
+{#          });#}
+{#          $('#{{form.age_from.auto_id}}').change(function(){#}
+{#            $(this).post_form_on_change();#}
+{#          });#}
+{#          $('#{{form.age_to.auto_id}}').change(function(){#}
+{#            $(this).post_form_on_change();#}
+{#          });#}
+{##}
           $('#{{form.category.auto_id}}').hide();
           $('#{{form.category.auto_id}}').render_trip_categories_as_list();
           $('#{{form.category.auto_id}}').change(function(){
             $(this).post_form_on_change();
           });
-          $('#clear_form').click(function(){
-            $(this).post_form_on_change({clear_data: true})
-            return false;
-          });
+{#          $('#clear_form').click(function(){#}
+{#            $(this).post_form_on_change({clear_data: true})#}
+{#            return false;#}
+{#          });#}
           $('#trip-filter-submit').hide();
         });
 

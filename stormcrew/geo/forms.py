@@ -3,7 +3,7 @@ from django import forms
 from django.conf import settings
 from relish.decorators import instance_cache
 from trip.models import Trip
-from api.aviasales import AviasalesManger
+from party_api.aviasales import AviasalesManger
 from .models import AirportIATA
 
 l_avia = logging.getLogger('api_aviasales')

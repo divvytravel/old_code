@@ -2,8 +2,7 @@
 *.pot
 *.pyc
 local_settings.py
-settings_local.py
-settings_secret.py
+server_settings.py
 *.sqlite
 *.TODO
 *.log.*
@@ -11,6 +10,8 @@ settings_secret.py
 *.bat
 .idea/
 debug/
-db.sqlite.*
+env
+divvy.db
 local_fixtures/
 media/
+static/
