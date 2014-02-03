@@ -267,7 +267,7 @@ TRAVELPAYOUTS_MARKER = os.environ.get('TRAVELPAYOUTS_MARKER', '')
 
 ########## Custom user app defaults
 # Select the correct user model
-AUTH_USER_MODEL = "users.User"
+AUTH_USER_MODEL = 'users.User'
 ########## END Custom user app defaults
 
 
