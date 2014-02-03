@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Trip, TripPicture, TripRequest, TripCategory,\
-    TripPointType, TripPoint, Tags
+from django.contrib.contenttypes import generic
+from .models import Trip, TripRequest, TripCategory,\
+    TripPointType, TripPoint, Tags, Images
+
+
+class ImagesInline(generic.GenericStackedInline):
+    model = Images
+    extra = 1
 
 
 class TripPointInline(admin.TabularInline):
@@ -12,7 +18,7 @@ class TripPointInline(admin.TabularInline):
 
 class TripAdmin(admin.ModelAdmin):
     list_display = 'title', 'get_country', 'city', 'start_date', 'end_date'
-    inlines = TripPointInline, 
+    inlines = [ImagesInline, TripPointInline]
 
     def get_country(self, obj):
         try:
@@ -20,14 +26,6 @@ class TripAdmin(admin.ModelAdmin):
         except:
             return u"-"
     get_country.short_description = u"Страна"
-
-
-class TripPictureAdmin(admin.ModelAdmin):
-    list_display = 'file_name', 'trip'
-
-    def file_name(self, obj):
-        return obj.file.name
-    file_name.short_description = u"Имя файла"
 
 
 class TripPointTypeAdmin(admin.ModelAdmin):
@@ -48,7 +46,6 @@ class TripRequestAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Trip, TripAdmin)
-admin.site.register(TripPicture, TripPictureAdmin)
 admin.site.register(TripRequest, TripRequestAdmin)
 admin.site.register(TripCategory, TripCategoryAdmin)
 admin.site.register(TripPoint, TripPointAdmin)

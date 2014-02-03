@@ -23,7 +23,7 @@ from geo.forms import CheapestFlightForm
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
 from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
-from .models import Trip, TripPicture, TripCategory, TripPoint
+from .models import Trip, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
 
 
@@ -207,11 +207,11 @@ class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
         return super(TripFilterFormView, self).form_invalid(form)
 
 
-class SaveImagesMixin(object):
-    def save_images(self):
-        for image_stream in self.request.FILES.getlist('files[]'):
-            pic = TripPicture(file=image_stream, trip=self.object)
-            pic.save()
+# class SaveImagesMixin(object):
+#     def save_images(self):
+#         for image_stream in self.request.FILES.getlist('files[]'):
+#             pic = TripPicture(file=image_stream, trip=self.object)
+#             pic.save()
 
 
 class TripCreateStepOneView(LoginRequiredMixin, FormView):
@@ -264,8 +264,7 @@ class TripPointInline(InlineFormSet):
         return kwargs
 
 
-class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView,
-                                                            SaveImagesMixin):
+class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
     form_class = TripForm
     model = Trip
     success_message = u"Поездка создана!"
@@ -450,8 +449,7 @@ class TripPointUpdateInline(TripPointInline):
         return kwargs
 
 
-class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView,
-                                                            SaveImagesMixin):
+class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView):
     model = Trip
     form_class = TripUpdateForm
     template_name = "trip/trip_update.html"

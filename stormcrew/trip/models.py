@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+import uuid
+
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -7,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.utils.dateformat import format
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save, post_delete
+from django.contrib.contenttypes import generic
 
 from model_utils import Choices
 from utils.helpers import get_today
@@ -16,6 +20,19 @@ from .managers import TripManager, TripRequestManager
 
 logger = logging.getLogger(__name__)
 DEFAUTL_CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
+
+
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "trip/%s.%s" % (uuid.uuid4(), ext)
+    return filename
+
+
+class Images(models.Model):
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    image = models.ImageField(upload_to=get_file_path, max_length=255)
 
 
 class Tags(models.Model):
@@ -86,6 +103,8 @@ class Trip(models.Model):
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     related_name='approved_trips', blank=True, verbose_name=u'Участники')
     tags = models.ManyToManyField(Tags, related_name='trips', blank=True, verbose_name=u'Теги')
+    image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
+    images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
 
     objects = TripManager()
 
@@ -336,24 +355,6 @@ class TripPoint(models.Model):
 
 post_save.connect(Trip.points_updated, sender=TripPoint)
 post_delete.connect(Trip.points_updated, sender=TripPoint)
-
-
-class TripPicture(models.Model):
-    file = models.ImageField("Изображение", upload_to="trip")
-    trip = models.ForeignKey('trip.Trip', related_name='images',
-                             verbose_name=u'Поездка')
-
-    class Meta:
-        verbose_name = u"Изображение"
-        verbose_name_plural = u"Изображения"
-
-    def __unicode__(self):
-        return self.file.name
-
-    # remove to leave file.
-    def delete(self, *args, **kwargs):
-        self.file.delete(False)
-        super(TripPicture, self).delete(*args, **kwargs)
 
 
 class TripRequest(models.Model):
