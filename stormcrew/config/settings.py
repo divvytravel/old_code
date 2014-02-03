@@ -173,7 +173,9 @@ THIRD_PARTY_APPS = (
     'sorl.thumbnail', # image thumbnails
     'postman_custom',
     'postman',
-    'tastypie'
+    'tastypie',
+    'provider',
+    'provider.oauth2'
 )
 
 # Apps specific for this project go here.
@@ -224,9 +226,10 @@ NO_AVATAR_IMG = STATIC_URL + 'img/no-avatar.jpg'
 ########## END AUTHENTICATION CONFIGURATION
 
 ########## SOCIAL AUTH CONFIGURATION
-FACEBOOK_APP_ID = os.environ.get('FACEBOOK_APP_ID', '')
-FACEBOOK_API_SECRET = os.environ.get('FACEBOOK_API_SECRET', '')
+FACEBOOK_APP_ID = '205781592952444'
+FACEBOOK_API_SECRET = '6995e3fd3d2517a722d105b1282a5bcc'
 FACEBOOK_SKIP_POST_ON_WALL = os.environ.get('FACEBOOK_SKIP_POST_ON_WALL', False)
+
 FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'user_birthday', 'publish_stream']
 FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 

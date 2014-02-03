@@ -1,0 +1,1 @@
+curl --dump-header - -H "Content-Type: application/json" -X POST --data '{"provider": "facebook", "access_token": "CAACEdEose0cBAFrLWAbkIB8VCXcCmKhgDnw0MjT3MvjAsOV9UDQRMqPgDOAVVzZA7YmfDlXLevVOofZAafPMWn5JDEZA7UGyYa7vA8T2oxFh5VSMIZBk69blp3Qpob1xCcHf9xHi0jgylZBXTNC9l9Mu4ecTIZAIHG9BuWhPZA9iWUwXGmtTvn9aoysXyZAFd04ZD"}' http://localhost:8000/api/v1/registration/ &
