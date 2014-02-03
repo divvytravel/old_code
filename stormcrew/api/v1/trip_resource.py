@@ -6,7 +6,7 @@ from tastypie import fields
 
 from .base import BaseResourceMixin
 
-from trip.models import Trip, TripCategory, Tags
+from trip.models import Trip, TripCategory, Tags, Images
 from geo.models import Country, City
 
 try:
@@ -15,6 +15,12 @@ except ImportError:
     from django.contrib.auth.models import User
 else:
     User = get_user_model()
+
+
+class ImageResource(ModelResource, BaseResourceMixin):
+    class Meta(BaseResourceMixin.Meta):
+        queryset = Images.objects.all()
+        allowed_methods = ['get']
 
 
 class UserResource(ModelResource, BaseResourceMixin):
@@ -48,6 +54,7 @@ class TripResource(ModelResource, BaseResourceMixin):
                                  related_name='trips', full=True, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
                                   related_name='trips', full=True, null=True)
+    images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = Trip.objects.all()
