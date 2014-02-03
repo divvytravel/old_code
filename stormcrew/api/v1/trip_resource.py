@@ -68,4 +68,7 @@ class TripResource(ModelResource, BaseResourceMixin):
     def dehydrate(self, bundle):
         bundle.data['country'] = u'%s' % bundle.obj.city.country
         bundle.data['country_id'] = bundle.obj.city.country_id
+
+        bundle.data['city'] = u'%s' % bundle.obj.city.name
+        bundle.data['city_id'] = bundle.obj.city_id
         return bundle
