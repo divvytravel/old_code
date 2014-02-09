@@ -1,0 +1,60 @@
+.selectize-control.single
+  .selectize-input:after
+    position absolute
+    top 14px
+    right 10px
+    display block
+    width 15px
+    height 9px
+    background-image url("/static/img/arrow-down-medium.png")
+    background-repeat no-repeat
+    content: ' '
+
+  .selectize-input.dropdown-active:after
+    top 16px
+    background-image url("/static/img/arrow-up-medium.png")
+
+.selectize-input
+  height 33px
+  padding 6px 24px 8px 8px
+  border 1px solid #f6f6f6
+  box-shadow inset 0px 1px 3px rgba(0, 0, 0, 0.25)
+
+  .item
+    color #31b9da
+
+  input
+    color rgba(0, 0, 0, 0.9)
+    font-size 13px
+
+.selectize-input.focus
+  border 1px solid rgba(49, 185, 218, 0.4)
+  color rgba(0, 0, 0, 0.9)
+
+.selectize-dropdown-content
+  .option
+    height 14px
+    color #39bcdb
+    padding 6px 8px 4px 8px
+
+    &.active
+      color white
+      background #39bcdb
+
+    &:last-child
+      padding-bottom 8px
+
+  .option-multi
+    height 39px
+    color rgba(0, 0, 0, 0.9)
+
+    div
+      font-size 15px
+
+    p
+      padding-top 1px
+      font-size 11px
+
+    &:last-child
+      height 33px
+

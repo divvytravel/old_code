@@ -1,0 +1,96 @@
+.input
+  position relative
+  display inline-block
+  width 100%
+
+  .input-element
+    width 100%
+    height 33px
+    
+    padding 0px 24px 1px 8px
+    
+    border 1px solid #f6f6f6
+    border-radius 3px
+    
+    box-shadow inset 0px 1px 3px rgba(0, 0, 0, 0.25)
+
+    color rgba(0, 0, 0, 0.9)
+    font-size 13px
+
+    &:focus
+      outline none
+      
+      &::-webkit-input-placeholder
+        color rgba(0, 0, 0, 0.2)
+
+  .input-element::-webkit-input-placeholder
+    color rgba(0, 0, 0, 0.4)
+    font-size 13px
+
+  .input-picker
+    position absolute
+    top 10px
+    right 9px
+    color #31b9da
+    font-size 13px
+
+  .input-message
+    color rgba(0, 0, 0, 0.4)
+    line-height 26px
+    font-size 13px
+
+  &.input-disabled
+    .input-element
+      background #eee
+      color rgba(0, 0, 0, 0.4)
+
+    .input-picker
+      color rgba(0, 0, 0, 0.4)
+
+  &.input-fadeout
+    .input-element
+      background #fbfbfb
+      color rgba(0, 0, 0, 0.4)
+
+    .input-picker
+      color rgba(0, 0, 0, 0.4)
+
+  &.input-valid
+    .input-element
+      border-color #3fbf7f
+
+    .input-message
+      color #3fbf7f
+
+  &.input-invalid
+    .input-element
+      border-color #f2555d
+
+    .input-message
+      color #f2555d
+
+  &.input-limit
+    .input-element
+      border-color #31b9da
+
+    .input-message
+      color #31b9da
+
+
+
+
+
+  .input-type-date
+    display inline-block
+    cursor pointer
+
+  .ui-datepicker-trigger
+    position absolute
+    top 4px
+    right 3px
+    background transparent
+    border 0px
+    cursor pointer
+
+
+  

@@ -50,3 +50,18 @@ GeoIP
 -----
 
 put GeoLiteCity.dat into settings.GEOIP_PATH
+
+
+Client code compilation
+-----------------------
+Requirements: nodejs > 0.10, npm
+
+.. code-block:: bash
+  npm install -g gulp
+  npm install
+  gulp build --target ./../static
+
+  # load fixtures
+  sudo python manage.py loaddata ./../public/src/fixtures/users.json
+  sudo python manage.py loaddata ./../public/src/fixtures/geo.json
+  sudo python manage.py loaddata ./../public/src/fixtures/trips.json

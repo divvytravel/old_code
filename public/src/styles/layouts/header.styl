@@ -1,0 +1,38 @@
+.header
+  height 72px
+  background #31b9da
+  
+  .header-wrap
+    width 960px
+    margin 0 auto
+    padding-top 21px
+
+    @clearfix()
+
+    .header-logo
+      margin-top 5px
+      margin-left 2px
+      float left
+
+    .header-nav
+      float right
+
+      .header-nav-item
+        padding 6px 7px
+        line-height 18px
+
+        font-size 13px
+        //color black
+        color white
+        text-decoration none
+        border 1px solid transparent
+
+        &:hover
+          //background rgba(255, 255, 255, 0.2)
+          background rgba(255, 255, 255, 0.15)
+          border-radius 4px
+
+        &.active
+          //background rgba(255, 255, 255, 0.4)
+          background rgba(255, 255, 255, 0.2)
+          border-radius 4px

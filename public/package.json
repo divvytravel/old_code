@@ -1,0 +1,87 @@
+{
+  "name": "travel",
+  "version": "0.0.1",
+  "dependencies": {
+    "grunt-contrib-coffee": "~0.8",
+    "grunt-regarde": "~0.1",
+    "grunt-contrib-connect": "~0.6",
+    "grunt-contrib-clean": "~0.5",
+    "grunt-exec": "~0.4",
+    "grunt-react": "~0.6",
+    "coffee-script": "~1.6.3",
+    "gulp": "~3.5",
+    "gulp-exec": "~1.0",
+    "gulp-util": "~2.2",
+    "gulp-coffee": "~1.3",
+    "gulp-react": "~0.1",
+    "gulp-browserify": "~0.3",
+    "gulp-jade": "~0.4",
+    "gulp-stylus": "~0",
+    "gulp-concat": "~2.1",
+    "gulp-connect": "~0.1",
+    "gulp-imagemin": "~0.1",
+    "reactify": "~0.4",
+    "coffeeify": "~0.5",
+    "through2": "~0.4.0",
+    "browserify-shim": "~2.0.10",
+    "browserify": "~3.24",
+    "components-jquery": "git://github.com/components/jquery.git#1.10.2",
+    "jquery-ui": "git://github.com/jquery/jquery-ui#1.10.3",
+    "jsUri": "git://github.com/derek-watson/jsUri.git",
+    "spin.js": "~1.3",
+    "react-tools": "~0.5",
+    "moment": "~2.4",
+    "sifter": "~0.3",
+		"microplugin": "~0.0",
+		"selectize": "git://github.com/vslinko/selectize.js#master"
+  },
+  "shims": {
+    "jquery": {
+      "path": "./../node_modules/components-jquery/jquery.js",
+      "exports": "$"
+    },
+    "jquery.ui.core": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.core.js",
+      "depends": {"jquery": "jQuery"},
+      "exports": null
+    },
+    "jquery.ui.datepicker": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.datepicker.js",
+      "depends": {"jquery": "jQuery", "jquery.ui.core": null},
+      "exports": null
+    },
+    "React": {
+      "path": "./../node_modules/react-tools/build/modules/React.js",
+      "exports": null
+    },
+    "moment": {
+      "path": "./../node_modules/moment/moment.js",
+      "exports": null
+    },
+    "momentLang": {
+      "path": "./../node_modules/moment/lang/ru.js",
+      "exports": null
+    },
+    "uri": {
+      "path": "./../node_modules/jsuri/Uri.js",
+      "exports": null
+    },
+    "sifter": {
+      "path": "./../node_modules/sifter/lib/sifter.js",
+      "exports": null
+    },
+    "microplugin": {
+      "path": "./../node_modules/microplugin/src/microplugin.js",
+      "exports": null
+    },
+    "selectize": {
+      "path": "./../node_modules/selectize/dist/js/selectize.js",
+      "exports": "selectize",
+      "depends": {
+        "jquery": "jQuery",
+        "sifter": "Sifter",
+        "microplugin": "MicroPlugin"
+      }
+    }
+  }
+}

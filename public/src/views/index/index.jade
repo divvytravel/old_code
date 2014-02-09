@@ -1,0 +1,49 @@
+html(lang='ru-RU')
+  head
+    meta(charset='utf-8')
+    title mass.travel
+    link(rel='stylesheet', media='screen', href='/static/styles/index.css')
+
+    script(src='//use.typekit.net/ndu1ixv.js')
+    script(type='text/javascript').
+      try{Typekit.load();}catch(e){}
+
+    script(src='/static/js/index.js')
+    
+    script(type='text/javascript').
+      require("utils").init();
+
+  body
+    .promo
+      .header
+        .header-color-layout
+        .header-wrap
+          a.header-logo(href="/")
+            img(src="/static/img/logo.png")
+          .header-nav
+            a.header-nav-item(href="#") Путешествия
+            a.header-nav-item(href="#") Как это работает
+            a.header-nav-item(href="#") Создание путешествия
+            span(data-component="facebook-login", data-is-authenticated="")
+      .promo-content
+        div.promo-content-title Путешествуйте в хорошей компании
+        div.promo-content-description
+          | Вы можете 
+          a(href="#") организовать своё путешествие 
+          | и самостоятельно собрать 
+          | компанию, или к кому-нибудь присоединиться — 
+          a(href="#") выбирайте поездку, 
+          | и смотрите, куда собираются 
+          a(href="#") интересные вам люди
+          | .
+    .container
+      .sidebar
+        .title
+          | Посмотрите, <br/>
+          | куда собираются другие, <br/>
+          | и путешествуйте вместе
+        div(data-component="travellers")
+      .content
+        div(data-component="trips")
+    include ./../includes/footer
+

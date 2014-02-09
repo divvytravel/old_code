@@ -15,3 +15,5 @@ divvy.db
 local_fixtures/
 media/
 static/
+public/node_modules/
+stormcrew/templates/views/

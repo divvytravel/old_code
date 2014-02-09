@@ -1,0 +1,126 @@
+[
+  {
+    "model": "trip.tags",
+    "pk": 13,
+    "fields": {
+      "name": "Экскурсия",
+      "slug": "excursion"
+    }
+  },
+  {
+    "model": "trip.tags",
+    "pk": 14,
+    "fields": {
+      "name": "Итальянский язык",
+      "slug": "italian-lang"
+    }
+  },
+  {
+    "model": "trip.trip",
+    "pk": 15,
+    "fields": {
+      "category": null,
+      "city": 12,
+      "currency": "euro",
+      "descr_additional": "",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "descr_share": "",
+      "end_date": "2014-02-16",
+      "end_people_date": "2014-02-07",
+      "image": "/static/img/promo/trips/1.png",
+      "includes": "Что входит.",
+      "people": [2,3,4,5,6],
+      "people_count": 10,
+      "people_max_count": 20,
+      "price": 30000,
+      "price_type": "noncom",
+      "start_date": "2014-02-08",
+      "tags": [13,14],
+      "title": "Итальянская архитектура",
+      "trip_type": "open",
+      "owner": 2
+    }
+  },
+  {
+    "model": "trip.trip",
+    "pk": 16,
+    "fields": {
+      "category": null,
+      "city": 12,
+      "currency": "euro",
+      "descr_additional": "",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "descr_share": "",
+      "end_date": "2014-02-16",
+      "end_people_date": "2014-02-07",
+      "image": "/static/img/promo/trips/2.png",
+      "includes": "Что входит.",
+      "people": [2,3,4,5,6],
+      "people_count": 10,
+      "people_max_count": 20,
+      "price": 30000,
+      "price_type": "noncom",
+      "start_date": "2014-02-08",
+      "tags": [13,14],
+      "title": "Итальянская архитектура",
+      "trip_type": "open",
+      "owner": 2
+    }
+  },
+  {
+    "model": "trip.trip",
+    "pk": 17,
+    "fields": {
+      "category": null,
+      "city": 12,
+      "currency": "euro",
+      "descr_additional": "",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "descr_share": "",
+      "end_date": "2014-02-16",
+      "end_people_date": "2014-02-07",
+      "image": "/static/img/promo/trips/3.png",
+      "includes": "Что входит.",
+      "people": [2,3,4,5,6],
+      "people_count": 10,
+      "people_max_count": 20,
+      "price": 30000,
+      "price_type": "noncom",
+      "start_date": "2014-02-08",
+      "tags": [13,14],
+      "title": "Итальянская архитектура",
+      "trip_type": "open",
+      "owner": 2
+    }
+  },
+  {
+    "model": "trip.trip",
+    "pk": 18,
+    "fields": {
+      "category": null,
+      "city": 12,
+      "currency": "euro",
+      "descr_additional": "",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "descr_share": "",
+      "end_date": "2014-02-16",
+      "end_people_date": "2014-02-07",
+      "image": "/static/img/promo/trips/1.png",
+      "includes": "Что входит.",
+      "people": [2,3,4,5,6],
+      "people_count": 10,
+      "people_max_count": 20,
+      "price": 30000,
+      "price_type": "noncom",
+      "start_date": "2014-02-08",
+      "tags": [13,14],
+      "title": "Итальянская архитектура",
+      "trip_type": "open",
+      "owner": 2
+    }
+  }
+]

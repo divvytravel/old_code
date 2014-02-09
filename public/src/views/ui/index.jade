@@ -1,0 +1,91 @@
+html(lang='ru-RU')
+  head
+    meta(charset='utf-8')
+    title mass.travel
+    link(rel='stylesheet', media='screen', href='/static/styles/index.css')
+
+    script(src='//use.typekit.net/ndu1ixv.js')
+    script(type='text/javascript').
+      try{Typekit.load();}catch(e){}
+
+    script(src='/static/js/index.js')
+    
+    script(type='text/javascript').
+      require("utils").init();
+
+  body.ui.opacity
+    .promo
+      .header
+        .header-color-layout
+        .header-wrap
+          a.header-logo(href="/")
+            img(src="/static/img/logo.png")
+          .header-nav
+            a.header-nav-item(href="index.html") Путешествия
+            a.header-nav-item(href="#") Как это работает
+            a.header-nav-item(href="#") Создание путешествия
+            span(data-component="facebook-login", data-is-authenticated="")
+    .header
+      .header-wrap
+        a.header-logo(href="/")
+          img(src="/static/img/logo-white.png")
+        .header-nav
+          a.header-nav-item(href="index.html") Путешествия
+          a.header-nav-item(href="#") Как это работает
+          a.header-nav-item(href="#") Создание путешествия
+          span(data-component="facebook-login", data-is-authenticated="", data-type-white="true")
+    .container
+      .elements
+        ul.fields
+          li.fields-cell
+            span(data-component="input", data-value="Инпут")
+          li.fields-cell
+            span(data-component="select-data-wrapper")
+          li.fields-cell
+            span(data-component="select-data-wrapper", data-multiple="true")
+          li.fields-cell
+            span(data-component="select-data-wrapper", data-multiple="true")
+        ul.fields
+          li.fields-cell
+            span(data-component="input", data-placeholder="Плейсхолдер")
+        ul.fields
+          li.fields-cell
+            span(data-component="input", data-picker="$", data-placeholder="Фокус")
+          li.fields-cell
+            span
+          li.fields-cell
+            span
+          li.fields-cell
+            span
+          li.fields-cell.fields-cell-right
+            .fields-cell-right-container
+              a.button.button--type-action(href="#")
+                | Кнопка
+                i.button-picker.icon-calendar-blue
+        ul.fields
+          li.fields-cell
+            span(data-component="input", data-picker="$", data-value="Фейдаут", data-fadeout="true")
+          li.fields-cell
+            span(data-component="input", data-disabled="disabled", data-value="Disabled", data-picker="$")
+          li.fields-cell.fields-cell-middle
+            a.button.button--type-action(href="#")
+              i.button-icon.icon-download
+              | Изменить фон своих путешествий
+        ul.fields
+          li.fields-cell
+            span(data-component="input", data-max-length="20")
+          li.fields-cell
+            span(data-component="input", data-max-length="20")
+          li.fields-cell
+            span(data-component="input", data-type="email", data-invalid-message="Введите почту", data-valid-message="Нормалек!")
+          li.fields-cell
+            span(data-component="input", data-type="email", data-invalid-message="Введите почту", data-valid-message="Нормалек!")
+
+        .categories
+          a.button--type-category(href="#") Активный отдых
+          a.button--type-category(href="#") Концерты
+          a.button--type-category(href="#") Походы
+          a.button--type-category.active(href="#") Футбол
+          a.button--type-category(href="#") Экскурсии
+          a.button--type-category(href="#") Яхтинг
+          

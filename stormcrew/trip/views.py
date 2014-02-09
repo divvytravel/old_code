@@ -28,7 +28,7 @@ from .serializers import TripSerializer, TripCategorySerializer
 
 
 class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
-    template_name = "trip/new_filter.html"
+    template_name = "views/index/index.html"
     form_class = TripFilterForm
     content_type = "text/html"
 
