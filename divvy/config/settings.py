@@ -494,7 +494,7 @@ if DEBUG:
 try:
     from local_settings import *
 except ImportError:
-    pass
+    SERVER = True
 
 if SERVER:
     from server_settings import *
