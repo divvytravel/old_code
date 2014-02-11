@@ -4,5 +4,5 @@
 
 # For the persistance stores
 psycopg2==2.5
-
+gunicorn==18.0
 # TODO include uwsgi here?

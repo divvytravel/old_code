@@ -57,48 +57,48 @@ def branch(branch_name):
 
 @task
 def setup():
-    # """
-    # Setup project.
-    # """
-    # require.deb.packages([
-    #                          'curl',
-    #                          'python',
-    #                          'mercurial',
-    #                          'subversion',
-    #                          'git',
-    #                          'vim',
-    #                          'sudo',
-    #                          'libpq-dev',
-    #                          'libxml2-dev',
-    #                          'libxslt1-dev',
-    #                      ], update=True)
-    #
-    # # Creating project paths.
-    # sudo('mkdir %s -p' % env.path)
-    # sudo('chown %(project_user)s %(path)s' % env)
-    # sudo('mkdir %s -p' % env.virtualenv_path)
-    # sudo('chown %(project_user)s %(virtualenv_path)s' % env)
-    #
-    # fabtools.git.clone(env.repository_url, path=env.path, use_sudo=False, user=env.project_user)
-    # fabtools.git.checkout(path=env.path, branch=env.branch, use_sudo=False, user=env.project_user)
-    #
-    # require.python.virtualenv(env.virtualenv_path, use_sudo=False)
-    #
-    # require.python.virtualenv(env.virtualenv_path, use_sudo=False)
-    # with virtualenv(env.virtualenv_path):
-    #     require.python.requirements(os.path.join(env.path, 'requirements', 'server.txt'))
-    #
-    # env.db_pass = create_password()
-    # upload_template('config/server_settings.py' % env, '%(settings_path)s/server_settings.py' % env,
-    #                 context={'DB_PASSWORD': env.db_pass}, use_jinja=True)
-    #
-    # # Require a PostgreSQL server
-    # require.postgres.server()
-    # require.postgres.user(env.db_user, password=env.db_pass, createdb=False, createrole=True)
-    # require.postgres.database(env.db_name, env.db_user)
-    #
-    # with cd(env.manage_path):
-    #     run('chmod ogu+x manage.py')
+    """
+    Setup project.
+    """
+    require.deb.packages([
+                             'curl',
+                             'python',
+                             'mercurial',
+                             'subversion',
+                             'git',
+                             'vim',
+                             'sudo',
+                             'libpq-dev',
+                             'libxml2-dev',
+                             'libxslt1-dev',
+                         ], update=True)
+
+    # Creating project paths.
+    sudo('mkdir %s -p' % env.path)
+    sudo('chown %(project_user)s %(path)s' % env)
+    sudo('mkdir %s -p' % env.virtualenv_path)
+    sudo('chown %(project_user)s %(virtualenv_path)s' % env)
+
+    fabtools.git.clone(env.repository_url, path=env.path, use_sudo=False, user=env.project_user)
+    fabtools.git.checkout(path=env.path, branch=env.branch, use_sudo=False, user=env.project_user)
+
+    require.python.virtualenv(env.virtualenv_path, use_sudo=False)
+
+    require.python.virtualenv(env.virtualenv_path, use_sudo=False)
+    with virtualenv(env.virtualenv_path):
+        require.python.requirements(os.path.join(env.path, 'requirements', 'server.txt'))
+
+    env.db_pass = create_password()
+    upload_template('config/server_settings.py' % env, '%(settings_path)s/server_settings.py' % env,
+                    context={'DB_PASSWORD': env.db_pass}, use_jinja=True)
+
+    # Require a PostgreSQL server
+    require.postgres.server()
+    require.postgres.user(env.db_user, password=env.db_pass, createdb=False, createrole=True)
+    require.postgres.database(env.db_name, env.db_user)
+
+    with cd(env.manage_path):
+        run('chmod ogu+x manage.py')
 
     manage('collectstatic')
 
