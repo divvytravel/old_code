@@ -18,3 +18,4 @@ static/
 pid/
 public/node_modules/
 stormcrew/templates/views/
+log/

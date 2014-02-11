@@ -420,7 +420,7 @@ LOGGING = {
         'rotate_file':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../logs/main.log'),
+            'filename': os.path.join(BASE_DIR, '../log/main.log'),
             'when' : 'midnight',
             'interval' :    1,  # day
             'backupCount' : 7,
@@ -429,7 +429,7 @@ LOGGING = {
         'db_rotate_file':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../logs/db.log'),
+            'filename': os.path.join(BASE_DIR, '../log/db.log'),
             'when' : 'midnight',
             'interval' :    1,  # day
             'backupCount' : 7,
@@ -449,7 +449,7 @@ LOGGING = {
         'api_aviasales_file':{
             'level' : 'DEBUG',
             'class' : 'logging.handlers.TimedRotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, '../logs/api_aviasales.log'),
+            'filename': os.path.join(BASE_DIR, '../log/api_aviasales.log'),
             'when' : 'midnight',
             'interval' :    1,  # day
             'backupCount' : 7,

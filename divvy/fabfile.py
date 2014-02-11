@@ -12,7 +12,7 @@ from fabtools import require
 from fabtools.python import virtualenv, install_pip
 from fabtools.files import watch, upload_template
 from fabtools.service import restart
-# from fabric.contrib.files import comment, uncomment
+# from fabric.contrib.f iles import comment, uncomment
 # from fabtools.utils import run_as_root
 
 env.project_name = 'divvy'
@@ -188,6 +188,11 @@ def manage(command, noinput=True):
             run('%(manage_path)s/manage.py ' % env + command + ' --noinput')
         else:
             run('%(manage_path)s/manage.py ' % env + command)
+
+
+@task
+def gulp_compile():
+    pass
 
 
 @task
