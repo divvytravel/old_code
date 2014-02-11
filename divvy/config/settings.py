@@ -15,7 +15,7 @@ from os.path import join
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 SERVER = True
 DEBUG = False
