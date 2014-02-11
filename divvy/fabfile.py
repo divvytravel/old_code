@@ -87,18 +87,18 @@ def setup():
     # require.python.virtualenv(env.virtualenv_path, use_sudo=False)
     # with virtualenv(env.virtualenv_path):
     #     require.python.requirements(os.path.join(env.path, 'requirements', 'server.txt'))
-
-    env.db_pass = create_password()
-    upload_template('config/server_settings.py' % env, '%(settings_path)s/server_settings.py' % env,
-                    context={'DB_PASSWORD': env.db_pass}, use_jinja=True)
-
-    # Require a PostgreSQL server
-    require.postgres.server()
-    require.postgres.user(env.db_user, password=env.db_pass, createdb=False, createrole=True)
-    require.postgres.database(env.db_name, env.db_user)
-
-    with cd(env.manage_path):
-        run('chmod ogu+x manage.py')
+    #
+    # env.db_pass = create_password()
+    # upload_template('config/server_settings.py' % env, '%(settings_path)s/server_settings.py' % env,
+    #                 context={'DB_PASSWORD': env.db_pass}, use_jinja=True)
+    #
+    # # Require a PostgreSQL server
+    # require.postgres.server()
+    # require.postgres.user(env.db_user, password=env.db_pass, createdb=False, createrole=True)
+    # require.postgres.database(env.db_name, env.db_user)
+    #
+    # with cd(env.manage_path):
+    #     run('chmod ogu+x manage.py')
 
     manage('collectstatic')
 
