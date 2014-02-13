@@ -31,13 +31,15 @@ class User(AbstractUser):
 
     # TODO: create RelativeUrlField
     avatar_url = models.CharField(u"Url аватарки",
-        default=settings.NO_AVATAR_IMG, max_length=200)
+                                  default=settings.NO_AVATAR_IMG, max_length=200)
     provider = models.CharField(u"Источник", choices=PROVIDERS,
-        max_length=20, blank=True)
+                                max_length=20, blank=True)
     birthday = models.DateField(u"Дата рождения", blank=True, null=True)
     gender = models.CharField(u"Пол", choices=GENDERS, max_length=7, blank=True, null=True)
     social_auth_response = JSONField(u"Данные из источника", blank=True,
-        null=True)
+                                     null=True)
+    city = models.CharField(u"Город", blank=True, null=True, max_length = 20)
+    career = models.CharField(u"Деятельность", blank=True, null=True, max_length = 30)
 
     objects = UserManagerWithFilters()
 
@@ -74,7 +76,7 @@ class User(AbstractUser):
             try:
                 birthday = born.replace(year=today.year)
             except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-                birthday = born.replace(year=today.year, day=born.day-1)
+                birthday = born.replace(year=today.year, day=born.day - 1)
             if birthday > today:
                 return today.year - born.year - 1
             else:
@@ -113,7 +115,7 @@ class User(AbstractUser):
 
     def trip_requests(self):
         return TripRequest.objects.include_related().active().filter(
-        Q(trip__owner=self) | Q(trip__people=self)).distinct()
+            Q(trip__owner=self) | Q(trip__people=self)).distinct()
 
     def outgoing_trip_requests(self):
         return TripRequest.objects.include_related().active().filter(user=self)

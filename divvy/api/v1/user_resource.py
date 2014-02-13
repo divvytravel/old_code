@@ -85,7 +85,7 @@ class UserResource(ModelResource, BaseResourceMixin):
         fields = ['avatar_url', 'date_joined',
                   'birthday', 'first_name',
                   'gender', 'id', 'last_name',
-                  'username']
+                  'username', 'city', 'career']
 
     def obj_create(self, bundle, request=None, **kwargs):
         if 'access_token' in bundle.data:

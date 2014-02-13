@@ -23,7 +23,7 @@ env.project_user = env.project_name
 
 env.shell = '/bin/bash -c'
 
-env.hosts = ['%(project_user)s@192.168.12.2' % env]
+env.hosts = ['%(project_user)s@t.divvy.travel' % env]
 env.repository_url = 'https://indieman@bitbucket.org/divvytravel/divvy.git'
 
 env.virtualenv_path = '/usr/local/virtualenvs/%(project_name)s' % env
