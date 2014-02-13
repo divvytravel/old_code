@@ -52,27 +52,12 @@ if DEBUG:
 ########## MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Alexey Evseev', 'alexevseev@gmail.com'),
+    ('Ivan Kobzev', 'Ivan.Kobzev@gmail.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 ########## END MANAGER CONFIGURATION
-
-
-# ########## DATABASE CONFIGURATION
-# # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
-# import dj_database_url
-# DATABASES = {'default': dj_database_url.config()}
-# if DATABASES == {'default': {}}:
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': "db.sqlite",
-#         }
-#     }
-# ########## END DATABASE CONFIGURATION
-
 
 ########## GENERAL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#time-zone
@@ -498,3 +483,11 @@ except ImportError:
 
 if SERVER:
     from server_settings import *
+
+    RAVEN_CONFIG = {
+        'dsn': 'http://352e7c1857cf4f11b7dbe71dd4891d93:a3abffeff7f74e4684822dbe241738b1@sentry/2',
+        }
+
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'raven.contrib.django.raven_compat',
+    )
