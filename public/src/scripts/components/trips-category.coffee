@@ -7,8 +7,13 @@ api = require "api"
 TripsCategory = React.createClass
   render: ->
     `(
-      <div className="trips-category">
-        
+      <div className="trips-filter-category">
+        <a className="button--type-category">Активный отдых</a>
+        <a className="button--type-category">Концерты</a>
+        <a className="button--type-category">Походы</a>
+        <a className="button--type-category">Футбол</a>
+        <a className="button--type-category">Экскурсии</a>
+        <a className="button--type-category button--type-open-category">Все категории</a>
       </div>
     )`
 

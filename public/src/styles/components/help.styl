@@ -1,0 +1,64 @@
+.help
+  position relative
+  margin-left 2px
+
+  .help-icon
+    width 10px
+    height 10px
+    
+    display inline-block
+    
+    background rgba(255, 255, 255, 0.8)
+    
+    font-family Verdana
+    font-weight bold
+    font-size 8px
+    font-style normal
+    text-align center
+    line-height 10px
+    
+    border-radius 50%
+    border 1px solid rgba(49, 185, 218, 0.5)
+    
+    color rgba(49, 185, 218, 0.8)
+  
+    cursor pointer
+  
+    &:hover
+      background rgba(49, 185, 218, 1)
+      color white
+
+  .help-tooltip
+    position absolute
+    z-index 9999
+    margin-top 26px
+    margin-left -103px
+    padding 12px
+    width 166px
+    border-width 0px !important
+    border-radius 3px !important
+  
+    background white
+  
+    box-shadow 2px 0px 12px rgba(0, 0, 0, 0.12)
+  
+    .ui-tooltip-content
+      font-size 11px
+      line-height 15px !important
+      color rgba(0, 0, 0, 0.9)
+      font-family Helvetica
+    
+    &:before
+      content " "
+      position absolute
+      z-index 10000
+      top -10px
+      left 50%
+      margin-left -6px
+      width 0
+      height 0
+      border-left 8px solid transparent
+      border-right 8px solid transparent
+      border-bottom 10px solid white
+
+

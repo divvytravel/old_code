@@ -1,0 +1,52 @@
+.radio-group
+  .radio-group-item
+    padding-bottom 6px
+
+  .radio-group-label
+    font-size 13px
+    color rgba(0, 0, 0, 0.9)
+    padding-left 6px
+
+.radio-group-thin
+  .radio-group-label
+    font-size 11px
+
+.radio-group-input
+    display inline-block
+    vertical-align middle
+    margin 0
+    padding 0
+    width 18px
+    height 18px
+    background url(/static/img/checkbox.png) no-repeat
+    border none
+    cursor pointer
+
+.radio-group-input
+  background-position -120px 0
+
+.radio-group-input.hover
+  background-position -120px 0
+
+.radio-group-input.checked
+  background-position -140px 0
+
+.radio-group-input.disabled
+  background-position -160px 0
+  cursor default
+
+.radio-group-input.checked.disabled
+  background-position -180px 0
+
+
+/* Retina support */
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+       only screen and (-moz-min-device-pixel-ratio: 1.5),
+       only screen and (-o-min-device-pixel-ratio: 3/2),
+       only screen and (min-device-pixel-ratio: 1.5) {
+    .radio-group-input {
+        background-image: url(divvy@2x.png);
+        -webkit-background-size: 200px 20px;
+        background-size: 200px 20px;
+    }
+}

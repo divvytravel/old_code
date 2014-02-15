@@ -4,7 +4,9 @@ jade = require "gulp-jade"
 stylus = require "gulp-stylus"
 imagemin = require "gulp-imagemin"
 concat = require "gulp-concat"
+bower = require "gulp-bower"
 scripts = require "./gulp/scripts"
+
 
 target = gutil.env.target or "./../stormcrew/static"
 
@@ -40,6 +42,9 @@ gulp.task "imgs", ->
         .pipe(imagemin())
         .pipe(gulp.dest("#{target}/img"))
 
+gulp.task "bower", ->
+    bower().pipe gulp.dest "./node_modules"
+
 gulp.task "watch", ->
   gulp.run "scripts"
   gulp.run "imgs"
@@ -57,5 +62,6 @@ gulp.task "watch", ->
   gulp.watch "./src/styles/**/*.styl", ->
     gulp.run "styles"
 
+gulp.task "init", ["bower"]
 gulp.task "default", ["watch"]
-gulp.task "build", ["views", "ui-views", "scripts", "styles", "imgs"]
+gulp.task "build", ["init", "views", "ui-views", "scripts", "styles", "imgs"]

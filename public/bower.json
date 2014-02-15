@@ -1,0 +1,6 @@
+{
+  "name": "divvy.travel",
+  "dependencies": {
+    "iCheck": "1.0.1"
+  }
+}

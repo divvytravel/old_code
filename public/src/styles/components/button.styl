@@ -1,21 +1,46 @@
+color-red = #f2555d
+border-red = rgba(242, 85, 93, 0.7)
+shadow-red = rgba(99, 35, 38, 0.15)
+color-disabled-red = rgba(242, 85, 93, 0.5)
+
+background-hover-red = rgba(242, 85, 93, 0.09)
+background-active-red = rgba(242, 85, 93, 0.15)
+background-active-hover-red = rgba(242, 85, 93, 0.25)
+
+border-hover-red = rgba(242, 85, 93, 0.5)
+border-active-red = rgba(242, 85, 93, 0.6)
+border-active-hover-red = rgba(242, 85, 93, 0.7)
+
 .button
   display inline-block
   width 100%
+  padding 8px 0px
   border-radius 3px
   text-align center
   cursor pointer
+  font-size 15px
+  line-height 27px
+  color white
 
 .button--color-blue
-  color white
-  padding 12px 0px
   background #31b9da
   border 1px solid #2aa1bf
-  box-shadow 1px 0px 5px rgba(22, 76, 89, 0.15)
+  box-shadow 1px 0px 5px rgba(22, 76, 89, 0.5)
+
+.button--color-red
+  background #f2555d
+  border 1px solid #d14950
+  box-shadow 1px 0px 5px rgba(99, 35, 38, 0.5)
+
+.button--color-green
+  background #3fbf7f
+  border 1px solid #38ab72
+  box-shadow 1px 0px 5px rgba(21, 64, 42, 0.5)
 
 .button--type-action
   position relative
   height 28px
-  padding 3px 0px 0px 11px
+  padding 3px 0px 0px 0px
   text-align left
   font-size 13px
   color #31b9da
@@ -28,7 +53,10 @@
   &:hover
     border 1px solid rgba(49, 185, 218, 0.5)
     background rgba(49, 185, 218, 0.09)
-  
+
+  span
+    margin-left 11px
+
   .button-icon
     margin-top 4px
     margin-right 8px
@@ -37,6 +65,14 @@
     position absolute
     top 8px
     right 8px
+
+  &.active
+    border 1px solid rgba(49, 185, 218, 0.6)
+    background rgba(49, 185, 218, 0.15)
+    
+    &:hover
+      border 1px solid rgba(49, 185, 218, 0.7)
+      background rgba(49, 185, 218, 0.25)
 
 .button--type-category
   display inline-block
@@ -49,6 +85,8 @@
   font-size 13px
   line-height 18px
   color #31b9da
+  
+  cursor pointer
 
   &.active
     border 1px solid rgba(49, 185, 218, 0.6)
@@ -64,4 +102,53 @@
     background rgba(49, 185, 218, 0.09)
     box-shadow 1px 0px 5px rgba(22, 76, 89, 0.15)
 
+  &.button--type-open-category
+    position relative
+    float right
+    padding-right 27px
+    color color-red
+    border 1px solid border-red
+    background white
+    box-shadow 1px 0px 5px shadow-red
     
+    &:after
+      content " "
+      position absolute
+      top 9px
+      right 5px
+      width 15px
+      height 9px
+      background-image url("/static/img/arrow-down-medium-red.png")
+      background-repeat no-repeat
+      display block
+
+    &.opened:after
+      background-image url("/static/img/arrow-up-medium-red.png")
+
+.button--type-subcategory
+  color color-red
+
+  &.active
+    border 1px solid border-active-red
+    background background-active-red
+    box-shadow 1px 0px 5px shadow-red
+  
+    &:hover
+      border 1px solid border-active-hover-red
+      background background-active-hover-red
+  
+  &:hover
+    border 1px solid border-hover-red
+    background background-hover-red
+    box-shadow 1px 0px 5px shadow-red
+
+  &.disabled
+    color color-disabled-red
+    background transparent
+    border 1px solid transparent
+    
+    &:hover
+      background transparent
+      border 1px solid transparent
+      box-shadow none
+

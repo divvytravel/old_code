@@ -17,5 +17,6 @@ media/
 static/
 pid/
 public/node_modules/
+public/bower_components/
 stormcrew/templates/views/
 log/
