@@ -40,7 +40,7 @@ border-active-hover-red = rgba(242, 85, 93, 0.7)
 .button--type-action
   position relative
   height 28px
-  padding 3px 0px 0px 11px
+  padding 3px 0px 0px 0px
   text-align left
   font-size 13px
   color #31b9da
@@ -53,7 +53,10 @@ border-active-hover-red = rgba(242, 85, 93, 0.7)
   &:hover
     border 1px solid rgba(49, 185, 218, 0.5)
     background rgba(49, 185, 218, 0.09)
-  
+
+  span
+    margin-left 11px
+
   .button-icon
     margin-top 4px
     margin-right 8px
@@ -82,6 +85,8 @@ border-active-hover-red = rgba(242, 85, 93, 0.7)
   font-size 13px
   line-height 18px
   color #31b9da
+  
+  cursor pointer
 
   &.active
     border 1px solid rgba(49, 185, 218, 0.6)
