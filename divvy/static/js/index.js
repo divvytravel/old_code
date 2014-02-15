@@ -1,13 +1,13 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"Y2DqNF":[function(require,module,exports){
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"d+m9kx":[function(require,module,exports){
 module.exports={
   "FB_APP_ID": "245182945513174"
 }
 
 },{}],"config":[function(require,module,exports){
-module.exports=require('Y2DqNF');
+module.exports=require('d+m9kx');
 },{}],"jquery":[function(require,module,exports){
-module.exports=require('n6hJi7');
-},{}],"n6hJi7":[function(require,module,exports){
+module.exports=require('5Q/0Us');
+},{}],"5Q/0Us":[function(require,module,exports){
 (function (global){(function browserifyShim(module, exports, define, browserify_shim__define__module__export__) {
 /*!
  * jQuery JavaScript Library v1.10.2
@@ -9803,9 +9803,524 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 
 }).call(global, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"UBw7QK":[function(require,module,exports){
+(function (global){(function browserifyShim(module, define) {
+
+; global.jQuery = require("jquery");
+/*!
+ * iCheck v1.0.1, http://git.io/arlzeA
+ * =================================
+ * Powerful jQuery and Zepto plugin for checkboxes and radio buttons customization
+ *
+ * (c) 2013 Damir Sultanov, http://fronteed.com
+ * MIT Licensed
+ */
+
+(function($) {
+
+  // Cached vars
+  var _iCheck = 'iCheck',
+    _iCheckHelper = _iCheck + '-helper',
+    _checkbox = 'checkbox',
+    _radio = 'radio',
+    _checked = 'checked',
+    _unchecked = 'un' + _checked,
+    _disabled = 'disabled',
+    _determinate = 'determinate',
+    _indeterminate = 'in' + _determinate,
+    _update = 'update',
+    _type = 'type',
+    _click = 'click',
+    _touch = 'touchbegin.i touchend.i',
+    _add = 'addClass',
+    _remove = 'removeClass',
+    _callback = 'trigger',
+    _label = 'label',
+    _cursor = 'cursor',
+    _mobile = /ipad|iphone|ipod|android|blackberry|windows phone|opera mini|silk/i.test(navigator.userAgent);
+
+  // Plugin init
+  $.fn[_iCheck] = function(options, fire) {
+
+    // Walker
+    var handle = 'input[type="' + _checkbox + '"], input[type="' + _radio + '"]',
+      stack = $(),
+      walker = function(object) {
+        object.each(function() {
+          var self = $(this);
+
+          if (self.is(handle)) {
+            stack = stack.add(self);
+          } else {
+            stack = stack.add(self.find(handle));
+          };
+        });
+      };
+
+    // Check if we should operate with some method
+    if (/^(check|uncheck|toggle|indeterminate|determinate|disable|enable|update|destroy)$/i.test(options)) {
+
+      // Normalize method's name
+      options = options.toLowerCase();
+
+      // Find checkboxes and radio buttons
+      walker(this);
+
+      return stack.each(function() {
+        var self = $(this);
+
+        if (options == 'destroy') {
+          tidy(self, 'ifDestroyed');
+        } else {
+          operate(self, true, options);
+        };
+
+        // Fire method's callback
+        if ($.isFunction(fire)) {
+          fire();
+        };
+      });
+
+    // Customization
+    } else if (typeof options == 'object' || !options) {
+
+      // Check if any options were passed
+      var settings = $.extend({
+          checkedClass: _checked,
+          disabledClass: _disabled,
+          indeterminateClass: _indeterminate,
+          labelHover: true,
+          aria: false
+        }, options),
+
+        selector = settings.handle,
+        hoverClass = settings.hoverClass || 'hover',
+        focusClass = settings.focusClass || 'focus',
+        activeClass = settings.activeClass || 'active',
+        labelHover = !!settings.labelHover,
+        labelHoverClass = settings.labelHoverClass || 'hover',
+
+        // Setup clickable area
+        area = ('' + settings.increaseArea).replace('%', '') | 0;
+
+      // Selector limit
+      if (selector == _checkbox || selector == _radio) {
+        handle = 'input[type="' + selector + '"]';
+      };
+
+      // Clickable area limit
+      if (area < -50) {
+        area = -50;
+      };
+
+      // Walk around the selector
+      walker(this);
+
+      return stack.each(function() {
+        var self = $(this);
+
+        // If already customized
+        tidy(self);
+
+        var node = this,
+          id = node.id,
+
+          // Layer styles
+          offset = -area + '%',
+          size = 100 + (area * 2) + '%',
+          layer = {
+            position: 'absolute',
+            top: offset,
+            left: offset,
+            display: 'block',
+            width: size,
+            height: size,
+            margin: 0,
+            padding: 0,
+            background: '#fff',
+            border: 0,
+            opacity: 0
+          },
+
+          // Choose how to hide input
+          hide = _mobile ? {
+            position: 'absolute',
+            visibility: 'hidden'
+          } : area ? layer : {
+            position: 'absolute',
+            opacity: 0
+          },
+
+          // Get proper class
+          className = node[_type] == _checkbox ? settings.checkboxClass || 'i' + _checkbox : settings.radioClass || 'i' + _radio,
+
+          // Find assigned labels
+          label = $(_label + '[for="' + id + '"]').add(self.closest(_label)),
+
+          // Check ARIA option
+          aria = !!settings.aria,
+
+          // Set ARIA placeholder
+          ariaID = _iCheck + '-' + Math.random().toString(36).replace('0.', ''),
+
+          // Parent & helper
+          parent = '<div class="' + className + '" ' + (aria ? 'role="' + node[_type] + '" ' : ''),
+          helper;
+
+        // Set ARIA "labelledby"
+        if (label.length && aria) {
+          label.each(function() {
+            parent += 'aria-labelledby="';
+
+            if (this.id) {
+              parent += this.id;
+            } else {
+              this.id = ariaID;
+              parent += ariaID;
+            }
+
+            parent += '"';
+          });
+        };
+
+        // Wrap input
+        parent = self.wrap(parent + '/>')[_callback]('ifCreated').parent().append(settings.insert);
+
+        // Layer addition
+        helper = $('<ins class="' + _iCheckHelper + '"/>').css(layer).appendTo(parent);
+
+        // Finalize customization
+        self.data(_iCheck, {o: settings, s: self.attr('style')}).css(hide);
+        !!settings.inheritClass && parent[_add](node.className || '');
+        !!settings.inheritID && id && parent.attr('id', _iCheck + '-' + id);
+        parent.css('position') == 'static' && parent.css('position', 'relative');
+        operate(self, true, _update);
+
+        // Label events
+        if (label.length) {
+          label.on(_click + '.i mouseover.i mouseout.i ' + _touch, function(event) {
+            var type = event[_type],
+              item = $(this);
+
+            // Do nothing if input is disabled
+            if (!node[_disabled]) {
+
+              // Click
+              if (type == _click) {
+                if ($(event.target).is('a')) {
+                  return;
+                }
+                operate(self, false, true);
+
+              // Hover state
+              } else if (labelHover) {
+
+                // mouseout|touchend
+                if (/ut|nd/.test(type)) {
+                  parent[_remove](hoverClass);
+                  item[_remove](labelHoverClass);
+                } else {
+                  parent[_add](hoverClass);
+                  item[_add](labelHoverClass);
+                };
+              };
+
+              if (_mobile) {
+                event.stopPropagation();
+              } else {
+                return false;
+              };
+            };
+          });
+        };
+
+        // Input events
+        self.on(_click + '.i focus.i blur.i keyup.i keydown.i keypress.i', function(event) {
+          var type = event[_type],
+            key = event.keyCode;
+
+          // Click
+          if (type == _click) {
+            return false;
+
+          // Keydown
+          } else if (type == 'keydown' && key == 32) {
+            if (!(node[_type] == _radio && node[_checked])) {
+              if (node[_checked]) {
+                off(self, _checked);
+              } else {
+                on(self, _checked);
+              };
+            };
+
+            return false;
+
+          // Keyup
+          } else if (type == 'keyup' && node[_type] == _radio) {
+            !node[_checked] && on(self, _checked);
+
+          // Focus/blur
+          } else if (/us|ur/.test(type)) {
+            parent[type == 'blur' ? _remove : _add](focusClass);
+          };
+        });
+
+        // Helper events
+        helper.on(_click + ' mousedown mouseup mouseover mouseout ' + _touch, function(event) {
+          var type = event[_type],
+
+            // mousedown|mouseup
+            toggle = /wn|up/.test(type) ? activeClass : hoverClass;
+
+          // Do nothing if input is disabled
+          if (!node[_disabled]) {
+
+            // Click
+            if (type == _click) {
+              operate(self, false, true);
+
+            // Active and hover states
+            } else {
+
+              // State is on
+              if (/wn|er|in/.test(type)) {
+
+                // mousedown|mouseover|touchbegin
+                parent[_add](toggle);
+
+              // State is off
+              } else {
+                parent[_remove](toggle + ' ' + activeClass);
+              };
+
+              // Label hover
+              if (label.length && labelHover && toggle == hoverClass) {
+
+                // mouseout|touchend
+                label[/ut|nd/.test(type) ? _remove : _add](labelHoverClass);
+              };
+            };
+
+            if (_mobile) {
+              event.stopPropagation();
+            } else {
+              return false;
+            };
+          };
+        });
+      });
+    } else {
+      return this;
+    };
+  };
+
+  // Do something with inputs
+  function operate(input, direct, method) {
+    var node = input[0],
+      state = /er/.test(method) ? _indeterminate : /bl/.test(method) ? _disabled : _checked,
+      active = method == _update ? {
+        checked: node[_checked],
+        disabled: node[_disabled],
+        indeterminate: input.attr(_indeterminate) == 'true' || input.attr(_determinate) == 'false'
+      } : node[state];
+
+    // Check, disable or indeterminate
+    if (/^(ch|di|in)/.test(method) && !active) {
+      on(input, state);
+
+    // Uncheck, enable or determinate
+    } else if (/^(un|en|de)/.test(method) && active) {
+      off(input, state);
+
+    // Update
+    } else if (method == _update) {
+
+      // Handle states
+      for (var state in active) {
+        if (active[state]) {
+          on(input, state, true);
+        } else {
+          off(input, state, true);
+        };
+      };
+
+    } else if (!direct || method == 'toggle') {
+
+      // Helper or label was clicked
+      if (!direct) {
+        input[_callback]('ifClicked');
+      };
+
+      // Toggle checked state
+      if (active) {
+        if (node[_type] !== _radio) {
+          off(input, state);
+        };
+      } else {
+        on(input, state);
+      };
+    };
+  };
+
+  // Add checked, disabled or indeterminate state
+  function on(input, state, keep) {
+    var node = input[0],
+      parent = input.parent(),
+      checked = state == _checked,
+      indeterminate = state == _indeterminate,
+      disabled = state == _disabled,
+      callback = indeterminate ? _determinate : checked ? _unchecked : 'enabled',
+      regular = option(input, callback + capitalize(node[_type])),
+      specific = option(input, state + capitalize(node[_type]));
+
+    // Prevent unnecessary actions
+    if (node[state] !== true) {
+
+      // Toggle assigned radio buttons
+      if (!keep && state == _checked && node[_type] == _radio && node.name) {
+        var form = input.closest('form'),
+          inputs = 'input[name="' + node.name + '"]';
+
+        inputs = form.length ? form.find(inputs) : $(inputs);
+
+        inputs.each(function() {
+          if (this !== node && $(this).data(_iCheck)) {
+            off($(this), state);
+          };
+        });
+      };
+
+      // Indeterminate state
+      if (indeterminate) {
+
+        // Add indeterminate state
+        node[state] = true;
+
+        // Remove checked state
+        if (node[_checked]) {
+          off(input, _checked, 'force');
+        };
+
+      // Checked or disabled state
+      } else {
+
+        // Add checked or disabled state
+        if (!keep) {
+          node[state] = true;
+        };
+
+        // Remove indeterminate state
+        if (checked && node[_indeterminate]) {
+          off(input, _indeterminate, false);
+        };
+      };
+
+      // Trigger callbacks
+      callbacks(input, checked, state, keep);
+    };
+
+    // Add proper cursor
+    if (node[_disabled] && !!option(input, _cursor, true)) {
+      parent.find('.' + _iCheckHelper).css(_cursor, 'default');
+    };
+
+    // Add state class
+    parent[_add](specific || option(input, state) || '');
+
+    // Set ARIA attribute
+    disabled ? parent.attr('aria-disabled', 'true') : parent.attr('aria-checked', indeterminate ? 'mixed' : 'true');
+
+    // Remove regular state class
+    parent[_remove](regular || option(input, callback) || '');
+  };
+
+  // Remove checked, disabled or indeterminate state
+  function off(input, state, keep) {
+    var node = input[0],
+      parent = input.parent(),
+      checked = state == _checked,
+      indeterminate = state == _indeterminate,
+      disabled = state == _disabled,
+      callback = indeterminate ? _determinate : checked ? _unchecked : 'enabled',
+      regular = option(input, callback + capitalize(node[_type])),
+      specific = option(input, state + capitalize(node[_type]));
+
+    // Prevent unnecessary actions
+    if (node[state] !== false) {
+
+      // Toggle state
+      if (indeterminate || !keep || keep == 'force') {
+        node[state] = false;
+      };
+
+      // Trigger callbacks
+      callbacks(input, checked, callback, keep);
+    };
+
+    // Add proper cursor
+    if (!node[_disabled] && !!option(input, _cursor, true)) {
+      parent.find('.' + _iCheckHelper).css(_cursor, 'pointer');
+    };
+
+    // Remove state class
+    parent[_remove](specific || option(input, state) || '');
+
+    // Set ARIA attribute
+    disabled ? parent.attr('aria-disabled', 'false') : parent.attr('aria-checked', 'false');
+
+    // Add regular state class
+    parent[_add](regular || option(input, callback) || '');
+  };
+
+  // Remove all traces
+  function tidy(input, callback) {
+    if (input.data(_iCheck)) {
+
+      // Remove everything except input
+      input.parent().html(input.attr('style', input.data(_iCheck).s || ''));
+
+      // Callback
+      if (callback) {
+        input[_callback](callback);
+      };
+
+      // Unbind events
+      input.off('.i').unwrap();
+      $(_label + '[for="' + input[0].id + '"]').add(input.closest(_label)).off('.i');
+    };
+  };
+
+  // Get some option
+  function option(input, state, regular) {
+    if (input.data(_iCheck)) {
+      return input.data(_iCheck).o[state + (regular ? '' : 'Class')];
+    };
+  };
+
+  // Capitalize some string
+  function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  // Executable handlers
+  function callbacks(input, checked, callback, keep) {
+    if (!keep) {
+      if (checked) {
+        input[_callback]('ifToggled');
+      };
+
+      input[_callback]('ifChanged')[_callback]('if' + capitalize(callback));
+    };
+  };
+})(window.jQuery || window.Zepto);
+
+}).call(global, module, undefined);
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"5Q/0Us"}],"iCheck":[function(require,module,exports){
+module.exports=require('UBw7QK');
 },{}],"jquery.ui.core":[function(require,module,exports){
-module.exports=require('/ni112');
-},{}],"/ni112":[function(require,module,exports){
+module.exports=require('XIAbGy');
+},{}],"XIAbGy":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
 ; global.jQuery = require("jquery");
@@ -10132,9 +10647,9 @@ $.extend( $.ui, {
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"n6hJi7"}],"jquery.ui.datepicker":[function(require,module,exports){
-module.exports=require('t3Hhld');
-},{}],"t3Hhld":[function(require,module,exports){
+},{"jquery":"5Q/0Us"}],"jquery.ui.datepicker":[function(require,module,exports){
+module.exports=require('qggHk5');
+},{}],"qggHk5":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
 ; global.jQuery = require("jquery");
@@ -12180,9 +12695,1810 @@ $.datepicker.version = "@VERSION";
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"n6hJi7","jquery.ui.core":"/ni112"}],"uri":[function(require,module,exports){
-module.exports=require('mGesKN');
-},{}],"mGesKN":[function(require,module,exports){
+},{"jquery":"5Q/0Us","jquery.ui.core":"XIAbGy"}],"+XIwud":[function(require,module,exports){
+(function (global){(function browserifyShim(module, define) {
+
+; global.jQuery = require("jquery");
+global.jqueryUIWidget = require("jquery.ui.widget");
+/*!
+ * jQuery UI Mouse @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/mouse/
+ *
+ * Depends:
+ *	jquery.ui.widget.js
+ */
+(function( $, undefined ) {
+
+var mouseHandled = false;
+$( document ).mouseup( function() {
+	mouseHandled = false;
+});
+
+$.widget("ui.mouse", {
+	version: "@VERSION",
+	options: {
+		cancel: "input,textarea,button,select,option",
+		distance: 1,
+		delay: 0
+	},
+	_mouseInit: function() {
+		var that = this;
+
+		this.element
+			.bind("mousedown."+this.widgetName, function(event) {
+				return that._mouseDown(event);
+			})
+			.bind("click."+this.widgetName, function(event) {
+				if (true === $.data(event.target, that.widgetName + ".preventClickEvent")) {
+					$.removeData(event.target, that.widgetName + ".preventClickEvent");
+					event.stopImmediatePropagation();
+					return false;
+				}
+			});
+
+		this.started = false;
+	},
+
+	// TODO: make sure destroying one instance of mouse doesn't mess with
+	// other instances of mouse
+	_mouseDestroy: function() {
+		this.element.unbind("."+this.widgetName);
+		if ( this._mouseMoveDelegate ) {
+			$(document)
+				.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
+				.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
+		}
+	},
+
+	_mouseDown: function(event) {
+		// don't let more than one widget handle mouseStart
+		if( mouseHandled ) { return; }
+
+		// we may have missed mouseup (out of window)
+		(this._mouseStarted && this._mouseUp(event));
+
+		this._mouseDownEvent = event;
+
+		var that = this,
+			btnIsLeft = (event.which === 1),
+			// event.target.nodeName works around a bug in IE 8 with
+			// disabled inputs (#7620)
+			elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
+		if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
+			return true;
+		}
+
+		this.mouseDelayMet = !this.options.delay;
+		if (!this.mouseDelayMet) {
+			this._mouseDelayTimer = setTimeout(function() {
+				that.mouseDelayMet = true;
+			}, this.options.delay);
+		}
+
+		if (this._mouseDistanceMet(event) && this._mouseDelayMet(event)) {
+			this._mouseStarted = (this._mouseStart(event) !== false);
+			if (!this._mouseStarted) {
+				event.preventDefault();
+				return true;
+			}
+		}
+
+		// Click event may never have fired (Gecko & Opera)
+		if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
+			$.removeData(event.target, this.widgetName + ".preventClickEvent");
+		}
+
+		// these delegates are required to keep context
+		this._mouseMoveDelegate = function(event) {
+			return that._mouseMove(event);
+		};
+		this._mouseUpDelegate = function(event) {
+			return that._mouseUp(event);
+		};
+		$(document)
+			.bind("mousemove."+this.widgetName, this._mouseMoveDelegate)
+			.bind("mouseup."+this.widgetName, this._mouseUpDelegate);
+
+		event.preventDefault();
+
+		mouseHandled = true;
+		return true;
+	},
+
+	_mouseMove: function(event) {
+		// IE mouseup check - mouseup happened when mouse was out of window
+		if ($.ui.ie && ( !document.documentMode || document.documentMode < 9 ) && !event.button) {
+			return this._mouseUp(event);
+		}
+
+		if (this._mouseStarted) {
+			this._mouseDrag(event);
+			return event.preventDefault();
+		}
+
+		if (this._mouseDistanceMet(event) && this._mouseDelayMet(event)) {
+			this._mouseStarted =
+				(this._mouseStart(this._mouseDownEvent, event) !== false);
+			(this._mouseStarted ? this._mouseDrag(event) : this._mouseUp(event));
+		}
+
+		return !this._mouseStarted;
+	},
+
+	_mouseUp: function(event) {
+		$(document)
+			.unbind("mousemove."+this.widgetName, this._mouseMoveDelegate)
+			.unbind("mouseup."+this.widgetName, this._mouseUpDelegate);
+
+		if (this._mouseStarted) {
+			this._mouseStarted = false;
+
+			if (event.target === this._mouseDownEvent.target) {
+				$.data(event.target, this.widgetName + ".preventClickEvent", true);
+			}
+
+			this._mouseStop(event);
+		}
+
+		return false;
+	},
+
+	_mouseDistanceMet: function(event) {
+		return (Math.max(
+				Math.abs(this._mouseDownEvent.pageX - event.pageX),
+				Math.abs(this._mouseDownEvent.pageY - event.pageY)
+			) >= this.options.distance
+		);
+	},
+
+	_mouseDelayMet: function(/* event */) {
+		return this.mouseDelayMet;
+	},
+
+	// These are placeholder methods, to be overriden by extending plugin
+	_mouseStart: function(/* event */) {},
+	_mouseDrag: function(/* event */) {},
+	_mouseStop: function(/* event */) {},
+	_mouseCapture: function(/* event */) { return true; }
+});
+
+})(jQuery);
+
+}).call(global, module, undefined);
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.mouse":[function(require,module,exports){
+module.exports=require('+XIwud');
+},{}],"jquery.ui.slider":[function(require,module,exports){
+module.exports=require('jxOnI+');
+},{}],"jxOnI+":[function(require,module,exports){
+(function (global){(function browserifyShim(module, define) {
+
+; global.jQuery = require("jquery");
+global.jqueryUIMouse = require("jquery.ui.mouse");
+/*!
+ * jQuery UI Slider @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/slider/
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.mouse.js
+ *	jquery.ui.widget.js
+ */
+(function( $, undefined ) {
+
+// number of pages in a slider
+// (how many times can you page up/down to go through the whole range)
+var numPages = 5;
+
+$.widget( "ui.slider", $.ui.mouse, {
+	version: "@VERSION",
+	widgetEventPrefix: "slide",
+
+	options: {
+		animate: false,
+		distance: 0,
+		max: 100,
+		min: 0,
+		orientation: "horizontal",
+		range: false,
+		step: 1,
+		value: 0,
+		values: null,
+
+		// callbacks
+		change: null,
+		slide: null,
+		start: null,
+		stop: null
+	},
+
+	_create: function() {
+		this._keySliding = false;
+		this._mouseSliding = false;
+		this._animateOff = true;
+		this._handleIndex = null;
+		this._detectOrientation();
+		this._mouseInit();
+
+		this.element
+			.addClass( "ui-slider" +
+				" ui-slider-" + this.orientation +
+				" ui-widget" +
+				" ui-widget-content" +
+				" ui-corner-all");
+
+		this._refresh();
+		this._setOption( "disabled", this.options.disabled );
+
+		this._animateOff = false;
+	},
+
+	_refresh: function() {
+		this._createRange();
+		this._createHandles();
+		this._setupEvents();
+		this._refreshValue();
+	},
+
+	_createHandles: function() {
+		var i, handleCount,
+			options = this.options,
+			existingHandles = this.element.find( ".ui-slider-handle" ).addClass( "ui-state-default ui-corner-all" ),
+			handle = "<a class='ui-slider-handle ui-state-default ui-corner-all' href='#'></a>",
+			handles = [];
+
+		handleCount = ( options.values && options.values.length ) || 1;
+
+		if ( existingHandles.length > handleCount ) {
+			existingHandles.slice( handleCount ).remove();
+			existingHandles = existingHandles.slice( 0, handleCount );
+		}
+
+		for ( i = existingHandles.length; i < handleCount; i++ ) {
+			handles.push( handle );
+		}
+
+		this.handles = existingHandles.add( $( handles.join( "" ) ).appendTo( this.element ) );
+
+		this.handle = this.handles.eq( 0 );
+
+		this.handles.each(function( i ) {
+			$( this ).data( "ui-slider-handle-index", i );
+		});
+	},
+
+	_createRange: function() {
+		var options = this.options,
+			classes = "";
+
+		if ( options.range ) {
+			if ( options.range === true ) {
+				if ( !options.values ) {
+					options.values = [ this._valueMin(), this._valueMin() ];
+				} else if ( options.values.length && options.values.length !== 2 ) {
+					options.values = [ options.values[0], options.values[0] ];
+				} else if ( $.isArray( options.values ) ) {
+					options.values = options.values.slice(0);
+				}
+			}
+
+			if ( !this.range || !this.range.length ) {
+				this.range = $( "<div></div>" )
+					.appendTo( this.element );
+
+				classes = "ui-slider-range" +
+				// note: this isn't the most fittingly semantic framework class for this element,
+				// but worked best visually with a variety of themes
+				" ui-widget-header ui-corner-all";
+			} else {
+				this.range.removeClass( "ui-slider-range-min ui-slider-range-max" )
+					// Handle range switching from true to min/max
+					.css({
+						"left": "",
+						"bottom": ""
+					});
+			}
+
+			this.range.addClass( classes +
+				( ( options.range === "min" || options.range === "max" ) ? " ui-slider-range-" + options.range : "" ) );
+		} else {
+			this.range = $([]);
+		}
+	},
+
+	_setupEvents: function() {
+		var elements = this.handles.add( this.range ).filter( "a" );
+		this._off( elements );
+		this._on( elements, this._handleEvents );
+		this._hoverable( elements );
+		this._focusable( elements );
+	},
+
+	_destroy: function() {
+		this.handles.remove();
+		this.range.remove();
+
+		this.element
+			.removeClass( "ui-slider" +
+				" ui-slider-horizontal" +
+				" ui-slider-vertical" +
+				" ui-widget" +
+				" ui-widget-content" +
+				" ui-corner-all" );
+
+		this._mouseDestroy();
+	},
+
+	_mouseCapture: function( event ) {
+		var position, normValue, distance, closestHandle, index, allowed, offset, mouseOverHandle,
+			that = this,
+			o = this.options;
+
+		if ( o.disabled ) {
+			return false;
+		}
+
+		this.elementSize = {
+			width: this.element.outerWidth(),
+			height: this.element.outerHeight()
+		};
+		this.elementOffset = this.element.offset();
+
+		position = { x: event.pageX, y: event.pageY };
+		normValue = this._normValueFromMouse( position );
+		distance = this._valueMax() - this._valueMin() + 1;
+		this.handles.each(function( i ) {
+			var thisDistance = Math.abs( normValue - that.values(i) );
+			if (( distance > thisDistance ) ||
+				( distance === thisDistance &&
+					(i === that._lastChangedValue || that.values(i) === o.min ))) {
+				distance = thisDistance;
+				closestHandle = $( this );
+				index = i;
+			}
+		});
+
+		allowed = this._start( event, index );
+		if ( allowed === false ) {
+			return false;
+		}
+		this._mouseSliding = true;
+
+		this._handleIndex = index;
+
+		closestHandle
+			.addClass( "ui-state-active" )
+			.focus();
+
+		offset = closestHandle.offset();
+		mouseOverHandle = !$( event.target ).parents().addBack().is( ".ui-slider-handle" );
+		this._clickOffset = mouseOverHandle ? { left: 0, top: 0 } : {
+			left: event.pageX - offset.left - ( closestHandle.width() / 2 ),
+			top: event.pageY - offset.top -
+				( closestHandle.height() / 2 ) -
+				( parseInt( closestHandle.css("borderTopWidth"), 10 ) || 0 ) -
+				( parseInt( closestHandle.css("borderBottomWidth"), 10 ) || 0) +
+				( parseInt( closestHandle.css("marginTop"), 10 ) || 0)
+		};
+
+		if ( !this.handles.hasClass( "ui-state-hover" ) ) {
+			this._slide( event, index, normValue );
+		}
+		this._animateOff = true;
+		return true;
+	},
+
+	_mouseStart: function() {
+		return true;
+	},
+
+	_mouseDrag: function( event ) {
+		var position = { x: event.pageX, y: event.pageY },
+			normValue = this._normValueFromMouse( position );
+
+		this._slide( event, this._handleIndex, normValue );
+
+		return false;
+	},
+
+	_mouseStop: function( event ) {
+		this.handles.removeClass( "ui-state-active" );
+		this._mouseSliding = false;
+
+		this._stop( event, this._handleIndex );
+		this._change( event, this._handleIndex );
+
+		this._handleIndex = null;
+		this._clickOffset = null;
+		this._animateOff = false;
+
+		return false;
+	},
+
+	_detectOrientation: function() {
+		this.orientation = ( this.options.orientation === "vertical" ) ? "vertical" : "horizontal";
+	},
+
+	_normValueFromMouse: function( position ) {
+		var pixelTotal,
+			pixelMouse,
+			percentMouse,
+			valueTotal,
+			valueMouse;
+
+		if ( this.orientation === "horizontal" ) {
+			pixelTotal = this.elementSize.width;
+			pixelMouse = position.x - this.elementOffset.left - ( this._clickOffset ? this._clickOffset.left : 0 );
+		} else {
+			pixelTotal = this.elementSize.height;
+			pixelMouse = position.y - this.elementOffset.top - ( this._clickOffset ? this._clickOffset.top : 0 );
+		}
+
+		percentMouse = ( pixelMouse / pixelTotal );
+		if ( percentMouse > 1 ) {
+			percentMouse = 1;
+		}
+		if ( percentMouse < 0 ) {
+			percentMouse = 0;
+		}
+		if ( this.orientation === "vertical" ) {
+			percentMouse = 1 - percentMouse;
+		}
+
+		valueTotal = this._valueMax() - this._valueMin();
+		valueMouse = this._valueMin() + percentMouse * valueTotal;
+
+		return this._trimAlignValue( valueMouse );
+	},
+
+	_start: function( event, index ) {
+		var uiHash = {
+			handle: this.handles[ index ],
+			value: this.value()
+		};
+		if ( this.options.values && this.options.values.length ) {
+			uiHash.value = this.values( index );
+			uiHash.values = this.values();
+		}
+		return this._trigger( "start", event, uiHash );
+	},
+
+	_slide: function( event, index, newVal ) {
+		var otherVal,
+			newValues,
+			allowed;
+
+		if ( this.options.values && this.options.values.length ) {
+			otherVal = this.values( index ? 0 : 1 );
+
+			if ( ( this.options.values.length === 2 && this.options.range === true ) &&
+					( ( index === 0 && newVal > otherVal) || ( index === 1 && newVal < otherVal ) )
+				) {
+				newVal = otherVal;
+			}
+
+			if ( newVal !== this.values( index ) ) {
+				newValues = this.values();
+				newValues[ index ] = newVal;
+				// A slide can be canceled by returning false from the slide callback
+				allowed = this._trigger( "slide", event, {
+					handle: this.handles[ index ],
+					value: newVal,
+					values: newValues
+				} );
+				otherVal = this.values( index ? 0 : 1 );
+				if ( allowed !== false ) {
+					this.values( index, newVal, true );
+				}
+			}
+		} else {
+			if ( newVal !== this.value() ) {
+				// A slide can be canceled by returning false from the slide callback
+				allowed = this._trigger( "slide", event, {
+					handle: this.handles[ index ],
+					value: newVal
+				} );
+				if ( allowed !== false ) {
+					this.value( newVal );
+				}
+			}
+		}
+	},
+
+	_stop: function( event, index ) {
+		var uiHash = {
+			handle: this.handles[ index ],
+			value: this.value()
+		};
+		if ( this.options.values && this.options.values.length ) {
+			uiHash.value = this.values( index );
+			uiHash.values = this.values();
+		}
+
+		this._trigger( "stop", event, uiHash );
+	},
+
+	_change: function( event, index ) {
+		if ( !this._keySliding && !this._mouseSliding ) {
+			var uiHash = {
+				handle: this.handles[ index ],
+				value: this.value()
+			};
+			if ( this.options.values && this.options.values.length ) {
+				uiHash.value = this.values( index );
+				uiHash.values = this.values();
+			}
+
+			//store the last changed value index for reference when handles overlap
+			this._lastChangedValue = index;
+
+			this._trigger( "change", event, uiHash );
+		}
+	},
+
+	value: function( newValue ) {
+		if ( arguments.length ) {
+			this.options.value = this._trimAlignValue( newValue );
+			this._refreshValue();
+			this._change( null, 0 );
+			return;
+		}
+
+		return this._value();
+	},
+
+	values: function( index, newValue ) {
+		var vals,
+			newValues,
+			i;
+
+		if ( arguments.length > 1 ) {
+			this.options.values[ index ] = this._trimAlignValue( newValue );
+			this._refreshValue();
+			this._change( null, index );
+			return;
+		}
+
+		if ( arguments.length ) {
+			if ( $.isArray( arguments[ 0 ] ) ) {
+				vals = this.options.values;
+				newValues = arguments[ 0 ];
+				for ( i = 0; i < vals.length; i += 1 ) {
+					vals[ i ] = this._trimAlignValue( newValues[ i ] );
+					this._change( null, i );
+				}
+				this._refreshValue();
+			} else {
+				if ( this.options.values && this.options.values.length ) {
+					return this._values( index );
+				} else {
+					return this.value();
+				}
+			}
+		} else {
+			return this._values();
+		}
+	},
+
+	_setOption: function( key, value ) {
+		var i,
+			valsLength = 0;
+
+		if ( key === "range" && this.options.range === true ) {
+			if ( value === "min" ) {
+				this.options.value = this._values( 0 );
+				this.options.values = null;
+			} else if ( value === "max" ) {
+				this.options.value = this._values( this.options.values.length-1 );
+				this.options.values = null;
+			}
+		}
+
+		if ( $.isArray( this.options.values ) ) {
+			valsLength = this.options.values.length;
+		}
+
+		$.Widget.prototype._setOption.apply( this, arguments );
+
+		switch ( key ) {
+			case "orientation":
+				this._detectOrientation();
+				this.element
+					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
+					.addClass( "ui-slider-" + this.orientation );
+				this._refreshValue();
+				break;
+			case "value":
+				this._animateOff = true;
+				this._refreshValue();
+				this._change( null, 0 );
+				this._animateOff = false;
+				break;
+			case "values":
+				this._animateOff = true;
+				this._refreshValue();
+				for ( i = 0; i < valsLength; i += 1 ) {
+					this._change( null, i );
+				}
+				this._animateOff = false;
+				break;
+			case "min":
+			case "max":
+				this._animateOff = true;
+				this._refreshValue();
+				this._animateOff = false;
+				break;
+			case "range":
+				this._animateOff = true;
+				this._refresh();
+				this._animateOff = false;
+				break;
+		}
+	},
+
+	//internal value getter
+	// _value() returns value trimmed by min and max, aligned by step
+	_value: function() {
+		var val = this.options.value;
+		val = this._trimAlignValue( val );
+
+		return val;
+	},
+
+	//internal values getter
+	// _values() returns array of values trimmed by min and max, aligned by step
+	// _values( index ) returns single value trimmed by min and max, aligned by step
+	_values: function( index ) {
+		var val,
+			vals,
+			i;
+
+		if ( arguments.length ) {
+			val = this.options.values[ index ];
+			val = this._trimAlignValue( val );
+
+			return val;
+		} else if ( this.options.values && this.options.values.length ) {
+			// .slice() creates a copy of the array
+			// this copy gets trimmed by min and max and then returned
+			vals = this.options.values.slice();
+			for ( i = 0; i < vals.length; i+= 1) {
+				vals[ i ] = this._trimAlignValue( vals[ i ] );
+			}
+
+			return vals;
+		} else {
+			return [];
+		}
+	},
+
+	// returns the step-aligned value that val is closest to, between (inclusive) min and max
+	_trimAlignValue: function( val ) {
+		if ( val <= this._valueMin() ) {
+			return this._valueMin();
+		}
+		if ( val >= this._valueMax() ) {
+			return this._valueMax();
+		}
+		var step = ( this.options.step > 0 ) ? this.options.step : 1,
+			valModStep = (val - this._valueMin()) % step,
+			alignValue = val - valModStep;
+
+		if ( Math.abs(valModStep) * 2 >= step ) {
+			alignValue += ( valModStep > 0 ) ? step : ( -step );
+		}
+
+		// Since JavaScript has problems with large floats, round
+		// the final value to 5 digits after the decimal point (see #4124)
+		return parseFloat( alignValue.toFixed(5) );
+	},
+
+	_valueMin: function() {
+		return this.options.min;
+	},
+
+	_valueMax: function() {
+		return this.options.max;
+	},
+
+	_refreshValue: function() {
+		var lastValPercent, valPercent, value, valueMin, valueMax,
+			oRange = this.options.range,
+			o = this.options,
+			that = this,
+			animate = ( !this._animateOff ) ? o.animate : false,
+			_set = {};
+
+		if ( this.options.values && this.options.values.length ) {
+			this.handles.each(function( i ) {
+				valPercent = ( that.values(i) - that._valueMin() ) / ( that._valueMax() - that._valueMin() ) * 100;
+				_set[ that.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
+				$( this ).stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
+				if ( that.options.range === true ) {
+					if ( that.orientation === "horizontal" ) {
+						if ( i === 0 ) {
+							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { left: valPercent + "%" }, o.animate );
+						}
+						if ( i === 1 ) {
+							that.range[ animate ? "animate" : "css" ]( { width: ( valPercent - lastValPercent ) + "%" }, { queue: false, duration: o.animate } );
+						}
+					} else {
+						if ( i === 0 ) {
+							that.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { bottom: ( valPercent ) + "%" }, o.animate );
+						}
+						if ( i === 1 ) {
+							that.range[ animate ? "animate" : "css" ]( { height: ( valPercent - lastValPercent ) + "%" }, { queue: false, duration: o.animate } );
+						}
+					}
+				}
+				lastValPercent = valPercent;
+			});
+		} else {
+			value = this.value();
+			valueMin = this._valueMin();
+			valueMax = this._valueMax();
+			valPercent = ( valueMax !== valueMin ) ?
+					( value - valueMin ) / ( valueMax - valueMin ) * 100 :
+					0;
+			_set[ this.orientation === "horizontal" ? "left" : "bottom" ] = valPercent + "%";
+			this.handle.stop( 1, 1 )[ animate ? "animate" : "css" ]( _set, o.animate );
+
+			if ( oRange === "min" && this.orientation === "horizontal" ) {
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { width: valPercent + "%" }, o.animate );
+			}
+			if ( oRange === "max" && this.orientation === "horizontal" ) {
+				this.range[ animate ? "animate" : "css" ]( { width: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+			}
+			if ( oRange === "min" && this.orientation === "vertical" ) {
+				this.range.stop( 1, 1 )[ animate ? "animate" : "css" ]( { height: valPercent + "%" }, o.animate );
+			}
+			if ( oRange === "max" && this.orientation === "vertical" ) {
+				this.range[ animate ? "animate" : "css" ]( { height: ( 100 - valPercent ) + "%" }, { queue: false, duration: o.animate } );
+			}
+		}
+	},
+
+	_handleEvents: {
+		keydown: function( event ) {
+			/*jshint maxcomplexity:25*/
+			var allowed, curVal, newVal, step,
+				index = $( event.target ).data( "ui-slider-handle-index" );
+
+			switch ( event.keyCode ) {
+				case $.ui.keyCode.HOME:
+				case $.ui.keyCode.END:
+				case $.ui.keyCode.PAGE_UP:
+				case $.ui.keyCode.PAGE_DOWN:
+				case $.ui.keyCode.UP:
+				case $.ui.keyCode.RIGHT:
+				case $.ui.keyCode.DOWN:
+				case $.ui.keyCode.LEFT:
+					event.preventDefault();
+					if ( !this._keySliding ) {
+						this._keySliding = true;
+						$( event.target ).addClass( "ui-state-active" );
+						allowed = this._start( event, index );
+						if ( allowed === false ) {
+							return;
+						}
+					}
+					break;
+			}
+
+			step = this.options.step;
+			if ( this.options.values && this.options.values.length ) {
+				curVal = newVal = this.values( index );
+			} else {
+				curVal = newVal = this.value();
+			}
+
+			switch ( event.keyCode ) {
+				case $.ui.keyCode.HOME:
+					newVal = this._valueMin();
+					break;
+				case $.ui.keyCode.END:
+					newVal = this._valueMax();
+					break;
+				case $.ui.keyCode.PAGE_UP:
+					newVal = this._trimAlignValue( curVal + ( (this._valueMax() - this._valueMin()) / numPages ) );
+					break;
+				case $.ui.keyCode.PAGE_DOWN:
+					newVal = this._trimAlignValue( curVal - ( (this._valueMax() - this._valueMin()) / numPages ) );
+					break;
+				case $.ui.keyCode.UP:
+				case $.ui.keyCode.RIGHT:
+					if ( curVal === this._valueMax() ) {
+						return;
+					}
+					newVal = this._trimAlignValue( curVal + step );
+					break;
+				case $.ui.keyCode.DOWN:
+				case $.ui.keyCode.LEFT:
+					if ( curVal === this._valueMin() ) {
+						return;
+					}
+					newVal = this._trimAlignValue( curVal - step );
+					break;
+			}
+
+			this._slide( event, index, newVal );
+		},
+		click: function( event ) {
+			event.preventDefault();
+		},
+		keyup: function( event ) {
+			var index = $( event.target ).data( "ui-slider-handle-index" );
+
+			if ( this._keySliding ) {
+				this._keySliding = false;
+				this._stop( event, index );
+				this._change( event, index );
+				$( event.target ).removeClass( "ui-state-active" );
+			}
+		}
+	}
+
+});
+
+}(jQuery));
+
+}).call(global, module, undefined);
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"5Q/0Us","jquery.ui.mouse":"+XIwud"}],"jquery.ui.tooltip":[function(require,module,exports){
+module.exports=require('Gtjt3u');
+},{}],"Gtjt3u":[function(require,module,exports){
+(function (global){(function browserifyShim(module, define) {
+
+; global.jQuery = require("jquery");
+global.jqueryUIWidget = require("jquery.ui.widget");
+/*!
+ * jQuery UI Tooltip @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/tooltip/
+ *
+ * Depends:
+ *	jquery.ui.core.js
+ *	jquery.ui.widget.js
+ *	jquery.ui.position.js
+ */
+(function( $ ) {
+
+var increments = 0;
+
+function addDescribedBy( elem, id ) {
+	var describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ );
+	describedby.push( id );
+	elem
+		.data( "ui-tooltip-id", id )
+		.attr( "aria-describedby", $.trim( describedby.join( " " ) ) );
+}
+
+function removeDescribedBy( elem ) {
+	var id = elem.data( "ui-tooltip-id" ),
+		describedby = (elem.attr( "aria-describedby" ) || "").split( /\s+/ ),
+		index = $.inArray( id, describedby );
+	if ( index !== -1 ) {
+		describedby.splice( index, 1 );
+	}
+
+	elem.removeData( "ui-tooltip-id" );
+	describedby = $.trim( describedby.join( " " ) );
+	if ( describedby ) {
+		elem.attr( "aria-describedby", describedby );
+	} else {
+		elem.removeAttr( "aria-describedby" );
+	}
+}
+
+$.widget( "ui.tooltip", {
+	version: "@VERSION",
+	options: {
+		content: function() {
+			// support: IE<9, Opera in jQuery <1.7
+			// .text() can't accept undefined, so coerce to a string
+			var title = $( this ).attr( "title" ) || "";
+			// Escape title, since we're going from an attribute to raw HTML
+			return $( "<a>" ).text( title ).html();
+		},
+		hide: true,
+		// Disabled elements have inconsistent behavior across browsers (#8661)
+		items: "[title]:not([disabled])",
+		position: {
+			my: "left top+15",
+			at: "left bottom",
+			collision: "flipfit flip"
+		},
+		show: true,
+		tooltipClass: null,
+		track: false,
+
+		// callbacks
+		close: null,
+		open: null
+	},
+
+	_create: function() {
+		this._on({
+			mouseover: "open",
+			focusin: "open"
+		});
+
+		// IDs of generated tooltips, needed for destroy
+		this.tooltips = {};
+		// IDs of parent tooltips where we removed the title attribute
+		this.parents = {};
+
+		if ( this.options.disabled ) {
+			this._disable();
+		}
+	},
+
+	_setOption: function( key, value ) {
+		var that = this;
+
+		if ( key === "disabled" ) {
+			this[ value ? "_disable" : "_enable" ]();
+			this.options[ key ] = value;
+			// disable element style changes
+			return;
+		}
+
+		this._super( key, value );
+
+		if ( key === "content" ) {
+			$.each( this.tooltips, function( id, element ) {
+				that._updateContent( element );
+			});
+		}
+	},
+
+	_disable: function() {
+		var that = this;
+
+		// close open tooltips
+		$.each( this.tooltips, function( id, element ) {
+			var event = $.Event( "blur" );
+			event.target = event.currentTarget = element[0];
+			that.close( event, true );
+		});
+
+		// remove title attributes to prevent native tooltips
+		this.element.find( this.options.items ).addBack().each(function() {
+			var element = $( this );
+			if ( element.is( "[title]" ) ) {
+				element
+					.data( "ui-tooltip-title", element.attr( "title" ) )
+					.attr( "title", "" );
+			}
+		});
+	},
+
+	_enable: function() {
+		// restore title attributes
+		this.element.find( this.options.items ).addBack().each(function() {
+			var element = $( this );
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
+			}
+		});
+	},
+
+	open: function( event ) {
+		var that = this,
+			target = $( event ? event.target : this.element )
+				// we need closest here due to mouseover bubbling,
+				// but always pointing at the same event target
+				.closest( this.options.items );
+
+		// No element to show a tooltip for or the tooltip is already open
+		if ( !target.length || target.data( "ui-tooltip-id" ) ) {
+			return;
+		}
+
+		if ( target.attr( "title" ) ) {
+			target.data( "ui-tooltip-title", target.attr( "title" ) );
+		}
+
+		target.data( "ui-tooltip-open", true );
+
+		// kill parent tooltips, custom or native, for hover
+		if ( event && event.type === "mouseover" ) {
+			target.parents().each(function() {
+				var parent = $( this ),
+					blurEvent;
+				if ( parent.data( "ui-tooltip-open" ) ) {
+					blurEvent = $.Event( "blur" );
+					blurEvent.target = blurEvent.currentTarget = this;
+					that.close( blurEvent, true );
+				}
+				if ( parent.attr( "title" ) ) {
+					parent.uniqueId();
+					that.parents[ this.id ] = {
+						element: this,
+						title: parent.attr( "title" )
+					};
+					parent.attr( "title", "" );
+				}
+			});
+		}
+
+		this._updateContent( target, event );
+	},
+
+	_updateContent: function( target, event ) {
+		var content,
+			contentOption = this.options.content,
+			that = this,
+			eventType = event ? event.type : null;
+
+		if ( typeof contentOption === "string" ) {
+			return this._open( event, target, contentOption );
+		}
+
+		content = contentOption.call( target[0], function( response ) {
+			// ignore async response if tooltip was closed already
+			if ( !target.data( "ui-tooltip-open" ) ) {
+				return;
+			}
+			// IE may instantly serve a cached response for ajax requests
+			// delay this call to _open so the other call to _open runs first
+			that._delay(function() {
+				// jQuery creates a special event for focusin when it doesn't
+				// exist natively. To improve performance, the native event
+				// object is reused and the type is changed. Therefore, we can't
+				// rely on the type being correct after the event finished
+				// bubbling, so we set it back to the previous value. (#8740)
+				if ( event ) {
+					event.type = eventType;
+				}
+				this._open( event, target, response );
+			});
+		});
+		if ( content ) {
+			this._open( event, target, content );
+		}
+	},
+
+	_open: function( event, target, content ) {
+		var tooltip, events, delayedShow,
+			positionOption = $.extend( {}, this.options.position );
+
+		if ( !content ) {
+			return;
+		}
+
+		// Content can be updated multiple times. If the tooltip already
+		// exists, then just update the content and bail.
+		tooltip = this._find( target );
+		if ( tooltip.length ) {
+			tooltip.find( ".ui-tooltip-content" ).html( content );
+			return;
+		}
+
+		// if we have a title, clear it to prevent the native tooltip
+		// we have to check first to avoid defining a title if none exists
+		// (we don't want to cause an element to start matching [title])
+		//
+		// We use removeAttr only for key events, to allow IE to export the correct
+		// accessible attributes. For mouse events, set to empty string to avoid
+		// native tooltip showing up (happens only when removing inside mouseover).
+		if ( target.is( "[title]" ) ) {
+			if ( event && event.type === "mouseover" ) {
+				target.attr( "title", "" );
+			} else {
+				target.removeAttr( "title" );
+			}
+		}
+
+		tooltip = this._tooltip( target );
+		addDescribedBy( target, tooltip.attr( "id" ) );
+		tooltip.find( ".ui-tooltip-content" ).html( content );
+
+		function position( event ) {
+			positionOption.of = event;
+			if ( tooltip.is( ":hidden" ) ) {
+				return;
+			}
+			tooltip.position( positionOption );
+		}
+		if ( this.options.track && event && /^mouse/.test( event.type ) ) {
+			this._on( this.document, {
+				mousemove: position
+			});
+			// trigger once to override element-relative positioning
+			position( event );
+		} else {
+			tooltip.position( $.extend({
+				of: target
+			}, this.options.position ) );
+		}
+
+		tooltip.hide();
+
+		this._show( tooltip, this.options.show );
+		// Handle tracking tooltips that are shown with a delay (#8644). As soon
+		// as the tooltip is visible, position the tooltip using the most recent
+		// event.
+		if ( this.options.show && this.options.show.delay ) {
+			delayedShow = this.delayedShow = setInterval(function() {
+				if ( tooltip.is( ":visible" ) ) {
+					position( positionOption.of );
+					clearInterval( delayedShow );
+				}
+			}, $.fx.interval );
+		}
+
+		this._trigger( "open", event, { tooltip: tooltip } );
+
+		events = {
+			keyup: function( event ) {
+				if ( event.keyCode === $.ui.keyCode.ESCAPE ) {
+					var fakeEvent = $.Event(event);
+					fakeEvent.currentTarget = target[0];
+					this.close( fakeEvent, true );
+				}
+			},
+			remove: function() {
+				this._removeTooltip( tooltip );
+			}
+		};
+		if ( !event || event.type === "mouseover" ) {
+			events.mouseleave = "close";
+		}
+		if ( !event || event.type === "focusin" ) {
+			events.focusout = "close";
+		}
+		this._on( true, target, events );
+	},
+
+	close: function( event ) {
+		var that = this,
+			target = $( event ? event.currentTarget : this.element ),
+			tooltip = this._find( target );
+
+		// disabling closes the tooltip, so we need to track when we're closing
+		// to avoid an infinite loop in case the tooltip becomes disabled on close
+		if ( this.closing ) {
+			return;
+		}
+
+		// Clear the interval for delayed tracking tooltips
+		clearInterval( this.delayedShow );
+
+		// only set title if we had one before (see comment in _open())
+		if ( target.data( "ui-tooltip-title" ) ) {
+			target.attr( "title", target.data( "ui-tooltip-title" ) );
+		}
+
+		removeDescribedBy( target );
+
+		tooltip.stop( true );
+		this._hide( tooltip, this.options.hide, function() {
+			that._removeTooltip( $( this ) );
+		});
+
+		target.removeData( "ui-tooltip-open" );
+		this._off( target, "mouseleave focusout keyup" );
+		// Remove 'remove' binding only on delegated targets
+		if ( target[0] !== this.element[0] ) {
+			this._off( target, "remove" );
+		}
+		this._off( this.document, "mousemove" );
+
+		if ( event && event.type === "mouseleave" ) {
+			$.each( this.parents, function( id, parent ) {
+				$( parent.element ).attr( "title", parent.title );
+				delete that.parents[ id ];
+			});
+		}
+
+		this.closing = true;
+		this._trigger( "close", event, { tooltip: tooltip } );
+		this.closing = false;
+	},
+
+	_tooltip: function( element ) {
+		var id = "ui-tooltip-" + increments++,
+			tooltip = $( "<div>" )
+				.attr({
+					id: id,
+					role: "tooltip"
+				})
+				.addClass( "ui-tooltip ui-widget ui-corner-all ui-widget-content " +
+					( this.options.tooltipClass || "" ) );
+		$( "<div>" )
+			.addClass( "ui-tooltip-content" )
+			.appendTo( tooltip );
+		tooltip.appendTo( this.document[0].body );
+		this.tooltips[ id ] = element;
+		return tooltip;
+	},
+
+	_find: function( target ) {
+		var id = target.data( "ui-tooltip-id" );
+		return id ? $( "#" + id ) : $();
+	},
+
+	_removeTooltip: function( tooltip ) {
+		tooltip.remove();
+		delete this.tooltips[ tooltip.attr( "id" ) ];
+	},
+
+	_destroy: function() {
+		var that = this;
+
+		// close open tooltips
+		$.each( this.tooltips, function( id, element ) {
+			// Delegate to close method to handle common cleanup
+			var event = $.Event( "blur" );
+			event.target = event.currentTarget = element[0];
+			that.close( event, true );
+
+			// Remove immediately; destroying an open tooltip doesn't use the
+			// hide animation
+			$( "#" + id ).remove();
+
+			// Restore the title
+			if ( element.data( "ui-tooltip-title" ) ) {
+				element.attr( "title", element.data( "ui-tooltip-title" ) );
+				element.removeData( "ui-tooltip-title" );
+			}
+		});
+	}
+});
+
+}( jQuery ) );
+
+}).call(global, module, undefined);
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.widget":[function(require,module,exports){
+module.exports=require('7ui+HQ');
+},{}],"7ui+HQ":[function(require,module,exports){
+(function (global){(function browserifyShim(module, define) {
+
+; global.jQuery = require("jquery");
+/*!
+ * jQuery UI Widget @VERSION
+ * http://jqueryui.com
+ *
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/jQuery.widget/
+ */
+(function( $, undefined ) {
+
+var uuid = 0,
+	slice = Array.prototype.slice,
+	_cleanData = $.cleanData;
+$.cleanData = function( elems ) {
+	for ( var i = 0, elem; (elem = elems[i]) != null; i++ ) {
+		try {
+			$( elem ).triggerHandler( "remove" );
+		// http://bugs.jquery.com/ticket/8235
+		} catch( e ) {}
+	}
+	_cleanData( elems );
+};
+
+$.widget = function( name, base, prototype ) {
+	var fullName, existingConstructor, constructor, basePrototype,
+		// proxiedPrototype allows the provided prototype to remain unmodified
+		// so that it can be used as a mixin for multiple widgets (#8876)
+		proxiedPrototype = {},
+		namespace = name.split( "." )[ 0 ];
+
+	name = name.split( "." )[ 1 ];
+	fullName = namespace + "-" + name;
+
+	if ( !prototype ) {
+		prototype = base;
+		base = $.Widget;
+	}
+
+	// create selector for plugin
+	$.expr[ ":" ][ fullName.toLowerCase() ] = function( elem ) {
+		return !!$.data( elem, fullName );
+	};
+
+	$[ namespace ] = $[ namespace ] || {};
+	existingConstructor = $[ namespace ][ name ];
+	constructor = $[ namespace ][ name ] = function( options, element ) {
+		// allow instantiation without "new" keyword
+		if ( !this._createWidget ) {
+			return new constructor( options, element );
+		}
+
+		// allow instantiation without initializing for simple inheritance
+		// must use "new" keyword (the code above always passes args)
+		if ( arguments.length ) {
+			this._createWidget( options, element );
+		}
+	};
+	// extend with the existing constructor to carry over any static properties
+	$.extend( constructor, existingConstructor, {
+		version: prototype.version,
+		// copy the object used to create the prototype in case we need to
+		// redefine the widget later
+		_proto: $.extend( {}, prototype ),
+		// track widgets that inherit from this widget in case this widget is
+		// redefined after a widget inherits from it
+		_childConstructors: []
+	});
+
+	basePrototype = new base();
+	// we need to make the options hash a property directly on the new instance
+	// otherwise we'll modify the options hash on the prototype that we're
+	// inheriting from
+	basePrototype.options = $.widget.extend( {}, basePrototype.options );
+	$.each( prototype, function( prop, value ) {
+		if ( !$.isFunction( value ) ) {
+			proxiedPrototype[ prop ] = value;
+			return;
+		}
+		proxiedPrototype[ prop ] = (function() {
+			var _super = function() {
+					return base.prototype[ prop ].apply( this, arguments );
+				},
+				_superApply = function( args ) {
+					return base.prototype[ prop ].apply( this, args );
+				};
+			return function() {
+				var __super = this._super,
+					__superApply = this._superApply,
+					returnValue;
+
+				this._super = _super;
+				this._superApply = _superApply;
+
+				returnValue = value.apply( this, arguments );
+
+				this._super = __super;
+				this._superApply = __superApply;
+
+				return returnValue;
+			};
+		})();
+	});
+	constructor.prototype = $.widget.extend( basePrototype, {
+		// TODO: remove support for widgetEventPrefix
+		// always use the name + a colon as the prefix, e.g., draggable:start
+		// don't prefix for widgets that aren't DOM-based
+		widgetEventPrefix: existingConstructor ? basePrototype.widgetEventPrefix : name
+	}, proxiedPrototype, {
+		constructor: constructor,
+		namespace: namespace,
+		widgetName: name,
+		widgetFullName: fullName
+	});
+
+	// If this widget is being redefined then we need to find all widgets that
+	// are inheriting from it and redefine all of them so that they inherit from
+	// the new version of this widget. We're essentially trying to replace one
+	// level in the prototype chain.
+	if ( existingConstructor ) {
+		$.each( existingConstructor._childConstructors, function( i, child ) {
+			var childPrototype = child.prototype;
+
+			// redefine the child widget using the same prototype that was
+			// originally used, but inherit from the new version of the base
+			$.widget( childPrototype.namespace + "." + childPrototype.widgetName, constructor, child._proto );
+		});
+		// remove the list of existing child constructors from the old constructor
+		// so the old child constructors can be garbage collected
+		delete existingConstructor._childConstructors;
+	} else {
+		base._childConstructors.push( constructor );
+	}
+
+	$.widget.bridge( name, constructor );
+};
+
+$.widget.extend = function( target ) {
+	var input = slice.call( arguments, 1 ),
+		inputIndex = 0,
+		inputLength = input.length,
+		key,
+		value;
+	for ( ; inputIndex < inputLength; inputIndex++ ) {
+		for ( key in input[ inputIndex ] ) {
+			value = input[ inputIndex ][ key ];
+			if ( input[ inputIndex ].hasOwnProperty( key ) && value !== undefined ) {
+				// Clone objects
+				if ( $.isPlainObject( value ) ) {
+					target[ key ] = $.isPlainObject( target[ key ] ) ?
+						$.widget.extend( {}, target[ key ], value ) :
+						// Don't extend strings, arrays, etc. with objects
+						$.widget.extend( {}, value );
+				// Copy everything else by reference
+				} else {
+					target[ key ] = value;
+				}
+			}
+		}
+	}
+	return target;
+};
+
+$.widget.bridge = function( name, object ) {
+	var fullName = object.prototype.widgetFullName || name;
+	$.fn[ name ] = function( options ) {
+		var isMethodCall = typeof options === "string",
+			args = slice.call( arguments, 1 ),
+			returnValue = this;
+
+		// allow multiple hashes to be passed on init
+		options = !isMethodCall && args.length ?
+			$.widget.extend.apply( null, [ options ].concat(args) ) :
+			options;
+
+		if ( isMethodCall ) {
+			this.each(function() {
+				var methodValue,
+					instance = $.data( this, fullName );
+				if ( !instance ) {
+					return $.error( "cannot call methods on " + name + " prior to initialization; " +
+						"attempted to call method '" + options + "'" );
+				}
+				if ( !$.isFunction( instance[options] ) || options.charAt( 0 ) === "_" ) {
+					return $.error( "no such method '" + options + "' for " + name + " widget instance" );
+				}
+				methodValue = instance[ options ].apply( instance, args );
+				if ( methodValue !== instance && methodValue !== undefined ) {
+					returnValue = methodValue && methodValue.jquery ?
+						returnValue.pushStack( methodValue.get() ) :
+						methodValue;
+					return false;
+				}
+			});
+		} else {
+			this.each(function() {
+				var instance = $.data( this, fullName );
+				if ( instance ) {
+					instance.option( options || {} )._init();
+				} else {
+					$.data( this, fullName, new object( options, this ) );
+				}
+			});
+		}
+
+		return returnValue;
+	};
+};
+
+$.Widget = function( /* options, element */ ) {};
+$.Widget._childConstructors = [];
+
+$.Widget.prototype = {
+	widgetName: "widget",
+	widgetEventPrefix: "",
+	defaultElement: "<div>",
+	options: {
+		disabled: false,
+
+		// callbacks
+		create: null
+	},
+	_createWidget: function( options, element ) {
+		element = $( element || this.defaultElement || this )[ 0 ];
+		this.element = $( element );
+		this.uuid = uuid++;
+		this.eventNamespace = "." + this.widgetName + this.uuid;
+		this.options = $.widget.extend( {},
+			this.options,
+			this._getCreateOptions(),
+			options );
+
+		this.bindings = $();
+		this.hoverable = $();
+		this.focusable = $();
+
+		if ( element !== this ) {
+			$.data( element, this.widgetFullName, this );
+			this._on( true, this.element, {
+				remove: function( event ) {
+					if ( event.target === element ) {
+						this.destroy();
+					}
+				}
+			});
+			this.document = $( element.style ?
+				// element within the document
+				element.ownerDocument :
+				// element is window or document
+				element.document || element );
+			this.window = $( this.document[0].defaultView || this.document[0].parentWindow );
+		}
+
+		this._create();
+		this._trigger( "create", null, this._getCreateEventData() );
+		this._init();
+	},
+	_getCreateOptions: $.noop,
+	_getCreateEventData: $.noop,
+	_create: $.noop,
+	_init: $.noop,
+
+	destroy: function() {
+		this._destroy();
+		// we can probably remove the unbind calls in 2.0
+		// all event bindings should go through this._on()
+		this.element
+			.unbind( this.eventNamespace )
+			// 1.9 BC for #7810
+			// TODO remove dual storage
+			.removeData( this.widgetName )
+			.removeData( this.widgetFullName )
+			// support: jquery <1.6.3
+			// http://bugs.jquery.com/ticket/9413
+			.removeData( $.camelCase( this.widgetFullName ) );
+		this.widget()
+			.unbind( this.eventNamespace )
+			.removeAttr( "aria-disabled" )
+			.removeClass(
+				this.widgetFullName + "-disabled " +
+				"ui-state-disabled" );
+
+		// clean up events and states
+		this.bindings.unbind( this.eventNamespace );
+		this.hoverable.removeClass( "ui-state-hover" );
+		this.focusable.removeClass( "ui-state-focus" );
+	},
+	_destroy: $.noop,
+
+	widget: function() {
+		return this.element;
+	},
+
+	option: function( key, value ) {
+		var options = key,
+			parts,
+			curOption,
+			i;
+
+		if ( arguments.length === 0 ) {
+			// don't return a reference to the internal hash
+			return $.widget.extend( {}, this.options );
+		}
+
+		if ( typeof key === "string" ) {
+			// handle nested keys, e.g., "foo.bar" => { foo: { bar: ___ } }
+			options = {};
+			parts = key.split( "." );
+			key = parts.shift();
+			if ( parts.length ) {
+				curOption = options[ key ] = $.widget.extend( {}, this.options[ key ] );
+				for ( i = 0; i < parts.length - 1; i++ ) {
+					curOption[ parts[ i ] ] = curOption[ parts[ i ] ] || {};
+					curOption = curOption[ parts[ i ] ];
+				}
+				key = parts.pop();
+				if ( value === undefined ) {
+					return curOption[ key ] === undefined ? null : curOption[ key ];
+				}
+				curOption[ key ] = value;
+			} else {
+				if ( value === undefined ) {
+					return this.options[ key ] === undefined ? null : this.options[ key ];
+				}
+				options[ key ] = value;
+			}
+		}
+
+		this._setOptions( options );
+
+		return this;
+	},
+	_setOptions: function( options ) {
+		var key;
+
+		for ( key in options ) {
+			this._setOption( key, options[ key ] );
+		}
+
+		return this;
+	},
+	_setOption: function( key, value ) {
+		this.options[ key ] = value;
+
+		if ( key === "disabled" ) {
+			this.widget()
+				.toggleClass( this.widgetFullName + "-disabled ui-state-disabled", !!value )
+				.attr( "aria-disabled", value );
+			this.hoverable.removeClass( "ui-state-hover" );
+			this.focusable.removeClass( "ui-state-focus" );
+		}
+
+		return this;
+	},
+
+	enable: function() {
+		return this._setOption( "disabled", false );
+	},
+	disable: function() {
+		return this._setOption( "disabled", true );
+	},
+
+	_on: function( suppressDisabledCheck, element, handlers ) {
+		var delegateElement,
+			instance = this;
+
+		// no suppressDisabledCheck flag, shuffle arguments
+		if ( typeof suppressDisabledCheck !== "boolean" ) {
+			handlers = element;
+			element = suppressDisabledCheck;
+			suppressDisabledCheck = false;
+		}
+
+		// no element argument, shuffle and use this.element
+		if ( !handlers ) {
+			handlers = element;
+			element = this.element;
+			delegateElement = this.widget();
+		} else {
+			// accept selectors, DOM elements
+			element = delegateElement = $( element );
+			this.bindings = this.bindings.add( element );
+		}
+
+		$.each( handlers, function( event, handler ) {
+			function handlerProxy() {
+				// allow widgets to customize the disabled handling
+				// - disabled as an array instead of boolean
+				// - disabled class as method for disabling individual parts
+				if ( !suppressDisabledCheck &&
+						( instance.options.disabled === true ||
+							$( this ).hasClass( "ui-state-disabled" ) ) ) {
+					return;
+				}
+				return ( typeof handler === "string" ? instance[ handler ] : handler )
+					.apply( instance, arguments );
+			}
+
+			// copy the guid so direct unbinding works
+			if ( typeof handler !== "string" ) {
+				handlerProxy.guid = handler.guid =
+					handler.guid || handlerProxy.guid || $.guid++;
+			}
+
+			var match = event.match( /^(\w+)\s*(.*)$/ ),
+				eventName = match[1] + instance.eventNamespace,
+				selector = match[2];
+			if ( selector ) {
+				delegateElement.delegate( selector, eventName, handlerProxy );
+			} else {
+				element.bind( eventName, handlerProxy );
+			}
+		});
+	},
+
+	_off: function( element, eventName ) {
+		eventName = (eventName || "").split( " " ).join( this.eventNamespace + " " ) + this.eventNamespace;
+		element.unbind( eventName ).undelegate( eventName );
+	},
+
+	_delay: function( handler, delay ) {
+		function handlerProxy() {
+			return ( typeof handler === "string" ? instance[ handler ] : handler )
+				.apply( instance, arguments );
+		}
+		var instance = this;
+		return setTimeout( handlerProxy, delay || 0 );
+	},
+
+	_hoverable: function( element ) {
+		this.hoverable = this.hoverable.add( element );
+		this._on( element, {
+			mouseenter: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-hover" );
+			},
+			mouseleave: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-hover" );
+			}
+		});
+	},
+
+	_focusable: function( element ) {
+		this.focusable = this.focusable.add( element );
+		this._on( element, {
+			focusin: function( event ) {
+				$( event.currentTarget ).addClass( "ui-state-focus" );
+			},
+			focusout: function( event ) {
+				$( event.currentTarget ).removeClass( "ui-state-focus" );
+			}
+		});
+	},
+
+	_trigger: function( type, event, data ) {
+		var prop, orig,
+			callback = this.options[ type ];
+
+		data = data || {};
+		event = $.Event( event );
+		event.type = ( type === this.widgetEventPrefix ?
+			type :
+			this.widgetEventPrefix + type ).toLowerCase();
+		// the original event may come from any element
+		// so we need to reset the target on the new event
+		event.target = this.element[ 0 ];
+
+		// copy original event properties over to the new event
+		orig = event.originalEvent;
+		if ( orig ) {
+			for ( prop in orig ) {
+				if ( !( prop in event ) ) {
+					event[ prop ] = orig[ prop ];
+				}
+			}
+		}
+
+		this.element.trigger( event, data );
+		return !( $.isFunction( callback ) &&
+			callback.apply( this.element[0], [ event ].concat( data ) ) === false ||
+			event.isDefaultPrevented() );
+	}
+};
+
+$.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
+	$.Widget.prototype[ "_" + method ] = function( element, options, callback ) {
+		if ( typeof options === "string" ) {
+			options = { effect: options };
+		}
+		var hasOptions,
+			effectName = !options ?
+				method :
+				options === true || typeof options === "number" ?
+					defaultEffect :
+					options.effect || defaultEffect;
+		options = options || {};
+		if ( typeof options === "number" ) {
+			options = { duration: options };
+		}
+		hasOptions = !$.isEmptyObject( options );
+		options.complete = callback;
+		if ( options.delay ) {
+			element.delay( options.delay );
+		}
+		if ( hasOptions && $.effects && $.effects.effect[ effectName ] ) {
+			element[ method ]( options );
+		} else if ( effectName !== method && element[ effectName ] ) {
+			element[ effectName ]( options.duration, options.easing, callback );
+		} else {
+			element.queue(function( next ) {
+				$( this )[ method ]();
+				if ( callback ) {
+					callback.call( element[ 0 ] );
+				}
+				next();
+			});
+		}
+	};
+});
+
+})( jQuery );
+
+}).call(global, module, undefined);
+}).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"jquery":"5Q/0Us"}],"Lamjpc":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /*!
  * jsUri
@@ -12600,7 +14916,11 @@ module.exports=require('mGesKN');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"NLtOHb":[function(require,module,exports){
+},{}],"uri":[function(require,module,exports){
+module.exports=require('Lamjpc');
+},{}],"microplugin":[function(require,module,exports){
+module.exports=require('0vcR2t');
+},{}],"0vcR2t":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /**
  * microplugin.js
@@ -12739,9 +15059,7 @@ module.exports=require('mGesKN');
 }));
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"microplugin":[function(require,module,exports){
-module.exports=require('NLtOHb');
-},{}],"KoSWjB":[function(require,module,exports){
+},{}],"8y1JGA":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 // moment.js language configuration
 // language : russian (ru)
@@ -12909,11 +15227,11 @@ module.exports=require('NLtOHb');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../moment":"OeVw/B"}],"momentLang":[function(require,module,exports){
-module.exports=require('KoSWjB');
+},{"../moment":"WWz+tO"}],"momentLang":[function(require,module,exports){
+module.exports=require('8y1JGA');
 },{}],"moment":[function(require,module,exports){
-module.exports=require('OeVw/B');
-},{}],"OeVw/B":[function(require,module,exports){
+module.exports=require('WWz+tO');
+},{}],"WWz+tO":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 //! moment.js
 //! version : 2.4.0
@@ -15232,7 +17550,7 @@ module.exports=require('OeVw/B');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],17:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -15280,7 +17598,7 @@ function $(id) {
 
 module.exports = $;
 
-},{"./ex":99,"./ge":103}],18:[function(require,module,exports){
+},{"./ex":109,"./ge":113}],28:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -15372,7 +17690,7 @@ var CSSProperty = {
 
 module.exports = CSSProperty;
 
-},{}],19:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -15471,7 +17789,7 @@ var CSSPropertyOperations = {
 
 module.exports = CSSPropertyOperations;
 
-},{"./CSSProperty":18,"./dangerousStyleValue":96,"./escapeTextForBrowser":98,"./hyphenate":110,"./memoizeStringOnly":119}],20:[function(require,module,exports){
+},{"./CSSProperty":28,"./dangerousStyleValue":106,"./escapeTextForBrowser":108,"./hyphenate":120,"./memoizeStringOnly":129}],30:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -15564,7 +17882,7 @@ var CallbackRegistry = {
 
 module.exports = CallbackRegistry;
 
-},{}],21:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -15931,7 +18249,7 @@ var ChangeEventPlugin = {
 
 module.exports = ChangeEventPlugin;
 
-},{"./EventConstants":30,"./EventPluginHub":32,"./EventPropagators":35,"./ExecutionEnvironment":36,"./SyntheticEvent":81,"./isEventSupported":112,"./isTextInputElement":114,"./keyOf":118}],22:[function(require,module,exports){
+},{"./EventConstants":40,"./EventPluginHub":42,"./EventPropagators":45,"./ExecutionEnvironment":46,"./SyntheticEvent":91,"./isEventSupported":122,"./isTextInputElement":124,"./keyOf":128}],32:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16145,7 +18463,7 @@ var CompositionEventPlugin = {
 
 module.exports = CompositionEventPlugin;
 
-},{"./EventConstants":30,"./EventPropagators":35,"./ExecutionEnvironment":36,"./ReactInputSelection":62,"./SyntheticCompositionEvent":80,"./getTextContentAccessor":109,"./keyOf":118}],23:[function(require,module,exports){
+},{"./EventConstants":40,"./EventPropagators":45,"./ExecutionEnvironment":46,"./ReactInputSelection":72,"./SyntheticCompositionEvent":90,"./getTextContentAccessor":119,"./keyOf":128}],33:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16282,7 +18600,7 @@ var DOMChildrenOperations = {
 
 module.exports = DOMChildrenOperations;
 
-},{"./Danger":26,"./ReactMultiChildUpdateTypes":68,"./getTextContentAccessor":109}],24:[function(require,module,exports){
+},{"./Danger":36,"./ReactMultiChildUpdateTypes":78,"./getTextContentAccessor":119}],34:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16516,7 +18834,7 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 
-},{"./invariant":111}],25:[function(require,module,exports){
+},{"./invariant":121}],35:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16633,7 +18951,7 @@ var DOMPropertyOperations = {
 
 module.exports = DOMPropertyOperations;
 
-},{"./DOMProperty":24,"./escapeTextForBrowser":98,"./memoizeStringOnly":119}],26:[function(require,module,exports){
+},{"./DOMProperty":34,"./escapeTextForBrowser":108,"./memoizeStringOnly":129}],36:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16792,7 +19110,7 @@ var Danger = {
 
 module.exports = Danger;
 
-},{"./ExecutionEnvironment":36,"./createNodesFromMarkup":94,"./emptyFunction":97,"./getMarkupWrap":106,"./invariant":111,"./mutateHTMLNodeWithMarkup":124}],27:[function(require,module,exports){
+},{"./ExecutionEnvironment":46,"./createNodesFromMarkup":104,"./emptyFunction":107,"./getMarkupWrap":116,"./invariant":121,"./mutateHTMLNodeWithMarkup":134}],37:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -16972,7 +19290,7 @@ var DefaultDOMPropertyConfig = {
 
 module.exports = DefaultDOMPropertyConfig;
 
-},{"./DOMProperty":24}],28:[function(require,module,exports){
+},{"./DOMProperty":34}],38:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17018,7 +19336,7 @@ var DefaultEventPluginOrder = [
 
 module.exports = DefaultEventPluginOrder;
 
-},{"./keyOf":118}],29:[function(require,module,exports){
+},{"./keyOf":128}],39:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17132,7 +19450,7 @@ var EnterLeaveEventPlugin = {
 
 module.exports = EnterLeaveEventPlugin;
 
-},{"./EventConstants":30,"./EventPropagators":35,"./ReactMount":65,"./SyntheticMouseEvent":84,"./keyOf":118}],30:[function(require,module,exports){
+},{"./EventConstants":40,"./EventPropagators":45,"./ReactMount":75,"./SyntheticMouseEvent":94,"./keyOf":128}],40:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17206,7 +19524,7 @@ var EventConstants = {
 
 module.exports = EventConstants;
 
-},{"./keyMirror":117}],31:[function(require,module,exports){
+},{"./keyMirror":127}],41:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17262,7 +19580,7 @@ var EventListener = {
 
 module.exports = EventListener;
 
-},{}],32:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17450,7 +19768,7 @@ if (ExecutionEnvironment.canUseDOM) {
 
 module.exports = EventPluginHub;
 
-},{"./CallbackRegistry":20,"./EventPluginRegistry":33,"./EventPluginUtils":34,"./EventPropagators":35,"./ExecutionEnvironment":36,"./accumulate":90,"./forEachAccumulated":102,"./invariant":111}],33:[function(require,module,exports){
+},{"./CallbackRegistry":30,"./EventPluginRegistry":43,"./EventPluginUtils":44,"./EventPropagators":45,"./ExecutionEnvironment":46,"./accumulate":100,"./forEachAccumulated":112,"./invariant":121}],43:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17668,7 +19986,7 @@ var EventPluginRegistry = {
 
 module.exports = EventPluginRegistry;
 
-},{"./invariant":111}],34:[function(require,module,exports){
+},{"./invariant":121}],44:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17828,7 +20146,7 @@ var EventPluginUtils = {
 
 module.exports = EventPluginUtils;
 
-},{"./EventConstants":30,"./invariant":111}],35:[function(require,module,exports){
+},{"./EventConstants":40,"./invariant":121}],45:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -17992,7 +20310,7 @@ var EventPropagators = {
 
 module.exports = EventPropagators;
 
-},{"./CallbackRegistry":20,"./EventConstants":30,"./accumulate":90,"./forEachAccumulated":102}],36:[function(require,module,exports){
+},{"./CallbackRegistry":30,"./EventConstants":40,"./accumulate":100,"./forEachAccumulated":112}],46:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18035,7 +20353,7 @@ var ExecutionEnvironment = {
 
 module.exports = ExecutionEnvironment;
 
-},{}],37:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18100,7 +20418,7 @@ var LinkedValueMixin = {
 
 module.exports = LinkedValueMixin;
 
-},{"./invariant":111}],38:[function(require,module,exports){
+},{"./invariant":121}],48:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18165,7 +20483,7 @@ var MobileSafariClickEventPlugin = {
 
 module.exports = MobileSafariClickEventPlugin;
 
-},{"./EventConstants":30,"./emptyFunction":97}],39:[function(require,module,exports){
+},{"./EventConstants":40,"./emptyFunction":107}],49:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18280,7 +20598,9 @@ var PooledClass = {
 
 module.exports = PooledClass;
 
-},{}],"EIqVLP":[function(require,module,exports){
+},{}],"React":[function(require,module,exports){
+module.exports=require('2ftwoI');
+},{}],"2ftwoI":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /**
  * Copyright 2013 Facebook, Inc.
@@ -18356,9 +20676,7 @@ module.exports = React;
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./ReactComponent":42,"./ReactCompositeComponent":45,"./ReactCurrentOwner":46,"./ReactDOM":47,"./ReactDOMComponent":49,"./ReactDefaultInjection":58,"./ReactInstanceHandles":63,"./ReactMount":65,"./ReactMultiChild":67,"./ReactPerf":70,"./ReactPropTypes":72,"./ReactServerRendering":74,"./ReactTextComponent":75}],"React":[function(require,module,exports){
-module.exports=require('EIqVLP');
-},{}],42:[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactCompositeComponent":55,"./ReactCurrentOwner":56,"./ReactDOM":57,"./ReactDOMComponent":59,"./ReactDefaultInjection":68,"./ReactInstanceHandles":73,"./ReactMount":75,"./ReactMultiChild":77,"./ReactPerf":80,"./ReactPropTypes":82,"./ReactServerRendering":84,"./ReactTextComponent":85}],52:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18848,7 +21166,7 @@ var ReactComponent = {
 
 module.exports = ReactComponent;
 
-},{"./ReactComponentEnvironment":44,"./ReactCurrentOwner":46,"./ReactOwner":69,"./ReactUpdates":76,"./invariant":111,"./keyMirror":117,"./merge":120}],43:[function(require,module,exports){
+},{"./ReactComponentEnvironment":54,"./ReactCurrentOwner":56,"./ReactOwner":79,"./ReactUpdates":86,"./invariant":121,"./keyMirror":127,"./merge":130}],53:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18969,7 +21287,7 @@ var ReactComponentBrowserEnvironment = {
 
 module.exports = ReactComponentBrowserEnvironment;
 
-},{"./ReactDOMIDOperations":51,"./ReactMarkupChecksum":64,"./ReactMount":65,"./ReactReconcileTransaction":73,"./getReactRootElementInContainer":108,"./invariant":111,"./mutateHTMLNodeWithMarkup":124}],44:[function(require,module,exports){
+},{"./ReactDOMIDOperations":61,"./ReactMarkupChecksum":74,"./ReactMount":75,"./ReactReconcileTransaction":83,"./getReactRootElementInContainer":118,"./invariant":121,"./mutateHTMLNodeWithMarkup":134}],54:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -18995,7 +21313,7 @@ var ReactComponentEnvironment = ReactComponentBrowserEnvironment;
 
 module.exports = ReactComponentEnvironment;
 
-},{"./ReactComponentBrowserEnvironment":43}],45:[function(require,module,exports){
+},{"./ReactComponentBrowserEnvironment":53}],55:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -19923,7 +22241,7 @@ var ReactCompositeComponent = {
 
 module.exports = ReactCompositeComponent;
 
-},{"./ReactComponent":42,"./ReactCurrentOwner":46,"./ReactOwner":69,"./ReactPerf":70,"./ReactPropTransferer":71,"./ReactUpdates":76,"./invariant":111,"./keyMirror":117,"./merge":120,"./mixInto":123,"./objMap":126}],46:[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactCurrentOwner":56,"./ReactOwner":79,"./ReactPerf":80,"./ReactPropTransferer":81,"./ReactUpdates":86,"./invariant":121,"./keyMirror":127,"./merge":130,"./mixInto":133,"./objMap":136}],56:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -19964,7 +22282,7 @@ var ReactCurrentOwner = {
 
 module.exports = ReactCurrentOwner;
 
-},{}],47:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20160,7 +22478,7 @@ ReactDOM.injection = injection;
 
 module.exports = ReactDOM;
 
-},{"./ReactDOMComponent":49,"./mergeInto":122,"./objMapKeyVal":127}],48:[function(require,module,exports){
+},{"./ReactDOMComponent":59,"./mergeInto":132,"./objMapKeyVal":137}],58:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20226,7 +22544,7 @@ var ReactDOMButton = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMButton;
 
-},{"./ReactCompositeComponent":45,"./ReactDOM":47,"./keyMirror":117}],49:[function(require,module,exports){
+},{"./ReactCompositeComponent":55,"./ReactDOM":57,"./keyMirror":127}],59:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20591,7 +22909,7 @@ mixInto(ReactDOMComponent, ReactMultiChild.Mixin);
 
 module.exports = ReactDOMComponent;
 
-},{"./CSSPropertyOperations":19,"./DOMProperty":24,"./DOMPropertyOperations":25,"./ReactComponent":42,"./ReactEventEmitter":59,"./ReactMount":65,"./ReactMultiChild":67,"./ReactPerf":70,"./escapeTextForBrowser":98,"./invariant":111,"./keyOf":118,"./merge":120,"./mixInto":123}],50:[function(require,module,exports){
+},{"./CSSPropertyOperations":29,"./DOMProperty":34,"./DOMPropertyOperations":35,"./ReactComponent":52,"./ReactEventEmitter":69,"./ReactMount":75,"./ReactMultiChild":77,"./ReactPerf":80,"./escapeTextForBrowser":108,"./invariant":121,"./keyOf":128,"./merge":130,"./mixInto":133}],60:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20645,7 +22963,7 @@ var ReactDOMForm = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMForm;
 
-},{"./EventConstants":30,"./ReactCompositeComponent":45,"./ReactDOM":47,"./ReactEventEmitter":59}],51:[function(require,module,exports){
+},{"./EventConstants":40,"./ReactCompositeComponent":55,"./ReactDOM":57,"./ReactEventEmitter":69}],61:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20831,7 +23149,7 @@ var ReactDOMIDOperations = {
 
 module.exports = ReactDOMIDOperations;
 
-},{"./CSSPropertyOperations":19,"./DOMChildrenOperations":23,"./DOMPropertyOperations":25,"./ReactMount":65,"./getTextContentAccessor":109,"./invariant":111}],52:[function(require,module,exports){
+},{"./CSSPropertyOperations":29,"./DOMChildrenOperations":33,"./DOMPropertyOperations":35,"./ReactMount":75,"./getTextContentAccessor":119,"./invariant":121}],62:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -20994,7 +23312,7 @@ var ReactDOMInput = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMInput;
 
-},{"./DOMPropertyOperations":25,"./LinkedValueMixin":37,"./ReactCompositeComponent":45,"./ReactDOM":47,"./ReactMount":65,"./invariant":111,"./merge":120}],53:[function(require,module,exports){
+},{"./DOMPropertyOperations":35,"./LinkedValueMixin":47,"./ReactCompositeComponent":55,"./ReactDOM":57,"./ReactMount":75,"./invariant":121,"./merge":130}],63:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21039,7 +23357,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMOption;
 
-},{"./ReactCompositeComponent":45,"./ReactDOM":47}],54:[function(require,module,exports){
+},{"./ReactCompositeComponent":55,"./ReactDOM":57}],64:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21191,7 +23509,7 @@ var ReactDOMSelect = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMSelect;
 
-},{"./LinkedValueMixin":37,"./ReactCompositeComponent":45,"./ReactDOM":47,"./invariant":111,"./merge":120}],55:[function(require,module,exports){
+},{"./LinkedValueMixin":47,"./ReactCompositeComponent":55,"./ReactDOM":57,"./invariant":121,"./merge":130}],65:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21367,7 +23685,7 @@ var ReactDOMSelection = {
 
 module.exports = ReactDOMSelection;
 
-},{"./getNodeForCharacterOffset":107,"./getTextContentAccessor":109}],56:[function(require,module,exports){
+},{"./getNodeForCharacterOffset":117,"./getTextContentAccessor":119}],66:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21491,7 +23809,7 @@ var ReactDOMTextarea = ReactCompositeComponent.createClass({
 
 module.exports = ReactDOMTextarea;
 
-},{"./DOMPropertyOperations":25,"./LinkedValueMixin":37,"./ReactCompositeComponent":45,"./ReactDOM":47,"./invariant":111,"./merge":120}],57:[function(require,module,exports){
+},{"./DOMPropertyOperations":35,"./LinkedValueMixin":47,"./ReactCompositeComponent":55,"./ReactDOM":57,"./invariant":121,"./merge":130}],67:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21568,7 +23886,7 @@ var ReactDefaultBatchingStrategy = {
 
 module.exports = ReactDefaultBatchingStrategy;
 
-},{"./ReactUpdates":76,"./Transaction":88,"./emptyFunction":97,"./mixInto":123}],58:[function(require,module,exports){
+},{"./ReactUpdates":86,"./Transaction":98,"./emptyFunction":107,"./mixInto":133}],68:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21659,7 +23977,7 @@ module.exports = {
   inject: inject
 };
 
-},{"./ChangeEventPlugin":21,"./CompositionEventPlugin":22,"./DOMProperty":24,"./DefaultDOMPropertyConfig":27,"./DefaultEventPluginOrder":28,"./EnterLeaveEventPlugin":29,"./EventPluginHub":32,"./MobileSafariClickEventPlugin":38,"./ReactDOM":47,"./ReactDOMButton":48,"./ReactDOMForm":50,"./ReactDOMInput":52,"./ReactDOMOption":53,"./ReactDOMSelect":54,"./ReactDOMTextarea":56,"./ReactDefaultBatchingStrategy":57,"./ReactEventEmitter":59,"./ReactEventTopLevelCallback":61,"./ReactInstanceHandles":63,"./ReactPerf":70,"./ReactUpdates":76,"./SelectEventPlugin":77,"./SimpleEventPlugin":78}],59:[function(require,module,exports){
+},{"./ChangeEventPlugin":31,"./CompositionEventPlugin":32,"./DOMProperty":34,"./DefaultDOMPropertyConfig":37,"./DefaultEventPluginOrder":38,"./EnterLeaveEventPlugin":39,"./EventPluginHub":42,"./MobileSafariClickEventPlugin":48,"./ReactDOM":57,"./ReactDOMButton":58,"./ReactDOMForm":60,"./ReactDOMInput":62,"./ReactDOMOption":63,"./ReactDOMSelect":64,"./ReactDOMTextarea":66,"./ReactDefaultBatchingStrategy":67,"./ReactEventEmitter":69,"./ReactEventTopLevelCallback":71,"./ReactInstanceHandles":73,"./ReactPerf":80,"./ReactUpdates":86,"./SelectEventPlugin":87,"./SimpleEventPlugin":88}],69:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -21985,7 +24303,7 @@ var ReactEventEmitter = merge(ReactEventEmitterMixin, {
 
 module.exports = ReactEventEmitter;
 
-},{"./EventConstants":30,"./EventListener":31,"./EventPluginHub":32,"./ExecutionEnvironment":36,"./ReactEventEmitterMixin":60,"./ViewportMetrics":89,"./invariant":111,"./isEventSupported":112,"./merge":120}],60:[function(require,module,exports){
+},{"./EventConstants":40,"./EventListener":41,"./EventPluginHub":42,"./ExecutionEnvironment":46,"./ReactEventEmitterMixin":70,"./ViewportMetrics":99,"./invariant":121,"./isEventSupported":122,"./merge":130}],70:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -22076,7 +24394,7 @@ var ReactEventEmitterMixin = {
 
 module.exports = ReactEventEmitterMixin;
 
-},{"./EventPluginHub":32,"./ReactUpdates":76}],61:[function(require,module,exports){
+},{"./EventPluginHub":42,"./ReactUpdates":86}],71:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -22167,7 +24485,7 @@ var ReactEventTopLevelCallback = {
 
 module.exports = ReactEventTopLevelCallback;
 
-},{"./ReactEventEmitter":59,"./ReactMount":65,"./getEventTarget":105}],62:[function(require,module,exports){
+},{"./ReactEventEmitter":69,"./ReactMount":75,"./getEventTarget":115}],72:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -22309,7 +24627,7 @@ var ReactInputSelection = {
 
 module.exports = ReactInputSelection;
 
-},{"./ReactDOMSelection":55,"./getActiveElement":104,"./nodeContains":125}],63:[function(require,module,exports){
+},{"./ReactDOMSelection":65,"./getActiveElement":114,"./nodeContains":135}],73:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -22601,7 +24919,7 @@ var ReactInstanceHandles = {
 
 module.exports = ReactInstanceHandles;
 
-},{"./invariant":111}],64:[function(require,module,exports){
+},{"./invariant":121}],74:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -22656,7 +24974,7 @@ var ReactMarkupChecksum = {
 
 module.exports = ReactMarkupChecksum;
 
-},{"./adler32":91}],65:[function(require,module,exports){
+},{"./adler32":101}],75:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23190,7 +25508,7 @@ var ReactMount = {
 
 module.exports = ReactMount;
 
-},{"./$":17,"./ReactEventEmitter":59,"./ReactInstanceHandles":63,"./getReactRootElementInContainer":108,"./invariant":111,"./nodeContains":125}],66:[function(require,module,exports){
+},{"./$":27,"./ReactEventEmitter":69,"./ReactInstanceHandles":73,"./getReactRootElementInContainer":118,"./invariant":121,"./nodeContains":135}],76:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23287,7 +25605,7 @@ PooledClass.addPoolingTo(ReactMountReady);
 
 module.exports = ReactMountReady;
 
-},{"./PooledClass":39,"./mixInto":123}],67:[function(require,module,exports){
+},{"./PooledClass":49,"./mixInto":133}],77:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23730,7 +26048,7 @@ var ReactMultiChild = {
 
 module.exports = ReactMultiChild;
 
-},{"./ReactComponent":42,"./ReactMultiChildUpdateTypes":68,"./flattenChildren":101}],68:[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactMultiChildUpdateTypes":78,"./flattenChildren":111}],78:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23768,7 +26086,7 @@ var ReactMultiChildUpdateTypes = keyMirror({
 
 module.exports = ReactMultiChildUpdateTypes;
 
-},{"./keyMirror":117}],69:[function(require,module,exports){
+},{"./keyMirror":127}],79:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23906,7 +26224,7 @@ var ReactOwner = {
 
 module.exports = ReactOwner;
 
-},{"./invariant":111}],70:[function(require,module,exports){
+},{"./invariant":121}],80:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -23977,7 +26295,7 @@ function _noMeasure(objName, fnName, func) {
 
 module.exports = ReactPerf;
 
-},{}],71:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24100,7 +26418,7 @@ var ReactPropTransferer = {
 
 module.exports = ReactPropTransferer;
 
-},{"./emptyFunction":97,"./invariant":111,"./joinClasses":116,"./merge":120}],72:[function(require,module,exports){
+},{"./emptyFunction":107,"./invariant":121,"./joinClasses":126,"./merge":130}],82:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24236,7 +26554,7 @@ function createChainableTypeChecker(validate) {
 
 module.exports = Props;
 
-},{"./createObjectFrom":95,"./invariant":111}],73:[function(require,module,exports){
+},{"./createObjectFrom":105,"./invariant":121}],83:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24399,7 +26717,7 @@ PooledClass.addPoolingTo(ReactReconcileTransaction);
 
 module.exports = ReactReconcileTransaction;
 
-},{"./ExecutionEnvironment":36,"./PooledClass":39,"./ReactEventEmitter":59,"./ReactInputSelection":62,"./ReactMountReady":66,"./Transaction":88,"./mixInto":123}],74:[function(require,module,exports){
+},{"./ExecutionEnvironment":46,"./PooledClass":49,"./ReactEventEmitter":69,"./ReactInputSelection":72,"./ReactMountReady":76,"./Transaction":98,"./mixInto":133}],84:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24449,7 +26767,7 @@ module.exports = {
   renderComponentToString: renderComponentToString
 };
 
-},{"./ReactInstanceHandles":63,"./ReactMarkupChecksum":64,"./ReactReconcileTransaction":73}],75:[function(require,module,exports){
+},{"./ReactInstanceHandles":73,"./ReactMarkupChecksum":74,"./ReactReconcileTransaction":83}],85:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24544,7 +26862,7 @@ mixInto(ReactTextComponent, {
 
 module.exports = ReactTextComponent;
 
-},{"./ReactComponent":42,"./ReactMount":65,"./escapeTextForBrowser":98,"./mixInto":123}],76:[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactMount":75,"./escapeTextForBrowser":108,"./mixInto":133}],86:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24677,7 +26995,7 @@ var ReactUpdates = {
 
 module.exports = ReactUpdates;
 
-},{"./invariant":111}],77:[function(require,module,exports){
+},{"./invariant":121}],87:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -24898,7 +27216,7 @@ var SelectEventPlugin = {
 
 module.exports = SelectEventPlugin;
 
-},{"./EventConstants":30,"./EventPluginHub":32,"./EventPropagators":35,"./ExecutionEnvironment":36,"./ReactInputSelection":62,"./SyntheticEvent":81,"./getActiveElement":104,"./isEventSupported":112,"./isTextInputElement":114,"./keyOf":118,"./shallowEqual":128}],78:[function(require,module,exports){
+},{"./EventConstants":40,"./EventPluginHub":42,"./EventPropagators":45,"./ExecutionEnvironment":46,"./ReactInputSelection":72,"./SyntheticEvent":91,"./getActiveElement":114,"./isEventSupported":122,"./isTextInputElement":124,"./keyOf":128,"./shallowEqual":138}],88:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25253,7 +27571,7 @@ var SimpleEventPlugin = {
 
 module.exports = SimpleEventPlugin;
 
-},{"./EventConstants":30,"./EventPropagators":35,"./SyntheticClipboardEvent":79,"./SyntheticEvent":81,"./SyntheticFocusEvent":82,"./SyntheticKeyboardEvent":83,"./SyntheticMouseEvent":84,"./SyntheticTouchEvent":85,"./SyntheticUIEvent":86,"./SyntheticWheelEvent":87,"./invariant":111,"./keyOf":118}],79:[function(require,module,exports){
+},{"./EventConstants":40,"./EventPropagators":45,"./SyntheticClipboardEvent":89,"./SyntheticEvent":91,"./SyntheticFocusEvent":92,"./SyntheticKeyboardEvent":93,"./SyntheticMouseEvent":94,"./SyntheticTouchEvent":95,"./SyntheticUIEvent":96,"./SyntheticWheelEvent":97,"./invariant":121,"./keyOf":128}],89:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25300,7 +27618,7 @@ SyntheticEvent.augmentClass(SyntheticClipboardEvent, ClipboardEventInterface);
 module.exports = SyntheticClipboardEvent;
 
 
-},{"./SyntheticEvent":81}],80:[function(require,module,exports){
+},{"./SyntheticEvent":91}],90:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25353,7 +27671,7 @@ SyntheticEvent.augmentClass(
 module.exports = SyntheticCompositionEvent;
 
 
-},{"./SyntheticEvent":81}],81:[function(require,module,exports){
+},{"./SyntheticEvent":91}],91:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25515,7 +27833,7 @@ PooledClass.addPoolingTo(SyntheticEvent, PooledClass.threeArgumentPooler);
 
 module.exports = SyntheticEvent;
 
-},{"./PooledClass":39,"./emptyFunction":97,"./getEventTarget":105,"./merge":120,"./mergeInto":122}],82:[function(require,module,exports){
+},{"./PooledClass":49,"./emptyFunction":107,"./getEventTarget":115,"./merge":130,"./mergeInto":132}],92:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25561,7 +27879,7 @@ SyntheticUIEvent.augmentClass(SyntheticFocusEvent, FocusEventInterface);
 
 module.exports = SyntheticFocusEvent;
 
-},{"./SyntheticUIEvent":86}],83:[function(require,module,exports){
+},{"./SyntheticUIEvent":96}],93:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25619,7 +27937,7 @@ SyntheticUIEvent.augmentClass(SyntheticKeyboardEvent, KeyboardEventInterface);
 
 module.exports = SyntheticKeyboardEvent;
 
-},{"./SyntheticUIEvent":86}],84:[function(require,module,exports){
+},{"./SyntheticUIEvent":96}],94:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25706,7 +28024,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 
 module.exports = SyntheticMouseEvent;
 
-},{"./SyntheticUIEvent":86,"./ViewportMetrics":89}],85:[function(require,module,exports){
+},{"./SyntheticUIEvent":96,"./ViewportMetrics":99}],95:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25758,7 +28076,7 @@ SyntheticUIEvent.augmentClass(SyntheticTouchEvent, TouchEventInterface);
 
 module.exports = SyntheticTouchEvent;
 
-},{"./SyntheticUIEvent":86}],86:[function(require,module,exports){
+},{"./SyntheticUIEvent":96}],96:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25805,7 +28123,7 @@ SyntheticEvent.augmentClass(SyntheticUIEvent, UIEventInterface);
 
 module.exports = SyntheticUIEvent;
 
-},{"./SyntheticEvent":81}],87:[function(require,module,exports){
+},{"./SyntheticEvent":91}],97:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -25870,7 +28188,7 @@ SyntheticMouseEvent.augmentClass(SyntheticWheelEvent, WheelEventInterface);
 
 module.exports = SyntheticWheelEvent;
 
-},{"./SyntheticMouseEvent":84}],88:[function(require,module,exports){
+},{"./SyntheticMouseEvent":94}],98:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26116,7 +28434,7 @@ var Transaction = {
 
 module.exports = Transaction;
 
-},{"./invariant":111}],89:[function(require,module,exports){
+},{"./invariant":121}],99:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26154,7 +28472,7 @@ var ViewportMetrics = {
 
 module.exports = ViewportMetrics;
 
-},{}],90:[function(require,module,exports){
+},{}],100:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26207,7 +28525,7 @@ function accumulate(current, next) {
 
 module.exports = accumulate;
 
-},{"./invariant":111}],91:[function(require,module,exports){
+},{"./invariant":121}],101:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26248,7 +28566,7 @@ function adler32(data) {
 
 module.exports = adler32;
 
-},{}],92:[function(require,module,exports){
+},{}],102:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26298,7 +28616,7 @@ function copyProperties(obj, a, b, c, d, e, f) {
 
 module.exports = copyProperties;
 
-},{}],93:[function(require,module,exports){
+},{}],103:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26394,7 +28712,7 @@ function createArrayFrom(obj) {
 
 module.exports = createArrayFrom;
 
-},{}],94:[function(require,module,exports){
+},{}],104:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26486,7 +28804,7 @@ function createNodesFromMarkup(markup, handleScript) {
 
 module.exports = createNodesFromMarkup;
 
-},{"./ExecutionEnvironment":36,"./createArrayFrom":93,"./getMarkupWrap":106,"./invariant":111}],95:[function(require,module,exports){
+},{"./ExecutionEnvironment":46,"./createArrayFrom":103,"./getMarkupWrap":116,"./invariant":121}],105:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26545,7 +28863,7 @@ function createObjectFrom(keys, values /* = true */) {
 
 module.exports = createObjectFrom;
 
-},{}],96:[function(require,module,exports){
+},{}],106:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26604,7 +28922,7 @@ function dangerousStyleValue(styleName, value) {
 
 module.exports = dangerousStyleValue;
 
-},{"./CSSProperty":18}],97:[function(require,module,exports){
+},{"./CSSProperty":28}],107:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26649,7 +28967,7 @@ copyProperties(emptyFunction, {
 
 module.exports = emptyFunction;
 
-},{"./copyProperties":92}],98:[function(require,module,exports){
+},{"./copyProperties":102}],108:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26698,7 +29016,7 @@ function escapeTextForBrowser(text) {
 
 module.exports = escapeTextForBrowser;
 
-},{}],99:[function(require,module,exports){
+},{}],109:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26749,7 +29067,7 @@ ex._suffix = ']]>';
 
 module.exports = ex;
 
-},{}],100:[function(require,module,exports){
+},{}],110:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26796,7 +29114,7 @@ function filterAttributes(node, func, context) {
 
 module.exports = filterAttributes;
 
-},{}],101:[function(require,module,exports){
+},{}],111:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26847,7 +29165,7 @@ function flattenChildren(children) {
 
 module.exports = flattenChildren;
 
-},{"./invariant":111,"./traverseAllChildren":129}],102:[function(require,module,exports){
+},{"./invariant":121,"./traverseAllChildren":139}],112:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26885,7 +29203,7 @@ var forEachAccumulated = function(arr, cb, scope) {
 
 module.exports = forEachAccumulated;
 
-},{}],103:[function(require,module,exports){
+},{}],113:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26963,7 +29281,7 @@ function _getNodeID(node) {
 
 module.exports = ge;
 
-},{}],104:[function(require,module,exports){
+},{}],114:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -26998,7 +29316,7 @@ function getActiveElement() /*?DOMElement*/ {
 module.exports = getActiveElement;
 
 
-},{}],105:[function(require,module,exports){
+},{}],115:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27036,7 +29354,7 @@ function getEventTarget(nativeEvent) {
 
 module.exports = getEventTarget;
 
-},{}],106:[function(require,module,exports){
+},{}],116:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27146,7 +29464,7 @@ function getMarkupWrap(nodeName) {
 
 module.exports = getMarkupWrap;
 
-},{"./ExecutionEnvironment":36,"./invariant":111}],107:[function(require,module,exports){
+},{"./ExecutionEnvironment":46,"./invariant":121}],117:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27228,7 +29546,7 @@ function getNodeForCharacterOffset(root, offset) {
 
 module.exports = getNodeForCharacterOffset;
 
-},{}],108:[function(require,module,exports){
+},{}],118:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27270,7 +29588,7 @@ function getReactRootElementInContainer(container) {
 
 module.exports = getReactRootElementInContainer;
 
-},{}],109:[function(require,module,exports){
+},{}],119:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27312,7 +29630,7 @@ function getTextContentAccessor() {
 
 module.exports = getTextContentAccessor;
 
-},{"./ExecutionEnvironment":36}],110:[function(require,module,exports){
+},{"./ExecutionEnvironment":46}],120:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27349,7 +29667,7 @@ function hyphenate(string) {
 
 module.exports = hyphenate;
 
-},{}],111:[function(require,module,exports){
+},{}],121:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27386,7 +29704,7 @@ function invariant(condition) {
 
 module.exports = invariant;
 
-},{}],112:[function(require,module,exports){
+},{}],122:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27462,7 +29780,7 @@ function isEventSupported(eventNameSuffix, capture) {
 
 module.exports = isEventSupported;
 
-},{"./ExecutionEnvironment":36}],113:[function(require,module,exports){
+},{"./ExecutionEnvironment":46}],123:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27497,7 +29815,7 @@ function isNode(object) {
 
 module.exports = isNode;
 
-},{}],114:[function(require,module,exports){
+},{}],124:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27548,7 +29866,7 @@ function isTextInputElement(elem) {
 
 module.exports = isTextInputElement;
 
-},{}],115:[function(require,module,exports){
+},{}],125:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27580,7 +29898,7 @@ function isTextNode(object) {
 
 module.exports = isTextNode;
 
-},{"./isNode":113}],116:[function(require,module,exports){
+},{"./isNode":123}],126:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27626,7 +29944,7 @@ function joinClasses(className/*, ... */) {
 
 module.exports = joinClasses;
 
-},{}],117:[function(require,module,exports){
+},{}],127:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27683,7 +30001,7 @@ var keyMirror = function(obj) {
 
 module.exports = keyMirror;
 
-},{"./invariant":111}],118:[function(require,module,exports){
+},{"./invariant":121}],128:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27726,7 +30044,7 @@ var keyOf = function(oneKeyObj) {
 
 module.exports = keyOf;
 
-},{}],119:[function(require,module,exports){
+},{}],129:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27767,7 +30085,7 @@ function memoizeStringOnly(callback) {
 
 module.exports = memoizeStringOnly;
 
-},{}],120:[function(require,module,exports){
+},{}],130:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27806,7 +30124,7 @@ var merge = function(one, two) {
 
 module.exports = merge;
 
-},{"./mergeInto":122}],121:[function(require,module,exports){
+},{"./mergeInto":132}],131:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27927,7 +30245,7 @@ var mergeHelpers = {
 
 module.exports = mergeHelpers;
 
-},{"./invariant":111,"./keyMirror":117}],122:[function(require,module,exports){
+},{"./invariant":121,"./keyMirror":127}],132:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -27974,7 +30292,7 @@ function mergeInto(one, two) {
 
 module.exports = mergeInto;
 
-},{"./mergeHelpers":121}],123:[function(require,module,exports){
+},{"./mergeHelpers":131}],133:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28010,7 +30328,7 @@ var mixInto = function(constructor, methodBag) {
 
 module.exports = mixInto;
 
-},{}],124:[function(require,module,exports){
+},{}],134:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28105,7 +30423,7 @@ function mutateHTMLNodeWithMarkup(node, markup) {
 
 module.exports = mutateHTMLNodeWithMarkup;
 
-},{"./createNodesFromMarkup":94,"./filterAttributes":100,"./invariant":111}],125:[function(require,module,exports){
+},{"./createNodesFromMarkup":104,"./filterAttributes":110,"./invariant":121}],135:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28156,7 +30474,7 @@ function nodeContains(outerNode, innerNode) {
 
 module.exports = nodeContains;
 
-},{"./isTextNode":115}],126:[function(require,module,exports){
+},{"./isTextNode":125}],136:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28205,7 +30523,7 @@ function objMap(obj, func, context) {
 
 module.exports = objMap;
 
-},{}],127:[function(require,module,exports){
+},{}],137:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28254,7 +30572,7 @@ function objMapKeyVal(obj, func, context) {
 
 module.exports = objMapKeyVal;
 
-},{}],128:[function(require,module,exports){
+},{}],138:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28305,7 +30623,7 @@ function shallowEqual(objA, objB) {
 
 module.exports = shallowEqual;
 
-},{}],129:[function(require,module,exports){
+},{}],139:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
  *
@@ -28430,7 +30748,9 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 
-},{"./ReactComponent":42,"./ReactTextComponent":75,"./invariant":111}],"NPwNMR":[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactTextComponent":85,"./invariant":121}],"selectize":[function(require,module,exports){
+module.exports=require('M0rIo3');
+},{}],"M0rIo3":[function(require,module,exports){
 (function (global){(function browserifyShim(module, exports, define, browserify_shim__define__module__export__) {
 
 ; global.jQuery = require("jquery");
@@ -31212,11 +33532,7 @@ global.MicroPlugin = require("microplugin");
 
 }).call(global, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"n6hJi7","microplugin":"NLtOHb","sifter":"6v2FS6"}],"selectize":[function(require,module,exports){
-module.exports=require('NPwNMR');
-},{}],"sifter":[function(require,module,exports){
-module.exports=require('6v2FS6');
-},{}],"6v2FS6":[function(require,module,exports){
+},{"jquery":"5Q/0Us","microplugin":"0vcR2t","sifter":"mVD/kk"}],"mVD/kk":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /**
  * sifter.js
@@ -31667,7 +33983,112 @@ module.exports=require('6v2FS6');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"mbrXiH":[function(require,module,exports){
+},{}],"sifter":[function(require,module,exports){
+module.exports=require('mVD/kk');
+},{}],"EUQuU7":[function(require,module,exports){
+/** @jsx React.DOM */;
+var CheckGroup, React;
+
+React = require("React");
+
+CheckGroup = React.createClass({
+  getDefaultProps: function() {
+    return {
+      options: [],
+      value: null
+    };
+  },
+  getInitialState: function() {
+    return {
+      value: this.props.value
+    };
+  },
+  createChangeHandler: function(value) {
+    var _this = this;
+    return function() {
+      return _this.setState({
+        value: value
+      });
+    };
+  },
+  renderOptions: function() {
+    var _this = this;
+    return this.props.options.map(function(option) {
+      var classNames, handler;
+      classNames = ["button", "button--type-action"];
+      if (option.value === _this.state.value) {
+        classNames.push("active");
+      }
+      handler = _this.createChangeHandler(option.value);
+      return (
+        React.DOM.a( {className:classNames.join(" "), onClick:handler}, 
+          option.text
+        )
+      );
+    });
+  },
+  render: function() {
+    return (
+      React.DOM.div( {className:"check-group"}, 
+        this.renderOptions()
+      )
+    );
+  }
+});
+
+module.exports = CheckGroup;
+
+
+},{"React":"2ftwoI"}],"check-group":[function(require,module,exports){
+module.exports=require('EUQuU7');
+},{}],"ZyMaE4":[function(require,module,exports){
+/** @jsx React.DOM */;
+var $, Checkbox, React;
+
+React = require("React");
+
+$ = require("jquery");
+
+require("iCheck");
+
+Checkbox = React.createClass({
+  getDefaultProps: function() {
+    return {
+      label: null,
+      type: "normal"
+    };
+  },
+  componentDidMount: function(domNode) {
+    $(domNode).iCheck({
+      checkboxClass: "checkbox-input"
+    });
+    if (this.props.checked) {
+      return $(domNode).iCheck("check");
+    }
+  },
+  render: function() {
+    var classes;
+    classes = ["checkbox"];
+    if (this.props.type === "thin") {
+      classes.push("checkbox-thin");
+    }
+    return (
+      React.DOM.div( {className:classes.join(" ")}, 
+        React.DOM.label(null, 
+          React.DOM.input( {type:"checkbox"}),
+          React.DOM.span( {className:"checkbox-label"}, this.props.label)
+        )
+      )
+    );
+  }
+});
+
+module.exports = Checkbox;
+
+
+},{"React":"2ftwoI","iCheck":"UBw7QK","jquery":"5Q/0Us"}],"checkbox":[function(require,module,exports){
+module.exports=require('ZyMaE4');
+},{}],"FVDHTO":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, DateInput, React;
 
@@ -31678,17 +34099,31 @@ $ = require("jquery");
 require("jquery.ui.datepicker");
 
 DateInput = React.createClass({
+  getInitialState: function() {
+    return {
+      show: false
+    };
+  },
   componentDidMount: function() {
-    return $(this.refs.input.getDOMNode()).datepicker({
-      showOn: "both",
-      buttonImage: "/static/img/calendar-blue.png",
-      buttonImageOnly: false
+    return $(this.refs.datepicker.getDOMNode()).datepicker();
+  },
+  handleShow: function() {
+    return this.setState({
+      show: !this.state.show
     });
   },
   render: function() {
+    var styles;
+    styles = {
+      display: this.state.show ? "block" : "none"
+    };
     return (
-      React.DOM.span( {className:"input"}, 
-        React.DOM.input( {ref:"input", className:"input-element", placeholder:"Когда"})
+      React.DOM.span( {className:"date-input"}, 
+        React.DOM.a( {className:"button button--type-action", onClick:this.handleShow}, 
+          " Кнопка ",
+          React.DOM.i( {className:"button-picker icon-calendar-blue"})
+        ),
+        React.DOM.span( {ref:"datepicker", style:styles, className:"date-input--datepicker"})
       )
     );
   }
@@ -31697,9 +34132,11 @@ DateInput = React.createClass({
 module.exports = DateInput;
 
 
-},{"React":"EIqVLP","jquery":"n6hJi7","jquery.ui.datepicker":"t3Hhld"}],"date-input":[function(require,module,exports){
-module.exports=require('mbrXiH');
-},{}],"nLchEO":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us","jquery.ui.datepicker":"qggHk5"}],"date-input":[function(require,module,exports){
+module.exports=require('FVDHTO');
+},{}],"facebook-login":[function(require,module,exports){
+module.exports=require('jN3Y+z');
+},{}],"jN3Y+z":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, FacebookLogin, React, api, config, utils;
 
@@ -31772,9 +34209,61 @@ FacebookLogin = React.createClass({
 module.exports = FacebookLogin;
 
 
-},{"React":"EIqVLP","api":"xXH4my","config":"Y2DqNF","jquery":"n6hJi7","utils":"1OOBX8"}],"facebook-login":[function(require,module,exports){
-module.exports=require('nLchEO');
-},{}],"f3yUdj":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","config":"d+m9kx","jquery":"5Q/0Us","utils":"tX7VuE"}],"help":[function(require,module,exports){
+module.exports=require('Drv423');
+},{}],"Drv423":[function(require,module,exports){
+/** @jsx React.DOM */;
+var $, Help, React;
+
+React = require("React");
+
+$ = require("jquery");
+
+Help = React.createClass({
+  getInitialState: function() {
+    return {
+      showTooltip: false
+    };
+  },
+  getDefaultProps: function() {
+    return {
+      message: ""
+    };
+  },
+  componentDidMount: function() {},
+  handleHelpEnter: function() {
+    return this.setState({
+      showTooltip: true
+    });
+  },
+  handleHelpLeave: function() {
+    return this.setState({
+      showTooltip: false
+    });
+  },
+  render: function() {
+    tooltip;
+    var tooltip;
+    if (this.state.showTooltip) {
+      tooltip = (
+        React.DOM.span( {className:"help-tooltip", dangerouslySetInnerHTML:{__html: this.props.message}})
+      );
+    }
+    return (
+      React.DOM.span( {className:"help"}, 
+        React.DOM.i( {ref:"icon", className:"help-icon", onMouseEnter:this.handleHelpEnter, onMouseLeave:this.handleHelpLeave}, "?"),
+        tooltip
+      )
+    );
+  }
+});
+
+module.exports = Help;
+
+
+},{"React":"2ftwoI","jquery":"5Q/0Us"}],"input":[function(require,module,exports){
+module.exports=require('BEqvBD');
+},{}],"BEqvBD":[function(require,module,exports){
 /** @jsx React.DOM */;
 var Input, React;
 
@@ -31873,11 +34362,73 @@ Input = React.createClass({
 module.exports = Input;
 
 
-},{"React":"EIqVLP"}],"input":[function(require,module,exports){
-module.exports=require('f3yUdj');
-},{}],"select":[function(require,module,exports){
-module.exports=require('PC8Har');
-},{}],"PC8Har":[function(require,module,exports){
+},{"React":"2ftwoI"}],"radio-group":[function(require,module,exports){
+module.exports=require('BBj+WV');
+},{}],"BBj+WV":[function(require,module,exports){
+/** @jsx React.DOM */;
+var $, RadioGroup, React;
+
+React = require("React");
+
+$ = require("jquery");
+
+require("iCheck");
+
+RadioGroup = React.createClass({
+  getDefaultProps: function() {
+    return {
+      label: null,
+      type: "normal",
+      options: [],
+      value: null,
+      name: (new Date()).getTime()
+    };
+  },
+  getInitialState: function() {
+    return {
+      value: this.props.value
+    };
+  },
+  componentDidMount: function(domNode) {
+    return $(domNode).iCheck({
+      radioClass: "radio-group-input"
+    });
+  },
+  renderOptions: function() {
+    var name, value;
+    value = this.state.value;
+    name = this.props.name;
+    return this.props.options.map(function(option) {
+      return (
+        React.DOM.div( {className:"radio-group-item"}, 
+          React.DOM.label(null, 
+            React.DOM.input( {type:"radio", name:name, checked:value == option.value}),
+            React.DOM.span( {className:"radio-group-label"}, option.text)
+          )
+        )
+      );
+    });
+  },
+  render: function() {
+    var classes;
+    classes = ["radio-group"];
+    if (this.props.type === "thin") {
+      classes.push("radio-group-thin");
+    }
+    return (
+      React.DOM.div( {className:classes.join(" ")}, 
+        this.renderOptions()
+      )
+    );
+  }
+});
+
+module.exports = RadioGroup;
+
+
+},{"React":"2ftwoI","iCheck":"UBw7QK","jquery":"5Q/0Us"}],"select":[function(require,module,exports){
+module.exports=require('ADMAJT');
+},{}],"ADMAJT":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, React, Select;
 
@@ -31926,7 +34477,69 @@ Select = React.createClass({
 module.exports = Select;
 
 
-},{"React":"EIqVLP","jquery":"n6hJi7","selectize":"NPwNMR"}],"/UTDkd":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us","selectize":"M0rIo3"}],"oyMku8":[function(require,module,exports){
+/** @jsx React.DOM */;
+var $, React, Slider;
+
+React = require("React");
+
+$ = require("jquery");
+
+require("jquery.ui.slider");
+
+Slider = React.createClass({
+  getDefaultProps: function() {
+    return {
+      label: "",
+      min: 0,
+      max: 100,
+      minValue: 0,
+      maxValue: 0
+    };
+  },
+  componentDidMount: function() {
+    var _this = this;
+    return this.slider = $(this.refs.slider.getDOMNode()).slider({
+      range: true,
+      min: parseInt(this.props.min),
+      max: parseInt(this.props.max),
+      values: [this.props.minValue, this.props.maxValue],
+      slide: function(event, ui) {
+        if (!_this.props.onChange) {
+          return;
+        }
+        return _this.props.onChange({
+          event: {
+            target: {
+              values: ui.values
+            }
+          }
+        });
+      }
+    });
+  },
+  render: function() {
+    return (
+      React.DOM.div( {className:"slider-container"}, 
+        React.DOM.div( {className:"slider-label"}, this.props.label),
+        React.DOM.div( {ref:"slider"}),
+        React.DOM.div( {className:"slider-limits"}, 
+          React.DOM.span(null, this.props.min),
+          React.DOM.span(null, this.props.max)
+        )
+      )
+    );
+  }
+});
+
+module.exports = Slider;
+
+
+},{"React":"2ftwoI","jquery":"5Q/0Us","jquery.ui.slider":"jxOnI+"}],"slider":[function(require,module,exports){
+module.exports=require('oyMku8');
+},{}],"travellers-list":[function(require,module,exports){
+module.exports=require('jo29eT');
+},{}],"jo29eT":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, React, TravellersList;
 
@@ -32044,9 +34657,7 @@ TravellersList = React.createClass({
 module.exports = TravellersList;
 
 
-},{"React":"EIqVLP","jquery":"n6hJi7"}],"travellers-list":[function(require,module,exports){
-module.exports=require('/UTDkd');
-},{}],"q16Xgo":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us"}],"OqBcDj":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, Travellers, api, moment, uri;
 
@@ -32063,7 +34674,8 @@ Travellers = React.createClass({
     return {
       loaded: false,
       travellers: [],
-      meta: {}
+      meta: {},
+      active: null
     };
   },
   componentWillMount: function(domNode) {
@@ -32092,19 +34704,30 @@ Travellers = React.createClass({
       });
     });
   },
+  createActiveHandler: function(traveller) {
+    var _this = this;
+    return function() {
+      return _this.setState({
+        active: traveller.id
+      });
+    };
+  },
   renderTravellers: function() {
+    var active, createActiveHandler;
+    createActiveHandler = this.createActiveHandler;
+    active = this.state.active;
     return this.state.travellers.map(function(traveller) {
       return (
-        React.DOM.div( {className:"travellers-item"}, 
+        React.DOM.div( {className:traveller.id === active ? "travellers-item travellers-item-active" : "travellers-item", onClick:createActiveHandler(traveller)}, 
           React.DOM.div( {className:"travellers-item-icon"}, 
-            React.DOM.a( {href:traveller.resource_uri}, 
+            React.DOM.a( {href:"javascript:void(0)"}, 
               React.DOM.img( {src:traveller.avatar_url})
             )
           ),
           React.DOM.div( {className:"travellers-item-info"}, 
             React.DOM.div( {className:"travellers-item-info-wrap"}, 
               React.DOM.span( {className:"travellers-item-info-wrap-align"}, 
-                React.DOM.a( {href:traveller.resource_uri}, [traveller.first_name, traveller.last_name].join(" ")),
+                React.DOM.a( {href:"javascript:void(0)"}, [traveller.first_name, traveller.last_name].join(" ")),
                 React.DOM.span(null, traveller.birthday && (moment(moment()).diff(traveller.birthday, "years") + ", Стамбул")),
                 React.DOM.span(null, "Предприниматель")
               )
@@ -32125,11 +34748,13 @@ Travellers = React.createClass({
   },
   render: function() {
     return (
-      React.DOM.div(null, 
-        React.DOM.div( {className:"travellers"}, 
+      React.DOM.div( {className:"travellers"}, 
+        React.DOM.div(null, 
           this.renderTravellers()
         ),
-        this.renderLoadNextButton()
+        React.DOM.div( {className:"travellers-next"}, 
+          this.renderLoadNextButton()
+        )
       )
     );
   }
@@ -32138,9 +34763,11 @@ Travellers = React.createClass({
 module.exports = Travellers;
 
 
-},{"React":"EIqVLP","api":"xXH4my","moment":"OeVw/B","uri":"mGesKN"}],"travellers":[function(require,module,exports){
-module.exports=require('q16Xgo');
-},{}],"GnlfAt":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","moment":"WWz+tO","uri":"Lamjpc"}],"travellers":[function(require,module,exports){
+module.exports=require('OqBcDj');
+},{}],"trips-category":[function(require,module,exports){
+module.exports=require('bh4M0j');
+},{}],"bh4M0j":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, TripsCategory, api;
 
@@ -32151,8 +34778,13 @@ api = require("api");
 TripsCategory = React.createClass({
   render: function() {
     return (
-      React.DOM.div( {className:"trips-category"}
-        
+      React.DOM.div( {className:"trips-filter-category"}, 
+        React.DOM.a( {className:"button--type-category"}, "Активный отдых"),
+        React.DOM.a( {className:"button--type-category"}, "Концерты"),
+        React.DOM.a( {className:"button--type-category"}, "Походы"),
+        React.DOM.a( {className:"button--type-category"}, "Футбол"),
+        React.DOM.a( {className:"button--type-category"}, "Экскурсии"),
+        React.DOM.a( {className:"button--type-category button--type-open-category"}, "Все категории")
       )
     );
   }
@@ -32161,25 +34793,63 @@ TripsCategory = React.createClass({
 module.exports = TripsCategory;
 
 
-},{"React":"EIqVLP","api":"xXH4my"}],"trips-category":[function(require,module,exports){
-module.exports=require('GnlfAt');
-},{}],"LO0KQR":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd"}],"WCARnx":[function(require,module,exports){
 /** @jsx React.DOM */;
-var DateInput, React, TripsFilter, api;
+var CheckGroup, Checkbox, DateInput, React, Select, Slider, TripsFilter, api;
 
 React = require("React");
 
 api = require("api");
 
+Checkbox = require("checkbox");
+
+CheckGroup = require("check-group");
+
 DateInput = require("date-input");
 
+Select = require("select");
+
+Slider = require("slider");
+
 TripsFilter = React.createClass({
+  getDefaultProps: function() {
+    return {
+      groups: [
+        {
+          text: "3–10 человек",
+          value: "3-10"
+        }, {
+          text: "10–30 человек",
+          value: "10-30"
+        }, {
+          text: "> 30",
+          value: "30"
+        }
+      ]
+    };
+  },
   render: function() {
     return (
       React.DOM.div( {className:"trips-filter"}, 
         React.DOM.div( {className:"title"}, "Путешествие"),
         React.DOM.div( {className:"trips-filter-container"}, 
-          DateInput(null)
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div(null, DateInput(null)),
+            React.DOM.div( {className:"trips-filter-or-separator"}, "или..."),
+            React.DOM.div(null, Select( {className:"selectize-type--button"}))
+          ),
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div(null, Slider( {label:"СТОИМОСТЬ", min:"100 $", max:"4000 $"})),
+            React.DOM.div( {className:"trips-filter-flight"}, 
+              Checkbox( {checked:"true",  label:"С перелетом из " })
+            )
+          ),
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div( {className:"trips-filter-groups-title"}, "ГРУППЫ"),
+            React.DOM.div( {className:"trips-filter-groups"}, 
+              CheckGroup( {options:this.props.groups})
+            )
+          )
         )
       )
     );
@@ -32189,21 +34859,38 @@ TripsFilter = React.createClass({
 module.exports = TripsFilter;
 
 
-},{"React":"EIqVLP","api":"xXH4my","date-input":"mbrXiH"}],"trips-filter":[function(require,module,exports){
-module.exports=require('LO0KQR');
-},{}],"1GfluN":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","check-group":"EUQuU7","checkbox":"ZyMaE4","date-input":"FVDHTO","select":"ADMAJT","slider":"oyMku8"}],"trips-filter":[function(require,module,exports){
+module.exports=require('WCARnx');
+},{}],"trips-traveller-filter":[function(require,module,exports){
+module.exports=require('n8rQ89');
+},{}],"n8rQ89":[function(require,module,exports){
 /** @jsx React.DOM */;
-var React, TripsTravellerFilter, api;
+var React, Select, Slider, TripsTravellerFilter, api;
 
 React = require("React");
 
 api = require("api");
 
+Select = require("select");
+
+Slider = require("slider");
+
 TripsTravellerFilter = React.createClass({
   render: function() {
     return (
-      React.DOM.div( {className:"trips-traveller-filter"}
-
+      React.DOM.div( {className:"trips-filter trips-traveller-filter"}, 
+        React.DOM.div( {className:"title"}, "Компания и попутчики"),
+        React.DOM.div( {className:"trips-filter-container"}, 
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div(null, Select( {className:"selectize-type--button"}))
+          ),
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div(null, Slider( {label:"ВОЗРАСТ", min:"20", max:"60"}))
+          ),
+          React.DOM.div( {className:"trips-filter-container-column"}, 
+            React.DOM.div(null, Slider( {label:"ПОЛ", min:"0", max:"0"}))
+          )
+        )
       )
     );
   }
@@ -32212,13 +34899,9 @@ TripsTravellerFilter = React.createClass({
 module.exports = TripsTravellerFilter;
 
 
-},{"React":"EIqVLP","api":"xXH4my"}],"trips-traveller-filter":[function(require,module,exports){
-module.exports=require('1GfluN');
-},{}],"trips":[function(require,module,exports){
-module.exports=require('gUrdkx');
-},{}],"gUrdkx":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","select":"ADMAJT","slider":"oyMku8"}],"Ti+fB8":[function(require,module,exports){
 /** @jsx React.DOM */;
-var React, TravellersList, Trips, TripsCategory, TripsFilter, TripsTravellerFilter, api, moment;
+var Help, React, TravellersList, Trips, TripsCategory, TripsFilter, TripsTravellerFilter, api, moment;
 
 React = require("React");
 
@@ -32233,6 +34916,8 @@ TripsCategory = require("trips-category");
 TripsTravellerFilter = require("trips-traveller-filter");
 
 TravellersList = require("travellers-list");
+
+Help = require("help");
 
 Trips = React.createClass({
   getInitialState: function() {
@@ -32342,7 +35027,11 @@ Trips = React.createClass({
             trip.price + " " + this.getLocaleCurrency(trip.currency)
           ),
           React.DOM.div( {className:"trips-item-info-type"}, 
-            this.getLocaleType(trip.price_type), " поездка "
+            this.getLocaleType(trip.price_type), " поездка ", Help( {message:"Например, «Яхтинг на Карибах».<p style='padding-top:6px'>Понятный заголовок поможет собрать группу.</p>"})
+          ),
+          React.DOM.div( {className:"trips-item-info-avia"}, 
+            React.DOM.p(null, "Перелет из ", React.DOM.a( {href:"#"}, "Москвы")),
+            React.DOM.p(null, "от 21 000 руб.")
           )
         ),
         this.renderTravellers(trip)
@@ -32361,7 +35050,7 @@ Trips = React.createClass({
     });
   },
   renderTravellers: function(trip) {
-    var genders, ratio;
+    var genders, ratio, styles;
     genders = trip.people.filter(function(people) {
       return people.gender;
     });
@@ -32370,10 +35059,20 @@ Trips = React.createClass({
     } else {
       ratio = "парни";
     }
+    styles = {
+      left: "0%",
+      width: "" + ((trip.people.length * 100) / trip.people_max_count) + "%"
+    };
     return (
       React.DOM.div( {className:"trip-item-info-travellers"}, 
         React.DOM.div( {className:"trip-item-info-travellers-title"}, 
           " Компания "
+        ),
+        React.DOM.div( {className:"trip-item-info-travellers-slider"}, 
+          React.DOM.div( {className:"ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"}, 
+            React.DOM.div( {className:"ui-slider-range ui-widget-header ui-corner-all", style:styles})
+          ),
+          Help( {message:"Например, «Яхтинг на Карибах».<p style='padding-top:6px'>Понятный заголовок поможет собрать группу.</p>"})
         ),
         React.DOM.div( {className:"trip-item-info-travellers-ratio"}, 
           React.DOM.div(null, "Набрано ", trip.people.length, " из ", trip.people_count, " человек"),
@@ -32412,62 +35111,9 @@ Trips = React.createClass({
 module.exports = Trips;
 
 
-},{"React":"EIqVLP","api":"xXH4my","moment":"OeVw/B","travellers-list":"/UTDkd","trips-category":"GnlfAt","trips-filter":"LO0KQR","trips-traveller-filter":"1GfluN"}],"MhaZBn":[function(require,module,exports){
-/** @jsx React.DOM */;
-var $, React, camelize, moment;
-
-React = require("React");
-
-$ = require("jquery");
-
-moment = require("moment");
-
-moment.lang("ru");
-
-camelize = function(string, separator) {
-  if (separator == null) {
-    separator = "-";
-  }
-  return string.split(separator).map(function(piece, i) {
-    if (i !== 0) {
-      piece = piece.charAt(0).toUpperCase() + piece.slice(1);
-    }
-    return piece;
-  }).join("");
-};
-
-$(function() {
-  return setTimeout(function() {
-    return $("[data-component]").each(function() {
-      var Component, attribute, componentName, name, props, value, _i, _len, _ref;
-      props = {};
-      _ref = this.attributes;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        attribute = _ref[_i];
-        name = attribute.name;
-        value = attribute.value;
-        if (name !== "data-component" && name.match(/^data-/)) {
-          name = camelize(name.replace(/^data-/, ""));
-          props[name] = value;
-        }
-      }
-      props.innerHTML = this.innerHTML;
-      this.innerHTML = "";
-      componentName = this.attributes["data-component"].value;
-      Component = require(componentName);
-      if (Component) {
-        return React.renderComponent(Component(props), this);
-      }
-    });
-  }, 0);
-});
-
-
-},{"React":"EIqVLP","jquery":"n6hJi7","moment":"OeVw/B"}],"init":[function(require,module,exports){
-module.exports=require('MhaZBn');
-},{}],"test":[function(require,module,exports){
-module.exports=require('geBjoe');
-},{}],"geBjoe":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","help":"Drv423","moment":"WWz+tO","travellers-list":"jo29eT","trips-category":"bh4M0j","trips-filter":"WCARnx","trips-traveller-filter":"n8rQ89"}],"trips":[function(require,module,exports){
+module.exports=require('Ti+fB8');
+},{}],"ykJyJj":[function(require,module,exports){
 /** @jsx React.DOM */;
 var MyComponent, React;
 
@@ -32484,9 +35130,86 @@ MyComponent = React.createClass({
 module.exports = MyComponent;
 
 
-},{"React":"EIqVLP"}],"select-data-wrapper":[function(require,module,exports){
-module.exports=require('E9gCD9');
-},{}],"E9gCD9":[function(require,module,exports){
+},{"React":"2ftwoI"}],"test":[function(require,module,exports){
+module.exports=require('ykJyJj');
+},{}],"DYrn4O":[function(require,module,exports){
+/** @jsx React.DOM */;
+var CheckGroup, CheckGroupDataWrapper, React;
+
+React = require("React");
+
+CheckGroup = require("check-group");
+
+CheckGroupDataWrapper = React.createClass({
+  getDefaultProps: function() {
+    return {
+      options: [
+        {
+          text: "Кнопка",
+          value: "default"
+        }, {
+          text: "Ховер",
+          value: "hover"
+        }, {
+          text: "Включ.",
+          value: "active"
+        }, {
+          text: "Ховер  на вкл.",
+          value: "hover-active"
+        }
+      ]
+    };
+  },
+  render: function() {
+    return (
+      CheckGroup( {options:this.props.options, value:"active"})
+    );
+  }
+});
+
+module.exports = CheckGroupDataWrapper;
+
+
+},{"React":"2ftwoI","check-group":"EUQuU7"}],"check-group-data-wrapper":[function(require,module,exports){
+module.exports=require('DYrn4O');
+},{}],"qnOzge":[function(require,module,exports){
+/** @jsx React.DOM */;
+var RadioGroup, RadioGroupDataWrapper, React;
+
+React = require("React");
+
+RadioGroup = require("radio-group");
+
+RadioGroupDataWrapper = React.createClass({
+  getDefaultProps: function() {
+    return {
+      multiple: false,
+      options: [
+        {
+          text: "Запостить в Фейсбук",
+          value: "active"
+        }, {
+          text: "Запостить в Фейсбук",
+          value: "nonactive"
+        }
+      ]
+    };
+  },
+  render: function() {
+    return (
+      RadioGroup( {options:this.props.options, value:"active"})
+    );
+  }
+});
+
+module.exports = RadioGroupDataWrapper;
+
+
+},{"React":"2ftwoI","radio-group":"BBj+WV"}],"radio-group-data-wrapper":[function(require,module,exports){
+module.exports=require('qnOzge');
+},{}],"select-data-wrapper":[function(require,module,exports){
+module.exports=require('cRi17O');
+},{}],"cRi17O":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, Select, SelectDataWrapper;
 
@@ -32544,9 +35267,7 @@ SelectDataWrapper = React.createClass({
 module.exports = SelectDataWrapper;
 
 
-},{"React":"EIqVLP","select":"PC8Har"}],"api":[function(require,module,exports){
-module.exports=require('xXH4my');
-},{}],"xXH4my":[function(require,module,exports){
+},{"React":"2ftwoI","select":"ADMAJT"}],"NA3vNd":[function(require,module,exports){
 var $, apiUrl;
 
 apiUrl = "/api/v1";
@@ -32576,9 +35297,11 @@ module.exports.post = function(type, data, callback) {
 };
 
 
-},{"jquery":"n6hJi7"}],"utils":[function(require,module,exports){
-module.exports=require('1OOBX8');
-},{}],"1OOBX8":[function(require,module,exports){
+},{"jquery":"5Q/0Us"}],"api":[function(require,module,exports){
+module.exports=require('NA3vNd');
+},{}],"utils":[function(require,module,exports){
+module.exports=require('tX7VuE');
+},{}],"tX7VuE":[function(require,module,exports){
 var $, React, camelize;
 
 React = require("React");
@@ -32599,6 +35322,8 @@ camelize = function(string, separator) {
 
 module.exports.init = function() {
   return $(function() {
+    require("momentLang");
+    require("moment").lang("ru");
     return setTimeout(function() {
       return $("[data-component]").each(function() {
         var Component, attribute, componentName, name, props, value, _i, _len, _ref;
@@ -32636,4 +35361,4 @@ module.exports.isMSIE = function() {
 };
 
 
-},{"React":"EIqVLP","jquery":"n6hJi7"}]},{},[])
+},{"React":"2ftwoI","jquery":"5Q/0Us","moment":"WWz+tO","momentLang":"8y1JGA"}]},{},[])
