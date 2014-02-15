@@ -9,6 +9,10 @@ camelize = (string, separator = "-") ->
 
 module.exports.init = ->
   $ ->
+    # Configure moment
+    require("momentLang")
+    require("moment").lang("ru")
+
     # wait while all document ready callbacks done
     setTimeout ->
       $("[data-component]").each ->

@@ -9,6 +9,7 @@ TripsFilter = require "trips-filter"
 TripsCategory = require "trips-category"
 TripsTravellerFilter = require "trips-traveller-filter"
 TravellersList = require "travellers-list"
+Help = require "help"
 
 Trips = React.createClass
   getInitialState: ->
@@ -92,7 +93,11 @@ Trips = React.createClass
             {trip.price + " " + this.getLocaleCurrency(trip.currency)}
           </div>
           <div className="trips-item-info-type">
-            {this.getLocaleType(trip.price_type)} поездка
+            {this.getLocaleType(trip.price_type)} поездка <Help message="Например, «Яхтинг на Карибах».<p style='padding-top:6px'>Понятный заголовок поможет собрать группу.</p>"/>
+          </div>
+          <div className="trips-item-info-avia">
+            <p>Перелет из <a href="#">Москвы</a></p>
+            <p>от 21 000 руб.</p>
           </div>
         </div>
         {this.renderTravellers(trip)}
@@ -117,10 +122,20 @@ Trips = React.createClass
     else
       ratio = "парни"
 
+    styles =
+      left: "0%"
+      width: "#{(trip.people.length * 100) / trip.people_max_count}%"
+
     `(
       <div className="trip-item-info-travellers">
         <div className="trip-item-info-travellers-title">
           Компания
+        </div>
+        <div className="trip-item-info-travellers-slider">
+          <div className="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+            <div className="ui-slider-range ui-widget-header ui-corner-all" style={styles}></div>
+          </div>
+          <Help message="Например, «Яхтинг на Карибах».<p style='padding-top:6px'>Понятный заголовок поможет собрать группу.</p>"/>
         </div>
         <div className="trip-item-info-travellers-ratio">
           <div>Набрано {trip.people.length} из {trip.people_count} человек</div>

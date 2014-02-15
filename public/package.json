@@ -20,6 +20,7 @@
     "gulp-concat": "~2.1",
     "gulp-connect": "~0.1",
     "gulp-imagemin": "~0.1",
+    "gulp-bower": "~0.0.2",
     "reactify": "~0.4",
     "coffeeify": "~0.5",
     "through2": "~0.4.0",
@@ -33,7 +34,8 @@
     "moment": "~2.4",
     "sifter": "~0.3",
 		"microplugin": "~0.0",
-		"selectize": "git://github.com/vslinko/selectize.js#master"
+		"selectize": "git://github.com/vslinko/selectize.js#master",
+		"jquery-simple-slider": "git://github.com/qyi/jquery-simple-slider#master"
   },
   "shims": {
     "jquery": {
@@ -49,6 +51,37 @@
       "path": "./../node_modules/jquery-ui/ui/jquery.ui.datepicker.js",
       "depends": {"jquery": "jQuery", "jquery.ui.core": null},
       "exports": null
+    },
+    "jquery.ui.widget": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.widget.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery"
+      }
+    },
+    "jquery.ui.mouse": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.mouse.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery",
+        "jquery.ui.widget": "jqueryUIWidget"
+      }
+    },
+    "jquery.ui.slider": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.slider.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery",
+        "jquery.ui.mouse": "jqueryUIMouse"
+      }
+    },
+    "jquery.ui.tooltip": {
+      "path": "./../node_modules/jquery-ui/ui/jquery.ui.tooltip.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery",
+        "jquery.ui.widget": "jqueryUIWidget"
+      }
     },
     "React": {
       "path": "./../node_modules/react-tools/build/modules/React.js",
@@ -81,6 +114,13 @@
         "jquery": "jQuery",
         "sifter": "Sifter",
         "microplugin": "MicroPlugin"
+      }
+    },
+    "iCheck": {
+      "path": "./../node_modules/iCheck/icheck.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery"
       }
     }
   }

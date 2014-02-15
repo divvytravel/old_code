@@ -11,6 +11,7 @@ Travellers = React.createClass
     loaded: false
     travellers: []
     meta: {}
+    active: null
 
   componentWillMount: (domNode) ->
     api.get "user", limit: 6, (data) =>
@@ -26,19 +27,25 @@ Travellers = React.createClass
         travellers: @state.travellers.concat data.objects
         meta: data.meta
 
+  createActiveHandler: (traveller) ->
+    => @setState active: traveller.id
+
   renderTravellers: ->
+    createActiveHandler = @createActiveHandler
+    active = @state.active
+
     @state.travellers.map (traveller) ->
       return `(
-        <div className="travellers-item">
+        <div className={traveller.id === active ? "travellers-item travellers-item-active" : "travellers-item"} onClick={createActiveHandler(traveller)}>
           <div className="travellers-item-icon">
-            <a href={traveller.resource_uri}>
+            <a href="javascript:void(0)">
               <img src={traveller.avatar_url}/>
             </a>
           </div>
           <div className="travellers-item-info">
             <div className="travellers-item-info-wrap">
               <span className="travellers-item-info-wrap-align">
-                <a href={traveller.resource_uri}>{[traveller.first_name, traveller.last_name].join(" ")}</a>
+                <a href="javascript:void(0)">{[traveller.first_name, traveller.last_name].join(" ")}</a>
                 <span>{traveller.birthday && (moment(moment()).diff(traveller.birthday, "years") + ", Стамбул")}</span>
                 <span>Предприниматель</span>
               </span>
@@ -57,11 +64,13 @@ Travellers = React.createClass
 
   render: ->
     `(
-      <div>
-        <div className="travellers">
+      <div className="travellers">
+        <div>
           {this.renderTravellers()}
         </div>
-        {this.renderLoadNextButton()}
+        <div className="travellers-next">
+          {this.renderLoadNextButton()}
+        </div>
       </div>
     )`
 

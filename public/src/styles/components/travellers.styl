@@ -1,11 +1,20 @@
 .travellers
-  margin-bottom 15px
-
   .travellers-item
     height 90px
-    margin-bottom 12px
+    padding 6px 18px
+
+    cursor pointer
 
     @clearfix()
+
+    &:hover
+      background rgba(49, 185, 218, 0.09)
+
+    &.travellers-item-active
+      background rgba(49, 185, 218, 0.15)
+
+      &:hover
+        background rgba(49, 185, 218, 0.25)
 
     .travellers-item-icon
       float left
@@ -16,8 +25,9 @@
 
     .travellers-item-info
       float left
-      padding 0px 12px
+      padding-left 12px
       font-size 13px
+      width 174px
 
       .travellers-item-info-wrap
         display table
@@ -36,3 +46,7 @@
           span
             display block
             line-height 18px
+
+  .travellers-next
+    margin-top 12px
+    padding 0px 18px

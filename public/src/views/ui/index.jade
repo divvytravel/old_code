@@ -80,6 +80,9 @@ html(lang='ru-RU')
             span(data-component="input", data-type="email", data-invalid-message="Введите почту", data-valid-message="Нормалек!")
           li.fields-cell
             span(data-component="input", data-type="email", data-invalid-message="Введите почту", data-valid-message="Нормалек!")
+          li.fields-cell.fields-cell-right
+            .fields-cell-right-container
+              span.check-group-data-wrapper(data-component="check-group-data-wrapper")
 
         .categories
           a.button--type-category(href="#") Активный отдых
@@ -88,4 +91,55 @@ html(lang='ru-RU')
           a.button--type-category.active(href="#") Футбол
           a.button--type-category(href="#") Экскурсии
           a.button--type-category(href="#") Яхтинг
+          a.button--type-category.button--type-open-category(href="#") Все категории
+
+        .categories
+          a.button--type-category(href="#") Активный отдых
+          a.button--type-category(href="#") Концерты
+          a.button--type-category(href="#") Походы
+          a.button--type-category.active(href="#") Футбол
+          a.button--type-category(href="#") Экскурсии
+          a.button--type-category(href="#") Яхтинг
+          a.button--type-category.button--type-open-category(href="#") Все категории
           
+          div.sub-category
+            ul
+              li
+                a.button--type-category.button--type-subcategory(href="#") Концерты с интерлиньяжем
+                a.button--type-category.button--type-subcategory(href="#") Футбол
+                a.button--type-category.button--type-subcategory(href="#") Походы
+              li
+                a.button--type-category.button--type-subcategory(href="#") Экскурсии
+                a.button--type-category.button--type-subcategory(href="#") Активный отдых
+                a.button--type-category.button--type-subcategory(href="#") Яхтинг
+              li
+                a.button--type-category.button--type-subcategory.active(href="#") Шаринг жилья
+                a.button--type-category.button--type-subcategory(href="#") Йога
+                a.button--type-category.button--type-subcategory(href="#") Винные туры
+              li
+                a.button--type-category.button--type-subcategory(href="#") Экскурсии
+                a.button--type-category.button--type-subcategory(href="#") Активный отдых
+                span.button--type-category.button--type-subcategory.disabled Disabled
+
+            a.button--type-category.button--type-open-category.opened(href="#") Все категории
+        
+        .sliders-container
+          div(data-component="slider", data-label="СТОИМОСТЬ", data-min="100 $", data-max="4000 $")
+
+        .buttons-container
+          .button-item
+            a.button.button--color-blue Еще 10 путешественников
+          .button-item
+            a.button.button--color-red Еще 10 путешественников
+          .button-item
+            a.button.button--color-green Еще 10 путешественников
+
+        .checkboxes
+          .checkboxes-cell
+            span(data-component="checkbox" data-checked="true"  data-label="Запостить в Фейсбук")
+            span(data-component="checkbox" data-label="Запостить в Фейсбук")
+            //span(data-component="radio-group-data-wrapper")
+
+        //.help-container
+        //  .help-container-wrap
+        //    span(data-component="help" data-message="Например, «Яхтинг на Карибах».<p style='padding-top:6px'>Понятный заголовок поможет собрать группу.</p>")
