@@ -54,6 +54,7 @@ class TripCategory(models.Model):
                                   choices=APPLICABLE, default=APPLICABLE.all)
     slug = models.SlugField(u"Вид в url", unique=True)
     tag = models.ForeignKey(Tags, related_name="trip_category")
+    keywords = models.ManyToManyField(Tags)
 
     class Meta:
         verbose_name = u"Категория"
@@ -80,8 +81,10 @@ class Trip(models.Model):
     )
 
     title = models.CharField(u"Название", max_length=200)
-    category = models.ForeignKey(TripCategory, blank=True, null=True,
-                                 related_name="trips", verbose_name=u'Категория')
+    # category = models.ForeignKey(TripCategory, blank=True, null=True,
+    #                              related_name="trips", verbose_name=u'Категория')
+    categories = models.ManyToManyField(TripCategory, blank=True, null=True,
+                                        related_name='trips', verbose_name=u'Категории')
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     end_people_date = models.DateField(_(u"Дата окончания набора группы"))

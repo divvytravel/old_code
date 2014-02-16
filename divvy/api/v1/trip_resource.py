@@ -5,7 +5,8 @@ from tastypie import fields
 
 from .base import BaseResourceMixin
 
-from trip.models import Trip, TripCategory, Tags, Images
+from trip.models import Trip, TripCategory, Tags, Images, TripPoint,\
+    TripPointType
 from geo.models import Country, City
 
 from .user_resource import UserResource
@@ -26,15 +27,26 @@ class TagsResource(ModelResource, BaseResourceMixin):
 class TripCategoryResource(ModelResource, BaseResourceMixin):
     tag = fields.ToOneField(TagsResource, attribute='tag',
                             related_name='trip_category', full=True)
+    keywords = fields.ManyToManyField(TagsResource, attribute='keywords',
+                                      full=True, null=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = TripCategory.objects.all()
         allowed_methods = ['get']
 
 
+class TripPointTypeResource(ModelResource, BaseResourceMixin):
+    category = fields.ToOneField(TripCategoryResource, attribute='category',
+                                 related_name='point_types',
+                                 full=True, null=True)
+    class Meta(BaseResourceMixin.Meta):
+        queryset = TripPointType.objects.all()
+        allowed_methods = ['get']
+
+
 class TripResource(ModelResource, BaseResourceMixin):
     people = fields.ManyToManyField(UserResource, attribute='people', full=True, null=True)
-    category = fields.ToOneField(TripCategoryResource, attribute='category',
+    categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
                                  related_name='trips', full=True, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
                                   related_name='trips', full=True, null=True)
@@ -72,3 +84,13 @@ class TripResource(ModelResource, BaseResourceMixin):
         bundle.data['city'] = u'%s' % bundle.obj.city.name
         bundle.data['city_id'] = bundle.obj.city_id
         return bundle
+
+
+class TripPointResource(ModelResource, BaseResourceMixin):
+    p_type = fields.ToOneField(TripPointTypeResource, attribute='p_type',
+                               full=True, null=True)
+    trip = fields.ToOneField(TripResource, attribute='trip',
+                             related_name='points', full=True, null=True)
+    class Meta(BaseResourceMixin.Meta):
+        queryset = TripPoint.objects.all()
+        allowed_methods = ['get']
