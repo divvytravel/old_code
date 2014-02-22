@@ -170,6 +170,7 @@ LOCAL_APPS = (
     'utils',
     'geo',
     'party_api.aviasales',
+    'blog'
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
