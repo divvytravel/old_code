@@ -49,12 +49,32 @@ Trips = React.createClass
     types = "noncom": "Некоммерческая", "com": "Коммерческая"
     types[type]
 
+  onFilterChinge: (filters) ->
+    api.get "trip", filters, (data) =>
+      @setState
+        loaded: true
+        trips: data.objects
+        meta: data.meta
+
   renderTrips: ->
     @state.trips.map (trip) =>
       renderTags = @renderTags
       renderTripInfo = @renderTripInfo
+      
+      classes = ["trips-item"]
+
+      advised = null
+      if trip.advised or trip.id == 17
+        classes.push "trips-item-advised"
+        advised = `(
+          <div className="trips-item-advised-title">
+            рекомендуем  
+          </div>
+        )`
+
       return `(
-        <div className="trips-item">
+        <div className={classes.join(" ")}>
+          {advised}
           <div className="trips-item-title">
             <a href="#">{trip.title}</a>
             <span className="trips-item-title-star"></span>
@@ -157,7 +177,7 @@ Trips = React.createClass
   render: ->
     `(
       <div>
-        <TripsFilter/>
+        <TripsFilter onChange={this.onFilterChinge}/>
         <TripsCategory/>
         <TripsTravellerFilter/>
         <div className="trips">

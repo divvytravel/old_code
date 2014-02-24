@@ -5,6 +5,19 @@
 
     @clearfix()
 
+    &.trips-item-advised
+      background #fcf5cf
+
+      .trips-item-advised-title
+        margin-bottom 8px
+        font-size 9px
+        font-weight bold
+        text-transform uppercase
+
+      //.trips-item-content
+      //  .trips-item-info
+      //    box-shadow 2px 0px 12px rgba(0, 0, 0, 0.15)
+
     .trips-item-title
       a
         position: relative
@@ -40,6 +53,7 @@
       margin-top 12px
 
     .trips-item-content
+      position relative
       margin-top 9px
 
       @clearfix()
@@ -54,9 +68,11 @@
           height 360px
   
       .trips-item-info
-        float right
+        position absolute
+        top 0px
+        right 0px
         width 220px
-        height 360px
+        min-height 360px
 
         background white
         border-radius 5px
@@ -93,7 +109,7 @@
         color rgba(0, 0, 0, 0.9)
         
       .trip-item-info-travellers
-        padding 16px 18px
+        padding 16px 14px 0px 18px
         
         .trip-item-info-travellers-title
           font-family pragmatica-web
@@ -120,9 +136,8 @@
             margin-bottom 12px
             font-size 13px
             color #c68189
-          
 
   .trips-next
     padding 20px 36px
-          
+
 

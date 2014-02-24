@@ -10,6 +10,9 @@ Select = React.createClass
     options: []
     multiple: true
 
+  getInitialState: ->
+    value: null
+
   componentDidMount: (domNode) ->
     params = maxItems: 1
     params.render = @renderOption() if @props.multiple
@@ -19,6 +22,10 @@ Select = React.createClass
     selectize = $selectize[0].selectize
     selectize.addOption @props.options if @props.options
     selectize.refreshOptions false
+    
+    $selectize.on "change", (event) =>
+      @setState value: event.target.value
+      @props.onChange event.target.value if @props.onChange
 
   renderOption: ->
     option: (item, escape) ->

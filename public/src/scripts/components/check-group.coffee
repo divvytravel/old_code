@@ -12,7 +12,9 @@ CheckGroup = React.createClass
     value: @props.value
 
   createChangeHandler: (value) ->
-    => @setState value: value
+    =>
+      @setState value: value
+      @props.onChange value if @props.onChange
 
   renderOptions: ->
     @props.options.map (option) =>

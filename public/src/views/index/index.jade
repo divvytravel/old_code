@@ -23,21 +23,13 @@ html(lang='ru-RU')
           .header-nav
             a.header-nav-item(href="#") Путешествия
             a.header-nav-item(href="#") Как это работает
-            a.header-nav-item(href="#") Создание путешествия
+            a#promo-create-trip.header-nav-item(href="#") Создание путешествия
             span(data-component="facebook-login", data-is-authenticated="")
       .promo-content
         div.promo-content-title Путешествуйте в хорошей компании
-        div.promo-content-description
-          | Вы можете 
-          a(href="#") организовать своё путешествие 
-          | и самостоятельно собрать 
-          | компанию, или к кому-нибудь присоединиться — 
-          a(href="#") выбирайте поездку, 
-          | и смотрите, куда собираются 
-          a(href="#") интересные вам люди
-          | .
+        div(data-component="promo")
     .container
-      .sidebar
+      #promo-travellers.sidebar
         .title
           | Посмотрите, <br/>
           | куда собираются другие, <br/>

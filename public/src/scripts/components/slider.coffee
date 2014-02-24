@@ -12,6 +12,10 @@ Slider = React.createClass
     max: 100
     minValue: 0
     maxValue: 0
+    unit: null
+
+  getInitialState: ->
+    values: []
 
   componentDidMount: ->
     @slider = $(this.refs.slider.getDOMNode()).slider
@@ -19,9 +23,10 @@ Slider = React.createClass
       min: parseInt @props.min
       max: parseInt @props.max
       values: [@props.minValue, @props.maxValue]
-      slide: ( event, ui ) =>
+      change: ( event, ui ) =>
         return unless @props.onChange
-        @props.onChange event: target: values: ui.values
+        @setState values: ui.values
+        @props.onChange ui.values
     
   render: ->
     `(
@@ -29,8 +34,8 @@ Slider = React.createClass
         <div className="slider-label">{this.props.label}</div>
         <div ref="slider"></div>
         <div className="slider-limits">
-          <span>{this.props.min}</span>
-          <span>{this.props.max}</span>
+          <span>{[this.props.min, this.props.unit].join(' ')}</span>
+          <span>{[this.props.max, this.props.unit].join(' ')}</span>
         </div>
       </div>
     )`

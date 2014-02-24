@@ -5,28 +5,34 @@ React = require "React"
 $ = require "jquery"
 
 require "jquery.ui.datepicker"
+require "moment"
 
 DateInput = React.createClass
   getInitialState: ->
-    show: false
+    value: null
 
-  componentDidMount: ->
-    $(@refs.datepicker.getDOMNode()).datepicker()
+  componentDidMount: (domNode) ->
+    $(@refs.datepicker.getDOMNode()).datepicker
+      dateFormat: "yy-mm-dd"
+      onSelect: @handleDateChange
+
+  componentDidUpdate: (prevProps, prevState) ->
+    @props.onChange @state.value unless prevState.value is @state.value
+
+  handleDateChange: (date) ->
+    @setState value: date
 
   handleShow: ->
-    @setState show: not @state.show
+    $(@refs.datepicker.getDOMNode()).datepicker "show"
 
   render: ->
-    styles =
-      display: if @state.show then "block" else "none"
-
     `(
       <span className="date-input">
         <a className="button button--type-action" onClick={this.handleShow}>
-          Кнопка
+          <input ref="datepicker" type="text" className="date-input--datepicker"/>
+          {this.state.value ? moment(this.state.value, "YYYY-MM-DD").format("DD MMMM YYYY") : 'Когда'}
           <i className="button-picker icon-calendar-blue"></i>
         </a>
-        <span ref="datepicker" style={styles} className="date-input--datepicker"></span>
       </span>
     )`
 

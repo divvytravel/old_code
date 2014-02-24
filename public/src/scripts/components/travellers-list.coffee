@@ -3,91 +3,119 @@
 
 React = require "React"
 $ = require "jquery"
+require "moment"
 
 TravellersList = React.createClass
-  direction:
-    DOWN: "down"
-    UP: "up"
-
   getDefaultProps: ->
     iconSize: 61
     travellers: []
 
   getInitialState: ->
-    position: 0
-    maxLines: 0
-    direction: false
-    containerHeight: 0
-    listHeight: 0
+    size: if @props.travellers.length > 8 then "small" else "normal"
+    expanded: false
+    traveller: null
+    offset: null
 
   componentDidMount: (domNode) ->
-    list = $ @refs.list.getDOMNode()
+    @setState offset: $(domNode).offset()
 
-    @setState
-      direction: if @props.travellers.length > 3 then @direction.DOWN else false
-      listHeight: list.height()
-      containerHeight: list.parent().height()
+  createClickHandler: (traveller) ->
+    (event) =>
+      offset = $(event.target).offset()
+      event.preventDefault()
+      @setState
+        traveller:
+          avatar_url: traveller.avatar_url
+          firstName: traveller.first_name
+          lastName: traveller.last_name
+          birthday: moment(moment()).diff(traveller.birthday, "years")
+          city: "Стамбул"
+          activity: "Предприниматель"
+          top: offset.top
+          left: offset.left
 
-  next: ->
-    direction = @state.direction
-    position = @state.position
-    position -= @props.iconSize
+  closeDetails: ->
+    @setState traveller: null
 
-    if (@state.listHeight + position) < @state.containerHeight
-      position = @state.containerHeight - @state.listHeight
-      direction = @direction.UP
+  expand: (expanded) ->
+    => @setState expanded: expanded, traveller: null
 
-    $(@refs.list.getDOMNode()).animate top: position
-
-    @setState position: position, direction: direction
-
-  prev: ->
-    direction = @state.direction
-    position = @state.position
-    position += @props.iconSize
-
-    if position > 0
-      position = 0
-      direction = @direction.DOWN
-
-    $(@refs.list.getDOMNode()).animate top: position
-
-    @setState position: position, direction: direction
+  renderExpandButton: ->
+    if @state.expanded
+      `(
+        <div className="travellers-list-prev" onClick={this.expand(false)}>
+          <i className="arrow-up"/>
+        </div>
+      )`
+    else
+      `(
+        <div className="travellers-list-next" onClick={this.expand(true)}>
+          <i className="arrow-down"/>
+        </div>
+      )`
 
   renderTravellers: ->
+    clickHandler = @createClickHandler
+    
+    classes = """
+      travellers-list-item-icon
+      travellers-list-item-#{@state.size}-icon
+    """
+  
     @props.travellers.map (traveller) ->
       return `(
-        <div className="travellers-list-item-icon">
-          <a href={traveller.resource_uri}>
+        <div className={classes}>
+          <a href={traveller.resource_uri} onClick={clickHandler(traveller)}>
             <img src={traveller.avatar_url}/>
           </a>
         </div>
       )`
 
-  renderNextButton: ->
-    return unless @state.direction is @direction.DOWN
-    `(
-      <div className="travellers-list-next" onClick={this.next}>
-        <i className="arrow-down"/>
-      </div>
-    )`
+  renderTravellerDetails: ->
+    return unless @state.traveller
+    traveller = @state.traveller
 
-  renderPrevButton: ->
-    return unless @state.direction is @direction.UP
+    styles =
+      top: traveller.top - @state.offset.top - 9
+      left: traveller.left - @state.offset.left - 9
+
+    classes = """
+      travellers-list-item-details
+      travellers-list-item-details-#{@state.size}
+    """
+
     `(
-      <div className="travellers-list-prev" onClick={this.prev}>
-        <i className="arrow-up"/>
+      <div className={classes} style={styles}>
+        <div className="travellers-list-item-details-wrap">
+          <div className="travellers-list-item-details-wrap-close" onClick={this.closeDetails}>
+            <img src="/static/img/x-small-blue.png"/>
+          </div>
+          <div className="travellers-list-item-details-icon">
+            <a href="#">
+              <img src={this.state.traveller.avatar_url}/>
+            </a>
+          </div>
+          <div className="travellers-list-item-details-info">
+            <a href="#">{traveller.firstName}</a>
+            <a href="#">{traveller.lastName}</a>
+            <span>{[traveller.birthday, traveller.city].join(", ")}</span>
+            <span>{traveller.activity}</span>
+          </div>
+        </div>
       </div>
     )`
 
   render: ->
+    classes = ["travellers-list-items"]
+    classes.push "travellers-list-items-expanded" if @state.expanded
+  
     `(
       <div className="travellers-list">
-        {this.renderPrevButton()}
-        <div ref="list" className="travellers-list-items">
+        <div ref="list" className={classes.join(" ")}>
           {this.renderTravellers()}
         </div>
-        {this.renderNextButton()}
+        {this.renderExpandButton()}
+        {this.renderTravellerDetails()}
       </div>
     )`
 
