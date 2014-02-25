@@ -5,8 +5,6 @@ module.exports={
 
 },{}],"config":[function(require,module,exports){
 module.exports=require('d+m9kx');
-},{}],"jquery":[function(require,module,exports){
-module.exports=require('5Q/0Us');
 },{}],"5Q/0Us":[function(require,module,exports){
 (function (global){(function browserifyShim(module, exports, define, browserify_shim__define__module__export__) {
 /*!
@@ -9803,6 +9801,8 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 
 }).call(global, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"jquery":[function(require,module,exports){
+module.exports=require('5Q/0Us');
 },{}],"UBw7QK":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
@@ -10318,8 +10318,6 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"jquery":"5Q/0Us"}],"iCheck":[function(require,module,exports){
 module.exports=require('UBw7QK');
-},{}],"jquery.ui.core":[function(require,module,exports){
-module.exports=require('XIAbGy');
 },{}],"XIAbGy":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
@@ -10647,8 +10645,8 @@ $.extend( $.ui, {
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us"}],"jquery.ui.datepicker":[function(require,module,exports){
-module.exports=require('qggHk5');
+},{"jquery":"5Q/0Us"}],"jquery.ui.core":[function(require,module,exports){
+module.exports=require('XIAbGy');
 },{}],"qggHk5":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
@@ -12695,7 +12693,11 @@ $.datepicker.version = "@VERSION";
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us","jquery.ui.core":"XIAbGy"}],"+XIwud":[function(require,module,exports){
+},{"jquery":"5Q/0Us","jquery.ui.core":"XIAbGy"}],"jquery.ui.datepicker":[function(require,module,exports){
+module.exports=require('qggHk5');
+},{}],"jquery.ui.mouse":[function(require,module,exports){
+module.exports=require('+XIwud');
+},{}],"+XIwud":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
 ; global.jQuery = require("jquery");
@@ -12872,9 +12874,7 @@ $.widget("ui.mouse", {
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.mouse":[function(require,module,exports){
-module.exports=require('+XIwud');
-},{}],"jquery.ui.slider":[function(require,module,exports){
+},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.slider":[function(require,module,exports){
 module.exports=require('jxOnI+');
 },{}],"jxOnI+":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
@@ -13556,9 +13556,7 @@ $.widget( "ui.slider", $.ui.mouse, {
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us","jquery.ui.mouse":"+XIwud"}],"jquery.ui.tooltip":[function(require,module,exports){
-module.exports=require('Gtjt3u');
-},{}],"Gtjt3u":[function(require,module,exports){
+},{"jquery":"5Q/0Us","jquery.ui.mouse":"+XIwud"}],"Gtjt3u":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 
 ; global.jQuery = require("jquery");
@@ -13968,7 +13966,9 @@ $.widget( "ui.tooltip", {
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.widget":[function(require,module,exports){
+},{"jquery":"5Q/0Us","jquery.ui.widget":"7ui+HQ"}],"jquery.ui.tooltip":[function(require,module,exports){
+module.exports=require('Gtjt3u');
+},{}],"jquery.ui.widget":[function(require,module,exports){
 module.exports=require('7ui+HQ');
 },{}],"7ui+HQ":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
@@ -14918,8 +14918,6 @@ $.each( { show: "fadeIn", hide: "fadeOut" }, function( method, defaultEffect ) {
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],"uri":[function(require,module,exports){
 module.exports=require('Lamjpc');
-},{}],"microplugin":[function(require,module,exports){
-module.exports=require('0vcR2t');
 },{}],"0vcR2t":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /**
@@ -15059,6 +15057,10 @@ module.exports=require('0vcR2t');
 }));
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"microplugin":[function(require,module,exports){
+module.exports=require('0vcR2t');
+},{}],"momentLang":[function(require,module,exports){
+module.exports=require('8y1JGA');
 },{}],"8y1JGA":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 // moment.js language configuration
@@ -15227,11 +15229,7 @@ module.exports=require('0vcR2t');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../moment":"WWz+tO"}],"momentLang":[function(require,module,exports){
-module.exports=require('8y1JGA');
-},{}],"moment":[function(require,module,exports){
-module.exports=require('WWz+tO');
-},{}],"WWz+tO":[function(require,module,exports){
+},{"../moment":"WWz+tO"}],"WWz+tO":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 //! moment.js
 //! version : 2.4.0
@@ -17550,6 +17548,8 @@ module.exports=require('WWz+tO');
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],"moment":[function(require,module,exports){
+module.exports=require('WWz+tO');
 },{}],27:[function(require,module,exports){
 /**
  * Copyright 2013 Facebook, Inc.
@@ -30748,9 +30748,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 
-},{"./ReactComponent":52,"./ReactTextComponent":85,"./invariant":121}],"selectize":[function(require,module,exports){
-module.exports=require('M0rIo3');
-},{}],"M0rIo3":[function(require,module,exports){
+},{"./ReactComponent":52,"./ReactTextComponent":85,"./invariant":121}],"M0rIo3":[function(require,module,exports){
 (function (global){(function browserifyShim(module, exports, define, browserify_shim__define__module__export__) {
 
 ; global.jQuery = require("jquery");
@@ -33532,7 +33530,11 @@ global.MicroPlugin = require("microplugin");
 
 }).call(global, undefined, undefined, undefined, function defineExport(ex) { module.exports = ex; });
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":"5Q/0Us","microplugin":"0vcR2t","sifter":"mVD/kk"}],"mVD/kk":[function(require,module,exports){
+},{"jquery":"5Q/0Us","microplugin":"0vcR2t","sifter":"mVD/kk"}],"selectize":[function(require,module,exports){
+module.exports=require('M0rIo3');
+},{}],"sifter":[function(require,module,exports){
+module.exports=require('mVD/kk');
+},{}],"mVD/kk":[function(require,module,exports){
 (function (global){(function browserifyShim(module, define) {
 /**
  * sifter.js
@@ -33983,8 +33985,8 @@ global.MicroPlugin = require("microplugin");
 
 }).call(global, module, undefined);
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"sifter":[function(require,module,exports){
-module.exports=require('mVD/kk');
+},{}],"check-group":[function(require,module,exports){
+module.exports=require('EUQuU7');
 },{}],"EUQuU7":[function(require,module,exports){
 /** @jsx React.DOM */;
 var CheckGroup, React;
@@ -34006,9 +34008,12 @@ CheckGroup = React.createClass({
   createChangeHandler: function(value) {
     var _this = this;
     return function() {
-      return _this.setState({
+      _this.setState({
         value: value
       });
+      if (_this.props.onChange) {
+        return _this.props.onChange(value);
+      }
     };
   },
   renderOptions: function() {
@@ -34039,9 +34044,7 @@ CheckGroup = React.createClass({
 module.exports = CheckGroup;
 
 
-},{"React":"2ftwoI"}],"check-group":[function(require,module,exports){
-module.exports=require('EUQuU7');
-},{}],"ZyMaE4":[function(require,module,exports){
+},{"React":"2ftwoI"}],"ZyMaE4":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, Checkbox, React;
 
@@ -34088,6 +34091,8 @@ module.exports = Checkbox;
 
 },{"React":"2ftwoI","iCheck":"UBw7QK","jquery":"5Q/0Us"}],"checkbox":[function(require,module,exports){
 module.exports=require('ZyMaE4');
+},{}],"date-input":[function(require,module,exports){
+module.exports=require('FVDHTO');
 },{}],"FVDHTO":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, DateInput, React;
@@ -34098,32 +34103,41 @@ $ = require("jquery");
 
 require("jquery.ui.datepicker");
 
+require("moment");
+
 DateInput = React.createClass({
   getInitialState: function() {
     return {
-      show: false
+      value: null
     };
   },
-  componentDidMount: function() {
-    return $(this.refs.datepicker.getDOMNode()).datepicker();
-  },
-  handleShow: function() {
-    return this.setState({
-      show: !this.state.show
+  componentDidMount: function(domNode) {
+    return $(this.refs.datepicker.getDOMNode()).datepicker({
+      dateFormat: "yy-mm-dd",
+      onSelect: this.handleDateChange
     });
   },
+  componentDidUpdate: function(prevProps, prevState) {
+    if (prevState.value !== this.state.value) {
+      return this.props.onChange(this.state.value);
+    }
+  },
+  handleDateChange: function(date) {
+    return this.setState({
+      value: date
+    });
+  },
+  handleShow: function() {
+    return $(this.refs.datepicker.getDOMNode()).datepicker("show");
+  },
   render: function() {
-    var styles;
-    styles = {
-      display: this.state.show ? "block" : "none"
-    };
     return (
       React.DOM.span( {className:"date-input"}, 
         React.DOM.a( {className:"button button--type-action", onClick:this.handleShow}, 
-          " Кнопка ",
+          React.DOM.input( {ref:"datepicker", type:"text", className:"date-input--datepicker"}),
+          this.state.value ? moment(this.state.value, "YYYY-MM-DD").format("DD MMMM YYYY") : 'Когда',
           React.DOM.i( {className:"button-picker icon-calendar-blue"})
-        ),
-        React.DOM.span( {ref:"datepicker", style:styles, className:"date-input--datepicker"})
+        )
       )
     );
   }
@@ -34132,9 +34146,7 @@ DateInput = React.createClass({
 module.exports = DateInput;
 
 
-},{"React":"2ftwoI","jquery":"5Q/0Us","jquery.ui.datepicker":"qggHk5"}],"date-input":[function(require,module,exports){
-module.exports=require('FVDHTO');
-},{}],"facebook-login":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us","jquery.ui.datepicker":"qggHk5","moment":"WWz+tO"}],"facebook-login":[function(require,module,exports){
 module.exports=require('jN3Y+z');
 },{}],"jN3Y+z":[function(require,module,exports){
 /** @jsx React.DOM */;
@@ -34209,9 +34221,7 @@ FacebookLogin = React.createClass({
 module.exports = FacebookLogin;
 
 
-},{"React":"2ftwoI","api":"NA3vNd","config":"d+m9kx","jquery":"5Q/0Us","utils":"tX7VuE"}],"help":[function(require,module,exports){
-module.exports=require('Drv423');
-},{}],"Drv423":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","config":"d+m9kx","jquery":"5Q/0Us","utils":"tX7VuE"}],"Drv423":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, Help, React;
 
@@ -34261,8 +34271,8 @@ Help = React.createClass({
 module.exports = Help;
 
 
-},{"React":"2ftwoI","jquery":"5Q/0Us"}],"input":[function(require,module,exports){
-module.exports=require('BEqvBD');
+},{"React":"2ftwoI","jquery":"5Q/0Us"}],"help":[function(require,module,exports){
+module.exports=require('Drv423');
 },{}],"BEqvBD":[function(require,module,exports){
 /** @jsx React.DOM */;
 var Input, React;
@@ -34362,7 +34372,81 @@ Input = React.createClass({
 module.exports = Input;
 
 
-},{"React":"2ftwoI"}],"radio-group":[function(require,module,exports){
+},{"React":"2ftwoI"}],"input":[function(require,module,exports){
+module.exports=require('BEqvBD');
+},{}],"promo":[function(require,module,exports){
+module.exports=require('Yx4NeZ');
+},{}],"Yx4NeZ":[function(require,module,exports){
+/** @jsx React.DOM */;
+var $, Promo, React;
+
+React = require("React");
+
+$ = require("jquery");
+
+Promo = React.createClass({
+  createClickHandler: function(target) {
+    var targetNode,
+      _this = this;
+    targetNode = null;
+    return function(event) {
+      var highlight;
+      event.preventDefault();
+      if (!targetNode) {
+        targetNode = $("#" + target);
+      }
+      highlight = _this.createHighlight($(event.target));
+      $(_this.refs.root.getDOMNode()).append(highlight);
+      return _this.animateTo(highlight, targetNode);
+    };
+  },
+  createHighlight: function(el) {
+    var highlight;
+    highlight = $("<div>");
+    return highlight.css({
+      width: el.width(),
+      height: el.height(),
+      position: "absolute",
+      background: "#2aa1bf",
+      "z-index": 999999,
+      opacity: 0.6,
+      top: el.offset().top,
+      left: el.offset().left
+    });
+  },
+  animateTo: function(highlight, target) {
+    return highlight.animate({
+      left: target.offset().left,
+      top: target.offset().top,
+      width: target.outerWidth(),
+      height: target.outerHeight()
+    }, "slow", function() {
+      return highlight.animate({
+        opacity: 0
+      }, 1000, function() {
+        return highlight.remove();
+      });
+    });
+  },
+  render: function() {
+    return (
+      React.DOM.span( {className:"promo-content-description", ref:"root"}, 
+        " Вы можете " ,
+        React.DOM.a( {href:"#", onClick:this.createClickHandler("promo-create-trip")}, "организовать своё путешествие"),
+        " и самостоятельно собрать "+ 
+        "компанию, или к кому-нибудь присоединиться — " ,
+        React.DOM.a( {href:"#", onClick:this.createClickHandler("promo-filters")},  " выбирайте поездку, " ),
+        " и смотрите, куда собираются " ,
+        React.DOM.a( {href:"#", onClick:this.createClickHandler("promo-travellers")},  " интересные вам люди"),". "
+      )
+    );
+  }
+});
+
+module.exports = Promo;
+
+
+},{"React":"2ftwoI","jquery":"5Q/0Us"}],"radio-group":[function(require,module,exports){
 module.exports=require('BBj+WV');
 },{}],"BBj+WV":[function(require,module,exports){
 /** @jsx React.DOM */;
@@ -34426,9 +34510,7 @@ RadioGroup = React.createClass({
 module.exports = RadioGroup;
 
 
-},{"React":"2ftwoI","iCheck":"UBw7QK","jquery":"5Q/0Us"}],"select":[function(require,module,exports){
-module.exports=require('ADMAJT');
-},{}],"ADMAJT":[function(require,module,exports){
+},{"React":"2ftwoI","iCheck":"UBw7QK","jquery":"5Q/0Us"}],"ADMAJT":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, React, Select;
 
@@ -34445,8 +34527,14 @@ Select = React.createClass({
       multiple: true
     };
   },
+  getInitialState: function() {
+    return {
+      value: null
+    };
+  },
   componentDidMount: function(domNode) {
-    var $selectize, params, selectize;
+    var $selectize, params, selectize,
+      _this = this;
     params = {
       maxItems: 1
     };
@@ -34458,7 +34546,15 @@ Select = React.createClass({
     if (this.props.options) {
       selectize.addOption(this.props.options);
     }
-    return selectize.refreshOptions(false);
+    selectize.refreshOptions(false);
+    return $selectize.on("change", function(event) {
+      _this.setState({
+        value: event.target.value
+      });
+      if (_this.props.onChange) {
+        return _this.props.onChange(event.target.value);
+      }
+    });
   },
   renderOption: function() {
     return {
@@ -34477,7 +34573,9 @@ Select = React.createClass({
 module.exports = Select;
 
 
-},{"React":"2ftwoI","jquery":"5Q/0Us","selectize":"M0rIo3"}],"oyMku8":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us","selectize":"M0rIo3"}],"select":[function(require,module,exports){
+module.exports=require('ADMAJT');
+},{}],"oyMku8":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, React, Slider;
 
@@ -34494,7 +34592,13 @@ Slider = React.createClass({
       min: 0,
       max: 100,
       minValue: 0,
-      maxValue: 0
+      maxValue: 0,
+      unit: null
+    };
+  },
+  getInitialState: function() {
+    return {
+      values: []
     };
   },
   componentDidMount: function() {
@@ -34504,17 +34608,14 @@ Slider = React.createClass({
       min: parseInt(this.props.min),
       max: parseInt(this.props.max),
       values: [this.props.minValue, this.props.maxValue],
-      slide: function(event, ui) {
+      change: function(event, ui) {
         if (!_this.props.onChange) {
           return;
         }
-        return _this.props.onChange({
-          event: {
-            target: {
-              values: ui.values
-            }
-          }
+        _this.setState({
+          values: ui.values
         });
+        return _this.props.onChange(ui.values);
       }
     });
   },
@@ -34524,8 +34625,8 @@ Slider = React.createClass({
         React.DOM.div( {className:"slider-label"}, this.props.label),
         React.DOM.div( {ref:"slider"}),
         React.DOM.div( {className:"slider-limits"}, 
-          React.DOM.span(null, this.props.min),
-          React.DOM.span(null, this.props.max)
+          React.DOM.span(null, [this.props.min, this.props.unit].join(' ')),
+          React.DOM.span(null, [this.props.max, this.props.unit].join(' '))
         )
       )
     );
@@ -34537,8 +34638,6 @@ module.exports = Slider;
 
 },{"React":"2ftwoI","jquery":"5Q/0Us","jquery.ui.slider":"jxOnI+"}],"slider":[function(require,module,exports){
 module.exports=require('oyMku8');
-},{}],"travellers-list":[function(require,module,exports){
-module.exports=require('jo29eT');
 },{}],"jo29eT":[function(require,module,exports){
 /** @jsx React.DOM */;
 var $, React, TravellersList;
@@ -34547,11 +34646,9 @@ React = require("React");
 
 $ = require("jquery");
 
+require("moment");
+
 TravellersList = React.createClass({
-  direction: {
-    DOWN: "down",
-    UP: "up"
-  },
   getDefaultProps: function() {
     return {
       iconSize: 61,
@@ -34560,95 +34657,125 @@ TravellersList = React.createClass({
   },
   getInitialState: function() {
     return {
-      position: 0,
-      maxLines: 0,
-      direction: false,
-      containerHeight: 0,
-      listHeight: 0
+      size: this.props.travellers.length > 8 ? "small" : "normal",
+      expanded: false,
+      traveller: null,
+      offset: null
     };
   },
   componentDidMount: function(domNode) {
-    var list;
-    list = $(this.refs.list.getDOMNode());
     return this.setState({
-      direction: this.props.travellers.length > 3 ? this.direction.DOWN : false,
-      listHeight: list.height(),
-      containerHeight: list.parent().height()
+      offset: $(domNode).offset()
     });
   },
-  next: function() {
-    var direction, position;
-    direction = this.state.direction;
-    position = this.state.position;
-    position -= this.props.iconSize;
-    if ((this.state.listHeight + position) < this.state.containerHeight) {
-      position = this.state.containerHeight - this.state.listHeight;
-      direction = this.direction.UP;
-    }
-    $(this.refs.list.getDOMNode()).animate({
-      top: position
-    });
+  createClickHandler: function(traveller) {
+    var _this = this;
+    return function(event) {
+      var offset;
+      offset = $(event.target).offset();
+      event.preventDefault();
+      return _this.setState({
+        traveller: {
+          avatar_url: traveller.avatar_url,
+          firstName: traveller.first_name,
+          lastName: traveller.last_name,
+          birthday: moment(moment()).diff(traveller.birthday, "years"),
+          city: "Стамбул",
+          activity: "Предприниматель",
+          top: offset.top,
+          left: offset.left
+        }
+      });
+    };
+  },
+  closeDetails: function() {
     return this.setState({
-      position: position,
-      direction: direction
+      traveller: null
     });
   },
-  prev: function() {
-    var direction, position;
-    direction = this.state.direction;
-    position = this.state.position;
-    position += this.props.iconSize;
-    if (position > 0) {
-      position = 0;
-      direction = this.direction.DOWN;
+  expand: function(expanded) {
+    var _this = this;
+    return function() {
+      return _this.setState({
+        expanded: expanded,
+        traveller: null
+      });
+    };
+  },
+  renderExpandButton: function() {
+    if (this.state.expanded) {
+      return (
+        React.DOM.div( {className:"travellers-list-prev", onClick:this.expand(false)}, 
+          React.DOM.i( {className:"arrow-up"})
+        )
+      );
+    } else {
+      return (
+        React.DOM.div( {className:"travellers-list-next", onClick:this.expand(true)}, 
+          React.DOM.i( {className:"arrow-down"})
+        )
+      );
     }
-    $(this.refs.list.getDOMNode()).animate({
-      top: position
-    });
-    return this.setState({
-      position: position,
-      direction: direction
-    });
   },
   renderTravellers: function() {
+    var classes, clickHandler;
+    clickHandler = this.createClickHandler;
+    classes = "travellers-list-item-icon\ntravellers-list-item-" + this.state.size + "-icon";
     return this.props.travellers.map(function(traveller) {
       return (
-        React.DOM.div( {className:"travellers-list-item-icon"}, 
-          React.DOM.a( {href:traveller.resource_uri}, 
+        React.DOM.div( {className:classes}, 
+          React.DOM.a( {href:traveller.resource_uri, onClick:clickHandler(traveller)}, 
             React.DOM.img( {src:traveller.avatar_url})
           )
         )
       );
     });
   },
-  renderNextButton: function() {
-    if (this.state.direction !== this.direction.DOWN) {
+  renderTravellerDetails: function() {
+    var classes, styles, traveller;
+    if (!this.state.traveller) {
       return;
     }
+    traveller = this.state.traveller;
+    styles = {
+      top: traveller.top - this.state.offset.top - 9,
+      left: traveller.left - this.state.offset.left - 9
+    };
+    classes = "travellers-list-item-details\ntravellers-list-item-details-" + this.state.size;
     return (
-      React.DOM.div( {className:"travellers-list-next", onClick:this.next}, 
-        React.DOM.i( {className:"arrow-down"})
-      )
-    );
-  },
-  renderPrevButton: function() {
-    if (this.state.direction !== this.direction.UP) {
-      return;
-    }
-    return (
-      React.DOM.div( {className:"travellers-list-prev", onClick:this.prev}, 
-        React.DOM.i( {className:"arrow-up"})
+      React.DOM.div( {className:classes, style:styles}, 
+        React.DOM.div( {className:"travellers-list-item-details-wrap"}, 
+          React.DOM.div( {className:"travellers-list-item-details-wrap-close", onClick:this.closeDetails}, 
+            React.DOM.img( {src:"/static/img/x-small-blue.png"})
+          ),
+          React.DOM.div( {className:"travellers-list-item-details-icon"}, 
+            React.DOM.a( {href:"#"}, 
+              React.DOM.img( {src:this.state.traveller.avatar_url})
+            )
+          ),
+          React.DOM.div( {className:"travellers-list-item-details-info"}, 
+            React.DOM.a( {href:"#"}, traveller.firstName),
+            React.DOM.a( {href:"#"}, traveller.lastName),
+            React.DOM.span(null, [traveller.birthday, traveller.city].join(", ")),
+            React.DOM.span(null, traveller.activity)
+          )
+        )
       )
     );
   },
   render: function() {
+    var classes;
+    classes = ["travellers-list-items"];
+    if (this.state.expanded) {
+      classes.push("travellers-list-items-expanded");
+    }
     return (
       React.DOM.div( {className:"travellers-list"}, 
-        this.renderPrevButton(),
-        React.DOM.div( {ref:"list", className:"travellers-list-items"}, 
+        React.DOM.div( {ref:"list", className:classes.join(" ")}, 
           this.renderTravellers()
         ),
-        this.renderNextButton()
+        this.renderExpandButton(),
+        this.renderTravellerDetails()
       )
     );
   }
@@ -34657,7 +34784,9 @@ TravellersList = React.createClass({
 module.exports = TravellersList;
 
 
-},{"React":"2ftwoI","jquery":"5Q/0Us"}],"OqBcDj":[function(require,module,exports){
+},{"React":"2ftwoI","jquery":"5Q/0Us","moment":"WWz+tO"}],"travellers-list":[function(require,module,exports){
+module.exports=require('jo29eT');
+},{}],"OqBcDj":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, Travellers, api, moment, uri;
 
@@ -34765,8 +34894,6 @@ module.exports = Travellers;
 
 },{"React":"2ftwoI","api":"NA3vNd","moment":"WWz+tO","uri":"Lamjpc"}],"travellers":[function(require,module,exports){
 module.exports=require('OqBcDj');
-},{}],"trips-category":[function(require,module,exports){
-module.exports=require('bh4M0j');
 },{}],"bh4M0j":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, TripsCategory, api;
@@ -34793,7 +34920,11 @@ TripsCategory = React.createClass({
 module.exports = TripsCategory;
 
 
-},{"React":"2ftwoI","api":"NA3vNd"}],"WCARnx":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd"}],"trips-category":[function(require,module,exports){
+module.exports=require('bh4M0j');
+},{}],"trips-filter":[function(require,module,exports){
+module.exports=require('WCARnx');
+},{}],"WCARnx":[function(require,module,exports){
 /** @jsx React.DOM */;
 var CheckGroup, Checkbox, DateInput, React, Select, Slider, TripsFilter, api;
 
@@ -34817,29 +34948,73 @@ TripsFilter = React.createClass({
       groups: [
         {
           text: "3–10 человек",
-          value: "3-10"
+          value: "3,10"
         }, {
           text: "10–30 человек",
-          value: "10-30"
+          value: "10,30"
         }, {
           text: "> 30",
-          value: "30"
+          value: "30,9999"
         }
       ]
     };
   },
+  getInitialState: function() {
+    return {
+      filters: {},
+      countries: [
+        {
+          text: "Англия",
+          value: "England"
+        }, {
+          text: "Бельгия",
+          value: "France"
+        }
+      ]
+    };
+  },
+  handleFilterChange: function(filter, value) {
+    var filters;
+    if (typeof value === "object") {
+      value = value.toString();
+    }
+    filters = this.state.filters;
+    filters[filter] = value;
+    this.setState({
+      filters: filters
+    });
+    if (this.props.onChange) {
+      return this.props.onChange(filters);
+    }
+  },
   render: function() {
     return (
-      React.DOM.div( {className:"trips-filter"}, 
+      React.DOM.div( {className:"trips-filter", id:"promo-filters"}, 
         React.DOM.div( {className:"title"}, "Путешествие"),
         React.DOM.div( {className:"trips-filter-container"}, 
           React.DOM.div( {className:"trips-filter-container-column"}, 
-            React.DOM.div(null, DateInput(null)),
+            React.DOM.div(null, DateInput( {onChange:this.handleFilterChange.bind(this, 'start_date__gt')})),
             React.DOM.div( {className:"trips-filter-or-separator"}, "или..."),
-            React.DOM.div(null, Select( {className:"selectize-type--button"}))
+            React.DOM.div(null, 
+              Select(
+                {placeholder:"Куда",
+                className:"selectize-type--button",
+                options:this.state.countries,
+                multiple:false,
+                onChange:this.handleFilterChange.bind(this, 'country')}
+              )
+            )
           ),
           React.DOM.div( {className:"trips-filter-container-column"}, 
-            React.DOM.div(null, Slider( {label:"СТОИМОСТЬ", min:"100 $", max:"4000 $"})),
+            React.DOM.div(null, 
+              Slider(
+                {label:"СТОИМОСТЬ",
+                min:"100",
+                max:"4000",
+                unit:"$",
+                onChange:this.handleFilterChange.bind(this, 'price__range')}
+              )
+            ),
             React.DOM.div( {className:"trips-filter-flight"}, 
               Checkbox( {checked:"true",  label:"С перелетом из " })
             )
@@ -34847,7 +35022,9 @@ TripsFilter = React.createClass({
           React.DOM.div( {className:"trips-filter-container-column"}, 
             React.DOM.div( {className:"trips-filter-groups-title"}, "ГРУППЫ"),
             React.DOM.div( {className:"trips-filter-groups"}, 
-              CheckGroup( {options:this.props.groups})
+              CheckGroup(
+                {options:this.props.groups,
+                onChange:this.handleFilterChange.bind(this, 'people_count__range')})
             )
           )
         )
@@ -34859,11 +35036,7 @@ TripsFilter = React.createClass({
 module.exports = TripsFilter;
 
 
-},{"React":"2ftwoI","api":"NA3vNd","check-group":"EUQuU7","checkbox":"ZyMaE4","date-input":"FVDHTO","select":"ADMAJT","slider":"oyMku8"}],"trips-filter":[function(require,module,exports){
-module.exports=require('WCARnx');
-},{}],"trips-traveller-filter":[function(require,module,exports){
-module.exports=require('n8rQ89');
-},{}],"n8rQ89":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","check-group":"EUQuU7","checkbox":"ZyMaE4","date-input":"FVDHTO","select":"ADMAJT","slider":"oyMku8"}],"n8rQ89":[function(require,module,exports){
 /** @jsx React.DOM */;
 var React, Select, Slider, TripsTravellerFilter, api;
 
@@ -34899,7 +35072,9 @@ TripsTravellerFilter = React.createClass({
 module.exports = TripsTravellerFilter;
 
 
-},{"React":"2ftwoI","api":"NA3vNd","select":"ADMAJT","slider":"oyMku8"}],"Ti+fB8":[function(require,module,exports){
+},{"React":"2ftwoI","api":"NA3vNd","select":"ADMAJT","slider":"oyMku8"}],"trips-traveller-filter":[function(require,module,exports){
+module.exports=require('n8rQ89');
+},{}],"Ti+fB8":[function(require,module,exports){
 /** @jsx React.DOM */;
 var Help, React, TravellersList, Trips, TripsCategory, TripsFilter, TripsTravellerFilter, api, moment;
 
@@ -34979,14 +35154,35 @@ Trips = React.createClass({
     };
     return types[type];
   },
+  onFilterChinge: function(filters) {
+    var _this = this;
+    return api.get("trip", filters, function(data) {
+      return _this.setState({
+        loaded: true,
+        trips: data.objects,
+        meta: data.meta
+      });
+    });
+  },
   renderTrips: function() {
     var _this = this;
     return this.state.trips.map(function(trip) {
-      var renderTags, renderTripInfo;
+      var advised, classes, renderTags, renderTripInfo;
       renderTags = _this.renderTags;
       renderTripInfo = _this.renderTripInfo;
+      classes = ["trips-item"];
+      advised = null;
+      if (trip.advised || trip.id === 17) {
+        classes.push("trips-item-advised");
+        advised = (
+          React.DOM.div( {className:"trips-item-advised-title"}, 
+            " рекомендуем "  
+          )
+        );
+      }
       return (
-        React.DOM.div( {className:"trips-item"}, 
+        React.DOM.div( {className:classes.join(" ")}, 
+          advised,
           React.DOM.div( {className:"trips-item-title"}, 
             React.DOM.a( {href:"#"}, trip.title),
             React.DOM.span( {className:"trips-item-title-star"})
@@ -35096,7 +35292,7 @@ Trips = React.createClass({
   render: function() {
     return (
       React.DOM.div(null, 
-        TripsFilter(null),
+        TripsFilter( {onChange:this.onFilterChinge}),
         TripsCategory(null),
         TripsTravellerFilter(null),
         React.DOM.div( {className:"trips"}, 
@@ -35132,6 +35328,8 @@ module.exports = MyComponent;
 
 },{"React":"2ftwoI"}],"test":[function(require,module,exports){
 module.exports=require('ykJyJj');
+},{}],"check-group-data-wrapper":[function(require,module,exports){
+module.exports=require('DYrn4O');
 },{}],"DYrn4O":[function(require,module,exports){
 /** @jsx React.DOM */;
 var CheckGroup, CheckGroupDataWrapper, React;
@@ -35170,8 +35368,8 @@ CheckGroupDataWrapper = React.createClass({
 module.exports = CheckGroupDataWrapper;
 
 
-},{"React":"2ftwoI","check-group":"EUQuU7"}],"check-group-data-wrapper":[function(require,module,exports){
-module.exports=require('DYrn4O');
+},{"React":"2ftwoI","check-group":"EUQuU7"}],"radio-group-data-wrapper":[function(require,module,exports){
+module.exports=require('qnOzge');
 },{}],"qnOzge":[function(require,module,exports){
 /** @jsx React.DOM */;
 var RadioGroup, RadioGroupDataWrapper, React;
@@ -35205,9 +35403,7 @@ RadioGroupDataWrapper = React.createClass({
 module.exports = RadioGroupDataWrapper;
 
 
-},{"React":"2ftwoI","radio-group":"BBj+WV"}],"radio-group-data-wrapper":[function(require,module,exports){
-module.exports=require('qnOzge');
-},{}],"select-data-wrapper":[function(require,module,exports){
+},{"React":"2ftwoI","radio-group":"BBj+WV"}],"select-data-wrapper":[function(require,module,exports){
 module.exports=require('cRi17O');
 },{}],"cRi17O":[function(require,module,exports){
 /** @jsx React.DOM */;
@@ -35299,8 +35495,6 @@ module.exports.post = function(type, data, callback) {
 
 },{"jquery":"5Q/0Us"}],"api":[function(require,module,exports){
 module.exports=require('NA3vNd');
-},{}],"utils":[function(require,module,exports){
-module.exports=require('tX7VuE');
 },{}],"tX7VuE":[function(require,module,exports){
 var $, React, camelize;
 
@@ -35361,4 +35555,6 @@ module.exports.isMSIE = function() {
 };
 
 
-},{"React":"2ftwoI","jquery":"5Q/0Us","moment":"WWz+tO","momentLang":"8y1JGA"}]},{},[])
+},{"React":"2ftwoI","jquery":"5Q/0Us","moment":"WWz+tO","momentLang":"8y1JGA"}],"utils":[function(require,module,exports){
+module.exports=require('tX7VuE');
+},{}]},{},[])

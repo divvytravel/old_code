@@ -1,4 +1,4 @@
-stormcrew
+sormcrew
 ==============================
 
 yacht journeys
@@ -59,7 +59,7 @@ Requirements: nodejs > 0.10, npm
 .. code-block:: bash
   npm install -g gulp
   npm install
-  gulp build --target ./../static
+  gulp build --target ../divvy/static/
 
   # load fixtures
   sudo python manage.py loaddata ./../public/src/fixtures/users.json
