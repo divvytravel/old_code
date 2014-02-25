@@ -8,24 +8,16 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-
-        # Renaming column for 'User.city' to match new field type.
-        db.rename_column(u'users_user', 'city', 'city_id')
-        # Changing field 'User.city'
-        db.alter_column(u'users_user', 'city_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['geo.City']))
-        # Adding index on 'User', fields ['city']
-        # db.create_index(u'users_user', ['city_id'])
+        # Adding field 'User.city'
+        db.add_column(u'users_user', 'city',
+                      self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='users', null=True, to=orm['geo.City']),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Removing index on 'User', fields ['city']
-        # db.delete_index(u'users_user', ['city_id'])
+        # Deleting field 'User.city'
+        db.delete_column(u'users_user', 'city_id')
 
-
-        # Renaming column for 'User.city' to match new field type.
-        db.rename_column(u'users_user', 'city_id', 'city')
-        # Changing field 'User.city'
-        db.alter_column(u'users_user', 'city', self.gf('django.db.models.fields.CharField')(max_length=20, null=True))
 
     models = {
         u'auth.group': {
