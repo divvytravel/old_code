@@ -3,15 +3,14 @@ __author__ = 'indieman'
 from django.conf.urls import url
 
 from tastypie.resources import ModelResource, Resource
-from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.utils import trailing_slash
-from tastypie import fields, http
+from tastypie import fields
 
 from provider.oauth2.models import AccessToken, Client, RefreshToken
 
 import social_auth
-# from social_auth.db.django_models import UserSocialAuth
 
+# from .geo_resource import CityResource
 from .base import BaseResourceMixin, AnonymousPostBaseResourceMixin
 
 try:
@@ -38,46 +37,11 @@ class dict2obj(object):
         return self.__dict__['d'][key]
 
 
-# class SocialResource(ModelResource, BaseResourceMixin):
-#     user = fields.ForeignKey('api.v1.user_resource.UserResource', attribute='user')
-#     access_token = fields.CharField(attribute='access_token', null=True, blank=True)
-#
-#     class Meta(BaseResourceMixin.Meta):
-#         queryset = UserSocialAuth.objects.all()
-#         resource_name = 'socialauth'
-#         fields = ['provider', 'uid', ]
-#         include_resource_uri = True
-#         include_absolute_uri = False
-#         allowed_methods = ['get', 'post', 'patch', 'delete']
-#
-#     def get_object_list(self, request):
-#         return super(SocialResource, self).get_object_list(request).filter(user=request.user)
-#
-#     def obj_create(self, bundle, request=None, **kwargs):
-#         try:
-#             social_auth_backend = social_auth.backends.get_backend(bundle.data['provider'], bundle.request, '')
-#
-#             user = social_auth_backend.do_auth(access_token=bundle.data['access_token'], user=bundle.request.user)
-#             bundle.obj = user.social_user
-#
-#         except:
-#             raise ImmediateHttpResponse(response=http.HttpBadRequest('Social account is already use.'))
-#         return bundle
-#
-#     def hydrate_user(self, bundle):
-#         bundle.data['user'] = {'pk': bundle.request.user.pk}
-#         return bundle
-#
-#     def dehydrate_access_token(self, bundle):
-#         return bundle.obj.extra_data['access_token']
-
-
 class UserResource(ModelResource, BaseResourceMixin):
-    # socials = fields.ToManyField(SocialResource, attribute="social_auth", null=True,
-    #                              blank=True, full=True,
-    #                              use_in=lambda bundle: hasattr(bundle.request, "user") and \
-    #                                                    bundle.request.user.is_authenticated() and \
-    #                                                    bundle.obj.id == bundle.request.user.id)
+
+    city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
+                             related_name='users',
+                             full=True, null=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = User.objects.all()

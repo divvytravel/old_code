@@ -1,9 +1,8 @@
-from api.v1.geo_resource import CityResource, CountryResource
-
 __author__ = 'indieman'
 
 from tastypie.api import Api
 
+from api.v1.geo_resource import CityResource, CountryResource
 from api.v1.trip_resource import TripResource, TagsResource
 from api.v1.user_resource import UserResource, RegistrationResource
 from api.v1.blog_resource import BlogCategoryResource, PostResource

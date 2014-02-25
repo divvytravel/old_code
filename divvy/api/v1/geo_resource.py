@@ -1,4 +1,3 @@
-
 __author__ = 'indieman'
 
 from tastypie import fields
@@ -14,6 +13,9 @@ from api.v1.trip_resource import TripResource
 
 class CityResource(ModelResource, BaseResourceMixin):
     trips = fields.OneToManyField(TripResource, attribute='trips')
+    # users = fields.OneToManyField('api.v1.user_resource.UserResource',
+    #                               attribute='users', related_name='city',
+    #                               full=True, null=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = City.objects.all()
