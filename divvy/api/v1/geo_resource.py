@@ -12,7 +12,8 @@ from api.v1.trip_resource import TripResource
 
 
 class CityResource(ModelResource, BaseResourceMixin):
-    trips = fields.OneToManyField(TripResource, attribute='trips')
+    trips = fields.OneToManyField(TripResource, attribute='trips',
+                                  full=False, null=True)
     # users = fields.OneToManyField('api.v1.user_resource.UserResource',
     #                               attribute='users', related_name='city',
     #                               full=True, null=True)

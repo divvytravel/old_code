@@ -2,6 +2,7 @@ __author__ = 'indieman'
 
 from django.conf.urls import url
 
+from tastypie.constants import ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource, Resource
 from tastypie.utils import trailing_slash
 from tastypie import fields
@@ -42,6 +43,9 @@ class UserResource(ModelResource, BaseResourceMixin):
     city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
                              related_name='users',
                              full=True, null=True)
+    trips = fields.ToManyField('api.v1.trip_resource.TripResource',
+                               attribute='approved_trips', related_name='people',
+                               full=False, null=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = User.objects.all()
@@ -50,6 +54,10 @@ class UserResource(ModelResource, BaseResourceMixin):
                   'birthday', 'first_name',
                   'gender', 'id', 'last_name',
                   'username', 'city', 'career']
+
+        filtering = {
+            'trips': ALL_WITH_RELATIONS,
+            }
 
     def dehydrate(self, bundle):
         bundle.data['age'] = bundle.obj.get_age()
