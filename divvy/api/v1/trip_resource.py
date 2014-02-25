@@ -5,7 +5,7 @@ from tastypie import fields
 
 from .base import BaseResourceMixin
 
-from trip.models import Trip, TripCategory, Tags, Images, TripPoint,\
+from trip.models import Trip, TripCategory, Tags, Images, TripPoint, \
     TripPointType
 from geo.models import Country, City
 
@@ -23,6 +23,10 @@ class TagsResource(ModelResource, BaseResourceMixin):
         queryset = Tags.objects.all()
         allowed_methods = ['get']
 
+        filtering = {
+            'main_page': ('exact', ),
+        }
+
 
 class TripCategoryResource(ModelResource, BaseResourceMixin):
     tag = fields.ToOneField(TagsResource, attribute='tag',
@@ -39,6 +43,7 @@ class TripPointTypeResource(ModelResource, BaseResourceMixin):
     category = fields.ToOneField(TripCategoryResource, attribute='category',
                                  related_name='point_types',
                                  full=True, null=True)
+
     class Meta(BaseResourceMixin.Meta):
         queryset = TripPointType.objects.all()
         allowed_methods = ['get']
@@ -47,13 +52,13 @@ class TripPointTypeResource(ModelResource, BaseResourceMixin):
 class TripResource(ModelResource, BaseResourceMixin):
     people = fields.ManyToManyField(UserResource, attribute='people', full=True, null=True)
     categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
-                                 related_name='trips', full=True, null=True)
+                                        related_name='trips', full=True, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
                                   related_name='trips', full=True, null=True)
     images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
     class Meta(BaseResourceMixin.Meta):
-        queryset = Trip.objects.all()
+        queryset = Trip.objects.prefetch_related('people').all()
         allowed_methods = ['get']
         filtering = {
             'price_type': ('exact', ),
@@ -75,7 +80,16 @@ class TripResource(ModelResource, BaseResourceMixin):
 
             orm_filters["city__in"] = [i.pk for i in cities]
 
+        # if "sex" in filters:
+
         return orm_filters
+
+    def apply_filters(self, request, applicable_filters):
+        qs = None
+        if not qs:
+            qs = super(TripResource, self).apply_filters(request, applicable_filters)
+
+        return qs
 
     def dehydrate(self, bundle):
         bundle.data['country'] = u'%s' % bundle.obj.city.country
@@ -91,6 +105,7 @@ class TripPointResource(ModelResource, BaseResourceMixin):
                                full=True, null=True)
     trip = fields.ToOneField(TripResource, attribute='trip',
                              related_name='points', full=True, null=True)
+
     class Meta(BaseResourceMixin.Meta):
         queryset = TripPoint.objects.all()
         allowed_methods = ['get']

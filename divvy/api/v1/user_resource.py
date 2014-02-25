@@ -87,6 +87,10 @@ class UserResource(ModelResource, BaseResourceMixin):
                   'gender', 'id', 'last_name',
                   'username', 'city', 'career']
 
+    def dehydrate(self, bundle):
+        bundle.data['age'] = bundle.obj.get_age()
+        return bundle
+
     def obj_create(self, bundle, request=None, **kwargs):
         if 'access_token' in bundle.data:
             # Connect with social account

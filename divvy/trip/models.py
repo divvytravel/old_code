@@ -38,6 +38,7 @@ class Images(models.Model):
 class Tags(models.Model):
     name = models.CharField(_(u"Тег"), max_length=20)
     slug = models.SlugField(u"Вид в url", unique=True)
+    main_page = models.BooleanField(default=False)
 
     def __unicode__(self):
         return u'%s' % self.name
@@ -118,6 +119,9 @@ class Trip(models.Model):
 
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
+
+    def get_sex(self):
+        pass
 
     def format_date(self, date):
         return format(date, "j E")
