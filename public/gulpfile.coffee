@@ -4,21 +4,20 @@ jade = require "gulp-jade"
 stylus = require "gulp-stylus"
 imagemin = require "gulp-imagemin"
 concat = require "gulp-concat"
-bower = require "gulp-bower"
 scripts = require "./gulp/scripts"
 
 
-target = gutil.env.target or "./../stormcrew/static"
+target = gutil.env.target or "./../divvy/static"
 
 gulp.task "views", ->
   gulp.src("./src/views/**/*.jade")
     .pipe(jade())
-    .pipe(gulp.dest("./../stormcrew/templates/views"))
+    .pipe(gulp.dest("./../divvy/templates/views"))
 
 gulp.task "ui-views", ->
   gulp.src("./src/views/**/*.jade")
     .pipe(jade())
-    .pipe(gulp.dest("./../stormcrew/static"))
+    .pipe(gulp.dest("./../divvy/static"))
 
 gulp.task "scripts", ->
   gulp.src("src/scripts/**/*.coffee", read: false )
@@ -42,9 +41,6 @@ gulp.task "imgs", ->
         .pipe(imagemin())
         .pipe(gulp.dest("#{target}/img"))
 
-gulp.task "bower", ->
-    bower().pipe gulp.dest "./node_modules"
-
 gulp.task "watch", ->
   gulp.run "scripts"
   gulp.run "imgs"
@@ -62,6 +58,5 @@ gulp.task "watch", ->
   gulp.watch "./src/styles/**/*.styl", ->
     gulp.run "styles"
 
-gulp.task "init", ["bower"]
 gulp.task "default", ["watch"]
-gulp.task "build", ["init", "views", "ui-views", "scripts", "styles", "imgs"]
+gulp.task "build", ["views", "ui-views", "scripts", "styles", "imgs"]

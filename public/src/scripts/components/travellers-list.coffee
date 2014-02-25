@@ -41,6 +41,8 @@ TravellersList = React.createClass
     => @setState expanded: expanded, traveller: null
 
   renderExpandButton: ->
+    return `(<div/>)` if @props.travellers.length < 4
+
     if @state.expanded
       `(
         <div className="travellers-list-prev" onClick={this.expand(false)}>

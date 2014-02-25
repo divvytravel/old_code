@@ -58,7 +58,7 @@ Requirements: nodejs > 0.10, npm
 
 .. code-block:: bash
   npm install -g gulp
-  npm install
+  npm install --unsafe-perm
   gulp build --target ../divvy/static/
 
   # load fixtures

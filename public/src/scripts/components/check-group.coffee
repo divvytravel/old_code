@@ -17,16 +17,20 @@ CheckGroup = React.createClass
       @props.onChange value if @props.onChange
 
   renderOptions: ->
-    @props.options.map (option) =>
+    options = @props.options
+    options.map (option, index) =>
+
       classNames = ["button", "button--type-action"]
       classNames.push "active" if option.value is @state.value
 
       handler = @createChangeHandler option.value
 
       `(
-        <a className={classNames.join(" ")} onClick={handler}>
-          {option.text}
-        </a>
+        <span className="check-group-item">
+          <a className={classNames.join(" ")} onClick={handler}>
+            {option.text}
+          </a>
+        </span>
       )`
 
   render: ->

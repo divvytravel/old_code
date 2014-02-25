@@ -101,7 +101,6 @@ Trips = React.createClass
       )`
 
   renderTripInfo: (trip) ->
-    console.log trip
     `(
       <div className="trips-item-info">
         <div className="trips-item-info-title">

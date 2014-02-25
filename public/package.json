@@ -1,7 +1,11 @@
 {
   "name": "travel",
   "version": "0.0.1",
+  "scripts" : {
+    "postinstall": "./node_modules/.bin/bower --allow-root install"
+  },
   "dependencies": {
+    "bower": "~1.2",
     "grunt-contrib-coffee": "~0.8",
     "grunt-regarde": "~0.1",
     "grunt-contrib-connect": "~0.6",
@@ -20,7 +24,6 @@
     "gulp-concat": "~2.1",
     "gulp-connect": "~0.1",
     "gulp-imagemin": "~0.1",
-    "gulp-bower": "~0.0.2",
     "reactify": "~0.4",
     "coffeeify": "~0.5",
     "through2": "~0.4.0",
@@ -118,6 +121,13 @@
     },
     "iCheck": {
       "path": "./../node_modules/iCheck/icheck.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery"
+      }
+    },
+    "placeholder": {
+      "path": "./../node_modules/jquery-placeholder/jquery.placeholder.js",
       "exports": null,
       "depends": {
         "jquery": "jQuery"

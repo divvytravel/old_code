@@ -11,6 +11,41 @@
   background-image: url("/static/img/arrow-down-thin.png");
 }
 
+.blog {
+  margin-top: 34px;
+  background: #fff;
+}
+.blog .blog-container {
+  width: 960px;
+  margin: 0px auto;
+  padding: 24px 0px 36px 0px;
+}
+.blog .blog-title {
+  font-size: 33px;
+  padding-bottom: 12px;
+}
+.blog .blog-post {
+  display: inline-block;
+  width: 290px;
+  margin-right: 30px;
+  vertical-align: top;
+}
+.blog .blog-post .blog-post-title {
+  font-size: 15px;
+  font-family: pragmatica-web;
+  text-decoration: underline;
+  line-height: 22px;
+}
+.blog .blog-post .blog-post-created {
+  margin: 7px 0px 18px 0px;
+  font-size: 11px;
+  color: rgba(0,0,0,0.7);
+}
+.blog .blog-post .blog-post-text {
+  font-size: 13px;
+  color: rgba(0,0,0,0.9);
+}
+
 .button {
   display: inline-block;
   width: 100%;
@@ -177,6 +212,7 @@
 }
 
 .check-group {
+  display: table;
   zoom: 1;
 }
 .check-group:before,
@@ -188,14 +224,18 @@
   clear: both;
 }
 .check-group .button {
-  float: left;
-  width: 50px;
-  height: 33px;
-  margin-right: 6px;
-  padding: 17px 2px 2px 2px;
+  display: table-cell;
+  width: 48px;
+  height: 52px;
+  padding: 2px 2px 2px 2px;
   font-size: 10px;
   line-height: 12px;
   text-align: center;
+  vertical-align: middle;
+}
+.check-group .check-group-item {
+  margin-right: 6px;
+  display: inline-block;
 }
 
 .checkbox {
@@ -551,6 +591,10 @@ a {
 }
 .selectize-input input {
   color: rgba(0,0,0,0.9);
+  font-size: 13px;
+}
+.selectize-input input::-webkit-input-placeholder {
+  color: #31b9da;
   font-size: 13px;
 }
 .selectize-input.focus {
@@ -2180,13 +2224,50 @@ repeat-x
 .trips-filter .trips-filter-container-column .trips-filter-groups .button {
   margin-right: 4px;
 }
+.trips-filter .trips-filter-container-column-color .ui-slider {
+  background: -webkit-linear-gradient(left, #24c9f2 0%, #f26161 42%);
+  background: -moz-linear-gradient(left, #24c9f2 0%, #f26161 42%);
+  background: -o-linear-gradient(left, #24c9f2 0%, #f26161 42%);
+  background: -ms-linear-gradient(left, #24c9f2 0%, #f26161 42%);
+  background: linear-gradient(to right, #24c9f2 0%, #f26161 42%);
+}
 .trips-filter-category {
   border-bottom: 1px solid #e5e5e5;
   padding: 12px 36px 12px 29px;
 }
+.trips-filter-category .trips-filter-category-all {
+  margin: 12px 0px 6px 0px;
+}
+.trips-filter-category .sub-category {
+  margin-top: 10px;
+  zoom: 1;
+}
+.trips-filter-category .sub-category:before,
+.trips-filter-category .sub-category:after {
+  content: "";
+  display: table;
+}
+.trips-filter-category .sub-category:after {
+  clear: both;
+}
+.trips-filter-category .sub-category ul {
+  float: left;
+  width: 490px;
+}
+.trips-filter-category .sub-category ul li {
+  list-style: none;
+  float: left;
+  width: 122px;
+}
+.trips-filter-category .sub-category ul li a {
+  margin-bottom: 1px;
+}
 .trips-traveller-filter {
   padding-top: 21px;
   padding-bottom: 21px;
+}
+.trips-traveller-filter .trips-traveller-filter-title {
+  color: #e53939;
 }
 
 .trips .trips-item {
@@ -2386,9 +2467,6 @@ body {
   border: 1px solid rgba(0,0,0,0.06);
 }
 
-.footer {
-  margin-top: 34px;
-}
 .footer .footer-links {
   height: 32px;
   padding-top: 18px;

@@ -25,13 +25,17 @@ TripsFilter = React.createClass
 
   getInitialState: ->
     filters: {},
-    countries: [{
-      text: "Англия",
-      value: "England"
-    },{
-      text: "Бельгия",
-      value: "France"
-    }]
+    countries: []
+
+  componentWillMount: ->
+    api.get "trip", {}, (data) =>
+      countries = []
+      for trip in data.objects
+        if countries.indexOf(trip.country) is -1
+          countries.push
+            text: trip.country 
+            value: trip.country
+      @setState countries: countries
 
   handleFilterChange: (filter, value) ->
     value = value.toString() if typeof(value) is "object"
@@ -65,6 +69,7 @@ TripsFilter = React.createClass
                 min="100"
                 max="4000"
                 unit="$"
+                values={[100, 3000]}
                 onChange={this.handleFilterChange.bind(this, 'price__range')}
               />
             </div>

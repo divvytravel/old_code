@@ -11,16 +11,32 @@ TripsTravellerFilter = React.createClass
   render: ->
     `(
       <div className="trips-filter trips-traveller-filter">
-        <div className="title">Компания и попутчики</div>
+        <div className="title">
+          Компания и 
+          <span className="trips-traveller-filter-title"> попутчики</span>
+        </div>
         <div className="trips-filter-container">
           <div className="trips-filter-container-column">
             <div><Select className="selectize-type--button"/></div>
           </div>
           <div className="trips-filter-container-column">
-            <div><Slider label="ВОЗРАСТ" min="20" max="60"/></div>
+            <div>
+              <Slider
+                label="ВОЗРАСТ"
+                  values={[20,50]}
+                  min="20"
+                  max="60"/>
+              </div>
           </div>
-          <div className="trips-filter-container-column">
-            <div><Slider label="ПОЛ" min="0" max="0"/></div>
+          <div className="trips-filter-container-column trips-filter-container-column-color">
+            <div>
+              <Slider
+                value={50}
+                int={false}
+                label="ПОЛ"
+                min="M"
+                max="Ж"/>
+            </div>
           </div>
         </div>
       </div>

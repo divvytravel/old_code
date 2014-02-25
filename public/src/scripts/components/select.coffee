@@ -3,6 +3,7 @@
 
 React = require "React"
 $ = require "jquery"
+require "placeholder"
 require "selectize"
 
 Select = React.createClass
@@ -26,6 +27,17 @@ Select = React.createClass
     $selectize.on "change", (event) =>
       @setState value: event.target.value
       @props.onChange event.target.value if @props.onChange
+
+    $selectize.find("input").placeholder()
+
+  componentDidUpdate: (props, state, domNode) ->
+    selectize = $(domNode)[0].selectize
+
+    unless @props.options and @props.options.length is props.options.length
+      selectize.clearOptions()
+      if @props.options
+        selectize.addOption @props.options
+      selectize.refreshOptions false
 
   renderOption: ->
     option: (item, escape) ->

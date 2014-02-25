@@ -10,23 +10,29 @@ Slider = React.createClass
     label: ""
     min: 0
     max: 100
-    minValue: 0
-    maxValue: 0
     unit: null
+    values: []
+    value: null
+    int: true
 
   getInitialState: ->
-    values: []
+    values: @props.values
+    value: @props.value
 
   componentDidMount: ->
-    @slider = $(this.refs.slider.getDOMNode()).slider
-      range: true
-      min: parseInt @props.min
-      max: parseInt @props.max
-      values: [@props.minValue, @props.maxValue]
+    options =
+      range: if @state.value then false else true
       change: ( event, ui ) =>
         return unless @props.onChange
         @setState values: ui.values
         @props.onChange ui.values
+
+    options.value = @state.value if @state.value
+    options.values = @state.values if @state.values.length > 0
+    options.min = parseInt @props.min if @props.int
+    options.max = parseInt @props.max if @props.int
+
+    @slider = $(this.refs.slider.getDOMNode()).slider options
     
   render: ->
     `(
