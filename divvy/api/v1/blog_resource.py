@@ -25,3 +25,12 @@ class PostResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = Post.objects.all()
         allowed_methods = ['get']
+
+        filtering = {
+            'created': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
+            'tags': ('exact', 'range')
+        }
+
+        ordering = [
+            'created',
+        ]
