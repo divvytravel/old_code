@@ -14,16 +14,18 @@ FacebookLogin = React.createClass
   getInitialState: ->
     status: null
     key: null
+    name: null
+    image: null
 
   componentWillMount: ->
     $.ajaxSetup cache: true
     $.getScript "//connect.facebook.net/en_UK/all.js", =>
-      FB.init appId: config.FB_APP_ID, status: false
+      FB.init appId: config.FB_APP_ID, status: true
       FB.Event.subscribe "auth.authResponseChange", @register
 
   login: ->
     FB.getLoginStatus (response) =>
-      FB.login() if response.status is "not_authorized"
+      FB.login() if response.status is "not_authorized" or response.status is "unknown"
 
   register: (response) ->
     data = JSON.stringify
@@ -31,12 +33,26 @@ FacebookLogin = React.createClass
       provider: "facebook"
     api.post "registration", data, (response) =>
       @setState key: response.oauth_consumer_key
+      FB.api "/me", (user) =>
+        @setState
+          name: user.name
+          image: "http://graph.facebook.com/#{user.id}/picture"
 
-  render: ->
+  renderAuthButton: ->
     `(
       <a className={this.props.typeWhite ? "facebook-button facebook-button-white": "facebook-button"} onClick={this.login}>
         <span className="facebook-button-logo"></span>
         <span>Войти</span>
+      </a>
+    )`
+
+  render: ->
+    return @renderAuthButton() unless @state.name
+
+    `(
+      <a className="facebook-button facebook-button-white facebook-button-white-login">
+        <img src={this.state.image} className="facebook-user-icon"/>
+        <span className="facebook-user-name">{this.state.name}</span>
       </a>
     )`
 

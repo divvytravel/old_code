@@ -1,12 +1,15 @@
+args   = require("optimist").argv
 gulp = require "gulp"
 gutil = require "gulp-util"
+gulpif = require "gulp-if"
 jade = require "gulp-jade"
 stylus = require "gulp-stylus"
 imagemin = require "gulp-imagemin"
+uglify = require "gulp-uglify"
 concat = require "gulp-concat"
 scripts = require "./gulp/scripts"
 
-
+isProduction = args.type is "production"
 target = gutil.env.target or "./../divvy/static"
 
 gulp.task "views", ->
@@ -22,6 +25,7 @@ gulp.task "ui-views", ->
 gulp.task "scripts", ->
   gulp.src("src/scripts/**/*.coffee", read: false )
     .pipe(scripts())
+    .pipe(gulpif(isProduction, uglify outSourceMap: true))
     .pipe(gulp.dest("#{target}/js"))
 
 gulp.task "styles", ->
