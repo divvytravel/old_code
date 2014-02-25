@@ -102,7 +102,7 @@ class Country(models.Model):
 class City(models.Model):
     name = models.CharField(u"Название", max_length=100, db_index=True)
     name_en = models.CharField(u"Название (англ.)", max_length=100, unique=True)
-    country = models.ForeignKey(Country, verbose_name=u'Страна')
+    country = models.ForeignKey(Country, verbose_name=u'Страна', related_name='cities')
     iata = models.CharField(u"IATA код", max_length=3, blank=True,
         help_text=u"Если пусто, при сохранении будет попытка поиска IATA кода в базе. Если заполнено, то будет сохранено введенное значение")
 
