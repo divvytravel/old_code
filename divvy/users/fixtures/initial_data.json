@@ -1,0 +1,122 @@
+[
+    {
+    "model": "users.user",
+    "pk": 1,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/1.png",
+      "birthday": "1989-07-04",
+      "first_name": "admin",
+      "gender": "male",
+      "last_name": "admin",
+      "username": "admin"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 2,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/1.png",
+      "birthday": "1989-07-04",
+      "first_name": "Виктор",
+      "gender": "male",
+      "last_name": "Клевцов",
+      "username": "v-klevzov"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 3,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/2.png",
+      "birthday": "1989-07-04",
+      "first_name": "Евгения",
+      "gender": "female",
+      "last_name": "Милошевич",
+      "username": "miloshevich"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 4,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/3.png",
+      "birthday": "1986-07-04",
+      "first_name": "Константина",
+      "gender": "female",
+      "last_name": "Константинопольская",
+      "username": "const"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 5,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/4.png",
+      "birthday": "1990-07-04",
+      "first_name": "Жан",
+      "gender": "male",
+      "last_name": "Петров",
+      "username": "petrov"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 6,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/5.png",
+      "birthday": "1989-07-04",
+      "first_name": "Евгения",
+      "gender": "female",
+      "last_name": "Милошевич",
+      "username": "mmiloshevich"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 7,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/6.png",
+      "birthday": "1986-07-04",
+      "first_name": "Константина",
+      "gender": "female",
+      "last_name": "Константинопольская",
+      "username": "сconst"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 8,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/4.png",
+      "birthday": "1990-07-04",
+      "first_name": "Жан",
+      "gender": "male",
+      "last_name": "Петров",
+      "username": "jpetrov"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 9,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/1.png",
+      "birthday": "1986-07-04",
+      "first_name": "Константина",
+      "gender": "female",
+      "last_name": "Константинопольская",
+      "username": "с-const"
+    }
+  },
+  {
+    "model": "users.user",
+    "pk": 10,
+    "fields": {
+      "avatar_url": "/static/img/promo/users/2.png",
+      "birthday": "1990-07-04",
+      "first_name": "Жан",
+      "gender": "male",
+      "last_name": "Петров",
+      "username": "j-petrov"
+    }
+  }
+]
