@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from os.path import join
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
@@ -152,9 +153,9 @@ DJANGO_APPS = (
     'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
-    'south',  # Database migration helpers:
-    'crispy_forms',  # Form layouts
-    'social_auth',  # registration
+    'south', # Database migration helpers:
+    'crispy_forms', # Form layouts
+    'social_auth', # registration
     'sorl.thumbnail', # image thumbnails
     'postman_custom',
     'postman',
@@ -165,7 +166,7 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'users',  # custom users app
+    'users', # custom users app
     'trip',
     'utils',
     'geo',
@@ -358,9 +359,9 @@ TEMPLATE_DIRS = (
 
 if DEBUG:
     TEMPLATE_LOADERS = (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )
 else:
     TEMPLATE_LOADERS = (
         ('django.template.loaders.cached.Loader', (
@@ -398,27 +399,27 @@ LOGGING = {
         },
         'main_formatter': {
             'format': '%(levelname)s:%(name)s: %(message)s '
-                     '(%(asctime)s; %(filename)s:%(lineno)d)',
+                      '(%(asctime)s; %(filename)s:%(lineno)d)',
             'datefmt': "%Y-%m-%d %H:%M:%S",
         },
     },
     'handlers': {
-        'rotate_file':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
+        'rotate_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, '../log/main.log'),
-            'when' : 'midnight',
-            'interval' :    1,  # day
-            'backupCount' : 7,
+            'when': 'midnight',
+            'interval': 1, # day
+            'backupCount': 7,
             'formatter': 'main_formatter',
         },
-        'db_rotate_file':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
+        'db_rotate_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, '../log/db.log'),
-            'when' : 'midnight',
-            'interval' :    1,  # day
-            'backupCount' : 7,
+            'when': 'midnight',
+            'interval': 1, # day
+            'backupCount': 7,
             'formatter': 'main_formatter',
         },
         'console': {
@@ -432,13 +433,13 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'api_aviasales_file':{
-            'level' : 'DEBUG',
-            'class' : 'logging.handlers.TimedRotatingFileHandler',
+        'api_aviasales_file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, '../log/api_aviasales.log'),
-            'when' : 'midnight',
-            'interval' :    1,  # day
-            'backupCount' : 7,
+            'when': 'midnight',
+            'interval': 1, # day
+            'backupCount': 7,
             'formatter': 'main_formatter',
         },
     },
@@ -486,8 +487,8 @@ if SERVER:
     from server_settings import *
 
     RAVEN_CONFIG = {
-        'dsn': 'http://352e7c1857cf4f11b7dbe71dd4891d93:a3abffeff7f74e4684822dbe241738b1@sentry/2',
-        }
+        'dsn': 'http://352e7c1857cf4f11b7dbe71dd4891d93:a3abffeff7f74e4684822dbe241738b1@188.226.156.5/2',
+    }
 
     INSTALLED_APPS = INSTALLED_APPS + (
         'raven.contrib.django.raven_compat',
