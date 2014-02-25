@@ -9,6 +9,7 @@ TripsFilter = require "trips-filter"
 TripsCategory = require "trips-category"
 TripsTravellerFilter = require "trips-traveller-filter"
 TravellersList = require "travellers-list"
+Spinner = require "spinner"
 Help = require "help"
 
 Trips = React.createClass
@@ -50,6 +51,7 @@ Trips = React.createClass
     types[type]
 
   onFilterChinge: (filters) ->
+    @setState loaded: false
     api.get "trip", filters, (data) =>
       @setState
         loaded: true
@@ -173,16 +175,23 @@ Trips = React.createClass
       </div>
     )` if @state.meta.next
 
+  renderTripsBlock: ->
+    return `(<Spinner/>)` unless @state.loaded
+    
+    `(
+      <div className="trips">
+        {this.renderTrips()}
+        {this.renderLoadNextButton()}
+      </div>
+    )`
+
   render: ->
     `(
       <div>
         <TripsFilter onChange={this.onFilterChinge}/>
         <TripsCategory/>
         <TripsTravellerFilter/>
-        <div className="trips">
-          {this.renderTrips()}
-          {this.renderLoadNextButton()}
-        </div>
+        {this.renderTripsBlock()}
       </div>
     )`
 

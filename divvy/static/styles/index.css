@@ -341,6 +341,23 @@
 .facebook-button.facebook-button-white:hover .facebook-button-logo {
   background-image: url("/static/img/facebook-logo-color-hover.png");
 }
+.facebook-button.facebook-button-white-login {
+  -webkit-box-shadow: 0px 1px 1px rgba(29,75,87,0.3);
+  box-shadow: 0px 1px 1px rgba(29,75,87,0.3);
+}
+.facebook-button .facebook-user-icon {
+  width: 21px;
+  height: 21px;
+  margin-right: 6px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
+  position: relative;
+  top: 5px;
+}
+.facebook-button .facebook-user-name {
+  color: #31b9da;
+  max-width: 120px;
+}
 
 .help {
   position: relative;
@@ -493,6 +510,9 @@ a {
   font-size: 13px;
   color: #31b9da;
   text-decoration: none;
+}
+a:hover {
+  color: #2a8ab0;
 }
 .link--style-white {
   color: #fff;
@@ -1967,6 +1987,28 @@ repeat-x
 /*{cornerRadiusShadow}*/
 }
 
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+.spinner {
+  display: block;
+  padding: 5px;
+  text-align: center;
+}
+.spinner svg {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  fill: #31b9da;
+  -webkit-animation: spinner 2.2s infinite linear;
+}
+
 .tag {
   margin-right: 3px;
   padding: 4px 5px;
@@ -2588,6 +2630,9 @@ body {
 .promo .promo-content a {
   color: #008cae;
   font-weight: 200;
+}
+.promo .promo-content a:hover {
+  color: #2a8ab0;
 }
 .promo .promo-content .promo-content-title {
   margin: 30px 0px 10px 0px;
