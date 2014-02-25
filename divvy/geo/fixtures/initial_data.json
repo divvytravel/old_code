@@ -1,1 +1,1 @@
-Installed 0 object(s) from 0 fixture(s)
+[{"pk": 1, "model": "geo.country", "fields": {"name_en": "Russia", "name": "\u0420\u043e\u0441\u0441\u0438\u044f"}}, {"pk": 11, "model": "geo.country", "fields": {"name_en": "England", "name": "England"}}, {"pk": 1, "model": "geo.city", "fields": {"country": 1, "name_en": "Moscow", "iata": "", "name": "\u041c\u043e\u0441\u043a\u0432\u0430"}}, {"pk": 12, "model": "geo.city", "fields": {"country": 11, "name_en": "London", "iata": "", "name": "London"}}]
