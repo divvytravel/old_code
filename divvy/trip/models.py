@@ -110,6 +110,9 @@ class Trip(models.Model):
     image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
     images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
 
+    sex = models.FloatField(blank=True, null=True, default=None)
+    age = models.SmallIntegerField(blank=True, null=True, default=None)
+
     objects = TripManager()
 
     class Meta:
@@ -121,7 +124,16 @@ class Trip(models.Model):
         return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
 
     def get_sex(self):
-        pass
+        females = 0
+        people = self.people.all()
+        if people:
+            for p in people:
+                if 'female' == p.gender:
+                    females += 1
+
+            return float(females) / len(people)
+        else:
+            return None
 
     def format_date(self, date):
         return format(date, "j E")

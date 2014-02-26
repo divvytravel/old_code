@@ -66,7 +66,9 @@ class TripResource(ModelResource, BaseResourceMixin):
             'price': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'start_date': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'category': ('exact', ),
-            'tags': ('exact', 'range')
+            'tags': ('exact', 'range'),
+            'sex': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
+            'age': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
         }
 
     def build_filters(self, filters=None):
