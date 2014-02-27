@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'indieman'
 
 from tastypie.resources import ModelResource
@@ -99,6 +100,19 @@ class TripResource(ModelResource, BaseResourceMixin):
 
         bundle.data['city'] = u'%s' % bundle.obj.city.name
         bundle.data['city_id'] = bundle.obj.city_id
+
+        if bundle.obj.sex is None:
+            bundle.data['consist'] = None
+        elif 40 < bundle.obj.sex and bundle.data.sex < 60:
+            bundle.data['consist'] = u'поровну'
+        elif bundle.obj.sex > 70:
+            bundle.data['consist'] = u'преимущественно женщины'
+        elif bundle.obj.sex < 30:
+            bundle.data['consist'] = u'преимущественно мужчины'
+        elif bundle.obj.sex > 90:
+            bundle.data['consist'] = u'только женщины'
+        elif bundle.obj.sex < 10:
+            bundle.data['consist'] = u'только мужчины'
         return bundle
 
 
