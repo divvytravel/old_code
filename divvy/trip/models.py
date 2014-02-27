@@ -112,6 +112,7 @@ class Trip(models.Model):
 
     sex = models.FloatField(blank=True, null=True, default=None)
     age = models.SmallIntegerField(blank=True, null=True, default=None)
+    recommended = models.BooleanField(default=False)
 
     objects = TripManager()
 
