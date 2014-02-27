@@ -11,6 +11,7 @@ from trip.models import Trip, TripCategory, Tags, Images, TripPoint, \
 from geo.models import Country, City
 
 from .user_resource import UserResource
+from paginator import TripPaginator
 
 
 class ImageResource(ModelResource, BaseResourceMixin):
@@ -71,6 +72,7 @@ class TripResource(ModelResource, BaseResourceMixin):
             'sex': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'age': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
         }
+        paginator_class = TripPaginator
 
     def build_filters(self, filters=None):
         if filters is None:
