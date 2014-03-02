@@ -71,6 +71,7 @@ class TripResource(ModelResource, BaseResourceMixin):
             'tags': ('exact', 'range'),
             'sex': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'age': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
+            'people': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
         }
         paginator_class = TripPaginator
 
