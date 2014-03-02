@@ -4,6 +4,9 @@
 React = require "React"
 moment = require "moment"
 api = require "api"
+uri = require "uri"
+
+require "scrollTo"
 
 TripsFilter = require "trips-filter"
 TripsCategory = require "trips-category"
@@ -13,20 +16,44 @@ Spinner = require "spinner"
 Help = require "help"
 
 Trips = React.createClass
+  getDefaultProps: ->
+    onTravellersChange: ->
+    active: null
+
   getInitialState: ->
     loaded: false
     trips: []
     meta: {}
+    tag: null
 
   componentWillMount: (domNode) ->
-    api.get "trip", limit: 3, (data) =>
+    api.get "trip", limit: 4, (data) =>
       @setState
         loaded: true
         trips: data.objects
         meta: data.meta
 
+  componentDidUpdate: (props, state, domNode) ->
+    if @state.trips and @state.trips isnt state.trips
+      travellers = @extractTravellers()
+      if @props.onTravellersChange
+        @props.onTravellersChange travellers
+
+    #if @props.active isnt props.active
+
+  extractTravellers: ->
+    ids = []
+    travellers = []
+    for trip in @state.trips
+      for traveller in trip.people
+        if ids.indexOf(traveller.id) is -1
+          travellers.push traveller
+          ids.push traveller.id
+    travellers
+
   load: ->
-    api.get "trip", limit: @state.meta.total_count, offset: @state.meta.limit, (data) =>
+    offset = new uri(@state.meta.next).getQueryParamValue('offset') 
+    api.get "trip", limit: 5, offset: offset, (data) =>
       @setState
         trips: @state.trips.concat data.objects
         meta: data.meta
@@ -50,13 +77,30 @@ Trips = React.createClass
     types = "noncom": "Некоммерческая", "com": "Коммерческая"
     types[type]
 
-  onFilterChinge: (filters) ->
+  onFilterChange: (filters) ->
     @setState loaded: false
     api.get "trip", filters, (data) =>
       @setState
         loaded: true
         trips: data.objects
         meta: data.meta
+
+  getTripByCount: (count) ->
+    trips = ["путешествие", "путешествия", "путешествий"]
+    cases = [2, 0, 1, 1, 1, 2]
+    if count % 100 > 4 and count % 100 < 20
+      return trips[2]
+    else
+      return trips[cases[if count % 10 < 5 then count % 10 else 5]]
+
+  createTagClickHandler: (tag) ->
+    (event) =>
+      event.preventDefault()
+      @setState tag: tag.name
+      $.scrollTo $(@refs.tags.getDOMNode()), duration: 600
+      setTimeout =>
+        @onFilterChange tag: tag.id
+      , 500
 
   renderTrips: ->
     @state.trips.map (trip) =>
@@ -66,7 +110,7 @@ Trips = React.createClass
       classes = ["trips-item"]
 
       advised = null
-      if trip.advised or trip.id == 17
+      if trip.recommended
         classes.push "trips-item-advised"
         advised = `(
           <div className="trips-item-advised-title">
@@ -82,7 +126,7 @@ Trips = React.createClass
             <span className="trips-item-title-star"></span>
           </div>
           <div className="trips-item-tour">
-            {[trip.country, trip.city].join(" → ")}
+            {trip.country}<i> → </i>{trip.city}
           </div>
           <div className="trips-item-tags">
             {renderTags(trip.tags)}
@@ -97,9 +141,10 @@ Trips = React.createClass
       )`
 
   renderTags: (tags) ->
+    clickHandler = this.createTagClickHandler
     tags.map (tag) ->
       return `(
-        <a href={"/" + tag.slug} className="tag">{tag.name}</a>
+        <a href={"/" + tag.slug} className="tag" onClick={clickHandler(tag)}>{tag.name}</a>
       )`
 
   renderTripInfo: (trip) ->
@@ -167,19 +212,40 @@ Trips = React.createClass
     )`
 
   renderLoadNextButton: ->
+    offset = new uri(@state.meta.next).getQueryParamValue('offset') 
+    if @state.meta.total_count - offset < 5
+      count = @state.meta.total_count - offset 
+    else
+      count = 5
+
     return `(
       <div className="trips-next">
         <a onClick={this.load} className="button button--color-blue">
-          Все {this.state.meta.total_count} путешествия
+          {["Показать еще", count, this.getTripByCount(count)].join(" ")}
         </a>
       </div>
     )` if @state.meta.next
 
+  renderNotFound: ->
+    `(
+      <div className="trips-not-found">
+        <span className="trips-not-found-icon"></span>
+        <br/>
+        <span>
+          Ничего не найдено :-(
+        </span>
+      </div>
+    )`
+
   renderTripsBlock: ->
     return `(<Spinner/>)` unless @state.loaded
-    
+    return this.renderNotFound() if @state.trips.length is 0
+
     `(
       <div className="trips">
+        <div className="trips-count">
+          {["Подходит", this.state.meta.total_count, this.getTripByCount(this.state.meta.total_count)].join(" ")}
+        </div>
         {this.renderTrips()}
         {this.renderLoadNextButton()}
       </div>
@@ -188,8 +254,8 @@ Trips = React.createClass
   render: ->
     `(
       <div>
-        <TripsFilter onChange={this.onFilterChinge}/>
-        <TripsCategory/>
+        <TripsFilter onChange={this.onFilterChange}/>
+        <TripsCategory onChange={this.onFilterChange} checked={this.state.tag} ref="tags"/>
         <TripsTravellerFilter/>
         {this.renderTripsBlock()}
       </div>

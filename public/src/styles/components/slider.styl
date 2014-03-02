@@ -1,7 +1,8 @@
 .slider-label
   margin-bottom 6px
   text-align center
-  font-size 10px
+  font-size 9px
+  letter-spacing 1px
   font-weight bold
 
 .slider-limits
@@ -14,16 +15,16 @@
     width 50%
     font-size 11px
     color rgba(0, 0, 0, 0.9)
-    left -12px
+    left -6px
 
     &:last-child
       text-align right
-      left 12px
+      left 6px
 
 .ui-slider
 	position relative
 	text-align left
-	box-shadow inset 1px 0px 3px rgba(0, 0, 0, 0.33)
+	box-shadow inset 0px 1px 3px rgba(0, 0, 0, 0.33)
 
 	&.ui-widget-content
 	  border 0px
@@ -42,16 +43,23 @@
     	background white
     	box-shadow 0px 1px 5px rgba(19, 106, 128, 0.7)
 
-.ui-slider .ui-slider-range {
-	position: absolute;
-	z-index: 1;
-	font-size: .7em;
-	display: block;
-	border: 0;
-	background-position: 0 0;
-	background: #31b9da;
+.ui-slider .ui-slider-range
+	position absolute
+	z-index 1
+	font-size .7em
+	display block
+	border 0
+	background-position 0 0
+	background #31b9da
 	box-shadow inset 1px 0px 3px rgba(0, 0, 0, 0.33)
-}
+
+.ui-slider-horizontal
+  .ui-slider-handle
+  	top -7px
+  	margin-left -9px
+
+  a:last-child
+    margin-left -9px
 
 /* For IE8 - See #6727 */
 .ui-slider.ui-state-disabled .ui-slider-handle,
@@ -61,10 +69,6 @@
 
 .ui-slider-horizontal {
 	height: 6px;
-}
-.ui-slider-horizontal .ui-slider-handle {
-	top: -7px;
-	margin-left: -.6em;
 }
 .ui-slider-horizontal .ui-slider-range {
 	top: 0;
@@ -76,8 +80,6 @@
 .ui-slider-horizontal .ui-slider-range-max {
 	right: 0;
 }
-
-
 
 
 /*!

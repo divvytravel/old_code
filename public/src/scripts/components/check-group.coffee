@@ -27,8 +27,10 @@ CheckGroup = React.createClass
 
       `(
         <span className="check-group-item">
-          <a className={classNames.join(" ")} onClick={handler}>
-            {option.text}
+          <a
+            className={classNames.join(" ")}
+            onClick={handler}
+            dangerouslySetInnerHTML={{__html: option.text}}>
           </a>
         </span>
       )`

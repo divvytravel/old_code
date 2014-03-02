@@ -6,37 +6,43 @@ api = require "api"
 $ = require "jquery"
 
 TripsCategory = React.createClass
+  getDefaultProps: ->
+    checked: null
+
   getInitialState: ->
     showAll: false
     loaded: false
-    checked: []
+    checked: null
     tags: []
     meta: {}
 
   componentWillMount: ->
-    api.get "tags", {}, (data) =>
+    api.get "tags", main_page: true, (data) =>
       @setState
         loaded: true
         tags: data.objects
         meta: data.meta
 
+  componentDidUpdate: (props) ->
+    if @props.checked isnt props.checked
+      @setState checked: @props.checked
+
   showAllHandler: ->
     @setState showAll: not @state.showAll
 
+  getTagIdByName: (name) ->
+    for tag in @state.tags
+      return tag.id if tag.name is name
+
   createCheckTagHandler: (tag) ->
     =>
-      checked = @state.checked
-      index = checked.indexOf tag
-      if index is -1
-        checked.push tag
-      else
-        checked.splice index, index + 1
-
-      @setState checked: checked
+      @setState checked: tag
+      id = @getTagIdByName tag
+      @props.onChange "tags": id if @props.onChange and id
 
   renderTag: (tag) ->
     classes = ["button--type-category"]
-    classes.push "active" if @state.checked.indexOf(tag.name) isnt -1
+    classes.push "active" if @state.checked is tag.name
 
     `(
       <a className={classes.join(" ")} onClick={this.createCheckTagHandler(tag.name)}>{tag.name}</a>
@@ -44,7 +50,7 @@ TripsCategory = React.createClass
 
   renderSubTag: (tag) ->
     classes = ["button--type-category", "button--type-subcategory"]
-    classes.push "active" if @state.checked.indexOf(tag.name) isnt -1
+    classes.push "active" if @state.checked is tag.name
 
     `(
       <a className={classes.join(" ")} onClick={this.createCheckTagHandler(tag.name)}>{tag.name}</a>
