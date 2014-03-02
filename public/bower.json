@@ -2,6 +2,7 @@
   "name": "divvy.travel",
   "dependencies": {
     "iCheck": "1.0.1",
+    "jquery.scrollTo": "1.4.11",
     "jquery-placeholder": "git://github.com/matoilic/jquery.placeholder.git"
   }
 }

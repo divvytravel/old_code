@@ -34,7 +34,19 @@ TravellersList = React.createClass
           top: offset.top
           left: offset.left
 
+      $("body").on "click", @closeOnBody
+
+  closeOnBody: (event) ->
+    details = $ @refs.details.getDOMNode()
+    target = $ event.target
+    
+    return if details.has(target).length > 0
+    return if details[0] is target[0]
+
+    @closeDetails()
+
   closeDetails: ->
+    $("body").off "click", @closeOnBody
     @setState traveller: null
 
   expand: (expanded) ->
@@ -87,7 +99,7 @@ TravellersList = React.createClass
     """
 
     `(
-      <div className={classes} style={styles}>
+      <div className={classes} style={styles} ref="details">
         <div className="travellers-list-item-details-wrap">
           <div className="travellers-list-item-details-wrap-close" onClick={this.closeDetails}>
             <img src="/static/img/x-small-blue.png"/>

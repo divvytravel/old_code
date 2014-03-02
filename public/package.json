@@ -135,6 +135,13 @@
       "depends": {
         "jquery": "jQuery"
       }
+    },
+    "scrollTo": {
+      "path": "./../node_modules/jquery.scrollTo/jquery.scrollTo.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery"
+      }
     }
   }
 }

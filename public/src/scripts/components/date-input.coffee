@@ -7,6 +7,78 @@ $ = require "jquery"
 require "jquery.ui.datepicker"
 require "moment"
 
+initDatepickerLang = ->
+  if not window.datepicker_i18n or window.datepicker_i18n isnt "en"
+    $.datepicker.setDefaults
+      closeText: "Закрыть"
+      prevText: "&#x3c;"
+      nextText: "&#x3e;"
+      currentText: "Сегодня"
+      monthNames: [
+        "Январь"
+        "Февраль"
+        "Март"
+        "Апрель"
+        "Май"
+        "Июнь"
+        "Июль"
+        "Август"
+        "Сентябрь"
+        "Октябрь"
+        "Ноябрь"
+        "Декабрь"
+      ]
+      monthNamesShort: [
+        "Янв"
+        "Фев"
+        "Мар"
+        "Апр"
+        "Май"
+        "Июн"
+        "Июл"
+        "Авг"
+        "Сен"
+        "Окт"
+        "Ноя"
+        "Дек"
+      ]
+      dayNames: [
+        "воскресенье"
+        "понедельник"
+        "вторник"
+        "среда"
+        "четверг"
+        "пятница"
+        "суббота"
+      ]
+      dayNamesShort: [
+        "вск"
+        "пнд"
+        "втр"
+        "срд"
+        "чтв"
+        "птн"
+        "сбт"
+      ]
+      dayNamesMin: [
+        "Вс"
+        "Пн"
+        "Вт"
+        "Ср"
+        "Чт"
+        "Пт"
+        "Сб"
+      ]
+      weekHeader: "Не"
+      dateFormat: "dd.mm.yy"
+      firstDay: 1
+      isRTL: false
+      showMonthAfterYear: false
+      yearSuffix: "",
+      #changeYear: true
+
+setTimeout initDatepickerLang, 80
+
 DateInput = React.createClass
   getInitialState: ->
     value: null

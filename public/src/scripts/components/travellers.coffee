@@ -6,37 +6,43 @@ moment = require "moment"
 api = require "api"
 uri = require "uri"
 
-Travellers = React.createClass
-  getInitialState: ->
-    loaded: false
+TravellersNextButton = React.createClass
+  getDefaultProps: ->
+    count: null
+
+  handleGetNext: ->
+    @props.onClick() if @props.onClick
+    
+  render: ->
+    `(
+      <div className="travellers-next">
+        <a onClick={this.handleGetNext} className="button button--color-blue">
+            Ещё {this.props.count} путешественников
+        </a>
+      </div>
+    )`
+
+TravellersList = React.createClass
+  getDefaultProps: ->
     travellers: []
-    meta: {}
+
+  getInitialState: ->
     active: null
 
-  componentWillMount: (domNode) ->
-    api.get "user", limit: 6, (data) =>
-      @setState
-        loaded: true
-        travellers: data.objects
-        meta: data.meta
-
-  load: ->
-    offset = new uri(@state.meta.next).getQueryParamValue('offset') 
-    api.get "user", limit: 10, offset: offset, (data) =>
-      @setState
-        travellers: @state.travellers.concat data.objects
-        meta: data.meta
-
   createActiveHandler: (traveller) ->
-    => @setState active: traveller.id
+    =>
+      @setState active: traveller.id
+      @props.onActiveChange traveller.id if @props.onActiveChange
 
   renderTravellers: ->
     createActiveHandler = @createActiveHandler
     active = @state.active
 
-    @state.travellers.map (traveller) ->
+    @props.travellers.map (traveller) ->
       return `(
-        <div className={traveller.id === active ? "travellers-item travellers-item-active" : "travellers-item"} onClick={createActiveHandler(traveller)}>
+        <div
+          className={traveller.id === active ? "travellers-item travellers-item-active" : "travellers-item"}
+          onClick={createActiveHandler(traveller)}>
           <div className="travellers-item-icon">
             <a href="javascript:void(0)">
               <img src={traveller.avatar_url}/>
@@ -54,23 +60,111 @@ Travellers = React.createClass
         </div>
       )`
 
-  renderLoadNextButton: ->
-    #next = @state.meta.total_count - (@state.meta.offset + @state.travellers.length)
-    return `(
-      <a onClick={this.load} className="button button--color-blue">
-        Ещё 10 путешественников
-      </a>
-    )` if @state.meta.next
+  render: ->
+    `(
+      <div>
+        {this.renderTravellers()}
+      </div>
+    )`
+
+RemoteTravellers = React.createClass
+  getDefaultProps: ->
+    onActiveChange: ->
+
+  getInitialState: ->
+    travellers: []
+    meta: {}
+
+  componentWillMount: (domNode) ->
+    api.get "user", limit: 6, (data) =>
+      @setState
+        loaded: true
+        travellers: data.objects
+        meta: data.meta
+
+  load: ->
+    offset = new uri(@state.meta.next).getQueryParamValue('offset') 
+    api.get "user", limit: 10, offset: offset, (data) =>
+      @setState
+        travellers: @state.travellers.concat data.objects
+        meta: data.meta
+
+  renderNextButton: ->
+    if @state.meta.next
+      offset = new uri(@state.meta.next).getQueryParamValue('offset') 
+      if @state.meta.total_count - offset < 10
+        count = @state.meta.total_count - offset 
+      else
+        count = 10
+      `(<TravellersNextButton onClick={this.load} count={count}/>)` 
+
+  render: ->
+    `(
+      <div>
+        <TravellersList travellers={this.state.travellers}  onActiveChange={this.props.onActiveChange}/>
+        {this.renderNextButton()}
+      </div>
+    )`
+
+LocalTravellers = React.createClass
+  getDefaultProps: ->
+    onActiveChange: ->
+    travellers: []
+
+  getInitialState: ->
+    travellers: []
+
+  componentWillMount: ->
+    @setState
+      travellers: @props.travellers.slice 0, 6
+
+  componentDidUpdate: (props, state, domNode) ->
+    if @props.travellers isnt props.travellers
+      @setState
+        travellers: @props.travellers.slice 0, 6
+
+  next: ->
+    count = @state.travellers.length
+    @setState
+      travellers: @props.travellers.slice count, cont + 10 
+
+  renderNextButton: ->
+    return if @props.travellers.length is @state.travellers.length
+    offset = @props.travellers.length - @state.travellers.length
+    `(<TravellersNextButton onClick={this.next} count={offset < 10 ? offset : 10}/>)` 
+
+  render: ->
+    `(
+      <div>
+        <TravellersList travellers={this.state.travellers} onActiveChange={this.props.onActiveChange}/>
+        {this.renderNextButton()}
+      </div>
+    )`
+
+Travellers = React.createClass
+  getDefaultProps: ->
+    travellers: null
+
+  getInitialState: ->
+    loaded: false
+    travellers: []
+    active: null
+
+  activeChangeHandler: (active) ->
+    @props.onActiveChange active if @props.onActiveChange
+
+  renderTravellers: ->
+    return unless @props.travellers
+
+    if @props.travellers.length is 0
+      `(<RemoteTravellers onActiveChange={this.activeChangeHandler}/>)`
+    else
+      `(<LocalTravellers travellers={this.props.travellers} onActiveChange={this.activeChangeHandler}/>)`
 
   render: ->
     `(
       <div className="travellers">
-        <div>
-          {this.renderTravellers()}
-        </div>
-        <div className="travellers-next">
-          {this.renderLoadNextButton()}
-        </div>
+        {this.renderTravellers()}
       </div>
     )`
 

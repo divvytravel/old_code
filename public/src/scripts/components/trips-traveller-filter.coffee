@@ -6,6 +6,7 @@ api = require "api"
 
 Select = require "select"
 Slider = require "slider"
+Highlight = require "highlight"
 
 TripsTravellerFilter = React.createClass
   render: ->
@@ -13,7 +14,7 @@ TripsTravellerFilter = React.createClass
       <div className="trips-filter trips-traveller-filter">
         <div className="title">
           Компания и 
-          <span className="trips-traveller-filter-title"> попутчики</span>
+          <Highlight className="link--style-red" color="#f2555d" target="promo-travellers"> попутчики</Highlight>
         </div>
         <div className="trips-filter-container">
           <div className="trips-filter-container-column">

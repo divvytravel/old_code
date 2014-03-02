@@ -13,13 +13,13 @@ Slider = require "slider"
 TripsFilter = React.createClass
   getDefaultProps: ->
     groups: [{
-      text: "3–10 человек"
+      text: "<span>3–10</span> человек"
       value: "3,10"
     }, {
-      text: "10–30 человек",
+      text: "<span>10–30</span> человек",
       value: "10,30"
     }, {
-      text: "> 30",
+      text: "<span>> 30</span> человек",
       value: "30,9999"
     }]
 
@@ -55,7 +55,6 @@ TripsFilter = React.createClass
             <div>
               <Select
                 placeholder="Куда"
-                className="selectize-type--button"
                 options={this.state.countries}
                 multiple={false}
                 onChange={this.handleFilterChange.bind(this, 'country')}
@@ -63,7 +62,7 @@ TripsFilter = React.createClass
             </div>
           </div>
           <div className="trips-filter-container-column">
-            <div>
+            <div className="trips-filter-amount">
               <Slider
                 label="СТОИМОСТЬ"
                 min="100"
@@ -74,7 +73,6 @@ TripsFilter = React.createClass
               />
             </div>
             <div className="trips-filter-flight">
-              <Checkbox checked="true"  label="С перелетом из "/>
             </div>
           </div>
           <div className="trips-filter-container-column">
