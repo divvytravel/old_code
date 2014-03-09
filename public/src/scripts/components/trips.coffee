@@ -122,7 +122,7 @@ Trips = React.createClass
         <div className={classes.join(" ")}>
           {advised}
           <div className="trips-item-title">
-            <a href="#">{trip.title}</a>
+            <a href="/static/trip/nonprofit/detail.html#id=#{trip.id}">{trip.title}</a>
             <span className="trips-item-title-star"></span>
           </div>
           <div className="trips-item-tour">
@@ -254,7 +254,7 @@ Trips = React.createClass
   render: ->
     `(
       <div>
-        <TripsFilter onChange={this.onFilterChange}/>
+        <TripsFilter onChange={this.onFilterChange} maxPrice={this.state.meta.max_price} minPrice={this.state.meta.min_price}/>
         <TripsCategory onChange={this.onFilterChange} checked={this.state.tag} ref="tags"/>
         <TripsTravellerFilter/>
         {this.renderTripsBlock()}

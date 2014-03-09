@@ -83,7 +83,7 @@ RemoteTravellers = React.createClass
         meta: data.meta
 
   load: ->
-    offset = new uri(@state.meta.next).getQueryParamValue('offset') 
+    offset = new uri(@state.meta.next).getQueryParamValue('offset')
     api.get "user", limit: 10, offset: offset, (data) =>
       @setState
         travellers: @state.travellers.concat data.objects

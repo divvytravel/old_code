@@ -65,10 +65,10 @@ TripsFilter = React.createClass
             <div className="trips-filter-amount">
               <Slider
                 label="СТОИМОСТЬ"
-                min="100"
-                max="4000"
+                min="1"
+                max="30000"
                 unit="$"
-                values={[100, 3000]}
+                values={[1, 30000]}
                 onChange={this.handleFilterChange.bind(this, 'price__range')}
               />
             </div>

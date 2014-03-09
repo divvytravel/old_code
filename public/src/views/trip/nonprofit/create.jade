@@ -1,0 +1,19 @@
+html(lang='ru-RU')
+  head
+    meta(charset='utf-8')
+    title mass.travel
+    link(rel='stylesheet', media='screen', href='/static/styles/index.css')
+
+    script(src='//use.typekit.net/ndu1ixv.js')
+    script(type='text/javascript').
+      try{Typekit.load();}catch(e){}
+
+    script(src='/static/js/index.js')
+    
+    script(type='text/javascript').
+      require("utils").init();
+
+  body
+    include ./../../includes/header
+    div(data-component="trip" type="nonprofit")
+    include ./../../includes/footer
