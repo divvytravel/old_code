@@ -13,7 +13,7 @@ isProduction = args.type is "production"
 target = gutil.env.target or "./../divvy/static"
 
 gulp.task "views", ->
-  gulp.src("./src/views/**/*.jade")
+  gulp.src("./src/views/**/**/*.jade")
     .pipe(jade())
     .pipe(gulp.dest("./../divvy/templates/views"))
 
@@ -23,7 +23,7 @@ gulp.task "ui-views", ->
     .pipe(gulp.dest("./../divvy/static"))
 
 gulp.task "scripts", ->
-  gulp.src("src/scripts/**/*.coffee", read: false )
+  gulp.src("src/scripts/**/**/**/*.coffee", read: false )
     .pipe(scripts())
     .pipe(gulpif(isProduction, uglify outSourceMap: true))
     .pipe(gulp.dest("#{target}/js"))

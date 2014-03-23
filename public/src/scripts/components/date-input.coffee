@@ -98,14 +98,16 @@ DateInput = React.createClass
     $(@refs.datepicker.getDOMNode()).datepicker "show"
 
   render: ->
-    `(
-      <span className="date-input">
-        <a className="button button--type-action" onClick={this.handleShow}>
-          <input ref="datepicker" type="text" className="date-input--datepicker"/>
-          {this.state.value ? moment(this.state.value, "YYYY-MM-DD").format("DD MMMM YYYY") : 'Когда'}
-          <i className="button-picker icon-calendar-blue"></i>
-        </a>
-      </span>
-    )`
+    @.transferPropsTo(
+      `(
+        <span className="date-input">
+          <a className="button button--type-action" onClick={this.handleShow}>
+            <input ref="datepicker" type="text" className="date-input--datepicker"/>
+            {this.state.value ? moment(this.state.value, "YYYY-MM-DD").format("DD MMMM YYYY") : this.props.placeholder}
+            <i className="button-picker icon-calendar-blue"></i>
+          </a>
+        </span>
+      )`
+    )
 
 module.exports = DateInput

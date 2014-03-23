@@ -18,7 +18,7 @@ MainPage = React.createClass
     @setState active: active
 
   render: ->
-    return `(
+    `(
       <div className="container">
         <div id="promo-travellers" className="sidebar">
           <div className="title">

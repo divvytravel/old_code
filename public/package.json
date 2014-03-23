@@ -41,7 +41,8 @@
     "sifter": "~0.3",
 		"microplugin": "~0.0",
 		"selectize": "git://github.com/vslinko/selectize.js#master",
-		"jquery-simple-slider": "git://github.com/qyi/jquery-simple-slider#master"
+		"jquery-simple-slider": "git://github.com/qyi/jquery-simple-slider#master",
+		"blueimp-file-upload": "~9.5"
   },
   "shims": {
     "jquery": {
@@ -141,6 +142,19 @@
       "exports": null,
       "depends": {
         "jquery": "jQuery"
+      }
+    },
+    "fileuploadIFrameTransport": {
+      "path": "./../node_modules/blueimp-file-upload/js/jquery.iframe-transport.js",
+      "exports": null
+    },
+    "fileupload": {
+      "path": "./../node_modules/blueimp-file-upload/js/jquery.fileupload.js",
+      "exports": null,
+      "depends": {
+        "jquery": "jQuery",
+        "fileuploadIFrameTransport": "fileuploadIFrameTransport",
+        "jquery.ui.widget": "jqueryUIWidget"
       }
     }
   }
