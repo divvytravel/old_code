@@ -8,7 +8,8 @@ from django.contrib import admin
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-from trip.views import TripFilterFormView
+# from trip.views import TripFilterFormView
+from trip.views import index_view
 
 from postman.forms import AnonymousWriteForm
 from postman_custom.views import AjaxWriteView
@@ -18,8 +19,9 @@ from postman_custom.forms import WriteFormHideRecipients
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(r'^$', index_view, name='home'),
     url(r'^api/', include('api.urls')),
-    url(r'^$', TripFilterFormView.as_view(), name='home'),
+    # url(r'^$', TripFilterFormView.as_view(), name='home'),
     url(r'^trip/', include("trip.urls")),
     url(r'^geo/', include("geo.urls")),
 

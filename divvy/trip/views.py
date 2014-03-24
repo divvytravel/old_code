@@ -27,185 +27,189 @@ from .models import Trip, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
 
 
-class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
-    template_name = "views/index/index.html"
-    form_class = TripFilterForm
-    content_type = "text/html"
+def index_view(request):
+    return render_to_response('views/index/index.html')
 
-    def get(self, request, *args, **kwargs):
-        if 'clear' in request.GET:
-            self.clear_session_form_data()
-            return HttpResponseRedirect(self.request.path)
-        return super(TripFilterFormView, self).get(request, *args, **kwargs)
 
-    def get_form_kwargs(self):
-        kwargs = super(TripFilterFormView, self).get_form_kwargs()
-        kwargs.update({
-            'users_queryset': User.objects.ready_to_trip().have_trip().all(),
-            'category_queryset': TripCategory.objects.all(),
-        })
-        if self.request.method == 'GET':
-            self.udpate_form_kwargs_from_session(kwargs)
-        return kwargs
-
-    def udpate_form_kwargs_from_session(self, kwargs):
-        session_form_data = self.get_session_form_data()
-        if session_form_data:
-            users = session_form_data.get('users', None)
-            if users:
-                session_form_data['users'] = users.pk
-
-            country = session_form_data.get('country', None)
-            if country:
-                session_form_data['country'] = country.pk
-
-            category = session_form_data.get('category', None)
-            if category and isinstance(category, TripCategory):
-                session_form_data['category'] = category.pk
-            kwargs.setdefault('data', session_form_data)
-
-    def get_context_data(self, *args, **kwargs):
-        context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
-        if 'GET' in self.request.method:
-            form = context.get('form', None)
-            if form is not None and form.is_valid():
-                trips, users, selected_users, trip_categories = self.get_queries_data(form)
-                form.fields['users'].queryset = users
-                form.fields['category'].queryset = trip_categories
-            else:
-                trips = Trip.objects.actual().count_gender().all()[:30]
-                selected_users = []
-            context.update({
-                'trips': trips,
-                'selected_users': selected_users,
-            })
-        return context
-
-    def get_session_form_data(self):
-        return self.request.session.get('trip_form_data', {})
-
-    def set_session_form_data(self, form, data=None):
-        if data is None:
-            data = form.get_normalized_initial()
-        self.request.session['trip_form_data'] = data
-
-    def clear_session_form_data(self):
-        return self.request.session.pop('trip_form_data', None)
-
-    def remove_user_from_session_form_data(self):
-        session_form_data = self.get_session_form_data()
-        session_form_data['users'] = []
-        self.set_session_form_data(form=None, data=session_form_data)
-
-    def get_initial(self):
-        return self.get_session_form_data()
-
-    def is_user_satisfy(self, user_pk, gender, age_from, age_to):
-        if isinstance(user_pk, User):
-            user = user_pk
-        else:
-            try:
-                user = User.objects.get(pk=user_pk)
-            except User.DoesNotExist:
-                return False
-        return user.is_satisfy(gender, age_from, age_to)
-
-    def get_filtered_trips(self, form, category=True, count_gender=True):
-        clnd = form.cleaned_data
-        trip_qs = Trip.objects
-        if count_gender:
-            # have to apply count first. For some reason, if apply lately,
-            # count will show bad values
-            trip_qs = trip_qs.count_gender()
-        trip_qs = trip_qs.actual()\
-            .in_month_year_or_in_country(clnd['month_year'], clnd['country'])\
-            .with_price_type(clnd['price_type'])\
-            .with_people_gender(clnd['gender'])\
-            .with_people_age(clnd['age_from'], clnd['age_to'])
-        if category:
-            trip_qs = trip_qs.with_category(clnd['category'])
-        user_pk = clnd['users']
-        if is_iterable(clnd['users']):
-            try:
-                user_pk = user_pk[0]
-            except IndexError:
-                user_pk = None
-        if self.is_user_satisfy(user_pk, clnd['gender'],
-                                        clnd['age_from'], clnd['age_to']):
-            trip_qs = trip_qs.with_people(clnd['users'])
-        else:
-            self.remove_user_from_session_form_data()
-        trip_qs = trip_qs.geo_related()
-        return trip_qs
-
-    def get_filtered_users(self, form, trips):
-        clnd = form.cleaned_data
-        return User.objects.ready_to_trip().have_trip()\
-            .in_trips(trips)\
-            .with_age(clnd['age_from'], clnd['age_to'])\
-            .with_gender(clnd['gender'])
-
-    def get_filtered_categories(self, trips):
-        return TripCategory.objects.filter(trips__in=trips).distinct()
-
-    def get_queries_data(self, form):
-        trips = self.get_filtered_trips(form)
-        if not form.cleaned_data['category']:
-            trips_for_categories = trips
-        else:
-            trips_for_categories = self.get_filtered_trips(form,
-                category=False, count_gender=False)
-        users = self.get_filtered_users(form, trips)
-        trip_categories = self.get_filtered_categories(trips_for_categories)
-        selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
-        return trips, users, selected_users, trip_categories
-
-    def form_valid(self, form, data_only=False):
-        self.set_session_form_data(form)
-        trips, users, selected_users, trip_categories = self.get_queries_data(form)
-        if data_only:
-            return trips, users, selected_users, trip_categories
-        else:
-            form.fields['users'].queryset = users
-            form.fields['category'].queryset = trip_categories
-            return self.render_to_response(self.get_context_data(
-                form=form,
-                selected_users=selected_users,
-                trips=trips,
-            ))
-
-    def post_ajax(self, request, *args, **kwargs):
-        if 'clear' in self.request.POST:
-            self.clear_session_form_data()
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if form.is_valid():
-            trips, users, selected_users, trip_categories = self.form_valid(form, data_only=True)
-            if selected_users:
-                selected_users = UserPkSerializer(selected_users).data
-            trips = TripSerializer(trips, many=True).data
-            users = UserSerializer(users, many=True).data
-            trip_categories = TripCategorySerializer(trip_categories, many=True).data
-            selected_category = form.cleaned_data['category']
-            if is_iterable(selected_category):
-                selected_category = selected_category[0]
-            if selected_category:
-                selected_category = selected_category.pk
-            data = {
-                'trips': trips,
-                'users': users,
-                'selected_users': selected_users,
-                'trip_categories': trip_categories,
-                'selected_category': selected_category,
-            }
-        else:
-            # TODO
-            data = {}
-        return self.render_json_response(data)
-
-    def form_invalid(self, form):
-        return super(TripFilterFormView, self).form_invalid(form)
-
+# class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
+#     template_name = "views/index/index.html"
+#     form_class = TripFilterForm
+#     content_type = "text/html"
+#
+#     def get(self, request, *args, **kwargs):
+#         if 'clear' in request.GET:
+#             self.clear_session_form_data()
+#             return HttpResponseRedirect(self.request.path)
+#         return super(TripFilterFormView, self).get(request, *args, **kwargs)
+#
+#     def get_form_kwargs(self):
+#         kwargs = super(TripFilterFormView, self).get_form_kwargs()
+#         kwargs.update({
+#             'users_queryset': User.objects.ready_to_trip().have_trip().all(),
+#             'category_queryset': TripCategory.objects.all(),
+#         })
+#         if self.request.method == 'GET':
+#             self.udpate_form_kwargs_from_session(kwargs)
+#         return kwargs
+#
+#     def udpate_form_kwargs_from_session(self, kwargs):
+#         session_form_data = self.get_session_form_data()
+#         if session_form_data:
+#             users = session_form_data.get('users', None)
+#             if users:
+#                 session_form_data['users'] = users.pk
+#
+#             country = session_form_data.get('country', None)
+#             if country:
+#                 session_form_data['country'] = country.pk
+#
+#             category = session_form_data.get('category', None)
+#             if category and isinstance(category, TripCategory):
+#                 session_form_data['category'] = category.pk
+#             kwargs.setdefault('data', session_form_data)
+#
+#     def get_context_data(self, *args, **kwargs):
+#         context = super(TripFilterFormView, self).get_context_data(*args, **kwargs)
+#         if 'GET' in self.request.method:
+#             form = context.get('form', None)
+#             if form is not None and form.is_valid():
+#                 trips, users, selected_users, trip_categories = self.get_queries_data(form)
+#                 form.fields['users'].queryset = users
+#                 form.fields['category'].queryset = trip_categories
+#             else:
+#                 trips = Trip.objects.actual().count_gender().all()[:30]
+#                 selected_users = []
+#             context.update({
+#                 'trips': trips,
+#                 'selected_users': selected_users,
+#             })
+#         return context
+#
+#     def get_session_form_data(self):
+#         return self.request.session.get('trip_form_data', {})
+#
+#     def set_session_form_data(self, form, data=None):
+#         if data is None:
+#             data = form.get_normalized_initial()
+#         self.request.session['trip_form_data'] = data
+#
+#     def clear_session_form_data(self):
+#         return self.request.session.pop('trip_form_data', None)
+#
+#     def remove_user_from_session_form_data(self):
+#         session_form_data = self.get_session_form_data()
+#         session_form_data['users'] = []
+#         self.set_session_form_data(form=None, data=session_form_data)
+#
+#     def get_initial(self):
+#         return self.get_session_form_data()
+#
+#     def is_user_satisfy(self, user_pk, gender, age_from, age_to):
+#         if isinstance(user_pk, User):
+#             user = user_pk
+#         else:
+#             try:
+#                 user = User.objects.get(pk=user_pk)
+#             except User.DoesNotExist:
+#                 return False
+#         return user.is_satisfy(gender, age_from, age_to)
+#
+#     def get_filtered_trips(self, form, category=True, count_gender=True):
+#         clnd = form.cleaned_data
+#         trip_qs = Trip.objects
+#         if count_gender:
+#             # have to apply count first. For some reason, if apply lately,
+#             # count will show bad values
+#             trip_qs = trip_qs.count_gender()
+#         trip_qs = trip_qs.actual()\
+#             .in_month_year_or_in_country(clnd['month_year'], clnd['country'])\
+#             .with_price_type(clnd['price_type'])\
+#             .with_people_gender(clnd['gender'])\
+#             .with_people_age(clnd['age_from'], clnd['age_to'])
+#         if category:
+#             trip_qs = trip_qs.with_category(clnd['category'])
+#         user_pk = clnd['users']
+#         if is_iterable(clnd['users']):
+#             try:
+#                 user_pk = user_pk[0]
+#             except IndexError:
+#                 user_pk = None
+#         if self.is_user_satisfy(user_pk, clnd['gender'],
+#                                         clnd['age_from'], clnd['age_to']):
+#             trip_qs = trip_qs.with_people(clnd['users'])
+#         else:
+#             self.remove_user_from_session_form_data()
+#         trip_qs = trip_qs.geo_related()
+#         return trip_qs
+#
+#     def get_filtered_users(self, form, trips):
+#         clnd = form.cleaned_data
+#         return User.objects.ready_to_trip().have_trip()\
+#             .in_trips(trips)\
+#             .with_age(clnd['age_from'], clnd['age_to'])\
+#             .with_gender(clnd['gender'])
+#
+#     def get_filtered_categories(self, trips):
+#         return TripCategory.objects.filter(trips__in=trips).distinct()
+#
+#     def get_queries_data(self, form):
+#         trips = self.get_filtered_trips(form)
+#         if not form.cleaned_data['category']:
+#             trips_for_categories = trips
+#         else:
+#             trips_for_categories = self.get_filtered_trips(form,
+#                 category=False, count_gender=False)
+#         users = self.get_filtered_users(form, trips)
+#         trip_categories = self.get_filtered_categories(trips_for_categories)
+#         selected_users = wrap_in_iterable(form.cleaned_data['users'] or [])
+#         return trips, users, selected_users, trip_categories
+#
+#     def form_valid(self, form, data_only=False):
+#         self.set_session_form_data(form)
+#         trips, users, selected_users, trip_categories = self.get_queries_data(form)
+#         if data_only:
+#             return trips, users, selected_users, trip_categories
+#         else:
+#             form.fields['users'].queryset = users
+#             form.fields['category'].queryset = trip_categories
+#             return self.render_to_response(self.get_context_data(
+#                 form=form,
+#                 selected_users=selected_users,
+#                 trips=trips,
+#             ))
+#
+#     def post_ajax(self, request, *args, **kwargs):
+#         if 'clear' in self.request.POST:
+#             self.clear_session_form_data()
+#         form_class = self.get_form_class()
+#         form = self.get_form(form_class)
+#         if form.is_valid():
+#             trips, users, selected_users, trip_categories = self.form_valid(form, data_only=True)
+#             if selected_users:
+#                 selected_users = UserPkSerializer(selected_users).data
+#             trips = TripSerializer(trips, many=True).data
+#             users = UserSerializer(users, many=True).data
+#             trip_categories = TripCategorySerializer(trip_categories, many=True).data
+#             selected_category = form.cleaned_data['category']
+#             if is_iterable(selected_category):
+#                 selected_category = selected_category[0]
+#             if selected_category:
+#                 selected_category = selected_category.pk
+#             data = {
+#                 'trips': trips,
+#                 'users': users,
+#                 'selected_users': selected_users,
+#                 'trip_categories': trip_categories,
+#                 'selected_category': selected_category,
+#             }
+#         else:
+#             # TODO
+#             data = {}
+#         return self.render_json_response(data)
+#
+#     def form_invalid(self, form):
+#         return super(TripFilterFormView, self).form_invalid(form)
+#
 
 # class SaveImagesMixin(object):
 #     def save_images(self):
@@ -223,7 +227,6 @@ class TripCreateStepOneView(LoginRequiredMixin, FormView):
         self.category = form.cleaned_data['category']
         return super(TripCreateStepOneView, self).form_valid(form)
         
-
     def get_success_url(self):
         return reverse('trip_create_step_two', kwargs={
             'price_type': self.price_type,
