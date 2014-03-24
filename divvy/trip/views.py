@@ -2,7 +2,7 @@
 import itertools
 from django.views.generic import FormView, CreateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
