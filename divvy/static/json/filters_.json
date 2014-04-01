@@ -1,0 +1,31 @@
+[{
+  "id": 1,
+  "name": "ГРУППА",
+  "extra_data": null,
+  "alias": "group_count",
+  "type": "checkbox",
+  "sort": 38,
+  "vals": [{
+    "id": 318,
+    "prop_id": 38,
+    "value": "3-10 человек",
+    "extra_data": null,
+    "sort": 1
+  }, {
+    "id": 319,
+    "prop_id": 38,
+    "value": "10-30 человек",
+    "extra_data": null,
+    "sort": 2
+  }]
+}, {
+  "id": 2,
+  "name": "СТОИМОСТЬ",
+  "extra_data": null,
+  "alias": "price",
+  "type": "int",
+  "sort": 2,
+  "min": 180,
+  "max": 1279,
+  "step": false
+}]

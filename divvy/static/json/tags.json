@@ -1,0 +1,18 @@
+[
+  {
+    "model": "trip.tags",
+    "pk": 11,
+    "fields": {
+      "name": "Экскурсия",
+      "slug": "excursion"
+    }
+  },
+  {
+    "model": "trip.tags",
+    "pk": 12,
+    "fields": {
+      "name": "Итальянский язык",
+      "slug": "italian-lang"
+    }
+  }
+]

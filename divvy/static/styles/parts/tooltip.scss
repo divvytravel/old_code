@@ -1,0 +1,38 @@
+.arrow-up,
+.arrow-down {
+  display: inline-block;
+  width: 15px;
+  height: 9px;
+}
+.arrow-up {
+  background-image: url("../img/arrow-up-thin.png");
+}
+.arrow-down {
+  background-image: url("../img/arrow-down-thin.png");
+}
+
+.help {
+  position: relative;
+  margin-left: 2px;
+}
+.help .help-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  background: rgba(255,255,255,0.8);
+  font-family: Verdana;
+  font-weight: bold;
+  font-size: 8px;
+  font-style: normal;
+  text-align: center;
+  line-height: 10px;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(49,185,218,0.5);
+  color: rgba(49,185,218,0.8);
+  cursor: pointer;
+}
+.help .help-icon:hover {
+  background: #31b9da;
+  color: #fff;
+}

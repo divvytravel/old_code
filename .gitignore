@@ -14,9 +14,12 @@ env
 divvy.db
 local_fixtures/
 media/
-static/
+/static/
 pid/
 public/node_modules/
 public/bower_components/
 stormcrew/templates/views/
 log/
+.DS_Store
+*.sublime-project
+*.sublime-workspace
