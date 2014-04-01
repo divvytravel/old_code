@@ -363,12 +363,16 @@ if DEBUG:
         'django.template.loaders.app_directories.Loader',
     )
 else:
+    # TEMPLATE_LOADERS = (
+    #     #('django.template.loaders.cached.Loader', (
+    #     ((
+    #         'django.template.loaders.filesystem.Loader',
+    #         'django.template.loaders.app_directories.Loader',
+    #     )),
+    # )
     TEMPLATE_LOADERS = (
-        #('django.template.loaders.cached.Loader', (
-        ((
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )),
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
     )
 
 # See: http://django-crispy-forms.readthedocs.org/en/latest/install.html#template-packs
