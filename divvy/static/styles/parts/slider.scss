@@ -1,0 +1,104 @@
+/*!
+ * jQuery UI Slider 1.10.4
+ * http://jqueryui.com
+ *
+ * Copyright 2014 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
+ *
+ * http://api.jqueryui.com/slider/#theming
+ */
+
+.ui-slider {
+  position: relative;
+  text-align: left;
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.33) inset;
+  position: relative;
+  text-align: left;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border: none;
+
+  .ui-slider-handle {
+    border-radius: 50%;
+    cursor: default;
+    height: 18px;
+    position: absolute;
+    width: 18px;
+    z-index: 2;
+    &:active,
+    &:hover,
+    &:focus {
+      outline: none !important;
+    }
+    &.ui-state-default {
+      background: none repeat scroll 0 0 #FFFFFF;
+      border: 0 none;
+      box-shadow: 0 1px 5px rgba(19, 106, 128, 0.7);
+    }
+  }
+  .ui-slider-range {
+    background: none repeat scroll 0 0 #31B9DA;
+    border: 0 none;
+    box-shadow: 1px 0 3px rgba(0, 0, 0, 0.33) inset;
+    display: block;
+    font-size: 0.7em;
+    position: absolute;
+    z-index: 1;
+  }
+  &.ui-state-disabled {
+    .ui-slider-handle, .ui-slider-range {
+      filter: inherit;
+    }
+  }
+}
+
+.slider-gender {
+  .ui-slider {
+    background: -webkit-linear-gradient(left, #24c9f2 0%, #f26161 100%);
+    background: -moz-linear-gradient(left, #24c9f2 0%, #f26161 100%);
+    background: -o-linear-gradient(left, #24c9f2 0%, #f26161 100%);
+    background: -ms-linear-gradient(left, #24c9f2 0%, #f26161 100%);
+    background: linear-gradient(to right, #24c9f2 0%, #f26161 100%);
+  }
+}
+
+/* For IE8 - See #6727 */
+
+.ui-slider-horizontal {
+  height: 6px;
+  .ui-slider-handle {
+    top: -7px;
+    margin-left: -9px;
+  }
+  .ui-slider-range {
+    top: 0;
+    height: 100%;
+  }
+  .ui-slider-range-min {
+    left: 0;
+  }
+  .ui-slider-range-max {
+    right: 0;
+  }
+}
+
+.ui-slider-vertical {
+  width: .8em;
+  height: 100px;
+  .ui-slider-handle {
+    left: -0.3em;
+    margin-left: 0;
+    margin-bottom: -0.6em;
+  }
+  .ui-slider-range {
+    left: 0;
+    width: 100%;
+  }
+  .ui-slider-range-min {
+    bottom: 0;
+  }
+  .ui-slider-range-max {
+    top: 0;
+  }
+}

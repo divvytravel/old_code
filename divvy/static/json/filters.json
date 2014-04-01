@@ -1,0 +1,17 @@
+{
+    "price": {
+        "min": 100,
+        "max": 2400,
+        "alias": "price",
+    },
+    "age": {
+        "min": 20,
+        "max": 40,
+        "alias": "age",
+    },
+    "gender": {
+        "min": 20,
+        "max": 40,
+        "alias": "age",
+    }
+}

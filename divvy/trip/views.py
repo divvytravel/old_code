@@ -28,7 +28,9 @@ from .serializers import TripSerializer, TripCategorySerializer
 
 
 def index_view(request):
-    return render_to_response('views/index/index.html')
+    trips = Trip.objects.filter()
+
+    return render_to_response('views/index/index.html', dict(trips=trips))
 
 
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
@@ -218,339 +220,339 @@ def index_view(request):
 #             pic.save()
 
 
-class TripCreateStepOneView(LoginRequiredMixin, FormView):
-    template_name = 'trip/create_step_1.html'
-    form_class = TripCreateStepOne
-
-    def form_valid(self, form):
-        self.price_type = form.cleaned_data['price_type']
-        self.category = form.cleaned_data['category']
-        return super(TripCreateStepOneView, self).form_valid(form)
-        
-    def get_success_url(self):
-        return reverse('trip_create_step_two', kwargs={
-            'price_type': self.price_type,
-            'category_slug': self.category.slug})
-
-
-class TripPointInline(InlineFormSet):
-    max_num = 1
-    extra = 1
-    model = TripPoint
-    form_class = TripPointForm
-    formset_class = TripPointInlineFormSet
-    point_type = None
-
-    def __init__(self, *args, **kwargs):
-        self.point_type = kwargs.pop('point_type', None)
-        super(TripPointInline, self).__init__(*args, **kwargs)
-
-    def get_extra_form_kwargs(self):
-        return {
-            'point_type': self.point_type,
-            'price_type': self.view.price_type,
-        }
-
-    def get_formset_kwargs(self):
-        kwargs = super(TripPointInline, self).get_formset_kwargs()
-        if self.point_type:
-            kwargs['prefix'] = self.point_type.get_form_prefix()
-        return kwargs
-
-    def get_factory_kwargs(self):
-        kwargs = super(TripPointInline, self).get_factory_kwargs()
-        if self.point_type:
-            if self.point_type.many:
-                kwargs['max_num'] = None
-        if self.object is None:
-            kwargs['can_delete'] = False
-        return kwargs
+# class TripCreateStepOneView(LoginRequiredMixin, FormView):
+#     template_name = 'trip/create_step_1.html'
+#     form_class = TripCreateStepOne
+#
+#     def form_valid(self, form):
+#         self.price_type = form.cleaned_data['price_type']
+#         self.category = form.cleaned_data['category']
+#         return super(TripCreateStepOneView, self).form_valid(form)
+#
+#     def get_success_url(self):
+#         return reverse('trip_create_step_two', kwargs={
+#             'price_type': self.price_type,
+#             'category_slug': self.category.slug})
 
 
-class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
-    form_class = TripForm
-    model = Trip
-    success_message = u"Поездка создана!"
-    template_name = 'trip/create_step_2.html'
-
-    def get(self, request, *args, **kwargs):
-        step_one_form = TripCreateStepOne(data=kwargs)
-        if not step_one_form.is_valid():
-            self.set_error_messages(itertools.chain(step_one_form.errors.values()))
-            return HttpResponseRedirect(reverse('trip_create'))
-        return super(TripCreateStepTwoView, self).get(request, *args, **kwargs)
-
-    def get_inlines(self):
-        inlines = []
-        for point_type in self.category.get_point_types():
-            inlines.append((TripPointInline, {'point_type': point_type, }))
-        return inlines
-
-    def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
-        point_type = inline_kwargs.get('point_type', None)
-        is_many = False
-        if point_type:
-            is_many = point_type.many
-        setattr(inline_formset, 'is_many', is_many)
-        setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
-        setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
-        setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
-
-    def construct_inlines(self):
-        """
-        Returns the inline formset instances
-        """
-        inline_formsets = []
-        for inline_class, inline_kwargs in self.get_inlines():
-            inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
-            inline_formset = inline_instance.construct_formset()
-            self.define_many_for_inline_formset(inline_formset, inline_kwargs)
-            inline_formsets.append(inline_formset)
-        return inline_formsets
-
-    def get_form_kwargs(self):
-        kwargs = super(TripCreateStepTwoView, self).get_form_kwargs()
-        kwargs.update({
-            'owner': self.request.user,
-            'category': self.category,
-            'price_type': self.price_type,
-        })
-        return kwargs
-
-    def get_context_data(self, **kwargs):
-        context = super(TripCreateStepTwoView, self).get_context_data(**kwargs)
-        context['category'] = self.category
-        #TODO get text from Trip.PRICE_TYPE
-        if self.price_type == Trip.PRICE_TYPE.comm:
-            context['price_type'] = u'коммерческая'
-        else:
-            context['price_type'] = u'некоммерческая'
-        context['admins'] = ":".join(User.objects.admins().as_list('username'))
-        return context
-
-    def forms_valid(self, form, inlines):
-        inlines = TripPointInlinesWrapper(inlines)
-        if not inlines.clean():
-            return self.forms_invalid(form, inlines)
-        else:
-            #TODO next code is copied from extra_views.advanced.ModelFormWithInlinesMixin
-            # and modified. Here name of form field 'trip' is known.
-            # for contributing try to understand, how to assign
-            # self.object (now it has pk) to form in general case
-            self.object = form.save()
-            for formset in inlines:
-                for inl_form in formset.extra_forms:
-                    inl_form.trip = self.object
-                formset.save()
-            return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        self.set_success_message()
-        self.save_images()
-        return reverse('home')
-
-    @property
-    @instance_cache
-    def category(self):
-        return get_object_or_404(TripCategory, slug=self.kwargs['category_slug'])
-
-    @property
-    @instance_cache
-    def price_type(self):
-        price_type = self.kwargs['price_type']
-        if price_type not in map(lambda x: x[0], Trip.PRICE_TYPE._choices):
-            raise Http404
-        return price_type
-
-
-class TripRequestFormView(SuccessMessageMixin, CreateView):
-    form_class = TripRequestForm
-    template_name = "trip/trip_request_detail.html"
-
-    def post(self, *args, **kwargs):
-        if not self.request.user.is_authenticated():
-            messages.warning(self.request, u"Теперь вы можете подать заявку.")
-            return HttpResponseRedirect("{0}?next={1}".format(
-                settings.LOGIN_URL, self.request.path))
-        return super(TripRequestFormView, self).post(*args, **kwargs)
-
-    def get_trip(self):
-        if not hasattr(self, '_trip_object'):
-            setattr(self, '_trip_object',
-                get_object_or_404(
-                    Trip.objects.count_people().detail_related(),
-                    pk=self.kwargs['pk']))
-        return self._trip_object
-
-    def get_initial(self):
-        initial = {
-            'trip': self.get_trip(),
-        }
-        return initial
-
-    def get_form_kwargs(self):
-        kwargs = super(TripRequestFormView, self).get_form_kwargs()
-        kwargs.update({
-            'user': self.request.user,
-        })
-        return kwargs
-
-    def get_form_kwargs_for_cheapest(self, trip):
-        return {
-            'initial': {
-                'destination_iata': trip.city.get_iata(),
-                'departure_at': trip.start_date,
-                'return_at': trip.end_date,
-                'currency': trip.currency
-            }
-        }
-
-    def get_context_data(self, **kwargs):
-        context = super(TripRequestFormView, self).get_context_data(**kwargs)
-        trip = self.get_trip()
-        user_in = trip.is_user_in(self.request.user)
-        if user_in:
-            user_has_request = False
-        else:
-            user_has_request =  trip.is_user_has_request(self.request.user)
-        cheapest_form = CheapestFlightForm(
-            **self.get_form_kwargs_for_cheapest(trip))
-        context.update({
-            "trip": trip,
-            "user_in": user_in,
-            "user_has_request": user_has_request,
-            "cheapest_form": cheapest_form
-        })
-        return context
-
-    def get_success_message(self):
-        trip = self.get_trip()
-        if 'cancel' == self.request.POST.get('action'):
-            return u'Заявка на поездку "{0}" отменена.'.format(trip.title)
-        if trip.is_open():
-            return u'Заявка подана успешно! Теперь вы участвуете в поездке "{0}".'\
-                .format(trip.title)
-        elif trip.is_invite():
-            return u'Заявка подана успешно! Ваша заявку будет рассмотрена создателем поездки. Вы получите сообщение на email о результате.'
-        elif trip.is_closed():
-            return u'Заявка подана успешно! Ваша заявку будет рассмотрена участниками поездки. Вы получите сообщение на email о результате.'
-        else:
-            return u'Заявка подана успешно!'
-
-    def get_success_url(self):
-        next = self.request.POST.get('next', None)
-        return next or reverse('home')
-
-
-class TripPointUpdateInline(TripPointInline):
-    extra = 0
-
-    def get_formset_kwargs(self):
-        kwargs = super(TripPointUpdateInline, self).get_formset_kwargs()
-        if self.point_type:
-            kwargs['queryset'] = TripPoint.objects.filter(p_type=self.point_type)
-        return kwargs
-
-
-class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView):
-    model = Trip
-    form_class = TripUpdateForm
-    template_name = "trip/trip_update.html"
-    success_message = u"Поездка обновлена"
-
-    def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
-        point_type = inline_kwargs.get('point_type', None)
-        is_many = False
-        if point_type:
-            is_many = point_type.many
-        setattr(inline_formset, 'is_many', is_many)
-        setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
-        setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
-        setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
-
-    def construct_inlines(self):
-        """
-        Returns the inline formset instances
-        """
-        inline_formsets = []
-        for inline_class, inline_kwargs in self.get_inlines():
-            inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
-            inline_formset = inline_instance.construct_formset()
-            self.define_many_for_inline_formset(inline_formset, inline_kwargs)
-            inline_formsets.append(inline_formset)
-        return inline_formsets
-
-    def get_inlines(self):
-        """
-        Returns inline classes
-        """
-        inlines = []
-        for point_type in self.object.category.get_point_types():
-            inlines.append((TripPointUpdateInline, {'point_type': point_type, }))
-        return inlines
-
-    def get_success_url(self):
-        self.set_success_message()
-        self.save_images()
-        return self.object.get_absolute_url()
-
-    def get_form_kwargs(self):
-        if self.object.owner != self.request.user:
-            raise PermissionDenied  # return a forbidden response
-        kwargs = super(TripUpdateView, self).get_form_kwargs()
-        return kwargs
-
-    def forms_valid(self, form, inlines):
-        inlines = TripPointInlinesWrapper(inlines)
-        if not inlines.clean():
-            return self.forms_invalid(form, inlines)
-        else:
-            return super(TripUpdateView, self).forms_valid(form, inlines)
-
-    @property
-    @instance_cache
-    def price_type(self):
-        return self.object.price_type
-
-
-class TripDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Trip
-    success_message = u"Поездка удалена"
-    success_url = reverse_lazy('users:cabinet')
-
-    def get_object(self):
-        obj = super(TripDeleteView, self).get_object()
-        if obj.owner != self.request.user:
-            raise PermissionDenied
-        return obj
-
-
-class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
-    form_class = TripProcessForm
-    success_url = reverse_lazy('users:cabinet')
-
-    def get(self, *args, **kwargs):
-        raise PermissionDenied
-
-    def get_form_kwargs(self):
-        kwargs = super(TripRequestApproveView, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user})
-        return kwargs
-
-    def form_valid(self, form):
-        form.apply_action()
-        self.form = form
-        return super(TripRequestApproveView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        for form_error in form.errors.values():
-            messages.error(self.request, form_error)
-        return HttpResponseRedirect(self.success_url)
-
-    def get_success_message(self):
-        form = getattr(self, 'form', None)
-        if form is not None:
-            if form.cleaned_data['action'] == TripProcessForm.APPROVE:
-                return u"Заявка принята"
-            else:
-                return u"Заявка отклонена"
+# class TripPointInline(InlineFormSet):
+#     max_num = 1
+#     extra = 1
+#     model = TripPoint
+#     form_class = TripPointForm
+#     formset_class = TripPointInlineFormSet
+#     point_type = None
+#
+#     def __init__(self, *args, **kwargs):
+#         self.point_type = kwargs.pop('point_type', None)
+#         super(TripPointInline, self).__init__(*args, **kwargs)
+#
+#     def get_extra_form_kwargs(self):
+#         return {
+#             'point_type': self.point_type,
+#             'price_type': self.view.price_type,
+#         }
+#
+#     def get_formset_kwargs(self):
+#         kwargs = super(TripPointInline, self).get_formset_kwargs()
+#         if self.point_type:
+#             kwargs['prefix'] = self.point_type.get_form_prefix()
+#         return kwargs
+#
+#     def get_factory_kwargs(self):
+#         kwargs = super(TripPointInline, self).get_factory_kwargs()
+#         if self.point_type:
+#             if self.point_type.many:
+#                 kwargs['max_num'] = None
+#         if self.object is None:
+#             kwargs['can_delete'] = False
+#         return kwargs
+#
+#
+# class TripCreateStepTwoView(LoginRequiredMixin, SuccessMessageMixin, CreateWithInlinesView):
+#     form_class = TripForm
+#     model = Trip
+#     success_message = u"Поездка создана!"
+#     template_name = 'trip/create_step_2.html'
+#
+#     def get(self, request, *args, **kwargs):
+#         step_one_form = TripCreateStepOne(data=kwargs)
+#         if not step_one_form.is_valid():
+#             self.set_error_messages(itertools.chain(step_one_form.errors.values()))
+#             return HttpResponseRedirect(reverse('trip_create'))
+#         return super(TripCreateStepTwoView, self).get(request, *args, **kwargs)
+#
+#     def get_inlines(self):
+#         inlines = []
+#         for point_type in self.category.get_point_types():
+#             inlines.append((TripPointInline, {'point_type': point_type, }))
+#         return inlines
+#
+#     def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
+#         point_type = inline_kwargs.get('point_type', None)
+#         is_many = False
+#         if point_type:
+#             is_many = point_type.many
+#         setattr(inline_formset, 'is_many', is_many)
+#         setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
+#         setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
+#         setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
+#
+#     def construct_inlines(self):
+#         """
+#         Returns the inline formset instances
+#         """
+#         inline_formsets = []
+#         for inline_class, inline_kwargs in self.get_inlines():
+#             inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
+#             inline_formset = inline_instance.construct_formset()
+#             self.define_many_for_inline_formset(inline_formset, inline_kwargs)
+#             inline_formsets.append(inline_formset)
+#         return inline_formsets
+#
+#     def get_form_kwargs(self):
+#         kwargs = super(TripCreateStepTwoView, self).get_form_kwargs()
+#         kwargs.update({
+#             'owner': self.request.user,
+#             'category': self.category,
+#             'price_type': self.price_type,
+#         })
+#         return kwargs
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(TripCreateStepTwoView, self).get_context_data(**kwargs)
+#         context['category'] = self.category
+#         #TODO get text from Trip.PRICE_TYPE
+#         if self.price_type == Trip.PRICE_TYPE.comm:
+#             context['price_type'] = u'коммерческая'
+#         else:
+#             context['price_type'] = u'некоммерческая'
+#         context['admins'] = ":".join(User.objects.admins().as_list('username'))
+#         return context
+#
+#     def forms_valid(self, form, inlines):
+#         inlines = TripPointInlinesWrapper(inlines)
+#         if not inlines.clean():
+#             return self.forms_invalid(form, inlines)
+#         else:
+#             #TODO next code is copied from extra_views.advanced.ModelFormWithInlinesMixin
+#             # and modified. Here name of form field 'trip' is known.
+#             # for contributing try to understand, how to assign
+#             # self.object (now it has pk) to form in general case
+#             self.object = form.save()
+#             for formset in inlines:
+#                 for inl_form in formset.extra_forms:
+#                     inl_form.trip = self.object
+#                 formset.save()
+#             return HttpResponseRedirect(self.get_success_url())
+#
+#     def get_success_url(self):
+#         self.set_success_message()
+#         self.save_images()
+#         return reverse('home')
+#
+#     @property
+#     @instance_cache
+#     def category(self):
+#         return get_object_or_404(TripCategory, slug=self.kwargs['category_slug'])
+#
+#     @property
+#     @instance_cache
+#     def price_type(self):
+#         price_type = self.kwargs['price_type']
+#         if price_type not in map(lambda x: x[0], Trip.PRICE_TYPE._choices):
+#             raise Http404
+#         return price_type
+#
+#
+# class TripRequestFormView(SuccessMessageMixin, CreateView):
+#     form_class = TripRequestForm
+#     template_name = "trip/trip_request_detail.html"
+#
+#     def post(self, *args, **kwargs):
+#         if not self.request.user.is_authenticated():
+#             messages.warning(self.request, u"Теперь вы можете подать заявку.")
+#             return HttpResponseRedirect("{0}?next={1}".format(
+#                 settings.LOGIN_URL, self.request.path))
+#         return super(TripRequestFormView, self).post(*args, **kwargs)
+#
+#     def get_trip(self):
+#         if not hasattr(self, '_trip_object'):
+#             setattr(self, '_trip_object',
+#                 get_object_or_404(
+#                     Trip.objects.count_people().detail_related(),
+#                     pk=self.kwargs['pk']))
+#         return self._trip_object
+#
+#     def get_initial(self):
+#         initial = {
+#             'trip': self.get_trip(),
+#         }
+#         return initial
+#
+#     def get_form_kwargs(self):
+#         kwargs = super(TripRequestFormView, self).get_form_kwargs()
+#         kwargs.update({
+#             'user': self.request.user,
+#         })
+#         return kwargs
+#
+#     def get_form_kwargs_for_cheapest(self, trip):
+#         return {
+#             'initial': {
+#                 'destination_iata': trip.city.get_iata(),
+#                 'departure_at': trip.start_date,
+#                 'return_at': trip.end_date,
+#                 'currency': trip.currency
+#             }
+#         }
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(TripRequestFormView, self).get_context_data(**kwargs)
+#         trip = self.get_trip()
+#         user_in = trip.is_user_in(self.request.user)
+#         if user_in:
+#             user_has_request = False
+#         else:
+#             user_has_request =  trip.is_user_has_request(self.request.user)
+#         cheapest_form = CheapestFlightForm(
+#             **self.get_form_kwargs_for_cheapest(trip))
+#         context.update({
+#             "trip": trip,
+#             "user_in": user_in,
+#             "user_has_request": user_has_request,
+#             "cheapest_form": cheapest_form
+#         })
+#         return context
+#
+#     def get_success_message(self):
+#         trip = self.get_trip()
+#         if 'cancel' == self.request.POST.get('action'):
+#             return u'Заявка на поездку "{0}" отменена.'.format(trip.title)
+#         if trip.is_open():
+#             return u'Заявка подана успешно! Теперь вы участвуете в поездке "{0}".'\
+#                 .format(trip.title)
+#         elif trip.is_invite():
+#             return u'Заявка подана успешно! Ваша заявку будет рассмотрена создателем поездки. Вы получите сообщение на email о результате.'
+#         elif trip.is_closed():
+#             return u'Заявка подана успешно! Ваша заявку будет рассмотрена участниками поездки. Вы получите сообщение на email о результате.'
+#         else:
+#             return u'Заявка подана успешно!'
+#
+#     def get_success_url(self):
+#         next = self.request.POST.get('next', None)
+#         return next or reverse('home')
+#
+#
+# class TripPointUpdateInline(TripPointInline):
+#     extra = 0
+#
+#     def get_formset_kwargs(self):
+#         kwargs = super(TripPointUpdateInline, self).get_formset_kwargs()
+#         if self.point_type:
+#             kwargs['queryset'] = TripPoint.objects.filter(p_type=self.point_type)
+#         return kwargs
+#
+#
+# class TripUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateWithInlinesView):
+#     model = Trip
+#     form_class = TripUpdateForm
+#     template_name = "trip/trip_update.html"
+#     success_message = u"Поездка обновлена"
+#
+#     def define_many_for_inline_formset(self, inline_formset, inline_kwargs):
+#         point_type = inline_kwargs.get('point_type', None)
+#         is_many = False
+#         if point_type:
+#             is_many = point_type.many
+#         setattr(inline_formset, 'is_many', is_many)
+#         setattr(inline_formset, 'id_for_many', "inline_many_{0}".format(point_type.pk))
+#         setattr(inline_formset, 'custom_prefix', point_type.get_form_prefix())
+#         setattr(inline_formset, 'form_css_class', point_type.get_form_css_class())
+#
+#     def construct_inlines(self):
+#         """
+#         Returns the inline formset instances
+#         """
+#         inline_formsets = []
+#         for inline_class, inline_kwargs in self.get_inlines():
+#             inline_instance = inline_class(self.model, self.request, self.object, self.kwargs, self, **inline_kwargs)
+#             inline_formset = inline_instance.construct_formset()
+#             self.define_many_for_inline_formset(inline_formset, inline_kwargs)
+#             inline_formsets.append(inline_formset)
+#         return inline_formsets
+#
+#     def get_inlines(self):
+#         """
+#         Returns inline classes
+#         """
+#         inlines = []
+#         for point_type in self.object.category.get_point_types():
+#             inlines.append((TripPointUpdateInline, {'point_type': point_type, }))
+#         return inlines
+#
+#     def get_success_url(self):
+#         self.set_success_message()
+#         self.save_images()
+#         return self.object.get_absolute_url()
+#
+#     def get_form_kwargs(self):
+#         if self.object.owner != self.request.user:
+#             raise PermissionDenied  # return a forbidden response
+#         kwargs = super(TripUpdateView, self).get_form_kwargs()
+#         return kwargs
+#
+#     def forms_valid(self, form, inlines):
+#         inlines = TripPointInlinesWrapper(inlines)
+#         if not inlines.clean():
+#             return self.forms_invalid(form, inlines)
+#         else:
+#             return super(TripUpdateView, self).forms_valid(form, inlines)
+#
+#     @property
+#     @instance_cache
+#     def price_type(self):
+#         return self.object.price_type
+#
+#
+# class TripDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+#     model = Trip
+#     success_message = u"Поездка удалена"
+#     success_url = reverse_lazy('users:cabinet')
+#
+#     def get_object(self):
+#         obj = super(TripDeleteView, self).get_object()
+#         if obj.owner != self.request.user:
+#             raise PermissionDenied
+#         return obj
+#
+#
+# class TripRequestApproveView(LoginRequiredMixin, SuccessMessageMixin, FormView):
+#     form_class = TripProcessForm
+#     success_url = reverse_lazy('users:cabinet')
+#
+#     def get(self, *args, **kwargs):
+#         raise PermissionDenied
+#
+#     def get_form_kwargs(self):
+#         kwargs = super(TripRequestApproveView, self).get_form_kwargs()
+#         kwargs.update({'user': self.request.user})
+#         return kwargs
+#
+#     def form_valid(self, form):
+#         form.apply_action()
+#         self.form = form
+#         return super(TripRequestApproveView, self).form_valid(form)
+#
+#     def form_invalid(self, form):
+#         for form_error in form.errors.values():
+#             messages.error(self.request, form_error)
+#         return HttpResponseRedirect(self.success_url)
+#
+#     def get_success_message(self):
+#         form = getattr(self, 'form', None)
+#         if form is not None:
+#             if form.cleaned_data['action'] == TripProcessForm.APPROVE:
+#                 return u"Заявка принята"
+#             else:
+#                 return u"Заявка отклонена"
