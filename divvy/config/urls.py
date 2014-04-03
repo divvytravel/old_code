@@ -14,29 +14,34 @@ from trip.views import index_view
 from postman.forms import AnonymousWriteForm
 from postman_custom.views import AjaxWriteView
 from postman_custom.forms import WriteFormHideRecipients
+from social_auth import urls
 
 
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', index_view, name='home'),
-    url(r'^api/', include('api.urls')),
-    # url(r'^$', TripFilterFormView.as_view(), name='home'),
-    url(r'^trip/', include("trip.urls")),
-    url(r'^geo/', include("geo.urls")),
+                       url(r'^accounts/logout/$',
+                           'django.contrib.auth.views.logout',
+                           {'next_page': '/'},
+                           name='logout'),
+                       url(r'^$', index_view, name='home'),
+                       url(r'^api/', include('api.urls')),
+                       # url(r'^$', TripFilterFormView.as_view(), name='home'),
+                       url(r'^trip/', include("trip.urls")),
+                       url(r'^geo/', include("geo.urls")),
 
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+                       # Uncomment the next line to enable the admin:
+                       url(r'^admin/', include(admin.site.urls)),
 
-    # User management
-    url(r'^users/', include("users.urls", namespace="users")),
-    url(r'^accounts/', include('social_auth.urls')),
+                       # User management
+                       url(r'^users/', include("users.urls", namespace="users")),
+                       url(r'^accounts/', include('social_auth.urls')),
 
-    url(r'^messages/write/(?:(?P<recipients>[\w.@+-:]+)/)?$',
-        AjaxWriteView.as_view(
-            form_classes=(WriteFormHideRecipients, AnonymousWriteForm)),
-        name='postman_write'),
-    url(r'^messages/', include('postman.urls')),
+                       url(r'^messages/write/(?:(?P<recipients>[\w.@+-:]+)/)?$',
+                           AjaxWriteView.as_view(
+                               form_classes=(WriteFormHideRecipients, AnonymousWriteForm)),
+                           name='postman_write'),
+                       url(r'^messages/', include('postman.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

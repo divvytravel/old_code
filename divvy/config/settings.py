@@ -206,8 +206,8 @@ if SECURE:
 
 ########## AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
     'social_auth.backends.facebook.FacebookBackend',
+    "django.contrib.auth.backends.ModelBackend",
 )
 NO_AVATAR_IMG = STATIC_URL + 'img/no-avatar.jpg'
 ########## END AUTHENTICATION CONFIGURATION

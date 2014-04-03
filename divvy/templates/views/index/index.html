@@ -40,11 +40,19 @@
           <div class="navbar-header">
             <a class="navbar-logo" href="/"><img src="/static/img/logo-white.png"></a>
 
-            <div class="navbar-login pull-right">
-              <a href="#">
-                <span class="facebook-button-logo"></span><span>Войти</span>
-              </a>
-            </div>
+            {% if request.user.is_authenticated %}
+                <div class="navbar-login pull-right">
+                    <a href="{% url 'logout' %}">
+                        <span class="facebook-button-logo"></span><span>Выйти</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="navbar-login pull-right">
+                  <a href="{% url 'social_auth.views.auth' 'facebook' %}">
+                    <span class="facebook-button-logo"></span><span>Войти</span>
+                  </a>
+                </div>
+            {% endif %}
 
             <ul class="nav nav-pills nav-proj pull-right">
               <li><a href="#">Путешествия</a></li>

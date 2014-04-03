@@ -2,7 +2,7 @@
 import itertools
 from django.views.generic import FormView, CreateView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, render
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.contrib import messages
@@ -29,8 +29,7 @@ from .serializers import TripSerializer, TripCategorySerializer
 
 def index_view(request):
     trips = Trip.objects.filter()
-
-    return render_to_response('views/index/index.html', dict(trips=trips))
+    return render(request, 'views/index/index.html', dict(trips=trips))
 
 
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
