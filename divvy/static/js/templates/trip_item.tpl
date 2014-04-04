@@ -55,7 +55,7 @@
         </div>
         <div class="ratio">
           <div>
-            <span>Набрано 5 из 10 человек </span>
+            <span>Набрано <%= people_count %> из <%= people_max_count %> человек </span>
           </div>
           <div>
             <span>Преимущественно девушки</span>
@@ -63,19 +63,25 @@
         </div>
         <div class="list">
           <div class="items">
-            <% _.each(people, function(user) { %>
+            
+              <% _.each(people, function(user) { %>
 
-              <div class="item-icon traveller-item" data-url="<%= user.avatar_url %>" data-name="<%= user.first_name %> <%= user.last_name %>">
-                <a href="javascript:void(0)">
-                  <img src="<%= user.avatar_url %>">
-                </a>
-              </div>
+                <div class="item-icon traveller-item" data-url="<%= user.avatar_url %>" data-name="<%= user.first_name %> <%= user.last_name %>">
+                  <a href="javascript:void(0)">
+                    <img src="<%= user.avatar_url %>">
+                  </a>
+                </div>
 
-            <% }); %>
+              <% }); %>
+
           </div>
-          <div class="next">
-            <i class="arrow-down"></i>
-          </div>
+
+          <% if(people.length > 3) { %>
+            <div class="next">
+              <i class="arrow-down"></i>
+            </div>
+          <% } %>
+          
         </div>
       </div>
     </div>

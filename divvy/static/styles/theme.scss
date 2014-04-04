@@ -93,7 +93,7 @@ a:focus {
   height: 75%;
   background-image: url('/static/img/overlay.png'), url('/static/img/photo.jpg');
   background-size: cover;
-  min-height: 500px;
+  min-height: 512px;
   max-height: 768px;
 
   .navbar-proj {
@@ -182,7 +182,7 @@ a:focus {
     margin: 0 auto;
     text-align: center;
     width: 720px;
-    margin-top: 226px;
+    margin-top: 242px;
     .promo-content-title {
       color: rgba(255, 255, 255, 0.9);
       font-size: 33px;
@@ -197,7 +197,7 @@ a:focus {
       line-height: 27px;
     }
     .godown {
-      margin-top: 20px;
+      margin-top: 22px;
       a {
         opacity: 0.8;
         &:hover,
@@ -362,6 +362,37 @@ a:focus {
         padding: 28px 36px;
         
       }
+      .tags {
+        // margin-top: 12px;
+        // line-height: 18px;
+        border-bottom: 1px solid #E5E5E5;
+        padding: 12px 30px;
+        display: block;
+        .tag {
+          margin-right: 3px;
+          padding: 4px 6px;
+          // background: rgba(49,185,218,0.15);
+          border: 1px solid #fff;
+          -webkit-border-radius: 3px;
+          border-radius: 3px;
+          font-size: 13px;
+          line-height: 22px;
+          color: #31b9da;
+          &.active {
+              border: 1px solid rgba(49,185,218,0.6);
+              background: rgba(49,185,218,0.15);
+              &:hover {
+                border: 1px solid rgba(49,185,218,0.7);
+                background: rgba(49,185,218,0.25);
+              }
+            }
+          &:hover {
+            border: 1px solid rgba(49,185,218,0.7);
+            // background: rgba(49,185,218,0.25);
+            background:rgba(49,185,218,0.09);
+          }
+        }
+      }
       .companions {
         border-bottom: 1px solid #E5E5E5;
         padding: 28px 36px;
@@ -392,7 +423,7 @@ a:focus {
         .slider-limits {
           padding-top: 12px;
           width: 100%;
-          span {
+          >span {
             left: -6px;
             color: rgba(0, 0, 0, 0.9);
             display: inline-block;
@@ -527,6 +558,7 @@ a:focus {
             width: 16px;
             height: 16px;
             background-image: url("/static/img/star-inactive.png");
+            cursor: pointer;
           }
         }
         .tour {
@@ -549,6 +581,7 @@ a:focus {
             font-size: 11px;
             line-height: 18px;
             color: #31b9da;
+
             &:hover {
               border: 1px solid rgba(49,185,218,0.7);
               background: rgba(49,185,218,0.25);
@@ -711,7 +744,7 @@ a:focus {
                   background: #fff;
                   -webkit-box-shadow: 2px 0px 12px rgba(0,0,0,0.25);
                   box-shadow: 2px 0px 12px rgba(0,0,0,0.25);
-                  z-index: 2;
+                  z-index: 4;
                   .details-icon {
                     float: left;
                   }
@@ -959,8 +992,36 @@ a:focus {
 }
 
 .tooltip-proj {
-
+  
 }
+
+.help .tooltip {
+  // border-width: 0px !important;
+  // -webkit-border-radius: 3px !important;
+  // border-radius: 3px !important;
+  // // background: #fff;
+  // -webkit-box-shadow: 2px 0px 12px rgba(0,0,0,0.12);
+  // box-shadow: 2px 0px 12px rgba(0,0,0,0.12);
+}
+// .help .help-tooltip .ui-tooltip-content {
+//   font-size: 11px;
+//   line-height: 15px !important;
+//   color: rgba(0,0,0,0.9);
+//   font-family: Helvetica;
+// }
+// .help .help-tooltip:before {
+//   content: " ";
+//   position: absolute;
+//   z-index: 10000;
+//   top: -10px;
+//   left: 50%;
+//   margin-left: -6px;
+//   width: 0;
+//   height: 0;
+//   border-left: 8px solid transparent;
+//   border-right: 8px solid transparent;
+//   border-bottom: 10px solid #fff;
+// }
 
 .tooltip-inner {
   max-width: $tooltip-max-width;
@@ -969,8 +1030,11 @@ a:focus {
   color: $tooltip-color;
   text-align: center;
   text-decoration: none;
-  background-color: $tooltip-bg;
+  // background-color: $tooltip-bg;
+  background-color: #fff;
   border-radius: $border-radius-base;
+  -webkit-box-shadow: 0px 0px 12px rgba(0,0,0,0.22);
+  box-shadow: 0px 0px 12px rgba(0,0,0,0.22);
   font-size: 11px;
 }
 

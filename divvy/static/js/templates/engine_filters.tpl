@@ -23,8 +23,8 @@
          
         <div id="fPrice"></div>
         <div class="slider-limits">
-          <span><%= price.min %> $</span>
-          <span><%= price.max %> $</span>
+          <span><span id="fPriceMin"><%= price.min %></span> $</span>
+          <span><span id="fPriceMax"><%= price.max %></span> $</span>
           <% showPrice() %>
         </div>
       </div>
@@ -34,17 +34,20 @@
 
       <div class="check-group">
         <span class="item">
-          <a class="button button-toggle">
+          <a class="button button-toggle user-count">
+            <input class="hide" type="radio" name="user_count" value="3-10" />
             <span class="num-string">3–10</span> человек
           </a>
         </span>
         <span class="item">
-          <a class="button button-toggle">
+          <a class="button button-toggle user-count">
+            <input class="hide" type="radio" name="user_count" value="10-30" />
             <span class="num-string">10-30</span> человек
           </a>
         </span>
         <span class="item">
-          <a class="button button-toggle">
+          <a class="button button-toggle user-count">
+            <input class="hide" type="radio" name="user_count" value="30" />
             <span class="num-string">>&nbsp;30</span> человек
           </a>
         </span>
@@ -57,7 +60,24 @@
 
 
 <div class="tags">
-  
+  <div class="tags-wrap">
+    <a href="javascript:void(0)" class="tag tag-radio">
+      <input class="hide" type="radio" name="tag_radio" value="1" />
+      Активный отдых
+    </a>
+    <a href="javascript:void(0)" class="tag tag-radio">
+      <input class="hide" type="radio" name="tag_radio" value="2" />
+      Концерты
+    </a>
+    <a href="javascript:void(0)" class="tag tag-radio">
+      <input class="hide" type="radio" name="tag_radio" value="3" />
+      Походы
+    </a>
+    <a href="javascript:void(0)" class="tag tag-radio">
+      <input class="hide" type="radio" name="tag_radio" value="4" />
+      Яхтинг
+    </a>
+  </div>
 </div>
 
 

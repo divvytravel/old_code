@@ -23,12 +23,25 @@ define([
             "username": "petrov"
         },
 
-        urlRoot: "/static/json/users.json"
+        // urlRoot: "/static/json/users.json"
     });
 
     var TravellersCollection = Backbone.Collection.extend({
         model: TravellerModel,
-        url: '/static/json/users2.json',
+        // url: '/static/json/users2.json',
+
+        query: {},
+
+        url: function() {
+            var default_params = {
+                'format': 'json'
+            };
+            var params = _.extend(default_params, this.query);
+            var str = $.param( params );
+
+            return '/api/v1/user/?'+str;
+        },
+
         parse: function(response) {
             if (!response) {
                 return [];

@@ -103,7 +103,7 @@ define([
     var addFilter = function(key, val, multi) {
         multi = multi || false;
         var new_filter = this.setFilter(key, val, multi);
-
+        
         Backbone.history.navigate(new_filter, {trigger: true});
         return true;
     };

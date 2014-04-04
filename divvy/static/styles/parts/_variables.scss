@@ -504,7 +504,8 @@ $tooltip-opacity:             .95 !default;
 //** Tooltip arrow width
 $tooltip-arrow-width:         5px !default;
 //** Tooltip arrow color
-$tooltip-arrow-color:         $tooltip-bg !default;
+// $tooltip-arrow-color:         $tooltip-bg !default;
+$tooltip-arrow-color:         #fff !default;
 
 
 //== Popovers

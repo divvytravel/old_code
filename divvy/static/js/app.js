@@ -46,12 +46,15 @@ define(function (require) {
         tripsLayoutItems     : '#trips_layout_items',
         engineFilters        : '#engine_filters',
         mainPage             : '#main_page',
-        mpLoader             : '#main_page_loader'
+        mpLoader             : '#main_page_loader',
+        tLoader              : '#trips_loader'
     });
 
     App.addInitializer(function(){
 
         tripsCollection = new TripsCollection();
+        // tripsCollection.query = {'price__gt':100};
+
         travellersCollection = new TravellersCollection();
         engineFiltersModel = new EngineFiltersModel();
 
@@ -70,6 +73,7 @@ define(function (require) {
     App.on("initialize:after", function(options){
 
         var filterObj = Cm.parseQueryString(Backbone.history.fragment);
+        $("#trips_loader").hide();
 
         /**
          * Remember the view type
@@ -141,23 +145,24 @@ define(function (require) {
         /**
          * Draw all filters
          */
-        App.viewFilter.show(new ViewFilterView({filter: filterObj}));
+        // App.viewFilter.show(new ViewFilterView({filter: filterObj}));
 
         // tripsCollection.url = '/api/query?' + Cm.getServerQueryString(filter);
 
-        var tripsViewOptions = {
-            collection: productsCollection,
-            viewtype: filterObj.view || 'list'
-        };
+        // var tripsViewOptions = {
+        //     collection: productsCollection,
+        //     viewtype: filterObj.view || 'list'
+        // };
 
-        App.productsListing.show(new ProductsCollectionView(productsViewOptions));
-        App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}));
+        // App.productsListing.show(new ProductsCollectionView(productsViewOptions));
+        // App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}));
 
-        // $("#loading_spinner").show();
+        $("#trips_loader").show();
+        $("#trips_layout").hide();
         tripsCollection.fetch({
             success: function(){
                 $("#trips_layout").show();
-                // $("#loading_spinner").hide();
+                $("#trips_loader").hide();
             }
         }).always(function() { 
             // $("#loading_spinner").hide() 

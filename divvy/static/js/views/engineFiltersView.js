@@ -20,22 +20,70 @@ define([
 
         ui: {
             fPrice: "#fPrice",
+            fPriceMin: "#fPriceMin",
+            fPriceMax: "#fPriceMax",
+
             fAge: "#fAge",
             fGender: "#fGender",
             fDate: "#fDate",
             fPlaceTo: "#fPlaceTo",
             fPlaceFrom: "#fPlaceFrom",
+            fUserCount: ".user-count",
         },
 
         events: {
 
             "click .efilter": "eFilter",
-            "click .button-toggle": "toggleButton"
+            // "click .button-toggle": "toggleButton",
+            "click .user-count": "userToggle",
+            "click .tag-radio": "tagToggle"
 
         },
 
         toggleButton: function(e) {
             $(e.currentTarget).toggleClass('active');
+        },
+
+        userToggle: function(e) {
+            var $parent = $(e.currentTarget).parent().parent();
+            // var $parent = $(e.currentTarget).closest('');
+            var changed = true;
+
+            if ($parent.length) {
+              var $input = $(e.currentTarget).find('input');
+              if ($input.prop('type') == 'radio') {
+                // console.log( $input.prop('checked') );
+                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
+                else $parent.find('.active').removeClass('active')
+              }
+              if (changed) {
+                $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+                // Vent.trigger('filter:meta:changed', response.meta);
+                Cm.addFilter('user_count',$input.val());
+                }
+            }
+
+            if (changed) $(e.currentTarget).toggleClass('active')
+        },
+
+        tagToggle: function(e) {
+            var $parent = $(e.currentTarget).parent().parent();
+            // var $parent = $(e.currentTarget).closest('');
+            var changed = true;
+
+            if ($parent.length) {
+              var $input = $(e.currentTarget).find('input');
+              if ($input.prop('type') == 'radio') {
+                // console.log( $input.prop('checked') );
+                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
+                else $parent.find('.active').removeClass('active')
+              }
+              if (changed) {
+                $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+                }
+            }
+
+            if (changed) $(e.currentTarget).toggleClass('active')
         },
 
         onRender: function() {
@@ -134,6 +182,7 @@ define([
         },
 
         startPrice: function(val) {
+            var self = this;
 
             var alias = 'price';
             this.ui.fPrice.slider({
@@ -142,11 +191,29 @@ define([
                 max: this.model.get(alias).max,
                 values: [ 
                     this.model.get(alias).min, 
-                    this.model.get(alias).max 
+                    this.model.get(alias).max
                 ],
-                slide: function( event, ui ) {
-                    //
+                stop: function( event, ui ) {
+                    Cm.addFilter('price_min',ui.values[0]);
+                    Cm.addFilter('price_max',ui.values[1]);
                 }
+            });
+
+            // this.ui.fPrice.slider({
+            //     stop: function( event, ui ) {
+
+            //     }
+            // });
+
+            // Vent.on('filter:price:changed',function(response) {
+            Vent.on('trips:meta:changed',function(response) {
+
+                self.ui.fPriceMin.text( response.min_price );
+                self.ui.fPriceMax.text( response.max_price );
+                self.ui.fPrice.slider( "option", "min", response.min_price );
+                self.ui.fPrice.slider( "option", "max", response.max_price );
+                // self.ui.fPrice.slider( "option", "values", [response.min_price,response.max_price] );
+
             });
 
         },
@@ -162,8 +229,9 @@ define([
                     this.model.get(alias).min, 
                     this.model.get(alias).max 
                 ],
-                slide: function( event, ui ) {
-                    //
+                stop: function( event, ui ) {
+                    Cm.addFilter('age_min',ui.values[0]);
+                    Cm.addFilter('age_max',ui.values[1]);
                 }
             });
 
@@ -175,9 +243,9 @@ define([
             this.ui.fGender.slider({
                 min: this.model.get(alias).min,
                 max: this.model.get(alias).max,
-                value: 50,
-                slide: function( event, ui ) {
-                    //
+                value: 5,
+                stop: function( event, ui ) {
+                    Cm.addFilter('gender',ui.value.toString());
                 }
             });
 

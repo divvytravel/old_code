@@ -8,8 +8,8 @@ define([
 
         defaults: {
             "price": {
-                "min": 100,
-                "max": 2400,
+                "min": 1,
+                "max": 30000,
                 "alias": "price",
             },
             "age": {
@@ -19,7 +19,7 @@ define([
             },
             "gender": {
                 "min": 0,
-                "max": 100,
+                "max": 10,
                 "alias": "age",
             }
         },

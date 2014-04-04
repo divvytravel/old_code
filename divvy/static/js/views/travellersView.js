@@ -16,7 +16,28 @@ define([
         },
 
         toggleItem: function(e) {
-            $(e.currentTarget).toggleClass('active');
+            // $(e.currentTarget).toggleClass('active');
+
+            var $parent = $(e.currentTarget).parent().parent();
+            // var $parent = $(e.currentTarget).closest('');
+            var changed = true;
+
+            if ($parent.length) {
+              var $input = $(e.currentTarget).find('input');
+              if ($input.prop('type') == 'radio') {
+                // console.log( $input.prop('checked') );
+                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
+                else $parent.find('.active').removeClass('active')
+              }
+              if (changed) {
+                $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+                // Vent.trigger('filter:meta:changed', response.meta);
+                // Cm.addFilter('user_count',$input.val());
+                }
+            }
+
+            if (changed) $(e.currentTarget).toggleClass('active')
+
         },
 
         /**
