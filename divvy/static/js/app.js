@@ -12,6 +12,7 @@ define(function (require) {
         /** Collections & Models */
         TripsCollection = require('collections/trips'),
         TravellersCollection = require('collections/travellers'),
+        TagsCollection = require('collections/tags'),
         EngineFiltersModel = require('models/engineFilters'),
 
         /** Views */
@@ -26,6 +27,7 @@ define(function (require) {
     var App = new Marionette.Application(),
         tripsCollection = {},
         travellersCollection = {},
+        tagsCollection = {},
         engineFiltersModel = {};
 
     // var tripsCollection = new TripsCollection();
@@ -56,6 +58,7 @@ define(function (require) {
         // tripsCollection.query = {'price__gt':100};
 
         travellersCollection = new TravellersCollection();
+        tagsCollection = new TagsCollection();
         engineFiltersModel = new EngineFiltersModel();
 
         // tripsCollection.fetch({
@@ -75,6 +78,8 @@ define(function (require) {
         var filterObj = Cm.parseQueryString(Backbone.history.fragment);
         $("#trips_loader").hide();
 
+        // console.log(filterObj);
+
         /**
          * Remember the view type
          */
@@ -85,7 +90,7 @@ define(function (require) {
         // }
 
         // App.engineFilters.show(new EngineFiltersView({query_filter: filterObj}));
-        App.engineFilters.show( new EngineFiltersView({model: engineFiltersModel}) );
+        App.engineFilters.show( new EngineFiltersView({model: engineFiltersModel, filter: filterObj}) );
         App.tripsLayoutItems.show( new TripsView({collection: tripsCollection}) );
         App.sidebarTravellers.show( new TravellersView({collection: travellersCollection}) );
 
@@ -98,6 +103,7 @@ define(function (require) {
         }).always(function() { 
             $("#main_page_loader").hide();
             $("#main_page").show();
+            Backbone.history.loadUrl();
         });
 
         tripsCollection.fetch();
@@ -155,23 +161,30 @@ define(function (require) {
         // };
 
         // App.productsListing.show(new ProductsCollectionView(productsViewOptions));
-        // App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}));
+        // App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}))
+
+        tripsCollection.query = filterObj;
 
         $("#trips_loader").show();
         $("#trips_layout").hide();
         tripsCollection.fetch({
             success: function(){
-                $("#trips_layout").show();
                 $("#trips_loader").hide();
+                $("#trips_layout").show();
             }
         }).always(function() { 
-            // $("#loading_spinner").hide() 
+            //
         });
 
     });
 
     Vent.on('trips:meta:changed',function(response) {
-        $("#trips_layout_count").text('Подходит '+response.total_count+' путешествия').show();
+        if (response.total_count) {
+            $("#trips_layout_count").text('Подходит '+response.total_count+' путешеств' + Cm.getCorrectStr(response.total_count,'ие','ия','ий') ).show();
+        } else {
+            $("#trips_layout_count").text('Ничего не найдено').show();
+        }
+        
     });
 
     return App;

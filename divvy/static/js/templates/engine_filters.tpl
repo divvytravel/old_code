@@ -23,8 +23,8 @@
          
         <div id="fPrice"></div>
         <div class="slider-limits">
-          <span><span id="fPriceMin"><%= price.min %></span> $</span>
-          <span><span id="fPriceMax"><%= price.max %></span> $</span>
+          <span><span id="fPriceMin"><%= price.min %></span> &euro;</span>
+          <span><span id="fPriceMax"><%= price.max %></span> &euro;</span>
           <% showPrice() %>
         </div>
       </div>
@@ -35,19 +35,19 @@
       <div class="check-group">
         <span class="item">
           <a class="button button-toggle user-count">
-            <input class="hide" type="radio" name="user_count" value="3-10" />
+            <input class="hide" type="radio" name="people_count" value="3-10" data-gt="3" data-lt="10"/>
             <span class="num-string">3–10</span> человек
           </a>
         </span>
         <span class="item">
           <a class="button button-toggle user-count">
-            <input class="hide" type="radio" name="user_count" value="10-30" />
+            <input class="hide" type="radio" name="people_count" value="10-30" data-gt="10" data-lt="30"/>
             <span class="num-string">10-30</span> человек
           </a>
         </span>
         <span class="item">
           <a class="button button-toggle user-count">
-            <input class="hide" type="radio" name="user_count" value="30" />
+            <input class="hide" type="radio" name="people_count" value="30" data-gt="30"/>
             <span class="num-string">>&nbsp;30</span> человек
           </a>
         </span>
@@ -89,7 +89,7 @@
   <div class="filter-container">
     <div class="column">
       <div class="select-place-proj">
-        <input id="fPlaceFrom" class="typeahead input-proj" type="text" placeholder="Откуда?">
+        <input id="fPlaceFrom" class="typeahead input-proj" type="text" placeholder="Откуда?" disabled>
       </div>
     </div>
     <div class="column">

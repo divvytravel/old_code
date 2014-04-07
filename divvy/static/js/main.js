@@ -17,7 +17,8 @@ require.config({
         'hb'                      : '../vendor/handlebars/handlebars',
         'bootstrap-datepicker'    : '../js/vendor_override/bootstrap-datepicker',
         'typeahead'               : '../vendor/typeahead.js/dist/typeahead.jquery',
-        'touch-punch'             : '../vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min'
+        'touch-punch'             : '../vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min',
+        'moment'                  : '../vendor/moment/min/moment-with-langs.min'
 
     },
     shim: {
@@ -47,6 +48,12 @@ require([
     'app',
     'todie' // Неразобранный кусок лапши -> @TODO
 ], function (App) {
+
+    console.log(Divvy.is_authenticated);
+    if ( $("#header_block").length ) {
+        if ( !Divvy.is_authenticated )
+            $("#header_block").removeClass("login");
+    }
 
     App.start();
 

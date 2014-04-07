@@ -2,8 +2,9 @@
 define([
     'marionette',
     'templates',
+    'moment',
     'bootstrap'
-], function (Marionette, Templates) {
+], function (Marionette, Templates, Moment) {
     'use strict';
 
     var View = {};
@@ -20,6 +21,7 @@ define([
 
         ui: {
             helpTooltip: ".help-tooltip",
+            sexSlider: ".sex-slider",
         },
 
         allTravellers: function(e) {
@@ -37,13 +39,15 @@ define([
         travellerDetails: function(e) {
             
             var position = $(e.currentTarget).position();
+            // var top = position.top;
+            // var left = position.left;
+
             var index = $(e.currentTarget).index() + 1;
             var step = 61;
             var top = -9;
             var left = -9;
             if (index > 3) top = top + step;
-            // var top = position.top;
-            // var left = position.left;
+            // console.log($(e.currentTarget).data());
             var details = Templates.travellerDetails({top: top, left: left, data: $(e.currentTarget).data() });
             $(e.currentTarget).parent().append(details);
         },
@@ -52,8 +56,7 @@ define([
             $(e.currentTarget).parent().parent().remove();
         },
 
-        onRender: function() {
-            // this.model.set( 'output', this.getLinks(this.model) );
+        startTooltips: function() {
 
             this.ui.helpTooltip.tooltip({
                 // position: { my: "center top-10", at: "right center" },
@@ -63,6 +66,60 @@ define([
                 html: true,
                 title: "Пример текста для подсказки"
             });
+        },
+
+        onRender: function() {
+            // this.model.set( 'output', this.getLinks(this.model) );
+
+            this.startTooltips();
+            // console.log(this.model.get('people'));
+            this.buildSexSlider();
+
+        },
+
+        buildSexSlider: function() {
+
+            var output = '',
+                maleTotal = 0,
+                femaleTotal = 0,
+                factTotal = 0,
+                maleTotalProc = 0,
+                femaleTotalProc = 0,
+                minTotal = this.model.get('people_count'),
+                maxTotal = this.model.get('people_max_count');
+
+            var people = this.model.get('people');
+            factTotal = people.length;
+            maleTotal = _.where(people, {gender: "male"}).length;
+            femaleTotal = _.where(people, {gender: "female"}).length;
+
+            // @TODO
+            if (factTotal > minTotal) minTotal = factTotal;
+
+            var sliderWidth = 0,
+                leftPercent = 0,
+                rightPercent = 0;
+            sliderWidth = (100 / minTotal) * factTotal;
+
+            if (factTotal > 1) {
+                maleTotalProc = (100 / factTotal) * maleTotal;
+                femaleTotalProc = 100 - maleTotalProc;
+                console.log(maleTotal,femaleTotal);
+
+                var min = Math.min.apply(null, [maleTotalProc, femaleTotalProc]);
+                min = min/2;
+                leftPercent = maleTotalProc - min; rightPercent = maleTotalProc + min;
+
+            }
+
+            this.ui.sexSlider
+                .css('background', '-webkit-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', '-moz-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', '-o-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', '-ms-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', 'linear-gradient(to right, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('left', '0%')
+                .css('width', sliderWidth+'%');
 
         },
 
@@ -70,46 +127,158 @@ define([
          * Helper for template
          */
         templateHelpers: {
-            showButtonText: function(type){
-                var output = '';
+            // var self = this;
 
-                if(type == 'service') {
-                    output = 'отправить сообщение';
-                } else {
-                    output = 'сделать заказ';
+            // return {
+                showNotNull: function(val){
+                    var output = '';
+
+                    if (val != null) 
+                        output = val;
+
+                    return output;
+                },
+                showDateRange: function(){
+                    var output = '';
+                    Moment.lang('ru');
+                    var start = Moment( this.start_date );
+                    var end = Moment( this.end_date );
+
+                    if ( start.format('M') == end.format('M') ) {
+                        output = start.format('D')+" &ndash; "+end.format('D MMMM');
+                    } else {
+                        output = start.format('D MMMM')+" &ndash; "+end.format('D MMMM');
+                    }
+
+                    return output;
+                },
+                showTripType: function(){
+                    var output = '';
+
+                    switch (this.price_type) {
+                        case "com": 
+                        output = "Коммерческая поездка";
+                        case "noncom": 
+                        output = "Некоммерческая поездка";
+                    }
+
+                    return output;
+                },
+                showSexMajority: function(){
+                    var output = '',
+                        maleTotal = 0,
+                        femaleTotal = 0,
+                        factTotal = 0,
+                        minTotal = this.people_count,
+                        maxTotal = this.people_max_count;
+
+                    factTotal = this.people.length;
+                    maleTotal = _.where(this.people, {gender: "male"}).length;
+                    femaleTotal = _.where(this.people, {gender: "female"}).length;
+
+                    // @TODO
+                    // if (factTotal > maxTotal) maxTotal = factTotal;
+
+                    // var sliderWidth = 0;
+                    // sliderWidth = (100 / maxTotal) * factTotal;
+
+                    // ui.sexSlider
+                    // .css('background', '-webkit-linear-gradient(left, #24c9f2 20%, #f26161 90%)')
+                    // .css('background', '-moz-linear-gradient(left, #24c9f2 20%, #f26161 90%)')
+                    // .css('background', '-o-linear-gradient(left, #24c9f2 20%, #f26161 90%)')
+                    // .css('background', '-ms-linear-gradient(left, #24c9f2 20%, #f26161 90%)')
+                    // .css('background', 'linear-gradient(to right, #24c9f2 20%, #f26161 90%)')
+                    // .css('left', '0%')
+                    // .css('width', sliderWidth+'%');
+                    // this.buildSexSlider(20,20,34);
+
+
+                    // console.log(maleTotal, femaleTotal);
+                    if ( maleTotal === 0 && femaleTotal === 0 ) {
+                        output = 'Будь первым!';
+                    } else if ( maleTotal < femaleTotal ) {
+                        output = "Преимущественно девушки";
+                    } else if (maleTotal > femaleTotal) {
+                        output = "Преимущественно мужчины";
+                    } else {
+                        output = "Равенство полов";
+                    }
+
+                    return output;
+                },
+                showOccup: function(){
+                    var output = '',
+                        factTotal = 0,
+                        minTotal = this.people_count,
+                        maxTotal = this.people_max_count;
+
+                    factTotal = this.people.length;
+                    
+                    // @TODO
+                    if (factTotal > maxTotal) maxTotal = factTotal;
+
+                    if ( maxTotal < factTotal ) {
+                        output = "Переполнение!";
+                    } else {
+                        output = "Набрано "+factTotal+" из "+maxTotal+" человек";
+                    }
+
+                    return output;
+                },
+                showPlaceName: function(){
+                    var output = '',
+                        city = this.city || '',
+                        country = this.country || '';
+
+                    if ( city.length > 0 && city.length > 0 ) {
+                        output = "<span>"+city+"</span>"+
+                        "<i> → </i>"+
+                        "<span>"+country+"</span>";
+                    }
+
+                    return output;
+                },
+                showButtonText: function(type){
+                    var output = '';
+
+                    if(type == 'service') {
+                        output = 'отправить сообщение';
+                    } else {
+                        output = 'сделать заказ';
+                    }
+
+                    return output;
+                },
+                showExist: function(val){
+                    var output = '';
+
+                    if(val) {
+                        output = '<span class="item-exists">В наличии</span>';
+                    }
+
+                    return output;
+                },
+                showPrice: function(price, discount, light){
+                    light = light || false;
+                    var output = '';
+
+                    if(discount) {
+                        var new_price = price / 100 * (100 - discount);
+                        new_price = Number(new_price).toFixed(2);
+
+                        output = (!light) ?
+                            '<div class="item-price"><s>' + price + '&nbsp;руб.</s></div>' +
+                                '&nbsp;скидка: ' + discount + '% ' + new_price + '&nbsp;руб.' :
+                            '<div class="item-price"><s>' + price + '&nbsp;руб.</s></div>' +
+                                '&nbsp;' + new_price + '&nbsp;руб.';
+
+                    } else {
+                        output = '<div class="item-price">' + price + '&nbsp;руб.</div>';
+                    }
+
+                    return output;
                 }
-
-                return output;
-            },
-            showExist: function(val){
-                var output = '';
-
-                if(val) {
-                    output = '<span class="item-exists">В наличии</span>';
-                }
-
-                return output;
-            },
-            showPrice: function(price, discount, light){
-                light = light || false;
-                var output = '';
-
-                if(discount) {
-                    var new_price = price / 100 * (100 - discount);
-                    new_price = Number(new_price).toFixed(2);
-
-                    output = (!light) ?
-                        '<div class="item-price"><s>' + price + '&nbsp;руб.</s></div>' +
-                            '&nbsp;скидка: ' + discount + '% ' + new_price + '&nbsp;руб.' :
-                        '<div class="item-price"><s>' + price + '&nbsp;руб.</s></div>' +
-                            '&nbsp;' + new_price + '&nbsp;руб.';
-
-                } else {
-                    output = '<div class="item-price">' + price + '&nbsp;руб.</div>';
-                }
-
-                return output;
-            }
+            // }
         }
 
     });

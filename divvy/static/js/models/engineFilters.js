@@ -19,8 +19,8 @@ define([
             },
             "gender": {
                 "min": 0,
-                "max": 10,
-                "alias": "age",
+                "max": 100,
+                "alias": "gender",
             }
         },
 

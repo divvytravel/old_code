@@ -10,8 +10,8 @@
         "alias": "age",
     },
     "gender": {
-        "min": 20,
-        "max": 40,
-        "alias": "age",
+        "min": 0,
+        "max": 100,
+        "alias": "gender",
     }
 }

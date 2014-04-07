@@ -26,7 +26,7 @@ define([
             var params = _.extend(default_params, this.query);
 
             var str = $.param( params );
-            console.log(str);
+            // console.log(str);
 
             return '/api/v1/trip/?'+str;
         },
