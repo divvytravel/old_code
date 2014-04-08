@@ -20,8 +20,7 @@ define([
             // var base = _.result(this, 'urlRoot');
             // if (this.isNew()) return base;
             var default_params = {
-                'format': 'json',
-                'some': 3
+                'format': 'json'
             };
             var params = _.extend(default_params, this.query);
 
