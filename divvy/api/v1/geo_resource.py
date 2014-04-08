@@ -28,7 +28,7 @@ class CityResource(ModelResource, BaseResourceMixin):
 
 
 class CountryResource(ModelResource, BaseResourceMixin):
-    cities = fields.OneToManyField(CityResource, attribute='cities')
+    cities = fields.OneToManyField(CityResource, attribute='cities', full=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = Country.objects.all()
