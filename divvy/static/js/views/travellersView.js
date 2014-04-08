@@ -47,9 +47,37 @@ define([
         /**
          * Helper for template
          */
-        templateHelpers: {
-            //
-        }
+        templateHelpers: function() {
+
+            var self = this;
+
+            return {
+
+                showChecked: function(id) {
+                    var output = '';
+
+                    var filterObj = Cm.parseQueryString(Backbone.history.fragment);
+                    // console.log(id, filterObj);
+                    if(filterObj.people && parseInt( filterObj.people ) == id) {
+                        output = "checked";
+                    }
+
+                    return output;
+                },
+
+                showActive: function(id) {
+                    var output = '';
+
+                    var filterObj = Cm.parseQueryString(Backbone.history.fragment);
+                    if(filterObj.people && parseInt( filterObj.people ) == id) {
+                        output = "active";
+                    }
+
+                    return output;
+                },
+
+            }
+        },
 
     });
 

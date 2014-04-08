@@ -36,7 +36,15 @@ define([
             var default_params = {
                 'format': 'json'
             };
-            var params = _.extend(default_params, this.query);
+
+            var query = {};
+
+            _.each(this.query, function(value, key) {
+                key = 'trips__'+key;
+                query[key] = value;
+            });
+
+            var params = _.extend(default_params, query);
             var str = $.param( params );
 
             return '/api/v1/user/?'+str;

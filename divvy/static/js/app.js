@@ -163,7 +163,10 @@ define(function (require) {
         // App.productsListing.show(new ProductsCollectionView(productsViewOptions));
         // App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}))
 
+        travellersCollection.query = filterObj;
         tripsCollection.query = filterObj;
+
+        travellersCollection.fetch();
 
         $("#trips_loader").show();
         $("#trips_layout").hide();
@@ -182,7 +185,7 @@ define(function (require) {
         if (response.total_count) {
             $("#trips_layout_count").text('Подходит '+response.total_count+' путешеств' + Cm.getCorrectStr(response.total_count,'ие','ия','ий') ).show();
         } else {
-            $("#trips_layout_count").text('Ничего не найдено').show();
+            $("#trips_layout_count").html('Ничего не найдено <br><br>').show();
         }
         
     });

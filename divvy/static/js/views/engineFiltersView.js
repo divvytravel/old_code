@@ -5,13 +5,15 @@ define([
     'templates',
     'custom',
     'moment',
+    'collections/tags',
+    'collections/countries',
     'jquery',
     'hb',
     'jquery-ui',
     'bootstrap-datepicker',
     'typeahead',
     'touch-punch'
-], function (Marionette, Vent, Templates, Cm, Moment) {
+], function (Marionette, Vent, Templates, Cm, Moment, TagsCollection, CountriesCollection) {
     'use strict';
 
     var EngineFilters = {};
@@ -26,6 +28,7 @@ define([
 
             fAge: "#fAge",
             fGender: "#fGender",
+            fTags: "#fTags",
             fDate: "#fDate",
             fPlaceTo: "#fPlaceTo",
             fPlaceFrom: "#fPlaceFrom",
@@ -114,6 +117,7 @@ define([
         onRender: function() {
             // this.model.set( 'output', this.getLinks(this.model) );
 
+            this.startTags();
             this.startPrice();
             this.startAge();
             this.startGender();
@@ -258,6 +262,39 @@ define([
 
         },
 
+        startTags: function(val) {
+            var self = this;
+
+            var tagsCollection = new TagsCollection();
+
+            tagsCollection.fetch({
+                success: function(data) {
+
+                    // console.log(data);
+                    // var tags = Templates.travellerDetailsTags({tags: data});
+                    // self.ui.fTags.append( tags );
+
+                }
+            }).always(function() { 
+                
+            });
+
+            Vent.on('tags:obj:changed',function(obj) {
+                
+                console.log(obj);
+                var tags = Templates.travellerDetailsTags({tags: obj});
+                self.ui.fTags.html( tags );
+                
+            });
+
+            Vent.on('url:changed',function(obj) {
+                
+                // tagsCollection.fetch();
+                
+            });
+
+        },
+
         startAge: function(val) {
             var self = this,
                 alias = 'age';
@@ -284,9 +321,9 @@ define([
                 var defMinVal = filterObj.age__gt || '';
                 var defMaxVal = filterObj.age__lt || '';
                 if (defMinVal.length && defMaxVal.length) {
-                    self.ui.fAge.slider( "option", "values", [defMinVal, self.model.get(alias).min] );
+                    self.ui.fAge.slider( "option", "values", [defMinVal, defMaxVal] );
                 } else {
-                    self.ui.fAge.slider( "option", "values", [defMinVal, self.model.get(alias).max] );
+                    self.ui.fAge.slider( "option", "values", [self.model.get(alias).min, self.model.get(alias).max] );
                 }
                 
             });
@@ -294,7 +331,8 @@ define([
         },
 
         startGender: function(val) {
-            var self = this;
+            var self = this,
+                offset = 10;
 
             var alias = 'gender';
             this.ui.fGender.slider({
@@ -302,17 +340,34 @@ define([
                 max: this.model.get(alias).max,
                 value: 50,
                 stop: function( event, ui ) {
-                    var value = ui.value / 10;
-                    Cm.addFilter('gender', value.toFixed().toString());
+
+                    var min = ui.value - ( ui.value * offset / 100 );
+                    var max = ui.value + ( ui.value * offset / 100 );
+                    min = (min < 0) ? 0 : Math.round(min);
+                    max = (max > 100) ? 100 : Math.round(max);
+
+                    // Cm.addFilter('gender', value.toFixed().toString());
+                    Cm.addFilters({
+                        'sex__gte': min.toString(),
+                        'sex__lte': max.toString(),
+                    });
                 }
             });
 
             Vent.on('url:changed',function(filter) {
                 var filterObj = Cm.parseQueryString(filter);
 
-                var defVal = filterObj.gender || '';
-                if (defVal.length) {
-                    defVal = defVal * 10;
+                var defMinVal = filterObj.sex__gte || '';
+                var defMaxVal = filterObj.sex__lte || '';
+
+                if (defMinVal.length && defMaxVal.length) {
+
+                    defMinVal = parseInt( defMinVal );
+                    defMaxVal = parseInt( defMaxVal );
+
+                    var defVal = (defMinVal + defMaxVal) / 2;
+                    defVal = Math.round(defVal);
+
                     self.ui.fGender.slider( "option", "value", defVal );
                 } else {
                     self.ui.fGender.slider( "option", "value", 50 );
@@ -350,9 +405,11 @@ define([
 
                 var defVal = filterObj.start_date__gte || '';
                 if (defVal.length) {
-                    self.ui.fDate.datepicker('update', defVal);
+                    var date = Moment( defVal );
+                    console.log(date.format('MM-YYYY'));
+                    self.ui.fDate.datepicker('update', date.format('MM-YYYY'));
                 } else {
-                    self.ui.fDate.datepicker('update');
+                    self.ui.fDate.datepicker('update', '');
                 }
                 
             });

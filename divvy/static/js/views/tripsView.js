@@ -145,7 +145,10 @@ define([
                     var end = Moment( this.end_date );
 
                     if ( start.format('M') == end.format('M') ) {
-                        output = start.format('D')+" &ndash; "+end.format('D MMMM');
+                        if ( start.format('D') == end.format('D') )
+                            output = start.format('D MMMM');
+                        else
+                            output = start.format('D')+" &ndash; "+end.format('D MMMM');
                     } else {
                         output = start.format('D MMMM')+" &ndash; "+end.format('D MMMM');
                     }
@@ -168,6 +171,9 @@ define([
                     var output = '',
                         maleTotal = 0,
                         femaleTotal = 0,
+                        maleTotalPercent = 0,
+                        femaleTotalPercent = 0,
+                        
                         factTotal = 0,
                         minTotal = this.people_count,
                         maxTotal = this.people_max_count;
@@ -194,11 +200,23 @@ define([
 
 
                     // console.log(maleTotal, femaleTotal);
+
+                    if (factTotal) {
+                        maleTotalPercent = maleTotal * 100 / factTotal;
+                        femaleTotalPercent = femaleTotal * 100 / factTotal;
+                    }
+
                     if ( maleTotal === 0 && femaleTotal === 0 ) {
                         output = 'Будь первым!';
-                    } else if ( maleTotal < femaleTotal ) {
+                    } else if ( maleTotalPercent >= 40 && maleTotalPercent <= 60 ) {
+                        output = "Поровну";
+                    } else if ( maleTotal < femaleTotal && femaleTotalPercent > 90 ) {
+                        output = "Только девушки";
+                    } else if ( maleTotal > femaleTotal && maleTotalPercent > 90 ) {
+                        output = "Только мужчины";
+                    } else if ( maleTotal < femaleTotal && femaleTotalPercent > 55 ) {
                         output = "Преимущественно девушки";
-                    } else if (maleTotal > femaleTotal) {
+                    } else if ( maleTotal > femaleTotal && maleTotalPercent > 55 ) {
                         output = "Преимущественно мужчины";
                     } else {
                         output = "Равенство полов";
@@ -215,12 +233,12 @@ define([
                     factTotal = this.people.length;
                     
                     // @TODO
-                    if (factTotal > maxTotal) maxTotal = factTotal;
+                    if (factTotal > minTotal) minTotal = factTotal;
 
-                    if ( maxTotal < factTotal ) {
+                    if ( minTotal < factTotal ) {
                         output = "Переполнение!";
                     } else {
-                        output = "Набрано "+factTotal+" из "+maxTotal+" человек";
+                        output = "Набрано "+factTotal+" из "+minTotal+" человек";
                     }
 
                     return output;

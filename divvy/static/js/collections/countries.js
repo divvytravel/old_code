@@ -30,7 +30,7 @@ define([
             var params = _.extend(default_params, this.query);
             var str = $.param( params );
 
-            return '/api/v1/tags/?'+str;
+            return '/api/v1/country/?'+str;
         },
 
         parse: function(response) {
@@ -38,8 +38,7 @@ define([
                 return [];
             }
 
-            Vent.trigger('tags:meta:changed', response.meta);
-            Vent.trigger('tags:obj:changed', response.objects);
+            Vent.trigger('cities:meta:changed', response.meta);
 
             return response.objects;
         }

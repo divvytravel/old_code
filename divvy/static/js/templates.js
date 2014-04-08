@@ -9,6 +9,7 @@ define(function(require){
         engineFilters          : require('tpl!templates/engine_filters.tpl'),
 
         travellerDetails       : require('tpl!templates/traveller_details.tpl'),
+        travellerDetailsTags   : require('tpl!templates/engine_filters_tags.tpl'),
 
     };
 });

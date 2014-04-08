@@ -60,7 +60,7 @@
 
 
 <div class="tags">
-  <div class="tags-wrap">
+  <div class="tags-wrap" id="fTags">
     <a href="javascript:void(0)" class="tag tag-radio">
       <input class="hide" type="radio" name="tag_radio" value="1" />
       Активный отдых

@@ -1,6 +1,6 @@
-<div class="item traveller-radio" data-id="<%= id %>">
+<div class="item traveller-radio <%= showActive(id) %>" data-id="<%= id %>">
 
-  <input class="hide" type="radio" name="traveller_radio" data-id="<%= id %>" value="<%= id %>" />
+  <input class="hide" type="radio" name="traveller_radio" data-id="<%= id %>" value="<%= id %>" <%= showChecked(id) %> />
 
   <div class="userpic pull-left">
     <a href="javascript:void(0)"><img src="<%= avatar_url %>"></a>
