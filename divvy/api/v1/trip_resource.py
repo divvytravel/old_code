@@ -106,7 +106,7 @@ class TripResource(ModelResource, BaseResourceMixin):
 
         if bundle.obj.sex is None:
             bundle.data['consist'] = None
-        elif 40 < bundle.obj.sex and bundle.data.sex < 60:
+        elif 40 < bundle.obj.sex and bundle.obj.sex < 60:
             bundle.data['consist'] = u'поровну'
         elif bundle.obj.sex > 70:
             bundle.data['consist'] = u'преимущественно женщины'
