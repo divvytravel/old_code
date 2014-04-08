@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-height">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="/static/ico/favicon.ico">
@@ -34,7 +35,7 @@
 
   <body>
 
-    <div class="header">
+    <div class="header {% if request.user.is_authenticated %}login{% endif %}" id="header_block">
       <div class="navbar navbar-proj" role="navigation">
         <div class="container">
           <div class="navbar-header">
@@ -53,6 +54,13 @@
                   </a>
                 </div>
             {% endif %}
+
+            <script type="text/javascript">
+
+              window.Divvy = {};
+              Divvy.is_authenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+            </script>
 
             <ul class="nav nav-pills nav-proj pull-right">
               <li><a href="#">Путешествия</a></li>

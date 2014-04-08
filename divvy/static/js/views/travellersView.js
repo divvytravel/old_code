@@ -1,8 +1,9 @@
 
 define([
     'marionette',
-    'templates'
-], function (Marionette, Templates) {
+    'templates',
+    'custom'
+], function (Marionette, Templates, Cm) {
     'use strict';
 
     var View = {};
@@ -19,20 +20,23 @@ define([
             // $(e.currentTarget).toggleClass('active');
 
             var $parent = $(e.currentTarget).parent().parent();
-            // var $parent = $(e.currentTarget).closest('');
             var changed = true;
 
             if ($parent.length) {
               var $input = $(e.currentTarget).find('input');
               if ($input.prop('type') == 'radio') {
-                // console.log( $input.prop('checked') );
-                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
+                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = true
                 else $parent.find('.active').removeClass('active')
               }
               if (changed) {
                 $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
                 // Vent.trigger('filter:meta:changed', response.meta);
                 // Cm.addFilter('user_count',$input.val());
+
+                if ( !$input.prop('checked') ) 
+                    Cm.removeFilter('people',$input.val());
+                else
+                    Cm.addFilter('people',$input.val());
                 }
             }
 

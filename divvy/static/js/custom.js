@@ -109,11 +109,59 @@ define([
     };
 
 
+    var addFilters = function(obj, multi) {
+        multi = multi || false;
+        var self = this,
+            objLength = Object.keys(obj).length,
+            counter = 0;
+
+        _.each(obj, function(v, k){
+            counter++;
+
+            var new_filter = self.setFilter(k, v, multi);
+            // console.log(new_filter);
+            Backbone.history.navigate(new_filter, {trigger: false});
+            
+            if (counter >= objLength) 
+                Backbone.history.loadUrl();
+
+        });
+
+        // Backbone.history.stop();
+        // Backbone.history.start();
+
+        // Backbone.history.loadUrl();
+        // Backbone.history.navigate(Backbone.history.fragment, {trigger: true});
+        return true;
+    };
+
+
     var removeFilter = function(key, val, multi) {
         multi = multi || false;
         var new_filter = this.unsetFilter(key, val, multi);
 
         Backbone.history.navigate(new_filter, {trigger: true});
+        return true;
+    };
+
+
+    var removeFilters = function(obj, multi) {
+        multi = multi || false;
+        var self = this,
+            objLength = Object.keys(obj).length,
+            counter = 0;
+
+        _.each(obj, function(v, k){
+            counter++;
+
+            var new_filter = self.unsetFilter(k, v, multi);
+            Backbone.history.navigate(new_filter, {trigger: false});
+            
+            if (counter >= objLength) 
+                Backbone.history.loadUrl();
+
+        });
+
         return true;
     };
 
@@ -143,18 +191,54 @@ define([
     };
 
 
+    var getCorrectStr = function(num, str1, str2, str3) {
+        var val = num % 100;
+
+        if (val > 10 && val < 20) return str3;
+        else {
+            val = num % 10;
+            if (val == 1) return str1;
+            else if (val > 1 && val < 5) return str2;
+            else return str3;
+        }
+    };
+
+    // var getCorrectStr = function(iNumber, aEndings) {
+    //     var sEnding, i;
+    //     iNumber = iNumber % 100;
+    //     if (iNumber>=11 && iNumber<=19) {
+    //         sEnding=aEndings[2];
+    //     }
+    //     else {
+    //         i = iNumber % 10;
+    //         switch (i)
+    //         {
+    //             case (1): sEnding = aEndings[0]; break;
+    //             case (2):
+    //             case (3):
+    //             case (4): sEnding = aEndings[1]; break;
+    //             default: sEnding = aEndings[2];
+    //         }
+    //     }
+    //     return sEnding;
+    // };
+
+
     return {
         urldecode: urldecode,
         parseQueryString: parseQueryString,
         setFilter: setFilter,
         addFilter: addFilter,
+        addFilters: addFilters,
         unsetFilter: unsetFilter,
         removeFilter: removeFilter,
+        removeFilters: removeFilters,
         getServerQueryString: getServerQueryString,
 
         setCookie: setCookie,
         getCookie: getCookie,
-        removeCookie: removeCookie
+        removeCookie: removeCookie,
+        getCorrectStr: getCorrectStr,
     };
 
 });

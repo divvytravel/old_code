@@ -1,4 +1,4 @@
-<div class="item traveller-radio">
+<div class="item traveller-radio" data-id="<%= id %>">
 
   <input class="hide" type="radio" name="traveller_radio" data-id="<%= id %>" value="<%= id %>" />
 
@@ -9,11 +9,14 @@
     <div class="info-wrap">
       <span class="info-wrap-align">
         <a href="javascript:void(0)"><%= first_name %> <%= last_name %></a>
-        <span><%= age %>, 
+        <span>
 
+          <span>
+          <%= age %>, 
           <% if (city != null) { %>
-            <span><%= city %></span>
+            <%= city.name %>
           <% } %>
+          </span>
           
         </span>
 

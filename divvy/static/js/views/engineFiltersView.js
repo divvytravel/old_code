@@ -4,13 +4,14 @@ define([
     'vent',
     'templates',
     'custom',
+    'moment',
     'jquery',
     'hb',
     'jquery-ui',
     'bootstrap-datepicker',
     'typeahead',
     'touch-punch'
-], function (Marionette, Vent, Templates, Cm) {
+], function (Marionette, Vent, Templates, Cm, Moment) {
     'use strict';
 
     var EngineFilters = {};
@@ -46,20 +47,41 @@ define([
 
         userToggle: function(e) {
             var $parent = $(e.currentTarget).parent().parent();
-            // var $parent = $(e.currentTarget).closest('');
             var changed = true;
 
             if ($parent.length) {
-              var $input = $(e.currentTarget).find('input');
-              if ($input.prop('type') == 'radio') {
-                // console.log( $input.prop('checked') );
-                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
-                else $parent.find('.active').removeClass('active')
-              }
-              if (changed) {
-                $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
-                // Vent.trigger('filter:meta:changed', response.meta);
-                Cm.addFilter('user_count',$input.val());
+                var $input = $(e.currentTarget).find('input');
+                if ($input.prop('type') == 'radio') {
+                    if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = true
+                    else $parent.find('.active').removeClass('active')
+                }
+                if (changed) {
+                    $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+                    // Vent.trigger('filter:meta:changed', response.meta);
+                    if ( !$input.prop('checked') ) {
+                        // @TODO вынести в custom
+                        // Cm.removeFilter('people_count__gt');
+                        // Cm.removeFilter('people_count__lt');
+                        // Backbone.history.navigate(Cm.unsetFilter('people_count__gt'), {trigger: false});
+                        // Backbone.history.navigate(Cm.unsetFilter('people_count__lt'), {trigger: true});
+                        Cm.removeFilters({
+                            'people_count__gt': 0,
+                            'people_count__lt': 0
+                        });
+                    // people_count
+                    } else {
+                        if ($input.data('lt')) {
+                            // Cm.addFilter('people_count__lt',$input.data('lt'));
+                            Backbone.history.navigate(Cm.setFilter('people_count__lt',$input.data('lt')), {trigger: false});
+                        } else { 
+                            // Cm.removeFilter('people_count__lt');
+                            Backbone.history.navigate(Cm.unsetFilter('people_count__lt'), {trigger: false});
+                        }
+                        // Cm.addFilter('people_count__gt',$input.data('gt'));
+                        Backbone.history.navigate(Cm.setFilter('people_count__gt',$input.data('gt')), {trigger: true});
+                        
+                    }
+
                 }
             }
 
@@ -68,18 +90,21 @@ define([
 
         tagToggle: function(e) {
             var $parent = $(e.currentTarget).parent().parent();
-            // var $parent = $(e.currentTarget).closest('');
             var changed = true;
 
             if ($parent.length) {
-              var $input = $(e.currentTarget).find('input');
-              if ($input.prop('type') == 'radio') {
-                // console.log( $input.prop('checked') );
-                if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = false
-                else $parent.find('.active').removeClass('active')
-              }
-              if (changed) {
-                $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+                var $input = $(e.currentTarget).find('input');
+                if ($input.prop('type') == 'radio') {
+                    if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = true
+                    else $parent.find('.active').removeClass('active')
+                }
+                if (changed) {
+                    $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
+
+                    if ( !$input.prop('checked') ) 
+                        Cm.removeFilter('tags',$input.val());
+                    else
+                        Cm.addFilter('tags',$input.val());
                 }
             }
 
@@ -182,9 +207,14 @@ define([
         },
 
         startPrice: function(val) {
-            var self = this;
+            var self = this,
+                alias = 'price';
 
-            var alias = 'price';
+            // if (this.filter.price__gt) {
+                // var defMinVal = this.options.filter.price__gt || this.model.get(alias).min;
+                // var defMaxVal = this.options.filter.price__lt || this.model.get(alias).max;
+            // }
+
             this.ui.fPrice.slider({
                 range: true,
                 min: this.model.get(alias).min,
@@ -194,33 +224,44 @@ define([
                     this.model.get(alias).max
                 ],
                 stop: function( event, ui ) {
-                    Cm.addFilter('price_min',ui.values[0]);
-                    Cm.addFilter('price_max',ui.values[1]);
+                    Cm.addFilters({
+                        'price__gt': ui.values[0],
+                        'price__lt': ui.values[1]
+                    });
                 }
             });
-
-            // this.ui.fPrice.slider({
-            //     stop: function( event, ui ) {
-
-            //     }
-            // });
 
             // Vent.on('filter:price:changed',function(response) {
             Vent.on('trips:meta:changed',function(response) {
 
-                self.ui.fPriceMin.text( response.min_price );
-                self.ui.fPriceMax.text( response.max_price );
-                self.ui.fPrice.slider( "option", "min", response.min_price );
-                self.ui.fPrice.slider( "option", "max", response.max_price );
+                // self.ui.fPriceMin.text( response.min_price );
+                // self.ui.fPriceMax.text( response.max_price );
+                // self.ui.fPrice.slider( "option", "min", response.min_price );
+                // self.ui.fPrice.slider( "option", "max", response.max_price );
+
                 // self.ui.fPrice.slider( "option", "values", [response.min_price,response.max_price] );
 
+            });
+
+            Vent.on('url:changed',function(filter) {
+                var filterObj = Cm.parseQueryString(filter);
+
+                var defMinVal = filterObj.price__gt || '';
+                var defMaxVal = filterObj.price__lt || '';
+                if (defMinVal.length && defMaxVal.length) {
+                    self.ui.fPrice.slider( "option", "values", [defMinVal, defMaxVal] );
+                } else {
+                    self.ui.fPrice.slider( "option", "values", [self.model.get(alias).min, self.model.get(alias).max] );
+                }
+                
             });
 
         },
 
         startAge: function(val) {
+            var self = this,
+                alias = 'age';
 
-            var alias = 'age';
             this.ui.fAge.slider({
                 range: true,
                 min: this.model.get(alias).min,
@@ -230,35 +271,90 @@ define([
                     this.model.get(alias).max 
                 ],
                 stop: function( event, ui ) {
-                    Cm.addFilter('age_min',ui.values[0]);
-                    Cm.addFilter('age_max',ui.values[1]);
+                    Cm.addFilters({
+                        'age__gt': ui.values[0],
+                        'age__lt': ui.values[1]
+                    });
                 }
+            });
+
+            Vent.on('url:changed',function(filter) {
+                var filterObj = Cm.parseQueryString(filter);
+
+                var defMinVal = filterObj.age__gt || '';
+                var defMaxVal = filterObj.age__lt || '';
+                if (defMinVal.length && defMaxVal.length) {
+                    self.ui.fAge.slider( "option", "values", [defMinVal, self.model.get(alias).min] );
+                } else {
+                    self.ui.fAge.slider( "option", "values", [defMinVal, self.model.get(alias).max] );
+                }
+                
             });
 
         },
 
         startGender: function(val) {
+            var self = this;
 
             var alias = 'gender';
             this.ui.fGender.slider({
                 min: this.model.get(alias).min,
                 max: this.model.get(alias).max,
-                value: 5,
+                value: 50,
                 stop: function( event, ui ) {
-                    Cm.addFilter('gender',ui.value.toString());
+                    var value = ui.value / 10;
+                    Cm.addFilter('gender', value.toFixed().toString());
                 }
+            });
+
+            Vent.on('url:changed',function(filter) {
+                var filterObj = Cm.parseQueryString(filter);
+
+                var defVal = filterObj.gender || '';
+                if (defVal.length) {
+                    defVal = defVal * 10;
+                    self.ui.fGender.slider( "option", "value", defVal );
+                } else {
+                    self.ui.fGender.slider( "option", "value", 50 );
+                }
+                
             });
 
         },
 
         startDate: function(val) {
+            var self = this;
 
             var current = '';
             this.ui.fDate.datepicker({
                 format: "mm-yyyy",
                 viewMode: "months", 
                 minViewMode: "months",
+                autoclose: true,
                 language: "ru"
+            })
+            .on("changeDate", function(e){
+                var start = Moment( e.date );
+                var end = Moment( e.date ).add('M', 1);
+
+                Cm.addFilters({
+                    'start_date__gte': start.format('YYYY-MM-DD'),
+                    'start_date__lt': end.format('YYYY-MM-DD'),
+                });
+            });
+
+            // start_date
+
+            Vent.on('url:changed',function(filter) {
+                var filterObj = Cm.parseQueryString(filter);
+
+                var defVal = filterObj.start_date__gte || '';
+                if (defVal.length) {
+                    self.ui.fDate.datepicker('update', defVal);
+                } else {
+                    self.ui.fDate.datepicker('update');
+                }
+                
             });
 
         },

@@ -32,12 +32,16 @@ define([
     });
 
     $('.godown a').click(function(){
-        var speed = 500;
+        var speed = 300;
         var to = $('.main-page').offset().top;
 
         $('html, body').animate({scrollTop: to}, speed);
 
         return false;
+    });
+
+    $("a[href^='#']").click(function(e){
+        e.preventDefault();
     });
 
 });

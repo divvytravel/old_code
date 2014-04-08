@@ -1,35 +1,35 @@
 <div class="item clearfix">
   <div class="title">
     <a href="#"><%= title %></a>
-    <span class="title-star"></span>
+    <!-- <span class="title-star"></span> -->
   </div>
   <div class="tour">
-    <span>Россия</span>
-    <i> → </i>
-    <span>Москва</span>
+    <%= showPlaceName() %>
   </div>
 
   <div class="tags">
     <% _.each(tags, function(tag) { %>
-      <a href="#" class="tag"><%= tag.name %></a>
+      <a href="#" class="tag" data-id="<%= tag.name %>"><%= tag.name %></a>
     <% }); %>
   </div>
 
   <div class="content">
     <div class="preview">
+      <% if(recommended) { %>
+        <div class="recommended"></div>
+      <% } %>
       <img class="img-rounded" src="<%= image %>">
     </div>
 
     <div class="info">
       <div class="title">
         <span class="calendar-black"></span>
-        <span>08 – 16 февраля</span>
+        <span><%= showDateRange() %></span>
       </div>
       <div class="detail">
-        <div class="price"><%= price %> евро</div>
+        <div class="price"><%= price %> &euro;</div>
         <div class="type">
-          <span>Некоммерческая</span>
-          <span> поездка </span>
+          <span><%= showTripType() %></span>
           <span class="help">
             <i class="help-icon help-tooltip">?</i>
           </span>
@@ -47,7 +47,7 @@
         <div class="travellers-title">Компания</div>
         <div class="slider">
           <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-slider-range ui-widget-header ui-corner-all" style="left:0%;width:50%;"></div>
+            <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" style="left:0%;width:50%;"></div>
           </div>
           <span class="help">
             <i class="help-icon help-tooltip">?</i>
@@ -55,10 +55,10 @@
         </div>
         <div class="ratio">
           <div>
-            <span>Набрано <%= people_count %> из <%= people_max_count %> человек </span>
+            <span><%= showOccup() %></span>
           </div>
           <div>
-            <span>Преимущественно девушки</span>
+            <span><%= showSexMajority() %></span>
           </div>
         </div>
         <div class="list">
@@ -66,7 +66,11 @@
             
               <% _.each(people, function(user) { %>
 
-                <div class="item-icon traveller-item" data-url="<%= user.avatar_url %>" data-name="<%= user.first_name %> <%= user.last_name %>">
+                <div class="item-icon traveller-item" data-url="<%= user.avatar_url %>" 
+                  data-name="<%= user.first_name %> <%= user.last_name %>"
+                  data-age="<% if (user.age != null) { %><%= user.age %><% } else { %><% } %>"
+                  data-city="<% if (user.city != null) { %><%= user.city.name %><% } else { %><% } %>"
+                  data-career="<% if (user.career != null) { %><%= user.career %><% } else { %><% } %>">
                   <a href="javascript:void(0)">
                     <img src="<%= user.avatar_url %>">
                   </a>

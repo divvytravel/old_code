@@ -10,7 +10,15 @@
     </div>
     <div class="details-info">
       <a href="#"><%= data.name %></a>
-      <span>24, Стамбул</span>
+      <span>
+        <%= data.age %>, 
+        <% if (data.city != null) { %>
+          <%= data.city %>
+        <% } %>
+      </span>
+      <% if (data.career != null) { %>
+        <span><%= data.career %></span>
+      <% } %>
     </div>
   </div>
 </div>
