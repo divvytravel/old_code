@@ -1,11 +1,13 @@
 <div class="main">
   <div class="title">
     Путешествие
+    <span class="drop-filters drop-trip-filters" id="dropTripFilters">Сбросить</span>
   </div>
   <div class="filter-container">
     <div class="column">
       <div class="date-picker-proj">
         <input id="fDate" type="text" class="input-proj" placeholder="Когда">
+        <div id="fDateIcon" class="input-icon-proj"></div>
       </div>
 
       <div class="filter-or-separator">или...</div>
@@ -22,9 +24,11 @@
         <!-- <input type="text" id="amount" style="border:0; color:#f6931f; font-weight:bold;"> -->
          
         <div id="fPrice"></div>
+        <span id="fPriceMinSlide"></span>
+        <span id="fPriceMaxSlide"></span>
         <div class="slider-limits">
-          <span><span id="fPriceMin"><%= price.min %></span> &euro;</span>
-          <span><span id="fPriceMax"><%= price.max %></span> &euro;</span>
+          <span><span id="fPriceMin"><%= price.min %></span><!--  &euro; --></span>
+          <span><span id="fPriceMax"><%= price.max %></span><!--  &euro; --></span>
           <% showPrice() %>
         </div>
       </div>
@@ -84,7 +88,8 @@
 
 <div class="companions">
   <div class="title">
-    Компания и попутчики
+    Компания и <span class="pink">попутчики</span>
+    <span class="drop-filters drop-group-filters" id="dropGroupFilters">Сбросить</span>
   </div>
   <div class="filter-container">
     <div class="column">
@@ -96,8 +101,8 @@
       <div class="slider-label">ВОЗРАСТ</div>
       <div id="fAge"></div>
       <div class="slider-limits">
-        <span><%= age.min %></span>
-        <span><%= age.max %></span>
+        <span><span id="fAgeMin"><%= age.min %></span></span>
+        <span><span id="fAgeMax"><%= age.max %></span></span>
       </div>
     </div>
     <div class="column">

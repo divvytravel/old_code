@@ -39,15 +39,15 @@ define([
         travellerDetails: function(e) {
             
             var position = $(e.currentTarget).position();
-            // var top = position.top;
-            // var left = position.left;
 
             var index = $(e.currentTarget).index() + 1;
             var step = 61;
             var top = -9;
             var left = -9;
-            if (index > 3) top = top + step;
-            // console.log($(e.currentTarget).data());
+            top = top + position.top;
+            left = left + position.left;
+            // if (index > 3) top = top + step;
+            // if (index % 3 == 0) left = left + step;
             var details = Templates.travellerDetails({top: top, left: left, data: $(e.currentTarget).data() });
             $(e.currentTarget).parent().append(details);
         },
@@ -104,7 +104,7 @@ define([
             if (factTotal > 1) {
                 maleTotalProc = (100 / factTotal) * maleTotal;
                 femaleTotalProc = 100 - maleTotalProc;
-                console.log(maleTotal,femaleTotal);
+                // console.log(maleTotal,femaleTotal);
 
                 var min = Math.min.apply(null, [maleTotalProc, femaleTotalProc]);
                 min = min/2;
@@ -249,9 +249,12 @@ define([
                         country = this.country || '';
 
                     if ( city.length > 0 && city.length > 0 ) {
+                        // output = "<span>"+city+"</span>"+
+                        // "<i> → </i>"+
+                        // "<span>"+country+"</span>";
                         output = "<span>"+city+"</span>"+
-                        "<i> → </i>"+
-                        "<span>"+country+"</span>";
+                        "&nbsp;"+
+                        "<span>("+country+")</span>";
                     }
 
                     return output;
@@ -302,13 +305,15 @@ define([
     });
 
 
-    // View.EmptyView = Marionette.CompositeView.extend({
-    //     template: Templates.emptyTemplate
-    // });
+    View.EmptyView = Marionette.CompositeView.extend({
+        template: Templates.emptyTrips
+    });
 
 
     View.CollectionView = Marionette.CollectionView.extend({
-        itemView : View.ItemView,
+        itemView: View.ItemView,
+
+        emptyView: View.EmptyView,
 
         /**
          * Custom build for pass viewtype to ItemView

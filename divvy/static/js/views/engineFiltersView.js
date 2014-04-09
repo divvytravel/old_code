@@ -25,14 +25,22 @@ define([
             fPrice: "#fPrice",
             fPriceMin: "#fPriceMin",
             fPriceMax: "#fPriceMax",
+            fPriceMinSlide: "#fPriceMinSlide",
+            fPriceMaxSlide: "#fPriceMaxSlide",
 
             fAge: "#fAge",
+            fAgeMin: "#fAgeMin",
+            fAgeMax: "#fAgeMax",
+
             fGender: "#fGender",
             fTags: "#fTags",
             fDate: "#fDate",
+            fDateIcon: "#fDateIcon",
             fPlaceTo: "#fPlaceTo",
             fPlaceFrom: "#fPlaceFrom",
             fUserCount: ".user-count",
+            dropTripFilters: ".drop-trip-filters",
+            dropGroupFilters: ".drop-group-filters"
         },
 
         events: {
@@ -40,8 +48,22 @@ define([
             "click .efilter": "eFilter",
             // "click .button-toggle": "toggleButton",
             "click .user-count": "userToggle",
-            "click .tag-radio": "tagToggle"
+            "click .tag-radio": "tagToggle",
+            "click .drop-trip-filters": "dropTripFilters",
+            "click .drop-group-filters": "dropGroupFilters"
 
+        },
+
+        dropTripFilters: function(e) {
+            var params = ['price', 'people_count', 'start_date'];
+            var filters = this._getFilterParams(params);
+            Cm.removeFilters(filters);
+        },
+
+        dropGroupFilters: function(e) {
+            var params = ['age', 'sex'];
+            var filters = this._getFilterParams(params);
+            Cm.removeFilters(filters);
         },
 
         toggleButton: function(e) {
@@ -116,6 +138,7 @@ define([
 
         onRender: function() {
             // this.model.set( 'output', this.getLinks(this.model) );
+            var self = this;
 
             this.startTags();
             this.startPrice();
@@ -124,6 +147,25 @@ define([
             this.startDate();
             this.startPlaceTo();
             this.startPlaceFrom();
+
+            Vent.on('url:changed',function(filter) {
+                var params = ['price', 'people_count', 'start_date'];
+                var filters = self._getFilterParams(params);
+
+                if ( !Cm.checkFilters(filters) )
+                    self.ui.dropTripFilters.hide();
+                else
+                    self.ui.dropTripFilters.show();
+
+                var params = ['age', 'sex'];
+                var filters = self._getFilterParams(params);
+
+                if ( !Cm.checkFilters(filters) )
+                    self.ui.dropGroupFilters.hide();
+                else
+                    self.ui.dropGroupFilters.show();
+
+            });
 
         },
 
@@ -227,13 +269,43 @@ define([
                     this.model.get(alias).min, 
                     this.model.get(alias).max
                 ],
+                create: function(event, ui) {
+                    // self.ui.fPriceMinSlide.appendTo( self.ui.fPrice.find('a').get(0) );
+                    // self.ui.fPriceMaxSlide.appendTo( self.ui.fPrice.find('a').get(1) );
+                },
+                slide: function(event, ui) {
+                    self.ui.fPriceMin.html(ui.values[ 0 ] + '&nbsp;&euro;');
+                    self.ui.fPriceMax.html(ui.values[ 1 ] + '&nbsp;&euro;');
+                    // self.ui.fPrice.find(ui.handle).find('span').html(ui.value + '&nbsp;&euro;');
+                },
                 stop: function( event, ui ) {
                     Cm.addFilters({
                         'price__gt': ui.values[0],
                         'price__lt': ui.values[1]
                     });
+                },
+                change: function( event, ui ) {
+                    self.ui.fPriceMin.html( self.ui.fPrice.slider( "values", 0 ) + '&nbsp;&euro;');
+                    self.ui.fPriceMax.html( self.ui.fPrice.slider( "values", 1 ) + '&nbsp;&euro;');
                 }
             });
+
+            self.ui.fPriceMin.html( self.ui.fPrice.slider( "values", 0 ) + '&nbsp;&euro;');
+            self.ui.fPriceMax.html( self.ui.fPrice.slider( "values", 1 ) + '&nbsp;&euro;');
+
+            // self.ui.fPriceMinSlide.html( self.ui.fPrice.slider('values', 0) + '&nbsp;&euro;' ).position({
+            //     my: 'center top',
+            //     at: 'center bottom',
+            //     of: self.ui.fPrice.find('a:eq(0)'),
+            //     offset: "0, 10"
+            // });
+
+            // self.ui.fPriceMaxSlide.html( self.ui.fPrice.slider('values', 1) + '&nbsp;&euro;' ).position({
+            //     my: 'center top',
+            //     at: 'center bottom',
+            //     of: self.ui.fPrice.find('a:eq(1)'),
+            //     offset: "0, 10"
+            // });
 
             // Vent.on('filter:price:changed',function(response) {
             Vent.on('trips:meta:changed',function(response) {
@@ -282,7 +354,7 @@ define([
             Vent.on('tags:obj:changed',function(obj) {
                 
                 console.log(obj);
-                var tags = Templates.travellerDetailsTags({tags: obj});
+                var tags = Templates.engineFiltersTags({tags: obj});
                 self.ui.fTags.html( tags );
                 
             });
@@ -307,11 +379,19 @@ define([
                     this.model.get(alias).min, 
                     this.model.get(alias).max 
                 ],
+                slide: function(event, ui) {
+                    self.ui.fAgeMin.html(ui.values[ 0 ] );
+                    self.ui.fAgeMax.html(ui.values[ 1 ] );
+                },
                 stop: function( event, ui ) {
                     Cm.addFilters({
                         'age__gt': ui.values[0],
                         'age__lt': ui.values[1]
                     });
+                },
+                change: function( event, ui ) {
+                    self.ui.fAgeMin.html( self.ui.fAge.slider( "values", 0 ) );
+                    self.ui.fAgeMax.html( self.ui.fAge.slider( "values", 1 ) );
                 }
             });
 
@@ -386,7 +466,9 @@ define([
                 viewMode: "months", 
                 minViewMode: "months",
                 autoclose: true,
-                language: "ru"
+                language: "ru",
+                startDate: "04-2014",
+                endDate: "07-2014"
             })
             .on("changeDate", function(e){
                 var start = Moment( e.date );
@@ -397,6 +479,11 @@ define([
                     'start_date__lt': end.format('YYYY-MM-DD'),
                 });
             });
+
+            this.ui.fDateIcon.on( "click", function() {
+                // self.ui.fDate.trigger( "click" );
+                self.ui.fDate.datepicker('showTrigger');
+            });            
 
             // start_date
 
@@ -483,6 +570,21 @@ define([
                 {'value':'Мосул','country':'Ирак'}
             ];
             return states;
+        },
+
+        _getFilterParams: function(params) {
+
+            var postfix = ['gt', 'gte', 'lt', 'lte'];
+
+            var filterParams = {};
+            _.each(params, function(v){
+                _.each(postfix, function(vp){
+                    filterParams[v + "__" + vp] = 0;
+                });
+                // filterParams[v] = 0;
+            });
+
+            return filterParams;
         }
 
     });

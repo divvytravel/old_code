@@ -40,8 +40,10 @@ define([
             var query = {};
 
             _.each(this.query, function(value, key) {
-                key = 'trips__'+key;
-                query[key] = value;
+                if (key != 'v') {
+                    key = 'trips__' + key;
+                    query[key] = value;
+                }
             });
 
             var params = _.extend(default_params, query);

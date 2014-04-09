@@ -1293,6 +1293,7 @@ fieldset[disabled] .datepicker table tr td.active {
       background: none;
       color: #999999;
       cursor: default;
+      border: 1px solid #fff !important;
     }
   }
   &.active {

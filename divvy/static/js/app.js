@@ -88,6 +88,10 @@ define(function (require) {
         //     filterObj.view = f_view;
         //     Cm.addFilter('view', f_view);
         // }
+        if(!filterObj.v) {
+            var v = '0';
+            Cm.addFilter('v', v);
+        }
 
         // App.engineFilters.show(new EngineFiltersView({query_filter: filterObj}));
         App.engineFilters.show( new EngineFiltersView({model: engineFiltersModel, filter: filterObj}) );
@@ -185,7 +189,8 @@ define(function (require) {
         if (response.total_count) {
             $("#trips_layout_count").text('Подходит '+response.total_count+' путешеств' + Cm.getCorrectStr(response.total_count,'ие','ия','ий') ).show();
         } else {
-            $("#trips_layout_count").html('Ничего не найдено <br><br>').show();
+            // $("#trips_layout_count").html('Ничего не найдено <br><br>').show();
+            $("#trips_layout_count").hide();
         }
         
     });
