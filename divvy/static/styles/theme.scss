@@ -379,10 +379,29 @@ a:focus {
     min-height: 400px;
     margin-bottom: 34px;
     .filters {
+      .pink {
+        color: #f2555d;
+      }
+      .drop-filters {
+        font-family: $font-family-sans-serif;
+        display: inline-block;
+        position: relative;
+        top: -8px;
+        // left: 9px;
+        font-size: 11px;
+        line-height: 18px;
+        color: #30b9db;
+        background: url("/static/img/x-radial-blue.png") no-repeat;
+        padding: 0 0 0 20px;
+        margin-left: 2px;
+        cursor: pointer;
+      }
       .main {
         border-bottom: 1px solid #E5E5E5;
         padding: 28px 36px;
-        
+        .title {
+          
+        }
       }
       .tags {
         // margin-top: 12px;
@@ -553,6 +572,18 @@ a:focus {
         font-size: 11px;
         margin: 15px 0 0 36px;
       }
+
+      .not-found {
+        text-align: center;
+        font-size: 22px;
+        font-family: pragmatica-web;
+        padding: 37px 0 26px 0;
+        color: rgba(0, 0, 0, 0.8);
+        img {
+          margin-bottom: 10px;
+        }
+      }
+
       .item {
         border-bottom: 1px solid #E5E5E5;
         padding: 24px 36px 29px;
@@ -955,8 +986,7 @@ a:focus {
 .date-picker-proj {
   position: relative;
   cursor: pointer;
-  &:after {
-    content: "";
+  .input-icon-proj {
     display: block;
     position: absolute;
     height: 15px;
@@ -968,6 +998,19 @@ a:focus {
     background-position: 0px 0px;
     cursor: pointer;
   }
+  // &:after {
+  //   content: "";
+  //   display: block;
+  //   position: absolute;
+  //   height: 15px;
+  //   width: 17px;
+  //   top: 8px;
+  //   right: 8px;
+  //   background-image: url("../img/calendar-blue.png");
+  //   background-repeat: no-repeat;
+  //   background-position: 0px 0px;
+  //   cursor: pointer;
+  // }
 }
 
 .select-place-proj {

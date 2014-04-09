@@ -425,6 +425,12 @@
 
 		},
 
+		showTrigger: function(){
+			// console.log( $(".datepicker-dropdown").length );
+			// if ( !$('body').hasClass('datepicker-dropdown') )
+			this.show();
+		},
+
 		hide: function(){
 			if (this.isInline)
 				return;

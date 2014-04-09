@@ -166,6 +166,24 @@ define([
     };
 
 
+    var checkFilters = function(obj) {
+        var output = false;
+        // var counter = 0;
+
+        var filter = Backbone.history.fragment;
+        var filter_obj = parseQueryString( filter );
+
+        _.each(obj, function(v, k){
+            
+            if ( _.has(filter_obj, k) )
+                output = true;
+
+        });
+
+        return output;
+    };
+
+
     var getServerQueryString = function(filter) {
         var output = '';
         output = setFilter('current_category', Emart.current_category);
@@ -233,6 +251,7 @@ define([
         unsetFilter: unsetFilter,
         removeFilter: removeFilter,
         removeFilters: removeFilters,
+        checkFilters: checkFilters,
         getServerQueryString: getServerQueryString,
 
         setCookie: setCookie,
