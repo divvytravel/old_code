@@ -59,6 +59,9 @@ class TripResource(ModelResource, BaseResourceMixin):
                                   related_name='trips', full=True, null=True)
     images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
+    city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
+                             full=True, null=True)
+
     class Meta(BaseResourceMixin.Meta):
         queryset = Trip.objects.prefetch_related('people').all()
         allowed_methods = ['get']
@@ -72,6 +75,7 @@ class TripResource(ModelResource, BaseResourceMixin):
             'sex': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'age': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'people': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
+            'city': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
         }
         paginator_class = TripPaginator
 
@@ -101,8 +105,8 @@ class TripResource(ModelResource, BaseResourceMixin):
         bundle.data['country'] = u'%s' % bundle.obj.city.country
         bundle.data['country_id'] = bundle.obj.city.country_id
 
-        bundle.data['city'] = u'%s' % bundle.obj.city.name
-        bundle.data['city_id'] = bundle.obj.city_id
+        # bundle.data['city'] = u'%s' % bundle.obj.city.name
+        # bundle.data['city_id'] = bundle.obj.city_id
 
         if bundle.obj.sex is None:
             bundle.data['consist'] = None
