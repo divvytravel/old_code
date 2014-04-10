@@ -62,7 +62,7 @@ class TripResource(ModelResource, BaseResourceMixin):
     categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
                                         related_name='trips', full=True, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
-                                  related_name='trips', full=False, null=True)
+                                  related_name='trips', full=True, null=True)
     images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
     city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
@@ -139,7 +139,7 @@ class DateResource(TripResource):
 
     city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
                              full=False, null=True)
-    
+
     class Meta(TripResource.Meta):
         excludes = ['id', 'currency', 'descr_additional', 'descr_company'
                     'descr_main', 'descr_share', 'image', 'images',
