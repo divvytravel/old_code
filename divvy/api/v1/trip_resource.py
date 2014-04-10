@@ -76,7 +76,7 @@ class TripResource(ModelResource, BaseResourceMixin):
             'people_count': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'price': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'start_date': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
-            'category': ('exact', ),
+            'categories': ('exact', ),
             'tags': ('exact', 'range'),
             'sex': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'age': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
@@ -126,6 +126,27 @@ class TripResource(ModelResource, BaseResourceMixin):
             bundle.data['consist'] = u'только женщины'
         elif bundle.obj.sex < 10:
             bundle.data['consist'] = u'только мужчины'
+        return bundle
+
+
+class DateResource(TripResource):
+    people = fields.ManyToManyField(UserResource, attribute='people', full=False, null=True)
+    categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
+                                        related_name='trips', full=False, null=True)
+    tags = fields.ManyToManyField(TagsResource, attribute='tags',
+                                  related_name='trips', full=False, null=True)
+    images = fields.ManyToManyField(ImageResource, attribute='images', full=False, null=True)
+
+    city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
+                             full=False, null=True)
+    
+    class Meta(TripResource.Meta):
+        excludes = ['id', 'currency', 'descr_additional', 'descr_company'
+                    'descr_main', 'descr_share', 'image', 'images',
+                    'includes', 'price_type', 'recommended', 'title'
+                    ]
+
+    def dehydrate(self, bundle):
         return bundle
 
 
