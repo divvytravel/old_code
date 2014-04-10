@@ -57,7 +57,7 @@ class UserResource(ModelResource, BaseResourceMixin):
 
         filtering = {
             'trips': ALL_WITH_RELATIONS,
-            }
+        }
 
     def dehydrate(self, bundle):
         bundle.data['age'] = bundle.obj.get_age()

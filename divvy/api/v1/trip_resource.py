@@ -3,6 +3,7 @@ __author__ = 'indieman'
 
 from tastypie.resources import ModelResource
 from tastypie import fields
+from tastypie.constants import ALL_WITH_RELATIONS
 
 from .base import BaseResourceMixin
 
@@ -21,12 +22,17 @@ class ImageResource(ModelResource, BaseResourceMixin):
 
 
 class TagsResource(ModelResource, BaseResourceMixin):
+    trips = fields.ManyToManyField('api.v1.trip_resource.TripResource', attribute='trips',
+                                   related_name='tags', full=False, null=True)
+
     class Meta(BaseResourceMixin.Meta):
         queryset = Tags.objects.all()
         allowed_methods = ['get']
 
         filtering = {
             'main_page': ('exact', ),
+            # 'trips': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
+            'trips': ALL_WITH_RELATIONS
         }
 
 
@@ -56,7 +62,7 @@ class TripResource(ModelResource, BaseResourceMixin):
     categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
                                         related_name='trips', full=True, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
-                                  related_name='trips', full=True, null=True)
+                                  related_name='trips', full=False, null=True)
     images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
     city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
