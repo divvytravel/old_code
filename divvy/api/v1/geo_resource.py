@@ -14,9 +14,8 @@ from api.v1.trip_resource import TripResource
 class CityResource(ModelResource, BaseResourceMixin):
     trips = fields.OneToManyField(TripResource, attribute='trips',
                                   full=False, null=True)
-    # users = fields.OneToManyField('api.v1.user_resource.UserResource',
-    #                               attribute='users', related_name='city',
-    #                               full=True, null=True)
+    country = fields.ToOneField('api.v1.geo_resource.CountryResource', attribute='country',
+                                full=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = City.objects.all()
@@ -28,7 +27,7 @@ class CityResource(ModelResource, BaseResourceMixin):
 
 
 class CountryResource(ModelResource, BaseResourceMixin):
-    cities = fields.OneToManyField(CityResource, attribute='cities', full=True)
+    cities = fields.OneToManyField(CityResource, attribute='cities', full=False)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = Country.objects.all()
