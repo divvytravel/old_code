@@ -6,24 +6,25 @@ define([
 ], function (Backbone, Vent, Cm) {
     'use strict';
 
-    var CountrieModel = Backbone.Model.extend({
+    var DateModel = Backbone.Model.extend({
 
         defaults: {
-            "id": 0, 
-            "name": "", 
-            "resource_uri": ""
+            "end_date": "", 
+            "end_people_date": "", 
+            "start_date": ""
         },
 
     });
 
-    var CountrieCollection = Backbone.Collection.extend({
-        model: CountrieModel,
+    var DateCollection = Backbone.Collection.extend({
+        model: DateModel,
 
         query: {},
 
         url: function() {
             var default_params = {
-                'format': 'json'
+                'format': 'json',
+                'limit': 100
             };
 
             var query = {};
@@ -31,7 +32,7 @@ define([
             var params = _.extend(default_params, query);
             var str = $.param( params );
 
-            return '/api/v1/country/?'+str;
+            return '/api/v1/date/?'+str;
         },
 
         parse: function(response) {
@@ -39,13 +40,13 @@ define([
                 return [];
             }
 
-            Vent.trigger('countries:meta:changed', response.meta);
-            Vent.trigger('countries:obj:changed', response.objects);
+            Vent.trigger('dates:meta:changed', response.meta);
+            Vent.trigger('dates:obj:changed', response.objects);
 
             return response.objects;
         }
     });
 
 
-    return CountrieCollection;
+    return DateCollection;
 });

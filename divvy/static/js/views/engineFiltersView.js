@@ -7,13 +7,14 @@ define([
     'moment',
     'collections/tags',
     'collections/countries',
+    'collections/dates',
     'jquery',
     'hb',
     'jquery-ui',
     'bootstrap-datepicker',
     'typeahead',
     'touch-punch'
-], function (Marionette, Vent, Templates, Cm, Moment, TagsCollection, CountriesCollection) {
+], function (Marionette, Vent, Templates, Cm, Moment, TagsCollection, CountriesCollection, DatesCollection) {
     'use strict';
 
     var EngineFilters = {};
@@ -37,6 +38,7 @@ define([
             fDate: "#fDate",
             fDateIcon: "#fDateIcon",
             fPlaceTo: "#fPlaceTo",
+            fPlaceToIcon: "#fPlaceToIcon",
             fPlaceFrom: "#fPlaceFrom",
             fUserCount: ".user-count",
             dropTripFilters: ".drop-trip-filters",
@@ -55,7 +57,7 @@ define([
         },
 
         dropTripFilters: function(e) {
-            var params = ['price', 'people_count', 'start_date'];
+            var params = ['price', 'people_count', 'start_date', 'country'];
             var filters = this._getFilterParams(params);
             Cm.removeFilters(filters);
         },
@@ -110,7 +112,8 @@ define([
                 }
             }
 
-            if (changed) $(e.currentTarget).toggleClass('active')
+            if (changed) $(e.currentTarget).toggleClass('active');
+
         },
 
         tagToggle: function(e) {
@@ -140,16 +143,18 @@ define([
             // this.model.set( 'output', this.getLinks(this.model) );
             var self = this;
 
+            this.countriesCollection = new CountriesCollection();
+
             this.startTags();
             this.startPrice();
             this.startAge();
             this.startGender();
-            this.startDate();
+            this.startDateTrigger();
             this.startPlaceTo();
             this.startPlaceFrom();
 
             Vent.on('url:changed',function(filter) {
-                var params = ['price', 'people_count', 'start_date'];
+                var params = ['price', 'people_count', 'start_date', 'country'];
                 var filters = self._getFilterParams(params);
 
                 if ( !Cm.checkFilters(filters) )
@@ -167,39 +172,30 @@ define([
 
             });
 
+            Vent.on('url:changed',function(filter) {
+
+                var filterObj = Cm.parseQueryString(filter);
+                // if ( filterObj.people_count__gt == '10' && filterObj.people_count__lt == '30' ) {
+                //     self.ui.fUserCount.find("input[data-gt='10']").parent().trigger("click");
+                // }
+
+            });
+
+            Vent.on('trips:tags:click',function(id) {
+                self.ui.fTags.find('a[data-id="'+id+'"]').trigger('click');
+
+                // @TODO
+                var speed = 200;
+                var to = $('.main-page').offset().top;
+                $('html, body').animate({scrollTop: to}, speed);
+
+            });
+
         },
 
         initialize: function() {
             this.model.on("sync", this.render, this);
         },
-
-        // render: function() {
-        //     console.log(this.model);
-        // },
-
-        // onRender: function(){
-
-            // _.each(this.options.filter, function (val, name) {
-
-            //     var self = this;
-
-            //     if ( /-min$/.test(name) || /-max$/.test(name) ) {
-            //         this.$("*[data-filter-name='"+name+"']").val(val);
-            //     } else if( /^pr-/.test(name) ) {
-
-            //         var vals = val.toString().split('-');
-            //         _.each(vals, function(v){
-            //             //
-            //             self.$("*[data-filter-name='"+name+"'][data-filter-val='"+v+"']").prop("checked",true);
-            //         });
-
-            //     } else {
-            //         this.$("*[data-filter-name='"+name+"'][data-filter-val='"+val+"']").prop("checked",true);
-            //     }
-
-            // }, this);
-
-        // },
 
         /**
          * Helper for template
@@ -228,10 +224,6 @@ define([
                     return output;
                 },
 
-                showPrice: function() {
-                    
-                },
-
                 startSlider: function() {
 
                     console.log( this.price.min );
@@ -247,7 +239,19 @@ define([
                         // }
                     });
 
-                }
+                },
+
+                showChecked: function(id) {
+                    var output = '';
+
+                    var filterObj = Cm.parseQueryString(Backbone.history.fragment);
+                    // console.log(id, filterObj);
+                    if(filterObj.people && parseInt( filterObj.people ) == id) {
+                        output = "checked";
+                    }
+
+                    return output;
+                },
 
             }
         },
@@ -310,12 +314,10 @@ define([
             // Vent.on('filter:price:changed',function(response) {
             Vent.on('trips:meta:changed',function(response) {
 
-                // self.ui.fPriceMin.text( response.min_price );
-                // self.ui.fPriceMax.text( response.max_price );
-                // self.ui.fPrice.slider( "option", "min", response.min_price );
-                // self.ui.fPrice.slider( "option", "max", response.max_price );
-
-                // self.ui.fPrice.slider( "option", "values", [response.min_price,response.max_price] );
+                // if( response.min_price < response.max_price ) {
+                //     self.ui.fPrice.slider( "option", "min", response.min_price );
+                //     self.ui.fPrice.slider( "option", "max", response.max_price );
+                // }
 
             });
 
@@ -337,19 +339,19 @@ define([
         startTags: function(val) {
             var self = this;
 
-            var tagsCollection = new TagsCollection();
+            // var tagsCollection = new TagsCollection();
 
-            tagsCollection.fetch({
-                success: function(data) {
+            // tagsCollection.fetch({
+            //     success: function(data) {
 
-                    // console.log(data);
-                    // var tags = Templates.travellerDetailsTags({tags: data});
-                    // self.ui.fTags.append( tags );
+            //         // console.log(data);
+            //         // var tags = Templates.travellerDetailsTags({tags: data});
+            //         // self.ui.fTags.append( tags );
 
-                }
-            }).always(function() { 
+            //     }
+            // }).always(function() { 
                 
-            });
+            // });
 
             Vent.on('tags:obj:changed',function(obj) {
                 
@@ -457,7 +459,28 @@ define([
 
         },
 
-        startDate: function(val) {
+        startDateTrigger: function() {
+            var self = this;
+
+            var datesCollection = new DatesCollection();
+
+            this.startDate();
+
+            datesCollection.fetch({
+                success: function(data) {
+                    var startDates, pluckData;
+                    pluckData = _.pluck(data.toJSON(), "start_date");
+
+                    var min = _.min( pluckData, function(o){return Moment(o);} );
+                    var max = _.max( pluckData, function(o){return Moment(o);} );
+
+                    self.setAvailableDates(min, max);
+                }
+            });
+
+        },
+
+        startDate: function() {
             var self = this;
 
             var current = '';
@@ -467,12 +490,14 @@ define([
                 minViewMode: "months",
                 autoclose: true,
                 language: "ru",
-                startDate: "04-2014",
-                endDate: "07-2014"
+                // startDate: start.format('MM-YYYY'),
+                // endDate: end.format('MM-YYYY')
             })
             .on("changeDate", function(e){
                 var start = Moment( e.date );
                 var end = Moment( e.date ).add('M', 1);
+
+                Cm.removeFilters( self._getFilterParams(['country']), false );
 
                 Cm.addFilters({
                     'start_date__gte': start.format('YYYY-MM-DD'),
@@ -481,16 +506,21 @@ define([
             });
 
             this.ui.fDateIcon.on( "click", function() {
-                // self.ui.fDate.trigger( "click" );
                 self.ui.fDate.datepicker('showTrigger');
-            });            
+            });
 
-            // start_date
+            this.ui.fDateIcon
+            .on( 'mouseover', function(e) {
+                self.ui.fDate.addClass('hover');
+            })
+            .on( 'mouseleave', function(e) {
+                self.ui.fDate.removeClass('hover');
+            });
 
             Vent.on('url:changed',function(filter) {
                 var filterObj = Cm.parseQueryString(filter);
-
                 var defVal = filterObj.start_date__gte || '';
+
                 if (defVal.length) {
                     var date = Moment( defVal );
                     console.log(date.format('MM-YYYY'));
@@ -503,58 +533,107 @@ define([
 
         },
 
+        setAvailableDates: function(start, end) {
+            var self = this;
+            start = start || "2014-01-01";
+            end = end || "2014-10-01";
+
+            start = Moment( start );
+            end = Moment( end );
+
+            this.ui.fDate.datepicker('setStartDate', start.format('MM-YYYY'));
+            this.ui.fDate.datepicker('setEndDate', end.format('MM-YYYY'));
+
+        },
+
         startPlaceTo: function(val) {
-            var places = this.getPlaces();
+            var self = this;
+
+            this.countriesCollection.fetch();
 
             this.ui.fPlaceTo.typeahead({
-                hint: true,
+                hint: false,
                 highlight: true,
-                minLength: 1
+                autoselect: true,
+                minLength: 0
             },{
-                name: 'places',
-                displayKey: 'value',
-                source: this.substringMatcher(places),
+                name: 'counrty',
+                displayKey: 'name',
+                source: this.substringMatcher(this.countriesCollection),
+                // source: places,
                 templates: {
-                  suggestion: Handlebars.compile('<p class="name-part">{{value}}</p> <p class="addition-part">{{country}}</p>')
+                  // suggestion: Handlebars.compile('<p class="name-part">{{value}}</p> <p class="addition-part">{{country}}</p>')
+                  suggestion: Handlebars.compile('<p class="name-part">{{name}}</p>')
                 }
+            })
+            .on('typeahead:selected' , function(e) {
+                var params = ['start_date'];
+                var filters = self._getFilterParams(params);
+
+                Cm.removeFilters(filters, false);
+                Cm.addFilters({
+                    'country': $(e.currentTarget).val(),
+                });
+            });
+
+            this.ui.fPlaceTo.focus(function(e) {
+                self.ui.fPlaceTo.typeahead('val', '.').typeahead('val', '');
+            });
+
+            this.ui.fPlaceToIcon.on( 'click', function(e) {
+                self.ui.fPlaceTo.trigger('focus');
+            });
+
+            this.ui.fPlaceToIcon
+            .on( 'mouseover', function(e) {
+                self.ui.fPlaceTo.addClass('hover');
+            })
+            .on( 'mouseleave', function(e) {
+                self.ui.fPlaceTo.removeClass('hover');
+            });
+
+            Vent.on('url:changed',function(filter) {
+                var filterObj = Cm.parseQueryString(filter);
+                var defVal = filterObj.country || '';
+
+                if (defVal.length) {
+                    self.ui.fPlaceTo.val(defVal);
+                } else {
+                    self.ui.fPlaceTo.val("");
+                }
+                
             });
         },
 
         startPlaceFrom: function(val) {
-            var places = this.getPlaces();
+            // var places = this.getPlaces();
 
-            this.ui.fPlaceFrom.typeahead({
-                hint: true,
-                highlight: true,
-                minLength: 1
-            },{
-                name: 'places',
-                displayKey: 'value',
-                source: this.substringMatcher(places),
-                templates: {
-                  suggestion: Handlebars.compile('<p class="name-part">{{value}}</p> <p class="addition-part">{{country}}</p>')
-                }
-            });
+            // this.ui.fPlaceFrom.typeahead({
+            //     hint: true,
+            //     highlight: true,
+            //     minLength: 1
+            // },{
+            //     name: 'places',
+            //     displayKey: 'value',
+            //     // source: this.substringMatcher(places),
+            //     source: places,
+            //     templates: {
+            //       // suggestion: Handlebars.compile('<p class="name-part">{{value}}</p> <p class="addition-part">{{country}}</p>')
+            //       suggestion: Handlebars.compile('<p class="name-part">{{value}}</p>')
+            //     }
+            // });
         },
 
         substringMatcher: function(strs) {
             return function findMatches(q, cb) {
                 var matches, substrRegex;
 
-                // an array that will be populated with substring matches
                 matches = [];
-
-                // regex used to determine if a string contains the substring `q`
                 substrRegex = new RegExp(q, 'i');
 
-                // iterate through the pool of strings and for any string that
-                // contains the substring `q`, add it to the `matches` array
-                $.each(strs, function(i, str) {
-                    // console.log("op - ",str);
-                    if (substrRegex.test(str.value)) {
-                        // the typeahead jQuery plugin expects suggestions to a
-                        // JavaScript object, refer to typeahead docs for more info
-                        matches.push(str);
+                _.each(strs.models, function(val, key){
+                    if (substrRegex.test(val.get("name"))) {
+                        matches.push( val.toJSON() );
                     }
                 });
 
@@ -569,6 +648,7 @@ define([
                 {'value':'Пицунда','country':'Абхазия'},
                 {'value':'Мосул','country':'Ирак'}
             ];
+
             return states;
         },
 
@@ -578,10 +658,10 @@ define([
 
             var filterParams = {};
             _.each(params, function(v){
+                filterParams[v] = 0;
                 _.each(postfix, function(vp){
                     filterParams[v + "__" + vp] = 0;
                 });
-                // filterParams[v] = 0;
             });
 
             return filterParams;

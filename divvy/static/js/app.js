@@ -110,8 +110,12 @@ define(function (require) {
             Backbone.history.loadUrl();
         });
 
-        tripsCollection.fetch();
-        travellersCollection.fetch();
+        tripsCollection.fetch({
+                success: function(data) {
+                    // console.log( data.toJSON() );
+                }
+            });
+        // travellersCollection.fetch();
 
         // Marionette.Controller.extend({
         //   showById: function(id){
@@ -168,9 +172,11 @@ define(function (require) {
         // App.breadcrumbs.show(new BreadcrumbsView({model: breadcrumbsModel}))
 
         travellersCollection.query = filterObj;
+        tagsCollection.query = filterObj;
         tripsCollection.query = filterObj;
 
         travellersCollection.fetch();
+        tagsCollection.fetch();
 
         $("#trips_loader").show();
         $("#trips_layout").hide();

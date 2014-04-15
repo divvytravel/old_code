@@ -14,6 +14,7 @@
 
       <div class="select-place-proj">
         <input id="fPlaceTo" class="typeahead input-proj" type="text" placeholder="Куда?">
+        <div id="fPlaceToIcon" class="input-icon-proj"></div>
       </div>
 
     </div>
@@ -29,7 +30,6 @@
         <div class="slider-limits">
           <span><span id="fPriceMin"><%= price.min %></span><!--  &euro; --></span>
           <span><span id="fPriceMax"><%= price.max %></span><!--  &euro; --></span>
-          <% showPrice() %>
         </div>
       </div>
     </div>
@@ -95,6 +95,7 @@
     <div class="column">
       <div class="select-place-proj">
         <input id="fPlaceFrom" class="typeahead input-proj" type="text" placeholder="Откуда?" disabled>
+        <!-- <div id="fPlaceFromIcon" class="input-icon-proj"></div> -->
       </div>
     </div>
     <div class="column">

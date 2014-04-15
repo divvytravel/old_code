@@ -9,7 +9,7 @@
 
   <div class="tags">
     <% _.each(tags, function(tag) { %>
-      <a href="javascript:void(0)" class="tag" data-id="<%= tag.name %>"><%= tag.name %></a>
+      <a href="javascript:void(0)" class="tag" data-id="<%= tag.id %>"><%= tag.name %></a>
     <% }); %>
   </div>
 
