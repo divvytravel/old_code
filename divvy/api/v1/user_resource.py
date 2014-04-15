@@ -21,6 +21,9 @@ except ImportError:
 else:
     User = get_user_model()
 
+from trip.models import Trip
+from geo.models import City
+
 
 class Row(object):
     pass
@@ -93,6 +96,20 @@ class UserResource(ModelResource, BaseResourceMixin):
 
         kwargs['pk'] = request.user.pk
         return self.dispatch_detail(request, **kwargs)
+
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+
+        orm_filters = super(UserResource, self).build_filters(filters)
+
+        if "trip_country" in filters:
+            trips = Trip.objects.filter(city__country__name=filters['trip_country'])
+            for trip in trips:
+                print trip.id 
+            orm_filters["approved_trips__in"] = [i.pk for i in trips]
+
+        return orm_filters
 
 
 class OAuthResource(AnonymousPostBaseResourceMixin, Resource):
