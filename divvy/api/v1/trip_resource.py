@@ -42,12 +42,23 @@ class TagsResource(ModelResource, BaseResourceMixin):
         orm_filters = super(TagsResource, self).build_filters(filters)
 
         if "trip_country" in filters:
-            trips = Trip.objects.filter(city__country__name=filters['trip_country'])
+            trips = Trip.objects.filter(city__country__name=filters['trip_country']).distinct()
+
             for trip in trips:
                 print trip.id 
+
             orm_filters["trips__in"] = [i.pk for i in trips]
 
         return orm_filters
+
+    def apply_filters(self, request, applicable_filters):
+        qs = self.get_object_list(request).filter(**applicable_filters)
+
+        distinct = request.GET.get('distinct', False) == 'True'
+        if distinct:
+            qs = qs.distinct()
+
+        return qs
 
 
 class TripCategoryResource(ModelResource, BaseResourceMixin):
