@@ -39,7 +39,7 @@ require.config({
         'bootstrap-datepicker'    : ['jquery'],
         'bootstrap-datepicker-ru' : ['jquery'],
         'typeahead'               : ['jquery'],
-        'touch-punch'             : ['jquery']
+        'touch-punch'             : ['jquery', 'jquery-ui']
     }
 });
 
@@ -49,7 +49,6 @@ require([
     'todie' // Неразобранный кусок лапши -> @TODO
 ], function (App) {
 
-    console.log(Divvy.is_authenticated);
     if ( $("#header_block").length ) {
         if ( !Divvy.is_authenticated )
             $("#header_block").removeClass("login");

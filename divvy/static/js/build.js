@@ -12,7 +12,8 @@
       'hb'                      : '../vendor/handlebars/handlebars',
       'bootstrap-datepicker'    : '../js/vendor_override/bootstrap-datepicker',
       'typeahead'               : '../vendor/typeahead.js/dist/typeahead.jquery',
-      'touch-punch'             : '../vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min'
+      'touch-punch'             : '../vendor/jqueryui-touch-punch/jquery.ui.touch-punch.min',
+      'moment'                  : '../vendor/moment/min/moment-with-langs.min'
     },
     name: "main",
     out: "main-built.js"

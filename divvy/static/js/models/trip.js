@@ -9,11 +9,20 @@ define([
         defaults: {
             "age": null,
             "categories": [],
-            "city": "London",
-            "city_id": 12,
+            "city": {
+              "country": {
+                "id": 0,
+                "name": "",
+                "name_en": "",
+                "resource_uri": ""
+              },
+              "iata": "",
+              "id": 0,
+              "name": "",
+              "name_en": "",
+              "resource_uri": ""
+            },
             "consist": null,
-            "country": "England",
-            "country_id": 11,
             "currency": "euro",
             "descr_additional": "",
             "descr_company": "",

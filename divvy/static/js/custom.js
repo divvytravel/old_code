@@ -109,8 +109,9 @@ define([
     };
 
 
-    var addFilters = function(obj, multi) {
-        multi = multi || false;
+    var addFilters = function(obj, trigger) {
+        trigger = trigger !== false;
+
         var self = this,
             objLength = Object.keys(obj).length,
             counter = 0;
@@ -118,11 +119,10 @@ define([
         _.each(obj, function(v, k){
             counter++;
 
-            var new_filter = self.setFilter(k, v, multi);
-            // console.log(new_filter);
+            var new_filter = self.setFilter(k, v);
             Backbone.history.navigate(new_filter, {trigger: false});
             
-            if (counter >= objLength) 
+            if (trigger && counter >= objLength)
                 Backbone.history.loadUrl();
 
         });
@@ -145,8 +145,9 @@ define([
     };
 
 
-    var removeFilters = function(obj, multi) {
-        multi = multi || false;
+    var removeFilters = function(obj, trigger) {
+        trigger = trigger !== false;
+
         var self = this,
             objLength = Object.keys(obj).length,
             counter = 0;
@@ -154,10 +155,10 @@ define([
         _.each(obj, function(v, k){
             counter++;
 
-            var new_filter = self.unsetFilter(k, v, multi);
+            var new_filter = self.unsetFilter(k, v);
             Backbone.history.navigate(new_filter, {trigger: false});
             
-            if (counter >= objLength) 
+            if (trigger && counter >= objLength) 
                 Backbone.history.loadUrl();
 
         });

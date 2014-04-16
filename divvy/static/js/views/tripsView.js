@@ -2,9 +2,10 @@
 define([
     'marionette',
     'templates',
+    'vent',
     'moment',
     'bootstrap'
-], function (Marionette, Templates, Moment) {
+], function (Marionette, Templates, Vent, Moment) {
     'use strict';
 
     var View = {};
@@ -16,7 +17,8 @@ define([
         events: {
             "click .next": "allTravellers",
             "click .traveller-item": "travellerDetails",
-            "click .details-wrap-close": "destroyDetails"
+            "click .details-wrap-close": "destroyDetails",
+            "click .tag": "activateTag"
         },
 
         ui: {
@@ -54,6 +56,11 @@ define([
 
         destroyDetails: function(e) {
             $(e.currentTarget).parent().parent().remove();
+        },
+
+        activateTag: function(e) {
+            var id = $(e.currentTarget).data("id");
+            Vent.trigger('trips:tags:click', id);
         },
 
         startTooltips: function() {
@@ -159,7 +166,7 @@ define([
                     var output = '';
 
                     switch (this.price_type) {
-                        case "com": 
+                        case "comm": 
                         output = "Коммерческая поездка";
                         case "noncom": 
                         output = "Некоммерческая поездка";
@@ -245,8 +252,8 @@ define([
                 },
                 showPlaceName: function(){
                     var output = '',
-                        city = this.city || '',
-                        country = this.country || '';
+                        city = this.city.name || '',
+                        country = this.city.country.name || '';
 
                     if ( city.length > 0 && city.length > 0 ) {
                         // output = "<span>"+city+"</span>"+

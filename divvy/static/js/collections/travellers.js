@@ -40,7 +40,10 @@ define([
             var query = {};
 
             _.each(this.query, function(value, key) {
-                if (key != 'v') {
+                if (key == 'country') {
+                    key = 'trip_' + key;
+                    query[key] = value;
+                } else if (key != 'v') {
                     key = 'trips__' + key;
                     query[key] = value;
                 }
