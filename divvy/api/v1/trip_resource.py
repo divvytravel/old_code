@@ -44,9 +44,6 @@ class TagsResource(ModelResource, BaseResourceMixin):
         if "trip_country" in filters:
             trips = Trip.objects.filter(city__country__name=filters['trip_country']).distinct()
 
-            for trip in trips:
-                print trip.id 
-
             orm_filters["trips__in"] = [i.pk for i in trips]
 
         return orm_filters

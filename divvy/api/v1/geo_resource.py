@@ -7,6 +7,7 @@ from tastypie.resources import ModelResource
 from tastypie.constants import ALL_WITH_RELATIONS
 
 from geo.models import Country, City
+from trip.models import Trip
 
 from api.v1.trip_resource import TripResource
 
@@ -36,3 +37,25 @@ class CountryResource(ModelResource, BaseResourceMixin):
         filtering = {
             'cities': ALL_WITH_RELATIONS,
         }
+
+    def build_filters(self, filters=None):
+        if filters is None:
+            filters = {}
+
+        orm_filters = super(CountryResource, self).build_filters(filters)
+
+        if "trip_start_date_gte" in filters:
+            cities = City.objects.filter(trips__start_date__gte=filters['trip_start_date_gte']).distinct()
+
+            orm_filters["cities__in"] = [i.pk for i in cities]
+
+        return orm_filters
+
+    def apply_filters(self, request, applicable_filters):
+        qs = self.get_object_list(request).filter(**applicable_filters)
+
+        distinct = request.GET.get('distinct', False) == 'True'
+        if distinct:
+            qs = qs.distinct()
+
+        return qs
