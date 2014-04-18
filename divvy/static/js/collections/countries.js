@@ -2,8 +2,9 @@
 define([
     'backbone',
     'vent',
-    'custom'
-], function (Backbone, Vent, Cm) {
+    'custom',
+    'moment'
+], function (Backbone, Vent, Cm, Moment) {
     'use strict';
 
     var CountrieModel = Backbone.Model.extend({
@@ -22,8 +23,11 @@ define([
         query: {},
 
         url: function() {
+            var now = Moment().format('YYYY-MM-DD');
+
             var default_params = {
-                'format': 'json'
+                'format': 'json',
+                'trip_start_date_gte': now
             };
 
             var query = {};

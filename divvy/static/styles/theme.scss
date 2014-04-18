@@ -409,6 +409,9 @@ a:focus {
         border-bottom: 1px solid #E5E5E5;
         padding: 12px 30px 9px 30px;
         display: block;
+        .item {
+          display: inline-block;
+        }
         .tag {
           margin-right: 3px;
           margin-bottom: 3px;
@@ -432,11 +435,67 @@ a:focus {
             }
           &:hover {
             border: 1px solid rgba(49,185,218,0.7);
-            // background: rgba(49,185,218,0.25);
             background:rgba(49,185,218,0.09);
           }
+          &.hidden-tag {
+            color: rgba(0,0,0,0.7) !important;
+            &.active {
+              border: 1px solid rgba(0,0,0,0.6);
+              background: rgba(0,0,0,0.1);
+              &:hover {
+                border: 1px solid rgba(0,0,0,0.7);
+                background: rgba(0,0,0,0.2);
+              }
+            }
+            &:hover {
+              border: 1px solid rgba(0,0,0,0.7);
+              background:rgba(0,0,0,0.09);
+            }
+          }
+        }
+
+        .all-tags {
+          margin-right: 3px;
+          margin-bottom: 3px;
+          padding: 4px 6px;
+          border: 1px solid #fff;
+          -webkit-border-radius: 3px;
+          border-radius: 3px;
+          font-size: 13px;
+          line-height: 16px;
+          color: #f2555d;
+          display: inline-block;
+          span {
+            display: inline-block;
+          }
+          .arrow-down-red {
+            width: 13px;
+            height: 7px;
+            margin-left: 2px;
+            // background-position: 0px 2px;
+          }
+          &.active {
+              border: 1px solid rgba(242,85,93,0.8);
+              &:hover {
+                border: 1px solid rgba(242,85,93,0.8);
+              }
+            }
+          &:hover {
+            border: 1px solid rgba(242,85,93,0.8);
+          }
+
+        }
+        .items {
+          float: left;
+          width: 472px;
+        }
+        .control {
+          float: right;
+          width: 136px;
+          text-align: right;
         }
       }
+      
       .companions {
         border-bottom: 1px solid #E5E5E5;
         padding: 28px 36px;

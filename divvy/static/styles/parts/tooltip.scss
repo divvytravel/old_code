@@ -1,5 +1,6 @@
 .arrow-up,
-.arrow-down {
+.arrow-down,
+.arrow-down-red {
   display: inline-block;
   width: 15px;
   height: 9px;
@@ -9,6 +10,10 @@
 }
 .arrow-down {
   background-image: url("../img/arrow-down-thin.png");
+}
+.arrow-down-red {
+  background-image: url("../img/arrow-down-medium-red.png");
+  background-repeat: no-repeat;
 }
 
 .help {

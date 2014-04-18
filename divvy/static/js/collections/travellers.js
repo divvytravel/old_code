@@ -1,26 +1,27 @@
 
 define([
     'backbone',
-    'vent'
-], function (Backbone, Vent) {
+    'vent',
+    'moment'
+], function (Backbone, Vent, Moment) {
     'use strict';
 
     var TravellerModel = Backbone.Model.extend({
 
         defaults: {
-            "age": 23,
-            "avatar_url": "/static/img/promo/users/4.png",
-            "birthday": "1990-07-04",
+            "age": 0,
+            "avatar_url": "",
+            "birthday": "",
             "career": null,
             "city": null,
-            "date_joined": "2014-03-08T09:43:04.638218",
-            "first_name": "Жан",
-            "gender": "male",
-            "id": 5,
-            "last_name": "Петров",
-            "resource_uri": "/api/v1/user/5/",
-            "trips": ["/api/v1/trip/15/", "/api/v1/trip/16/", "/api/v1/trip/17/", "/api/v1/trip/18/"],
-            "username": "petrov"
+            "date_joined": "",
+            "first_name": "",
+            "gender": "",
+            "id": 0,
+            "last_name": "",
+            "resource_uri": "",
+            "trips": [],
+            "username": ""
         },
 
         // urlRoot: "/static/json/users.json"
@@ -28,13 +29,15 @@ define([
 
     var TravellersCollection = Backbone.Collection.extend({
         model: TravellerModel,
-        // url: '/static/json/users2.json',
 
         query: {},
 
         url: function() {
+            var now = Moment().format('YYYY-MM-DD');
+
             var default_params = {
-                'format': 'json'
+                'format': 'json',
+                'trips__start_date__gte': now
             };
 
             var query = {};

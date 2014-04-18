@@ -35,7 +35,7 @@
     </div>
     <div class="column">
       <div class="slider-label">ГРУППА</div>
-
+      <div id="checkGroup"></div>
       <div class="check-group">
         <span class="item">
           <a class="button button-toggle user-count">

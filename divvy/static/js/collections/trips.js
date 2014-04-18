@@ -3,14 +3,13 @@ define([
     'backbone',
     'models/trip',
     'vent',
-    'custom'
-], function (Backbone, TripModel, Vent, Cm) {
+    'custom',
+    'moment',
+], function (Backbone, TripModel, Vent, Cm, Moment) {
     'use strict';
 
     var TripsCollection = Backbone.Collection.extend({
         model: TripModel,
-        // url: '/static/json/trips.json',
-        // url: '/api/v1/trip/',
         
         query: {
             // 'price__gt':100
@@ -19,8 +18,11 @@ define([
         url: function() {
             // var base = _.result(this, 'urlRoot');
             // if (this.isNew()) return base;
+            var now = Moment().format('YYYY-MM-DD');
+
             var default_params = {
-                'format': 'json'
+                'format': 'json',
+                'start_date__gte': now
             };
             var params = _.extend(default_params, this.query);
 
@@ -35,9 +37,6 @@ define([
                 return [];
             }
 
-            /**
-             * Pass trips meta to event handler
-             */
             Vent.trigger('trips:meta:changed', response.meta);
 
             return response.objects;

@@ -194,7 +194,7 @@ define([
 
 
     var setCookie = function(key, val) {
-        $.cookie(key, val, { expires: 7, domain: Emart.domain, path: '/' });
+        $.cookie(key, val, { expires: 7, path: '/' });
         return true;
     };
 
@@ -205,7 +205,7 @@ define([
 
 
     var removeCookie = function(key) {
-        $.removeCookie(key, { domain: Emart.domain, path: '/' });
+        $.removeCookie(key, { path: '/' });
         return true;
     };
 

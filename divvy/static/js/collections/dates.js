@@ -2,8 +2,9 @@
 define([
     'backbone',
     'vent',
-    'custom'
-], function (Backbone, Vent, Cm) {
+    'custom',
+    'moment'
+], function (Backbone, Vent, Cm, Moment) {
     'use strict';
 
     var DateModel = Backbone.Model.extend({
@@ -22,9 +23,12 @@ define([
         query: {},
 
         url: function() {
+            var now = Moment().format('YYYY-MM-DD');
+
             var default_params = {
                 'format': 'json',
-                'limit': 100
+                'limit': 100,
+                'trips__start_date__gte': now
             };
 
             var query = {};

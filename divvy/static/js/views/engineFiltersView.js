@@ -8,13 +8,16 @@ define([
     'collections/tags',
     'collections/countries',
     'collections/dates',
+    'collections/filterPeopleCount',
+    'views/filterPeopleCountView',
+    'views/filterTagsView',
     'jquery',
     'hb',
     'jquery-ui',
     'bootstrap-datepicker',
     'typeahead',
     'touch-punch'
-], function (Marionette, Vent, Templates, Cm, Moment, TagsCollection, CountriesCollection, DatesCollection) {
+], function (Marionette, Vent, Templates, Cm, Moment, TagsCollection, CountriesCollection, DatesCollection, PeopleCountCollection, PeopleCountView, FilterTagsView) {
     'use strict';
 
     var EngineFilters = {};
@@ -42,15 +45,13 @@ define([
             fPlaceFrom: "#fPlaceFrom",
             fUserCount: ".user-count",
             dropTripFilters: ".drop-trip-filters",
-            dropGroupFilters: ".drop-group-filters"
+            dropGroupFilters: ".drop-group-filters",
+            fCheckGroup: ".check-group"
         },
 
         events: {
 
             "click .efilter": "eFilter",
-            // "click .button-toggle": "toggleButton",
-            "click .user-count": "userToggle",
-            "click .tag-radio": "tagToggle",
             "click .drop-trip-filters": "dropTripFilters",
             "click .drop-group-filters": "dropGroupFilters"
 
@@ -68,77 +69,6 @@ define([
             Cm.removeFilters(filters);
         },
 
-        toggleButton: function(e) {
-            $(e.currentTarget).toggleClass('active');
-        },
-
-        userToggle: function(e) {
-            var $parent = $(e.currentTarget).parent().parent();
-            var changed = true;
-
-            if ($parent.length) {
-                var $input = $(e.currentTarget).find('input');
-                if ($input.prop('type') == 'radio') {
-                    if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = true
-                    else $parent.find('.active').removeClass('active')
-                }
-                if (changed) {
-                    $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
-                    // Vent.trigger('filter:meta:changed', response.meta);
-                    if ( !$input.prop('checked') ) {
-                        // @TODO вынести в custom
-                        // Cm.removeFilter('people_count__gt');
-                        // Cm.removeFilter('people_count__lt');
-                        // Backbone.history.navigate(Cm.unsetFilter('people_count__gt'), {trigger: false});
-                        // Backbone.history.navigate(Cm.unsetFilter('people_count__lt'), {trigger: true});
-                        Cm.removeFilters({
-                            'people_count__gt': 0,
-                            'people_count__lt': 0
-                        });
-                    // people_count
-                    } else {
-                        if ($input.data('lt')) {
-                            // Cm.addFilter('people_count__lt',$input.data('lt'));
-                            Backbone.history.navigate(Cm.setFilter('people_count__lt',$input.data('lt')), {trigger: false});
-                        } else { 
-                            // Cm.removeFilter('people_count__lt');
-                            Backbone.history.navigate(Cm.unsetFilter('people_count__lt'), {trigger: false});
-                        }
-                        // Cm.addFilter('people_count__gt',$input.data('gt'));
-                        Backbone.history.navigate(Cm.setFilter('people_count__gt',$input.data('gt')), {trigger: true});
-                        
-                    }
-
-                }
-            }
-
-            if (changed) $(e.currentTarget).toggleClass('active');
-
-        },
-
-        tagToggle: function(e) {
-            var $parent = $(e.currentTarget).parent().parent();
-            var changed = true;
-
-            if ($parent.length) {
-                var $input = $(e.currentTarget).find('input');
-                if ($input.prop('type') == 'radio') {
-                    if ($input.prop('checked') && $(e.currentTarget).hasClass('active')) changed = true
-                    else $parent.find('.active').removeClass('active')
-                }
-                if (changed) {
-                    $input.prop('checked', !$(e.currentTarget).hasClass('active')).trigger('change')
-
-                    if ( !$input.prop('checked') ) 
-                        Cm.removeFilter('tags',$input.val());
-                    else
-                        Cm.addFilter('tags',$input.val());
-                }
-            }
-
-            if (changed) $(e.currentTarget).toggleClass('active')
-        },
-
         onRender: function() {
             // this.model.set( 'output', this.getLinks(this.model) );
             var self = this;
@@ -147,6 +77,7 @@ define([
 
             this.startTags();
             this.startPrice();
+            this.startPeople();
             this.startAge();
             this.startGender();
             this.startDateTrigger();
@@ -154,6 +85,9 @@ define([
             this.startPlaceFrom();
 
             Vent.on('url:changed',function(filter) {
+
+                // self.startPeople();
+
                 var params = ['price', 'people_count', 'start_date', 'country'];
                 var filters = self._getFilterParams(params);
 
@@ -336,7 +270,113 @@ define([
 
         },
 
+        startPeople: function(val) {
+            var self = this;
+
+            var peopleCountCollection = new PeopleCountCollection();
+
+            peopleCountCollection.add([
+              {
+                "field_name": "people_count", 
+                "name": "", 
+                "gt": 3, 
+                "lt": 10,
+                "active": false
+              },
+              {
+                "field_name": "people_count", 
+                "name": "", 
+                "gt": 10, 
+                "lt": 30,
+                "active": false
+              },
+              {
+                "field_name": "people_count", 
+                "name": "", 
+                "gt": 30, 
+                "lt": 0,
+                "active": false
+              }
+            ]);
+
+            this.ui.fCheckGroup.html( new PeopleCountView({collection: peopleCountCollection}).render().el );
+
+            Vent.on('url:changed',function(filter) {
+                
+                var filterObj = Cm.parseQueryString(filter);
+                var gt = filterObj.people_count__gt || false;
+                var lt = filterObj.people_count__lt || false;
+
+                if(gt) {
+                    // var model = peopleCountCollection.findWhere({gt: parseInt(gt)});
+                    // model.set("active", true);
+                    _.each(peopleCountCollection.models, function(model, key){
+                        if (model.get("gt") == gt)
+                            model.set("active", true);
+                        else
+                            model.set("active", false); 
+                    });
+                } else {
+                    // var model = peopleCountCollection.findWhere({active: true});
+                    _.each(peopleCountCollection.models, function(model, key){ 
+                        model.set("active", false); 
+                    });
+                }
+
+                self.ui.fCheckGroup.html( new PeopleCountView({collection: peopleCountCollection}).render().el );
+
+                // alert(musketeers.length);
+                
+            });
+
+        },
+
         startTags: function(val) {
+            var self = this;
+
+            // var tagsCollection = new TagsCollection();
+
+            Vent.on('tags:obj:changed',function(obj) {
+                
+                var tagsCollection = new TagsCollection();
+                tagsCollection.add(obj);
+                console.log(tagsCollection.models.length);
+
+                var filterObj = Cm.parseQueryString(Backbone.history.fragment);
+                var tagId = filterObj.tags || false;
+
+                if(tagId) {
+                    var model = tagsCollection.findWhere({id: parseInt(tagId)});
+                    if (!model) 
+                        Cm.removeFilter('tags', 0);
+
+                    _.each(tagsCollection.models, function(model, key){
+                        if (model.get("id") == tagId)
+                            model.set("active", true);
+                        else
+                            model.set("active", false); 
+                    });
+                } else {
+                    _.each(tagsCollection.models, function(model, key){ 
+                        model.set("active", false); 
+                    });
+                }
+
+                // console.log(obj);
+                // var tags = Templates.engineFiltersTags({tags: obj});
+                self.ui.fTags.html( new FilterTagsView({collection: tagsCollection}).render().el );
+                
+            });
+
+            Vent.on('url:changed',function(obj) {
+                
+                // tagsCollection.fetch();
+                
+            });
+
+        },
+
+        startTags_: function(val) {
             var self = this;
 
             // var tagsCollection = new TagsCollection();
@@ -355,7 +395,7 @@ define([
 
             Vent.on('tags:obj:changed',function(obj) {
                 
-                console.log(obj);
+                // console.log(obj);
                 var tags = Templates.engineFiltersTags({tags: obj});
                 self.ui.fTags.html( tags );
                 

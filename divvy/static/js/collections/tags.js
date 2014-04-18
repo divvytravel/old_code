@@ -13,7 +13,8 @@ define([
             "main_page": false, 
             "name": "", 
             "resource_uri": "", 
-            "slug": ""
+            "slug": "",
+            "active": false
         },
 
     });
@@ -25,7 +26,8 @@ define([
 
         url: function() {
             var default_params = {
-                'format': 'json'
+                'format': 'json',
+                'distinct': 'True'
             };
 
             var query = {};
@@ -37,9 +39,6 @@ define([
                 } else if (key == 'start_date__gte' || key == 'start_date__lt') {
                     key = 'trips__' + key;
                     query[key] = value;
-                } else if (key != 'v' && key != 'tags') {
-                    // key = 'trips__' + key;
-                    // query[key] = value;
                 }
             });
 
@@ -47,6 +46,10 @@ define([
             var str = $.param( params );
 
             return '/api/v1/tags/?'+str;
+        },
+
+        comparator: function(tag) {
+            return -tag.get("main_page");
         },
 
         parse: function(response) {
