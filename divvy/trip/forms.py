@@ -96,6 +96,11 @@ class TripCreateStepOne(forms.Form):
         return self.cleaned_data
 
 
+class TripFormTest(forms.ModelForm):
+    class Meta:
+        model = Trip
+
+
 class TripForm(forms.ModelForm):
     trip_errors = {
         'end_less_start_date': u"Конечная дата не может быть меньше начальной",

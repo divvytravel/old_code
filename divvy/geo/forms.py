@@ -4,7 +4,7 @@ from django.conf import settings
 from relish.decorators import instance_cache
 from trip.models import Trip
 from party_api.aviasales import AviasalesManger
-from .models import AirportIATA
+from .models import AirportIATA, City
 
 l_avia = logging.getLogger('api_aviasales')
 
@@ -75,3 +75,9 @@ class CheapestFlightForm(forms.Form):
     @instance_cache
     def get_av(self):
         return AviasalesManger()
+
+
+class CityForm(forms.ModelForm):
+    class Meta:
+        model = City
+

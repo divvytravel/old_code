@@ -8,11 +8,28 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Images'
+        db.create_table(u'trip_images', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=255)),
+        ))
+        db.send_create_signal(u'trip', ['Images'])
+
+        # Adding model 'Image'
+        db.create_table(u'trip_image', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=255)),
+        ))
+        db.send_create_signal(u'trip', ['Image'])
+
         # Adding model 'Tags'
         db.create_table(u'trip_tags', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=20)),
             ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
+            ('main_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'trip', ['Tags'])
 
@@ -26,16 +43,24 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'trip', ['TripCategory'])
 
+        # Adding M2M table for field keywords on 'TripCategory'
+        m2m_table_name = db.shorten_name(u'trip_tripcategory_keywords')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('tripcategory', models.ForeignKey(orm[u'trip.tripcategory'], null=False)),
+            ('tags', models.ForeignKey(orm[u'trip.tags'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['tripcategory_id', 'tags_id'])
+
         # Adding model 'Trip'
         db.create_table(u'trip_trip', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='trips', null=True, to=orm['trip.TripCategory'])),
             ('start_date', self.gf('django.db.models.fields.DateField')()),
             ('end_date', self.gf('django.db.models.fields.DateField')()),
             ('end_people_date', self.gf('django.db.models.fields.DateField')()),
             ('price', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('city', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geo.City'])),
+            ('city', self.gf('django.db.models.fields.related.ForeignKey')(related_name='trips', to=orm['geo.City'])),
             ('currency', self.gf('django.db.models.fields.CharField')(default='euro', max_length=10)),
             ('includes', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('people_count', self.gf('django.db.models.fields.PositiveIntegerField')()),
@@ -47,8 +72,21 @@ class Migration(SchemaMigration):
             ('trip_type', self.gf('django.db.models.fields.CharField')(default='open', max_length=10)),
             ('price_type', self.gf('django.db.models.fields.CharField')(default='noncom', max_length=10)),
             ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['users.User'])),
+            ('image', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='trip_images', null=True, to=orm['trip.Image'])),
+            ('sex', self.gf('django.db.models.fields.FloatField')(default=None, null=True, blank=True)),
+            ('age', self.gf('django.db.models.fields.SmallIntegerField')(default=None, null=True, blank=True)),
+            ('recommended', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'trip', ['Trip'])
+
+        # Adding M2M table for field categories on 'Trip'
+        m2m_table_name = db.shorten_name(u'trip_trip_categories')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('trip', models.ForeignKey(orm[u'trip.trip'], null=False)),
+            ('tripcategory', models.ForeignKey(orm[u'trip.tripcategory'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['trip_id', 'tripcategory_id'])
 
         # Adding M2M table for field people on 'Trip'
         m2m_table_name = db.shorten_name(u'trip_trip_people')
@@ -67,6 +105,15 @@ class Migration(SchemaMigration):
             ('tags', models.ForeignKey(orm[u'trip.tags'], null=False))
         ))
         db.create_unique(m2m_table_name, ['trip_id', 'tags_id'])
+
+        # Adding M2M table for field gallery on 'Trip'
+        m2m_table_name = db.shorten_name(u'trip_trip_gallery')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('trip', models.ForeignKey(orm[u'trip.trip'], null=False)),
+            ('image', models.ForeignKey(orm[u'trip.image'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['trip_id', 'image_id'])
 
         # Adding model 'TripPointType'
         db.create_table(u'trip_trippointtype', (
@@ -90,14 +137,6 @@ class Migration(SchemaMigration):
             ('trip', self.gf('django.db.models.fields.related.ForeignKey')(related_name='points', to=orm['trip.Trip'])),
         ))
         db.send_create_signal(u'trip', ['TripPoint'])
-
-        # Adding model 'TripPicture'
-        db.create_table(u'trip_trippicture', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('file', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('trip', self.gf('django.db.models.fields.related.ForeignKey')(related_name='images', to=orm['trip.Trip'])),
-        ))
-        db.send_create_signal(u'trip', ['TripPicture'])
 
         # Adding model 'TripRequest'
         db.create_table(u'trip_triprequest', (
@@ -130,14 +169,26 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Deleting model 'Images'
+        db.delete_table(u'trip_images')
+
+        # Deleting model 'Image'
+        db.delete_table(u'trip_image')
+
         # Deleting model 'Tags'
         db.delete_table(u'trip_tags')
 
         # Deleting model 'TripCategory'
         db.delete_table(u'trip_tripcategory')
 
+        # Removing M2M table for field keywords on 'TripCategory'
+        db.delete_table(db.shorten_name(u'trip_tripcategory_keywords'))
+
         # Deleting model 'Trip'
         db.delete_table(u'trip_trip')
+
+        # Removing M2M table for field categories on 'Trip'
+        db.delete_table(db.shorten_name(u'trip_trip_categories'))
 
         # Removing M2M table for field people on 'Trip'
         db.delete_table(db.shorten_name(u'trip_trip_people'))
@@ -145,14 +196,14 @@ class Migration(SchemaMigration):
         # Removing M2M table for field tags on 'Trip'
         db.delete_table(db.shorten_name(u'trip_trip_tags'))
 
+        # Removing M2M table for field gallery on 'Trip'
+        db.delete_table(db.shorten_name(u'trip_trip_gallery'))
+
         # Deleting model 'TripPointType'
         db.delete_table(u'trip_trippointtype')
 
         # Deleting model 'TripPoint'
         db.delete_table(u'trip_trippoint')
-
-        # Deleting model 'TripPicture'
-        db.delete_table(u'trip_trippicture')
 
         # Deleting model 'TripRequest'
         db.delete_table(u'trip_triprequest')
@@ -187,7 +238,7 @@ class Migration(SchemaMigration):
         },
         u'geo.city': {
             'Meta': {'ordering': "('country__name', 'name')", 'unique_together': "(('name', 'country'),)", 'object_name': 'City'},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Country']"}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cities'", 'to': u"orm['geo.Country']"}),
             'iata': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
@@ -199,16 +250,30 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
             'name_en': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
         },
+        u'trip.image': {
+            'Meta': {'object_name': 'Image'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '255'})
+        },
+        u'trip.images': {
+            'Meta': {'object_name': 'Images'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.files.ImageField', [], {'max_length': '255'}),
+            'object_id': ('django.db.models.fields.PositiveIntegerField', [], {})
+        },
         u'trip.tags': {
             'Meta': {'object_name': 'Tags'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'main_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'})
         },
         u'trip.trip': {
             'Meta': {'ordering': "('start_date',)", 'object_name': 'Trip'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'trips'", 'null': 'True', 'to': u"orm['trip.TripCategory']"}),
-            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.City']"}),
+            'age': ('django.db.models.fields.SmallIntegerField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'trips'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['trip.TripCategory']"}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'trips'", 'to': u"orm['geo.City']"}),
             'currency': ('django.db.models.fields.CharField', [], {'default': "'euro'", 'max_length': '10'}),
             'descr_additional': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'descr_company': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
@@ -216,7 +281,9 @@ class Migration(SchemaMigration):
             'descr_share': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'end_date': ('django.db.models.fields.DateField', [], {}),
             'end_people_date': ('django.db.models.fields.DateField', [], {}),
+            'gallery': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'trip_galleries'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['trip.Image']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'image': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'trip_images'", 'null': 'True', 'to': u"orm['trip.Image']"}),
             'includes': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.User']"}),
             'people': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'approved_trips'", 'blank': 'True', 'to': u"orm['users.User']"}),
@@ -224,6 +291,8 @@ class Migration(SchemaMigration):
             'people_max_count': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'price': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'price_type': ('django.db.models.fields.CharField', [], {'default': "'noncom'", 'max_length': '10'}),
+            'recommended': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'sex': ('django.db.models.fields.FloatField', [], {'default': 'None', 'null': 'True', 'blank': 'True'}),
             'start_date': ('django.db.models.fields.DateField', [], {}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'trips'", 'blank': 'True', 'to': u"orm['trip.Tags']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
@@ -233,15 +302,10 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'TripCategory'},
             'applicable': ('django.db.models.fields.CharField', [], {'default': "'all'", 'max_length': '10'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'keywords': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['trip.Tags']", 'symmetrical': 'False'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'tag': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'trip_category'", 'to': u"orm['trip.Tags']"}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'trip.trippicture': {
-            'Meta': {'object_name': 'TripPicture'},
-            'file': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'trip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'images'", 'to': u"orm['trip.Trip']"})
         },
         u'trip.trippoint': {
             'Meta': {'object_name': 'TripPoint'},
@@ -277,6 +341,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'User'},
             'avatar_url': ('django.db.models.fields.CharField', [], {'default': "'/static/img/no-avatar.jpg'", 'max_length': '200'}),
             'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'career': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'users'", 'null': 'True', 'to': u"orm['geo.City']"}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),

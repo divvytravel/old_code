@@ -1,0 +1,1 @@
+curl --dump-header - -H "Content-Type: multipart/form-data" -F "image=@test.png" -X POST --user divvy:73501505 http://localhost:8000/api/v1/image/ &

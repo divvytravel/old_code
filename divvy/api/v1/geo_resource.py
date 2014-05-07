@@ -2,25 +2,24 @@ __author__ = 'indieman'
 
 from tastypie import fields
 
-from api.v1.base import BaseResourceMixin
+from api.v1.base import BaseResourceMixin, ModelFormValidation
 from tastypie.resources import ModelResource
 from tastypie.constants import ALL_WITH_RELATIONS
 
 from geo.models import Country, City
-from trip.models import Trip
-
-from api.v1.trip_resource import TripResource
+from geo.forms import CityForm
 
 
 class CityResource(ModelResource, BaseResourceMixin):
-    trips = fields.OneToManyField(TripResource, attribute='trips',
-                                  full=False, null=True)
+    trips = fields.OneToManyField('api.v1.trip_resource.TripResource', attribute='trips',
+                                  full=False, null=True, blank=True)
     country = fields.ToOneField('api.v1.geo_resource.CountryResource', attribute='country',
-                                full=True)
+                                full=True, blank=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = City.objects.all()
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post']
+        validation = ModelFormValidation(form_class=CityForm)
 
         filtering = {
             'trips': ALL_WITH_RELATIONS,

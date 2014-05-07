@@ -3,22 +3,35 @@ __author__ = 'indieman'
 
 from tastypie.resources import ModelResource
 from tastypie import fields
-from tastypie.constants import ALL_WITH_RELATIONS
+from tastypie.constants import ALL_WITH_RELATIONS, ALL
 
-from .base import BaseResourceMixin
+from .base import BaseResourceMixin, MultipartResource, ModelFormValidation
 
 from trip.models import Trip, TripCategory, Tags, Images, TripPoint, \
-    TripPointType
-from geo.models import Country, City
+    TripPointType, Image
+from trip.forms import TripForm
 
-from .user_resource import UserResource
+from geo.models import City
+
+from .user import UserResource
 from paginator import TripPaginator
 
 
-class ImageResource(ModelResource, BaseResourceMixin):
+class ImagesResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = Images.objects.all()
         allowed_methods = ['get']
+
+
+class ImageResource(BaseResourceMixin, MultipartResource, ModelResource):
+
+    class Meta(BaseResourceMixin.Meta):
+        queryset = Image.objects.all()
+        allowed_methods = ['get', 'post']
+
+        filtering = {
+            'id': ALL
+        }
 
 
 class TagsResource(ModelResource, BaseResourceMixin):
@@ -80,19 +93,30 @@ class TripPointTypeResource(ModelResource, BaseResourceMixin):
 
 
 class TripResource(ModelResource, BaseResourceMixin):
-    people = fields.ManyToManyField(UserResource, attribute='people', full=True, null=True)
-    categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
-                                        related_name='trips', full=True, null=True)
+    people = fields.ManyToManyField(UserResource, attribute='people',
+                                    full=True, null=True)
+
+    categories = fields.ManyToManyField(TripCategoryResource,
+                                        attribute='categories',
+                                        full=True, null=True)
+
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
                                   related_name='trips', full=True, null=True)
-    images = fields.ManyToManyField(ImageResource, attribute='images', full=True, null=True)
 
-    city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
-                             full=True, null=True)
+    gallery = fields.ManyToManyField(ImageResource, attribute='gallery',
+                                     full=True, null=True)
+
+    image = fields.ToOneField(ImageResource, attribute='image',
+                              full=True, null=True)
+
+    city = fields.ToOneField('api.v1.geo_resource.CityResource',
+                             attribute='city', full=True, null=True,
+                             blank=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = Trip.objects.prefetch_related('people').all()
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post']
+
         filtering = {
             'price_type': ('exact', ),
             'people_count': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
@@ -105,7 +129,9 @@ class TripResource(ModelResource, BaseResourceMixin):
             'people': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
             'city': ('exact', 'range', 'gt', 'gte', 'lt', 'lte'),
         }
+
         paginator_class = TripPaginator
+        validation = ModelFormValidation(form_class=TripForm)
 
     def build_filters(self, filters=None):
         if filters is None:
@@ -118,8 +144,6 @@ class TripResource(ModelResource, BaseResourceMixin):
 
             orm_filters["city__in"] = [i.pk for i in cities]
 
-        # if "sex" in filters:
-
         return orm_filters
 
     def apply_filters(self, request, applicable_filters):
@@ -130,13 +154,10 @@ class TripResource(ModelResource, BaseResourceMixin):
         return qs
 
     def dehydrate(self, bundle):
-        # if bundle.obj.city:
-        #     bundle.data['country'] = u'%s' % bundle.obj.city.country
-        #     bundle.data['country_id'] = bundle.obj.city.country_id
 
         if bundle.obj.sex is None:
             bundle.data['consist'] = None
-        elif 40 < bundle.obj.sex and bundle.obj.sex < 60:
+        elif 40 < bundle.obj.sex < 60:
             bundle.data['consist'] = u'поровну'
         elif bundle.obj.sex > 70:
             bundle.data['consist'] = u'преимущественно женщины'

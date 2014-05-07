@@ -1,0 +1,1 @@
+curl --dump-header - -H "Content-Type: application/json" -X POST --data '{}' --user divvy:73501505 http://localhost:8000/api/v1/city/ &

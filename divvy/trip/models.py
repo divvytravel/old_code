@@ -35,6 +35,10 @@ class Images(models.Model):
     image = models.ImageField(upload_to=get_file_path, max_length=255)
 
 
+class Image(models.Model):
+    image = models.ImageField(upload_to=get_file_path, max_length=255)
+
+
 class Tags(models.Model):
     name = models.CharField(_(u"Тег"), max_length=20)
     slug = models.SlugField(u"Вид в url", unique=True)
@@ -93,6 +97,7 @@ class Trip(models.Model):
                                         help_text=u"примерный бюджет", blank=True, null=True)
     city = models.ForeignKey('geo.City', verbose_name=u'Город',
                              help_text=u"если несколько, то первый", related_name='trips')
+
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
     people_count = models.PositiveIntegerField(u"Минимальное количество человек")
@@ -107,8 +112,11 @@ class Trip(models.Model):
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
                                     related_name='approved_trips', blank=True, verbose_name=u'Участники')
     tags = models.ManyToManyField(Tags, related_name='trips', blank=True, verbose_name=u'Теги')
-    image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
-    images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
+
+    # image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
+    image = models.ForeignKey('trip.Image', related_name='trip_images', blank=True, null=True)
+    gallery = models.ManyToManyField('trip.Image', related_name='trip_galleries', blank=True, null=True)
+    # images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
 
     sex = models.FloatField(blank=True, null=True, default=None)
     age = models.SmallIntegerField(blank=True, null=True, default=None)
