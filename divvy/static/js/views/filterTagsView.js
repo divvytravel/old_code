@@ -17,7 +17,7 @@ define([
         className: "item",
 
         onRender: function() {
-            var hiddenToggleActive = Cm.getCookie('hidden_toggle_active');
+            var hiddenToggleActive = Cm.getCookie('hidden_toggle_active') || 'false';
 
             if ( this.model.get("active") ) {
                 this.$('a').addClass("active");
