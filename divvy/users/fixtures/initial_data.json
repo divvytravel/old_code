@@ -353,7 +353,7 @@
     "pk": 15,
     "model": "users.user",
     "fields": {
-      "username": "divvy03",
+      "username": "divvy04",
       "city": 12,
       "first_name": "Админ",
       "last_name": "Всея Сайта",
@@ -378,7 +378,7 @@
     "pk": 16,
     "model": "users.user",
     "fields": {
-      "username": "divvy03",
+      "username": "divvy05",
       "city": 12,
       "first_name": "Админ",
       "last_name": "Всея Сайта",
@@ -403,7 +403,7 @@
     "pk": 17,
     "model": "users.user",
     "fields": {
-      "username": "divvy03",
+      "username": "divvy06",
       "city": 12,
       "first_name": "Админ",
       "last_name": "Всея Сайта",
