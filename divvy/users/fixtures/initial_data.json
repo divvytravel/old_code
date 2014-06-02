@@ -323,5 +323,105 @@
       "email": "divvy@divvy.travel",
       "date_joined": "2014-02-27T13:20:00Z"
     }
+  },
+  {
+    "pk": 14,
+    "model": "users.user",
+    "fields": {
+      "username": "divvy03",
+      "city": 12,
+      "first_name": "Админ",
+      "last_name": "Всея Сайта",
+      "career": "Рут",
+      "avatar_url": "/static/img/no-avatar.jpg",
+      "social_auth_response": null,
+      "gender": null,
+      "is_active": true,
+      "birthday": null,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2014-04-08T13:02:38Z",
+      "groups": [],
+      "provider": "",
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$10000$H1WOaKmEINfz$MzZm/X/BFy2Q+ce71ZpF9AwbvwW54qK80mn5P+iW9Bc=",
+      "email": "divvy@divvy.travel",
+      "date_joined": "2014-02-27T13:20:00Z"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "users.user",
+    "fields": {
+      "username": "divvy03",
+      "city": 12,
+      "first_name": "Админ",
+      "last_name": "Всея Сайта",
+      "career": "Рут",
+      "avatar_url": "/static/img/no-avatar.jpg",
+      "social_auth_response": null,
+      "gender": null,
+      "is_active": true,
+      "birthday": null,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2014-04-08T13:02:38Z",
+      "groups": [],
+      "provider": "",
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$10000$H1WOaKmEINfz$MzZm/X/BFy2Q+ce71ZpF9AwbvwW54qK80mn5P+iW9Bc=",
+      "email": "divvy@divvy.travel",
+      "date_joined": "2014-02-27T13:20:00Z"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "users.user",
+    "fields": {
+      "username": "divvy03",
+      "city": 12,
+      "first_name": "Админ",
+      "last_name": "Всея Сайта",
+      "career": "Рут",
+      "avatar_url": "/static/img/no-avatar.jpg",
+      "social_auth_response": null,
+      "gender": null,
+      "is_active": true,
+      "birthday": null,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2014-04-08T13:02:38Z",
+      "groups": [],
+      "provider": "",
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$10000$H1WOaKmEINfz$MzZm/X/BFy2Q+ce71ZpF9AwbvwW54qK80mn5P+iW9Bc=",
+      "email": "divvy@divvy.travel",
+      "date_joined": "2014-02-27T13:20:00Z"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "users.user",
+    "fields": {
+      "username": "divvy03",
+      "city": 12,
+      "first_name": "Админ",
+      "last_name": "Всея Сайта",
+      "career": "Рут",
+      "avatar_url": "/static/img/no-avatar.jpg",
+      "social_auth_response": null,
+      "gender": null,
+      "is_active": true,
+      "birthday": null,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2014-04-08T13:02:38Z",
+      "groups": [],
+      "provider": "",
+      "user_permissions": [],
+      "password": "pbkdf2_sha256$10000$H1WOaKmEINfz$MzZm/X/BFy2Q+ce71ZpF9AwbvwW54qK80mn5P+iW9Bc=",
+      "email": "divvy@divvy.travel",
+      "date_joined": "2014-02-27T13:20:00Z"
+    }
   }
 ]
