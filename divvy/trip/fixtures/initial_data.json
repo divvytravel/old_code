@@ -1,0 +1,664 @@
+[
+  {
+    "pk": 1,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Первый тег",
+      "main_page": false,
+      "slug": "perviy_tag"
+    }
+  },
+  {
+    "pk": 13,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Экскурсия",
+      "main_page": true,
+      "slug": "excursion"
+    }
+  },
+  {
+    "pk": 14,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Итальянский язык",
+      "main_page": false,
+      "slug": "italian-lang"
+    }
+  },
+  {
+    "pk": 15,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Походы",
+      "main_page": true,
+      "slug": "trip"
+    }
+  },
+  {
+    "pk": 16,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Футбол",
+      "main_page": true,
+      "slug": "socker"
+    }
+  },
+  {
+    "pk": 17,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Яхтинг",
+      "main_page": true,
+      "slug": "boat"
+    }
+  },
+  {
+    "pk": 18,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Йога",
+      "main_page": true,
+      "slug": "yoga"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Винные туры",
+      "main_page": true,
+      "slug": "vine"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "trip.tags",
+    "fields": {
+      "name": "тег-1",
+      "main_page": false,
+      "slug": "tag-1"
+    }
+  },
+  {
+    "pk": 21,
+    "model": "trip.tags",
+    "fields": {
+      "name": "что-то длинное - 1",
+      "main_page": false,
+      "slug": "long-1"
+    }
+  },
+  {
+    "pk": 22,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Шаринг жилья",
+      "main_page": false,
+      "slug": "flats-share"
+    }
+  },
+  {
+    "pk": 23,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Языковые курсы",
+      "main_page": true,
+      "slug": "language"
+    }
+  },
+  {
+    "pk": 24,
+    "model": "trip.tags",
+    "fields": {
+      "name": "Вело-туры",
+      "main_page": false,
+      "slug": "bicycles"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "trip.tripcategory",
+    "fields": {
+      "keywords": [],
+      "slug": "category0",
+      "tag": 1,
+      "applicable": "noncom",
+      "title": "Категория 0"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "descr_share": "ыва",
+      "sex": 60.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 1,
+      "title": "Поездка",
+      "people_max_count": 8,
+      "descr_additional": "ыфва",
+      "recommended": true,
+      "start_date": "2014-04-28",
+      "descr_company": "фыва",
+      "descr_main": "описание поездки",
+      "end_date": "2014-05-01",
+      "tags": [
+        13,
+        14
+      ],
+      "price": 333,
+      "includes": "ф",
+      "end_people_date": "2014-04-16",
+      "categories": [
+        1
+      ],
+      "price_type": "noncom",
+      "age": 23,
+      "people_count": 7
+    }
+  },
+  {
+    "pk": 2,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "descr_share": "фыва",
+      "sex": 70.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 12,
+      "title": "Поездка1",
+      "people_max_count": 7,
+      "descr_additional": "фвыа",
+      "recommended": false,
+      "start_date": "2014-05-03",
+      "descr_company": "фыва",
+      "descr_main": "ыва",
+      "end_date": "2014-06-13",
+      "tags": [],
+      "price": 2945,
+      "includes": "фыва",
+      "end_people_date": "2014-04-01",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 33,
+      "people_count": 7
+    }
+  },
+  {
+    "pk": 3,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        3,
+        4,
+        7,
+        9,
+        10
+      ],
+      "descr_share": "фыва",
+      "sex": 95.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 1,
+      "title": "Поездка 2",
+      "people_max_count": 7,
+      "descr_additional": "фыва",
+      "recommended": false,
+      "start_date": "2014-04-16",
+      "descr_company": "фыва",
+      "descr_main": "ываф паап",
+      "end_date": "2014-05-12",
+      "tags": [
+        1
+      ],
+      "price": 938,
+      "includes": "1",
+      "end_people_date": "2014-04-08",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 28,
+      "people_count": 5
+    }
+  },
+  {
+    "pk": 4,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        5,
+        8,
+        10,
+        11
+      ],
+      "descr_share": "1",
+      "sex": 0.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 12,
+      "title": "Поездка 3",
+      "people_max_count": 11,
+      "descr_additional": "1",
+      "recommended": false,
+      "start_date": "2014-05-07",
+      "descr_company": "1",
+      "descr_main": "1",
+      "end_date": "2014-05-28",
+      "tags": [
+        1,
+        13,
+        14
+      ],
+      "price": 1500,
+      "includes": "1",
+      "end_people_date": "2014-04-01",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 30,
+      "people_count": 9
+    }
+  },
+  {
+    "pk": 5,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        3,
+        4
+      ],
+      "descr_share": "1",
+      "sex": 99.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 1,
+      "title": "Поездка 4",
+      "people_max_count": 5,
+      "descr_additional": "1",
+      "recommended": false,
+      "start_date": "2014-04-17",
+      "descr_company": "1",
+      "descr_main": "1",
+      "end_date": "2014-04-20",
+      "tags": [
+        13
+      ],
+      "price": 6390,
+      "includes": "1",
+      "end_people_date": "2014-04-01",
+      "categories": [
+        1
+      ],
+      "price_type": "noncom",
+      "age": 24,
+      "people_count": 5
+    }
+  },
+  {
+    "pk": 6,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        1,
+        2,
+        4,
+        6
+      ],
+      "descr_share": "фы",
+      "sex": 50.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 1,
+      "city": 12,
+      "title": "Поездка 5",
+      "people_max_count": 6,
+      "descr_additional": "фвыа",
+      "recommended": false,
+      "start_date": "2014-05-03",
+      "descr_company": "фвыа",
+      "descr_main": "ыва",
+      "end_date": "2014-05-28",
+      "tags": [
+        13
+      ],
+      "price": 1666,
+      "includes": "1",
+      "end_people_date": "2014-02-03",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 37,
+      "people_count": 4
+    }
+  },
+  {
+    "pk": 15,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        3,
+        5,
+        6,
+        7,
+        8
+      ],
+      "descr_share": "",
+      "sex": 40.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 2,
+      "city": 12,
+      "title": "Итальянская архитектура",
+      "people_max_count": 18,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-05-09",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "end_date": "2014-05-23",
+      "tags": [
+        13,
+        14
+      ],
+      "price": 21660,
+      "includes": "Что входит.",
+      "end_people_date": "2014-04-01",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 36,
+      "people_count": 8
+    }
+  },
+  {
+    "pk": 16,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        3,
+        6,
+        9,
+        10
+      ],
+      "descr_share": "",
+      "sex": 50.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 2,
+      "city": 1,
+      "title": "Русская архитектура",
+      "people_max_count": 20,
+      "descr_additional": "",
+      "recommended": true,
+      "start_date": "2014-04-08",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "end_date": "2014-04-16",
+      "tags": [
+        1,
+        14
+      ],
+      "price": 18200,
+      "includes": "Что входит.",
+      "end_people_date": "2014-02-07",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 26,
+      "people_count": 13
+    }
+  },
+  {
+    "pk": 17,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        3,
+        5,
+        6,
+        10,
+        11
+      ],
+      "descr_share": "",
+      "sex": 50.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 2,
+      "city": 1,
+      "title": "Испанская архитектура 2",
+      "people_max_count": 34,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-04-08",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "end_date": "2014-04-16",
+      "tags": [
+        13,
+        14
+      ],
+      "price": 14500,
+      "includes": "Что входит.",
+      "end_people_date": "2014-02-07",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 33,
+      "people_count": 31
+    }
+  },
+  {
+    "pk": 18,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "descr_share": "",
+      "sex": 40.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 2,
+      "city": 12,
+      "title": "Итальянская архитектура 1",
+      "people_max_count": 20,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-05-08",
+      "descr_company": "",
+      "descr_main": "Опишите суть поездки.",
+      "end_date": "2014-05-16",
+      "tags": [
+        13,
+        14,
+        19
+      ],
+      "price": 22000,
+      "includes": "Что входит.",
+      "end_people_date": "2014-02-07",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 31,
+      "people_count": 10
+    }
+  },
+  {
+    "pk": 19,
+    "model": "trip.trip",
+    "fields": {
+      "people": [],
+      "descr_share": "",
+      "sex": null,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 13,
+      "city": 16,
+      "title": "Регата на Карибах",
+      "people_max_count": 15,
+      "descr_additional": "",
+      "recommended": true,
+      "start_date": "2014-03-01",
+      "descr_company": "",
+      "descr_main": "Это суть",
+      "end_date": "2014-03-23",
+      "tags": [
+        17
+      ],
+      "price": 10,
+      "includes": "Ничего не входит",
+      "end_people_date": "2014-02-20",
+      "categories": [],
+      "price_type": "comm",
+      "age": 20,
+      "people_count": 12
+    }
+  },
+  {
+    "pk": 20,
+    "model": "trip.trip",
+    "fields": {
+      "people": [],
+      "descr_share": "",
+      "sex": 0.0,
+      "currency": "euro",
+      "trip_type": "invite",
+      "owner": 8,
+      "city": 17,
+      "title": "Апарты в Барселоне",
+      "people_max_count": 6,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-04-24",
+      "descr_company": "",
+      "descr_main": "dfgdfg",
+      "end_date": "2014-04-30",
+      "tags": [
+        22
+      ],
+      "price": 100,
+      "includes": "sdfsf",
+      "end_people_date": "2014-04-19",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 30,
+      "people_count": 6
+    }
+  },
+  {
+    "pk": 21,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        3,
+        4,
+        5,
+        6,
+        10,
+        12,
+        13,
+        15
+      ],
+      "descr_share": "",
+      "sex": 10.0,
+      "currency": "euro",
+      "trip_type": "closed",
+      "owner": 9,
+      "city": 18,
+      "title": "Итальянские каникулы",
+      "people_max_count": 5,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-05-05",
+      "descr_company": "",
+      "descr_main": "dgfd",
+      "end_date": "2014-05-12",
+      "tags": [
+        23
+      ],
+      "price": 300,
+      "includes": "fsdf",
+      "end_people_date": "2014-04-30",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 40,
+      "people_count": 3
+    }
+  },
+  {
+    "pk": 22,
+    "model": "trip.trip",
+    "fields": {
+      "people": [
+        2,
+        4,
+        6
+      ],
+      "descr_share": "",
+      "sex": 50.0,
+      "currency": "euro",
+      "trip_type": "open",
+      "owner": 2,
+      "city": 19,
+      "title": "Двухколесный Тай",
+      "people_max_count": 40,
+      "descr_additional": "",
+      "recommended": false,
+      "start_date": "2014-06-01",
+      "descr_company": "",
+      "descr_main": "dsfs",
+      "end_date": "2014-06-08",
+      "tags": [
+        24
+      ],
+      "price": 1500,
+      "includes": "3243",
+      "end_people_date": "2014-05-30",
+      "categories": [],
+      "price_type": "noncom",
+      "age": 70,
+      "people_count": 8
+    }
+  },
+  {
+    "pk": 1,
+    "model": "trip.trippointtype",
+    "fields": {
+      "category": 1,
+      "many": true,
+      "point_title_name": "Модель",
+      "title": "Модель"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "trip.trippointtype",
+    "fields": {
+      "category": 1,
+      "many": false,
+      "point_title_name": "Шкипер",
+      "title": "Шкипер"
+    }
+  }
+]
