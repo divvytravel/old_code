@@ -23,6 +23,7 @@ class Migration(SchemaMigration):
             ('title', self.gf('django.db.models.fields.CharField')(max_length=250)),
             ('text', self.gf('django.db.models.fields.TextField')()),
             ('slug', self.gf('django.db.models.fields.SlugField')(unique=True, max_length=50)),
+            ('created', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2014, 6, 2, 0, 0))),
         ))
         db.send_create_signal(u'blog', ['Post'])
 
@@ -57,6 +58,7 @@ class Migration(SchemaMigration):
         u'blog.post': {
             'Meta': {'object_name': 'Post'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['blog.Category']"}),
+            'created': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 6, 2, 0, 0)'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'posts'", 'blank': 'True', 'to': u"orm['trip.Tags']"}),
@@ -66,6 +68,7 @@ class Migration(SchemaMigration):
         u'trip.tags': {
             'Meta': {'object_name': 'Tags'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'main_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'slug': ('django.db.models.fields.SlugField', [], {'unique': 'True', 'max_length': '50'})
         }

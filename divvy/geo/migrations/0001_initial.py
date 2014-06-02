@@ -44,7 +44,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100, db_index=True)),
             ('name_en', self.gf('django.db.models.fields.CharField')(unique=True, max_length=100)),
-            ('country', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['geo.Country'])),
+            ('country', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cities', to=orm['geo.Country'])),
             ('iata', self.gf('django.db.models.fields.CharField')(max_length=3, blank=True)),
         ))
         db.send_create_signal(u'geo', ['City'])
@@ -84,7 +84,7 @@ class Migration(SchemaMigration):
         },
         u'geo.city': {
             'Meta': {'ordering': "('country__name', 'name')", 'unique_together': "(('name', 'country'),)", 'object_name': 'City'},
-            'country': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['geo.Country']"}),
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cities'", 'to': u"orm['geo.Country']"}),
             'iata': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),

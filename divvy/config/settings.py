@@ -161,7 +161,8 @@ THIRD_PARTY_APPS = (
     'postman',
     'tastypie',
     'provider',
-    'provider.oauth2'
+    'provider.oauth2',
+    'django_extensions'
 )
 
 # Apps specific for this project go here.

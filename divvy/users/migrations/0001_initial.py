@@ -26,6 +26,8 @@ class Migration(SchemaMigration):
             ('birthday', self.gf('django.db.models.fields.DateField')(null=True, blank=True)),
             ('gender', self.gf('django.db.models.fields.CharField')(max_length=7, null=True, blank=True)),
             ('social_auth_response', self.gf('social_auth.fields.JSONField')(null=True, blank=True)),
+            ('city', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='users', null=True, to=orm['geo.City'])),
+            ('career', self.gf('django.db.models.fields.CharField')(max_length=30, null=True, blank=True)),
         ))
         db.send_create_signal(u'users', ['User'])
 
@@ -80,10 +82,26 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
+        u'geo.city': {
+            'Meta': {'ordering': "('country__name', 'name')", 'unique_together': "(('name', 'country'),)", 'object_name': 'City'},
+            'country': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cities'", 'to': u"orm['geo.Country']"}),
+            'iata': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'db_index': 'True'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
+        },
+        u'geo.country': {
+            'Meta': {'object_name': 'Country'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100'})
+        },
         u'users.user': {
             'Meta': {'object_name': 'User'},
             'avatar_url': ('django.db.models.fields.CharField', [], {'default': "'/static/img/no-avatar.jpg'", 'max_length': '200'}),
             'birthday': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
+            'career': ('django.db.models.fields.CharField', [], {'max_length': '30', 'null': 'True', 'blank': 'True'}),
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'users'", 'null': 'True', 'to': u"orm['geo.City']"}),
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
