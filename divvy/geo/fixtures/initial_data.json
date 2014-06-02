@@ -44,5 +44,15 @@
       "iata": "",
       "name": "Manchester"
     }
-  }
+  },
+  {
+    "pk": 17,
+    "model": "geo.city",
+    "fields": {
+      "country": 1,
+      "name_en": "Saint-Petersburg",
+      "iata": "",
+      "name": "Санкт-Петербург"
+    }
+  },
 ]
