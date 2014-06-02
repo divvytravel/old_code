@@ -45,7 +45,8 @@ class AnonymousPostAuthentication(BasicAuthentication):
         if request.method == "POST":
             return True
         else:
-            return super(AnonymousPostAuthentication, self).is_authenticated(request, **kwargs)
+            return super(AnonymousPostAuthentication, self).is_authenticated(
+                request, **kwargs)
 
 
 class AnonymousPostBaseResourceMixin(BaseResourceMixin):
@@ -75,7 +76,8 @@ class AnonymousPostAuthentication(BasicAuthentication):
         if request.method == "POST":
             return True
         else:
-            return super(AnonymousPostAuthentication, self).is_authenticated(request, **kwargs)
+            return super(AnonymousPostAuthentication, self).is_authenticated(
+                request, **kwargs)
 
 
 class MultipartResource(object):
@@ -97,7 +99,8 @@ class MultipartResource(object):
             request.META['CONTENT_TYPE'] = 'application/json'
             return data
 
-        return super(MultipartResource, self).deserialize(request, data, format)
+        return super(MultipartResource, self).deserialize(
+            request, data, format)
 
     def put_detail(self, request, **kwargs):
         if request.META.get('CONTENT_TYPE').startswith('multipart') and \
@@ -168,13 +171,16 @@ class ModelFormValidation(FormValidation):
 
 class BaseResourceMixin(object):
     class Meta:
-        authentication = MultiAuthentication(SessionAuthentication(), BasicAuthentication())
+        # authentication = MultiAuthentication(
+        #     SessionAuthentication(),
+        #     BasicAuthentication())
+        authentication = Authentication()
         authorization = Authorization()
         always_return_data = True
 
 
-class AnonymousPostBaseResourceMixin(BaseResourceMixin):
-    class Meta(BaseResourceMixin.Meta):
-        authentication = AnonymousPostAuthentication()
-        authorization = Authorization()
-        always_return_data = True
+# class AnonymousPostBaseResourceMixin(BaseResourceMixin):
+#     class Meta(BaseResourceMixin.Meta):
+#         authentication = AnonymousPostAuthentication()
+#         authorization = Authorization()
+#         always_return_data = True

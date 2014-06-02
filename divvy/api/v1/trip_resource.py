@@ -149,7 +149,9 @@ class TripResource(ModelResource, BaseResourceMixin):
     def apply_filters(self, request, applicable_filters):
         qs = None
         if not qs:
-            qs = super(TripResource, self).apply_filters(request, applicable_filters)
+            qs = super(TripResource, self).apply_filters(
+                request,
+                applicable_filters)
 
         return qs
 
@@ -171,14 +173,19 @@ class TripResource(ModelResource, BaseResourceMixin):
 
 
 class DateResource(TripResource):
-    people = fields.ManyToManyField(UserResource, attribute='people', full=False, null=True)
-    categories = fields.ManyToManyField(TripCategoryResource, attribute='categories',
-                                        related_name='trips', full=False, null=True)
+    people = fields.ManyToManyField(UserResource, attribute='people',
+                                    full=False, null=True)
+    categories = fields.ManyToManyField(TripCategoryResource,
+                                        attribute='categories',
+                                        related_name='trips',
+                                        full=False, null=True)
     tags = fields.ManyToManyField(TagsResource, attribute='tags',
                                   related_name='trips', full=False, null=True)
-    images = fields.ManyToManyField(ImageResource, attribute='images', full=False, null=True)
+    images = fields.ManyToManyField(ImageResource, attribute='images',
+                                    full=False, null=True)
 
-    city = fields.ToOneField('api.v1.geo_resource.CityResource', attribute='city',
+    city = fields.ToOneField('api.v1.geo_resource.CityResource',
+                             attribute='city',
                              full=False, null=True)
 
     class Meta(TripResource.Meta):
