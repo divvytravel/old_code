@@ -54,5 +54,35 @@
       "iata": "",
       "name": "Saint-Petersburg"
     }
+  },
+  {
+    "pk": 18,
+    "model": "geo.city",
+    "fields": {
+      "country": 1,
+      "name_en": "Saint-Petersburg1",
+      "iata": "",
+      "name": "Saint-Petersburg1"
+    }
+  },
+  {
+    "pk": 19,
+    "model": "geo.city",
+    "fields": {
+      "country": 1,
+      "name_en": "Saint-Petersburg2",
+      "iata": "",
+      "name": "Saint-Petersburg2"
+    }
+  },
+  {
+    "pk": 20,
+    "model": "geo.city",
+    "fields": {
+      "country": 1,
+      "name_en": "Saint-Petersburg3",
+      "iata": "",
+      "name": "Saint-Petersburg3"
+    }
   }
 ]
