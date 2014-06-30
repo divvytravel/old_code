@@ -35,7 +35,8 @@ class ImageResource(BaseResourceMixin, MultipartResource, ModelResource):
 
 
 class TagsResource(ModelResource, BaseResourceMixin):
-    trips = fields.ManyToManyField('api.v1.trip_resource.TripResource', attribute='trips',
+    trips = fields.ManyToManyField('api.v1.trip_resource.TripResource',
+                                   attribute='trips',
                                    related_name='tags', full=False, null=True)
 
     class Meta(BaseResourceMixin.Meta):
@@ -55,7 +56,8 @@ class TagsResource(ModelResource, BaseResourceMixin):
         orm_filters = super(TagsResource, self).build_filters(filters)
 
         if "trip_country" in filters:
-            trips = Trip.objects.filter(city__country__name=filters['trip_country']).distinct()
+            trips = Trip.objects.filter(
+                city__country__name=filters['trip_country']).distinct()
 
             orm_filters["trips__in"] = [i.pk for i in trips]
 
@@ -112,6 +114,9 @@ class TripResource(ModelResource, BaseResourceMixin):
     city = fields.ToOneField('api.v1.geo_resource.CityResource',
                              attribute='city', full=True, null=True,
                              blank=True)
+    points = fields.ToManyField(
+        'api.v1.trip_resource.TripPointResource',
+        attribute='points', full=True, null=True, blank=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = Trip.objects.prefetch_related('people').all()
@@ -200,10 +205,10 @@ class DateResource(TripResource):
 
 class TripPointResource(ModelResource, BaseResourceMixin):
     p_type = fields.ToOneField(TripPointTypeResource, attribute='p_type',
-                               full=True, null=True)
+                               full=True, null=True, blank=True)
     trip = fields.ToOneField(TripResource, attribute='trip',
-                             related_name='points', full=True, null=True)
+                             related_name='points', null=True, blank=True)
 
     class Meta(BaseResourceMixin.Meta):
         queryset = TripPoint.objects.all()
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post', 'patch']

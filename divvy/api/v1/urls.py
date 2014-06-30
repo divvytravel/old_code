@@ -3,7 +3,9 @@ __author__ = 'indieman'
 from tastypie.api import Api
 
 from api.v1.geo_resource import CityResource, CountryResource
-from api.v1.trip_resource import TripResource, TagsResource, DateResource, ImageResource
+from api.v1.trip_resource import (TripResource, TagsResource,
+                                  DateResource, ImageResource,
+                                  TripPointResource)
 from api.v1.user import UserResource, RegistrationResource
 from api.v1.blog_resource import BlogCategoryResource, PostResource
 
@@ -19,4 +21,5 @@ v1_api.register(CityResource())
 v1_api.register(CountryResource())
 v1_api.register(DateResource())
 v1_api.register(ImageResource())
+v1_api.register(TripPointResource())
 urlpatterns = v1_api.urls

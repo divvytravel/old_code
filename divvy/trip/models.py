@@ -19,7 +19,8 @@ from .managers import TripManager, TripRequestManager
 
 
 logger = logging.getLogger(__name__)
-DEFAUTL_CURRENCY = Choices(('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
+DEFAUTL_CURRENCY = Choices(
+    ('euro', u"евро"), ('rub', u"руб."), ('dollar', u"доллар"))
 
 
 def get_file_path(instance, filename):
@@ -88,34 +89,53 @@ class Trip(models.Model):
     title = models.CharField(u"Название", max_length=200)
     # category = models.ForeignKey(TripCategory, blank=True, null=True,
     #                              related_name="trips", verbose_name=u'Категория')
-    categories = models.ManyToManyField(TripCategory, blank=True, null=True,
-                                        related_name='trips', verbose_name=u'Категории')
+    categories = models.ManyToManyField(
+        TripCategory, blank=True, null=True,
+        related_name='trips', verbose_name=u'Категории')
     start_date = models.DateField(u"Дата начала")
     end_date = models.DateField(u"Дата окончания")
     end_people_date = models.DateField(_(u"Дата окончания набора группы"))
     price = models.PositiveIntegerField(u"Бюджет",
-                                        help_text=u"примерный бюджет", blank=True, null=True)
+                                        help_text=u"примерный бюджет",
+                                        blank=True, null=True)
     city = models.ForeignKey('geo.City', verbose_name=u'Город',
-                             help_text=u"если несколько, то первый", related_name='trips')
+                             help_text=u"если несколько, то первый",
+                             related_name='trips')
 
-    currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY, default=CURRENCY.euro)
+    currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
+                                default=CURRENCY.euro)
     includes = models.CharField(u"Что входит", max_length=200)
-    people_count = models.PositiveIntegerField(u"Минимальное количество человек")
-    people_max_count = models.PositiveIntegerField(u"Максимальное количество человек")
+    people_count = models.PositiveIntegerField(
+        u"Минимальное количество человек")
+    people_max_count = models.PositiveIntegerField(
+        u"Максимальное количество человек")
     descr_main = models.TextField(u"Опишите суть поездки")
-    descr_share = models.TextField(u"Опишите, что вы хотите разделить (или зачем вам компания)", blank=True)
-    descr_additional = models.TextField(u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
-    descr_company = models.TextField(u"Требования к компании (кого вы хотели бы видеть в качестве соседей)", blank=True)
-    trip_type = models.CharField(u"Участие", max_length=10, choices=TRIP_TYPE, default=TRIP_TYPE.open)
-    price_type = models.CharField(_(u"Тип поездки"), max_length=10, choices=PRICE_TYPE, default=PRICE_TYPE.noncom)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=u'Создатель')
+    descr_share = models.TextField(
+        u"Опишите, что вы хотите разделить (или зачем вам компания)",
+        blank=True)
+    descr_additional = models.TextField(
+        u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
+    descr_company = models.TextField(
+        u"Требования к компании (кого вы хотели бы видеть в качестве соседей)",
+        blank=True)
+    trip_type = models.CharField(u"Участие", max_length=10, choices=TRIP_TYPE,
+                                 default=TRIP_TYPE.open)
+    price_type = models.CharField(
+        _(u"Тип поездки"), max_length=10, choices=PRICE_TYPE,
+        default=PRICE_TYPE.noncom)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, verbose_name=u'Создатель')
     people = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                    related_name='approved_trips', blank=True, verbose_name=u'Участники')
-    tags = models.ManyToManyField(Tags, related_name='trips', blank=True, verbose_name=u'Теги')
+                                    related_name='approved_trips',
+                                    blank=True, verbose_name=u'Участники')
+    tags = models.ManyToManyField(
+        Tags, related_name='trips', blank=True, verbose_name=u'Теги')
 
     # image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
-    image = models.ForeignKey('trip.Image', related_name='trip_images', blank=True, null=True)
-    gallery = models.ManyToManyField('trip.Image', related_name='trip_galleries', blank=True, null=True)
+    image = models.ForeignKey(
+        'trip.Image', related_name='trip_images', blank=True, null=True)
+    gallery = models.ManyToManyField(
+        'trip.Image', related_name='trip_galleries', blank=True, null=True)
     # images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
 
     sex = models.FloatField(blank=True, null=True, default=None)
@@ -130,7 +150,8 @@ class Trip(models.Model):
         verbose_name_plural = u"Поездки"
 
     def __unicode__(self):
-        return u"{0}, [{1} - {2}]".format(self.title, self.start_date, self.end_date)
+        return u"{0}, [{1} - {2}]".format(
+            self.title, self.start_date, self.end_date)
 
     def get_sex(self):
         females = 0
@@ -336,9 +357,10 @@ class Trip(models.Model):
 
 class TripPointType(models.Model):
     title = models.CharField(u'Название', max_length=100)
-    point_title_name = models.CharField(u'Название поля для заглавия',
-                                        max_length=100,
-                                        help_text=u"Например, 'Модель' для яхты, 'ФИО' для шкипера")
+    point_title_name = models.CharField(
+        u'Название поля для заглавия',
+        max_length=100,
+        help_text=u"Например, 'Модель' для яхты, 'ФИО' для шкипера")
     many = models.BooleanField(u'Несколько', default=False)
     category = models.ForeignKey(TripCategory, verbose_name=u'Категория',
                                  related_name='point_types')
@@ -363,22 +385,26 @@ class TripPointType(models.Model):
 class TripPoint(models.Model):
     CURRENCY = DEFAUTL_CURRENCY
 
-    p_type = models.ForeignKey(TripPointType, verbose_name=u'Тип')
-    title = models.CharField(u"Заглавие", max_length=50,
-                             help_text=u"Фактическое название поля береться из выбранного типа")
+    p_type = models.ForeignKey(
+        TripPointType, verbose_name=u'Тип', null=True, blank=True)
+    title = models.CharField(
+        u"Заглавие", max_length=50,
+        help_text=u"Фактическое название поля берется из выбранного типа")
     description = models.TextField(u"Описание")
     price = models.PositiveIntegerField(u"Цена", blank=True, null=True)
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
                                 blank=True, null=True)
     link = models.URLField(u"Ссылка", blank=True, null=True)
-    trip = models.ForeignKey(Trip, verbose_name=u'Поездка', related_name='points')
+    trip = models.ForeignKey(
+        Trip, verbose_name=u'Поездка', related_name='points', blank=True, null=True)
 
     class Meta:
         verbose_name = u"Поле поездки"
         verbose_name_plural = u"Поля поездки"
 
     def __unicode__(self):
-        return u"{0}, {1}, {2}".format(self.p_type, self.trip, self.description[:15])
+        return u"{0}, {1}, {2}".format(
+            self.p_type, self.trip, self.description[:15])
 
 
 post_save.connect(Trip.points_updated, sender=TripPoint)
@@ -400,14 +426,16 @@ class TripRequest(models.Model):
     date_created = models.DateTimeField(u"Дата создания", default=timezone.now)
     status = models.CharField(u"Статус", max_length=10, choices=STATUS,
                               default=STATUS.pending)
-    users_approved = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                            related_name='approved_trip_requests', blank=True, null=True,
-                                            verbose_name=u'Одобрена пользователями')
+    users_approved = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name='approved_trip_requests', blank=True, null=True,
+        verbose_name=u'Одобрена пользователями')
     approved_by_owner = models.BooleanField(u"Одобрена создателем",
                                             default=False)
-    denied_by = models.ManyToManyField(settings.AUTH_USER_MODEL,
-                                       blank=True, null=True, related_name='denied_trip_requests',
-                                       verbose_name=u'Отклонена пользователями')
+    denied_by = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        blank=True, null=True, related_name='denied_trip_requests',
+        verbose_name=u'Отклонена пользователями')
 
     objects = TripRequestManager()
 
