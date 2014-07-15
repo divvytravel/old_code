@@ -108,7 +108,7 @@
         text-align: center;
         width: 30px;
         height: 30px;
-        border-radius: 4px;
+        border-radius: 2px;
         border: none;
       }
     }
@@ -993,15 +993,18 @@ fieldset[disabled] .datepicker table tr td.selected {
 }
 
 .datepicker table tr td.active {
-  color: #ffffff;
-  background-color: #428bca;
-  border-color: #357ebd;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  // color: #ffffff;
+  // background-color: #428bca;
+  // border-color: #357ebd;
+  // text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  background-color: #cbedf6;
+  border-color: #6ecee5;
+  color: #31b9da;
   &:hover {
     color: #ffffff;
     background-color: #428bca;
     border-color: #357ebd;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    // text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   }
   &.disabled {
     color: #ffffff;
@@ -1028,9 +1031,12 @@ fieldset[disabled] .datepicker table tr td.selected {
     }
   }
   &:active, &:hover:active {
-    color: #ffffff;
-    background-color: #3276b1;
-    border-color: #285e8e;
+    // color: #ffffff;
+    // background-color: #3276b1;
+    // border-color: #285e8e;
+    background-color: #cbedf6;
+    border-color: #6ecee5;
+    color: #31b9da;
   }
   &.disabled {
     &:active, &:hover:active {
@@ -1040,9 +1046,12 @@ fieldset[disabled] .datepicker table tr td.selected {
     }
   }
   &.active, &:hover.active {
-    color: #ffffff;
-    background-color: #3276b1;
-    border-color: #285e8e;
+    // color: #ffffff;
+    // background-color: #3276b1;
+    // border-color: #285e8e;
+    background-color: #cbedf6;
+    border-color: #6ecee5;
+    color: #31b9da;
   }
   &.disabled {
     &.active, &:hover.active {
@@ -1190,29 +1199,6 @@ fieldset[disabled] .datepicker table tr td.active {
   }
   &.disabled {
     &:focus, &:hover:focus {
-      background-color: #428bca;
-      border-color: #357ebd;
-    }
-  }
-}
-
-.datepicker table tr td.active {
-  &.disabled:active, &:hover.disabled:active {
-    background-color: #428bca;
-    border-color: #357ebd;
-  }
-  &.disabled {
-    &.disabled:active, &:hover.disabled:active {
-      background-color: #428bca;
-      border-color: #357ebd;
-    }
-  }
-  &[disabled]:active, &:hover[disabled]:active {
-    background-color: #428bca;
-    border-color: #357ebd;
-  }
-  &.disabled {
-    &[disabled]:active, &:hover[disabled]:active {
       background-color: #428bca;
       border-color: #357ebd;
     }
@@ -1671,6 +1657,7 @@ fieldset[disabled] .datepicker table tr td span.active {
 }
 
 //kstl
+.datepicker-days table,
 .datepicker-months table {
   width: 256px;
   thead {
@@ -1680,7 +1667,7 @@ fieldset[disabled] .datepicker table tr td span.active {
     &.prev,
     &.next {
       cursor: pointer;
-
+      width: 50px !important;
       font-size: 11px;
       font-family: $font-family-sans-serif;
       font-weight: normal;
@@ -1693,6 +1680,18 @@ fieldset[disabled] .datepicker table tr td span.active {
     &.next {
       background: url("../img/arrow-next.png") 34px 8px no-repeat;
       text-align: left !important;
+    }
+  }
+}
+
+.datepicker-days table {
+  th {
+    &.prev {
+      width: 30px !important;
+    }
+    &.next {
+      width: 30px !important;
+      background-position: 22px 8px;
     }
   }
 }

@@ -34,6 +34,7 @@ define([
   var helperDirectory = 'templates/helpers/';
   var i18nDirectory = 'templates/i18n/';
   var buildCSSFileName = 'screen.build.css';
+  var onHbsReadMethod = "onHbsRead";
 
   Handlebars.registerHelper('$', function() {
     //placeholder for translation helper
@@ -106,7 +107,7 @@ define([
          var xdr = getXhr(true);
         xdr.open('GET', url);
         xdr.onload = function() {
-          callback(xdr.responseText);
+          callback(xdr.responseText, url);
         };
         xdr.onprogress = function(){};
         xdr.ontimeout = function(){};
@@ -122,7 +123,7 @@ define([
           //Do not explicitly handle errors, those should be
           //visible via console output in the browser.
           if (xhr.readyState === 4) {
-            callback(xhr.responseText);
+            callback(xhr.responseText, url);
           }
         };
         xhr.send(null);
@@ -141,21 +142,21 @@ define([
       var body = fs.readFileSync(path, 'utf8') || '';
       // we need to remove BOM stuff from the file content
       body = body.replace(/^\uFEFF/, '');
-      callback(body);
+      callback(body, path);
     };
   }
   else if (typeof java !== 'undefined' && typeof java.io !== 'undefined') {
     fetchText = function(path, callback) {
-      var f = new java.io.File(path);
-      var is = new java.io.FileReader(f);
-      var reader = new java.io.BufferedReader(is);
+      var fis = new java.io.FileInputStream(path);
+      var streamReader = new java.io.InputStreamReader(fis, "UTF-8");
+      var reader = new java.io.BufferedReader(streamReader);
       var line;
       var text = '';
       while ((line = reader.readLine()) !== null) {
         text += new String(line) + '\n';
       }
       reader.close();
-      callback(text);
+      callback(text, path);
     };
   }
 
@@ -165,7 +166,7 @@ define([
       callback(cache[path]);
     }
     else {
-      fetchText(path, function(data){
+      fetchText(path, function(data, path){
         cache[path] = data;
         callback.call(this, data);
       });
@@ -241,7 +242,9 @@ define([
               return res;
             }
             catch (e) {
-              return '{ "description" : "' + statement.comment + '" }';
+              return JSON.stringify({
+                description: res
+              });
             }
           }
         }
@@ -385,9 +388,11 @@ define([
       };
 
       function fetchAndRegister(langMap) {
-        fetchText(path, function(text) {
+          fetchText(path, function(text, path) {
+
+          var readCallback = (config.isBuild && config[onHbsReadMethod]) ? config[onHbsReadMethod]:  function(name,path,text){return text} ;
           // for some reason it doesn't include hbs _first_ when i don't add it here...
-          var nodes = Handlebars.parse(text);
+          var nodes = Handlebars.parse( readCallback(name, path, text));
           var partials = findPartialDeps( nodes );
           var meta = getMetaData( nodes );
           var extDeps = getExternalDeps( nodes );
@@ -530,7 +535,8 @@ define([
 
           text = '/* START_TEMPLATE */\n' +
                  'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ){ \n' +
-                   'var t = Handlebars.template(' + prec + ');\n';
+                   'var t = Handlebars.template(' + prec + ');\n' +
+                   "Handlebars.registerPartial('" + name + "', t);\n";
 
           for(var i=0; i<partialReferences.length;i++)
             text += "Handlebars.registerPartial('" + partialReferences[i] + "', t);\n";
@@ -576,7 +582,7 @@ define([
             });
           }
 
-          if ( config.removeCombined ) {
+          if ( config.removeCombined && path ) {
             fs.unlinkSync(path);
           }
 

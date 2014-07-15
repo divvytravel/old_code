@@ -8,6 +8,10 @@ describe("Backbone.localStorage", function(){
     number: 1337
   };
 
+  var onError = function (model, resp, options) {
+    throw new Error(resp);
+  };
+
   describe("on a Collection", function(){
 
     var Model = Backbone.Model.extend({
@@ -21,6 +25,10 @@ describe("Backbone.localStorage", function(){
 
     var collection = new Collection();
 
+    // bind error handler
+    before(function(){
+      collection.on('error', onError);
+    })
 
     // Clean up before starting
     before(function(){
@@ -60,6 +68,10 @@ describe("Backbone.localStorage", function(){
 
       it("should have assigned an `id` to the model", function(){
         assert.isDefined(model.id);
+      });
+
+      it("should be saved to the localstorage", function(){
+        assert.isNotNull(window.localStorage.getItem('collectionStore'+'-'+model.id));
       });
 
     });
@@ -111,6 +123,10 @@ describe("Backbone.localStorage", function(){
             var withId = _.clone(attributes);
             withId.id = 1;
             assert.deepEqual(model2.toJSON(), withId);
+          });
+
+          it("should be saved in localstorage by new id", function() {
+            assert.isNotNull(window.localStorage.getItem('collectionStore-1'));
           });
 
         });
@@ -214,8 +230,12 @@ describe("Backbone.localStorage", function(){
         model.fetch();
       });
 
-      it("should be saved in the store", function(){
+      it("should have assigned an `id` to the model", function(){
         assert.isDefined(model.id);
+      });
+
+      it("should be saved to the localstorage", function(){
+        assert.isNotNull(window.localStorage.getItem('modelStore'+'-'+model.id));
       });
 
       describe("with new attributes", function(){

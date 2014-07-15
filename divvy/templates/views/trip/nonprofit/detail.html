@@ -1,3 +1,309 @@
-<html lang="ru-RU"><head><meta charset="utf-8"/><title>mass.travel</title><link rel="stylesheet" media="screen" href="/static/styles/index.css"/><script src="//use.typekit.net/ndu1ixv.js"></script><script type="text/javascript">try{Typekit.load();}catch(e){}
-</script><script src="/static/js/index.js"></script><script type="text/javascript">require("utils").init();
-</script></head><body><div class="header"><div class="header-wrap"><a href="/" class="header-logo"><img src="/static/img/logo-white.png"/></a><div class="header-nav"><a href="index.html" class="header-nav-item">Путешествия</a><a href="#" class="header-nav-item">Как это работает</a><a href="#" class="header-nav-item">Создание путешествия</a><span data-component="facebook-login" data-is-authenticated="" data-type-white="true"></span></div></div></div><div data-component="trip-detail" type="nonprofit"></div><div class="footer"><div class="footer-links"><a href="#" class="link--style-white">Путешествия</a><a href="#" class="link--style-white">Как это работает</a><a href="#" class="link--style-white">Создание путешествия</a><a href="#" class="link--style-white">Помощь</a><a href="#" class="link--style-white">Обратная связь</a></div><div class="footer-copyright"><span>&copy; 2014 divvy.travel</span><br/><span class="footer-copyright-design">Дизайн – <a href="#">Влад Мороз</a></span></div></div></body></html>
+<!DOCTYPE html>
+<html lang="ru-RU">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1052">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="/static/ico/favicon.ico">
+
+    <title>Divvy</title>
+
+    <!-- Bootstrap core CSS -->
+    <!-- <link href="/static/vendor/bootstrap.min.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <script src="//use.typekit.net/ndu1ixv.js"></script>
+    <script type="text/javascript">
+      try{Typekit.load();}catch(e){}
+    </script>
+
+    <link href="/static/vendor/jquery-ui/themes/start/jquery-ui.min.css" rel="stylesheet">
+    <link href="/static/css/theme.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="header login" id="header_block">
+      <div class="navbar navbar-proj" role="navigation">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-logo" href="/"><img src="/static/img/logo-white.png"></a>
+
+            {% if request.user.is_authenticated %}
+                <div class="navbar-login pull-right">
+                    <a href="{% url 'logout' %}">
+                        <span class="facebook-button-logo"></span><span>Выйти</span>
+                    </a>
+                </div>
+            {% else %}
+                <div class="navbar-login pull-right">
+                  <a href="{% url 'social_auth.views.auth' 'facebook' %}">
+                    <span class="facebook-button-logo"></span><span>Войти</span>
+                  </a>
+                </div>
+            {% endif %}
+
+            <script type="text/javascript">
+
+              window.Divvy = {};
+              Divvy.is_authenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+
+            </script>
+
+            <ul class="nav nav-pills nav-proj pull-right">
+              <li><a href="#">Путешествия</a></li>
+              <li><a href="#">Как это работает</a></li>
+              <li><a href="#">Создание путешествия</a></li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="detail-trip-page" id="detail_trip_page">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="content-layout">
+              <div class="content-layout-block">
+
+                <div class="general-block header-block">
+                  <h1>Сёрфинг на Гавайях</h1>
+                  <div class="tour">
+                    <span>London</span>&nbsp;<span>(England)</span>
+                  </div>
+                </div>
+
+                <div class="general-block tags-block">
+                  <div class="tags">
+                    <a href="javascript:void(0)" class="tag" data-id="1">Серфинг</a>
+                    <a href="javascript:void(0)" class="tag" data-id="2">Активный отдых</a>
+                  </div>
+                </div>
+
+                <div class="general-block gallery-block clearfix">
+                  <div class="main-img">
+                    <img src="/static/img/promo/trips/photo-1.jpg"/>
+                    <div class="recommended"></div>
+                  </div>
+                  <div class="thumb-list">
+                    <div class="item" data-src="/static/img/promo/trips/photo-1.jpg"><img src="/static/img/promo/trips/photo-1.jpg"></div>
+                    <div class="item" data-src="/static/img/promo/trips/photo-2.jpg"><img src="/static/img/promo/trips/photo-2.jpg"></div>
+                    <div class="item" data-src="/static/img/promo/trips/photo-3.jpg"><img src="/static/img/promo/trips/photo-3.jpg"></div>
+                    <div class="item" data-src="/static/img/promo/trips/photo-4.jpg"><img src="/static/img/promo/trips/photo-4.jpg"></div>
+                  </div>
+
+                  <!-- <ul class="pgwSlider">
+                    <li><img src="/static/img/promo/trips/photo-1.jpg"></li>
+                    <li><img src="/static/img/promo/trips/photo-2.jpg"></li>
+                    <li><img src="/static/img/promo/trips/photo-3.jpg"></li>
+                    <li><img src="/static/img/promo/trips/photo-4.jpg"></li>
+                  </ul> -->
+                </div>
+
+                <div class="desc-block">
+                  <div>
+                    <p>На Гавайях серфинг будет включен в школьную программу. Ученики государственных школ смогут выбирать изучение серфинга на уроках спорта начиная с весны 2012 года.</p>
+                    <p>Когда вы думаете о Гавайях, вы думаете о серфинге — пояснил губернатор решение включить этот вид спорта в школьную программу. Гавайи родина серфинга, напомнил Эберкромби, «этот вид спорта глубоко укоренен в нашей культуре и образе жизни».</p>
+                  </div>
+                </div>
+
+                <div class="links-block">
+                  
+                </div>
+
+              </div>
+            </div>
+
+            <div class="side-layout">
+              <div class="side-panel" id="alerts_block">
+                
+                <div class="request-block border-b">
+                  <div class="request-cons">
+                    <div class="title">Заявка рассматривается</div>
+                    <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
+                  </div>
+                  
+                </div>
+
+                <div class="date-block border-b">
+                  <div class="title">13 – 21 июля</div>
+                  <div class="info">Заявки принимаются до 12 сентября</div>
+                </div>
+
+                <div class="detail-block border-b">
+                  <div class="type">
+                    <span>Некоммерческая поездка</span>
+                    <span class="help">
+                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                    </span>
+                  </div>
+                  <div class="chip-in">
+                    <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
+                    <ul class="items">
+                      <li class="item">
+                        <a href="#">Бунгало на неделю</a>: <span>600 &euro;</span>
+                      </li>
+                      <li class="item">
+                        <a href="#">Инструктор по сёрфу</a>: <span>800 &euro;</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="price">
+                    <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
+                    <div class="value">240 €</div>
+                  </div>
+                  <div class="addition">
+                    <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
+                    <div class="info">Еда и сувениры — около 100 евро на человека, там всё дешево.</div>
+                  </div>
+                </div>
+
+                <div class="organizer-block border-b">
+                  <div class="title">Организатор</div>
+                  <div class="organizer-item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">Константина Петрова</a>
+                          <span>
+                            <span>28, Москва</span>
+                          </span>
+                          <span>
+                            Повар
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="info">Организаторы некоммерческих поездок принимают участие в путешествии и делят расходы наравне с другими.</div>
+                </div>
+
+                <div class="travellers-block">
+                  <div class="title">Компания</div>
+                  <div class="slider">
+                    <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                      <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
+                        style="left: 0%; width: 14.285714285714286%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                    </div>
+                    <span class="help">
+                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                    </span>
+                  </div>
+                  <div class="ratio">
+                    <div>
+                      <span>Набрано 1 из 7 человек</span>
+                    </div>
+                    <div>
+                      <span>Только мужчины</span>
+                    </div>
+                  </div>
+                  <div class="info">
+                    Будем рады поехать в путешествие с сёрферами любого уровня, в том числе и новичками — будет инструктор!
+                  </div>
+                  <div class="travellers">
+                    <div class="item">
+                      <div class="userpic pull-left">
+                        <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
+                      </div>
+                      <div class="info">
+                        <div class="info-wrap">
+                          <span class="info-wrap-align">
+                            <a href="javascript:void(0)">Константина Петрова</a>
+                            <span>
+                              <span>28, Москва</span>
+                            </span>
+                            <span>
+                              Повар
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="userpic pull-left">
+                        <a href="javascript:void(0)"><img src="/static/img/promo/users/2.png"></a>
+                      </div>
+                      <div class="info">
+                        <div class="info-wrap">
+                          <span class="info-wrap-align">
+                            <a href="javascript:void(0)">Константина Петрова</a>
+                            <span>
+                              <span>28, Москва</span>
+                            </span>
+                            <span>
+                              Музыкант
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="item">
+                      <div class="userpic pull-left">
+                        <a href="javascript:void(0)"><img src="/static/img/promo/users/3.png"></a>
+                      </div>
+                      <div class="info">
+                        <div class="info-wrap">
+                          <span class="info-wrap-align">
+                            <a href="javascript:void(0)">Константина Петрова</a>
+                            <span>
+                              <span>28, Москва</span>
+                            </span>
+                            <span>
+                              Хирург
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+
+      <div class="footer-nav">
+        <div class="container">
+          <a href="#">Путешествия</a>
+          <a href="#">Как это работает</a>
+          <a href="#">Создание путешествия</a>
+          <a href="#">Помощь</a>
+          <a href="#">Обратная связь</a>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="footer-info">
+          <p>Copyright &copy;2015, Divvy travel, Inc. All rights reserved.</p>
+          <p class="design">Дизайн &ndash; <a href="http://vladmoroz.com/">Влад Мороз</a></p>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="/static/vendor/requirejs/require.js" data-main="/static/js/detail/main"></script>
+  </body>
+</html>

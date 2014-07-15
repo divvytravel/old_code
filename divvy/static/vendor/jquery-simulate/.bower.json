@@ -1,0 +1,12 @@
+{
+  "name": "jquery-simulate",
+  "homepage": "https://github.com/eduardolundgren/jquery-simulate",
+  "_release": "00fc7bb7b3",
+  "_resolution": {
+    "type": "commit",
+    "commit": "00fc7bb7b3a5d29cb06afcce661405729ffb36b6"
+  },
+  "_source": "https://github.com/eduardolundgren/jquery-simulate.git",
+  "_target": "00fc7bb7b3a5d29cb06afcce661405729ffb36b6",
+  "_originalSource": "https://github.com/eduardolundgren/jquery-simulate.git"
+}

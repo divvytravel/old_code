@@ -36,6 +36,10 @@ def create_nonprofit(request):
     return render(request, 'views/trip/nonprofit/create.html', dict())
 
 
+def detail_nonprofit(request):
+    return render(request, 'views/trip/nonprofit/detail.html', dict())
+
+
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 #     template_name = "views/index/index.html"
 #     form_class = TripFilterForm

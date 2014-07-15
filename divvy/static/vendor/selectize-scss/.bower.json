@@ -1,0 +1,36 @@
+{
+  "name": "selectize-scss",
+  "version": "0.8.7",
+  "authors": [
+    "Emanuel Kluge <mail@emanuel-kluge.de>"
+  ],
+  "description": "A port of the Selectize-styles to SCSS",
+  "main": [
+    "dist/selectize.css",
+    "dist/selectize.default.css"
+  ],
+  "keywords": [
+    "SCSS",
+    "CSS",
+    "Selectize"
+  ],
+  "license": "Apache License, Version 2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "selectize": "~0.9.1"
+  },
+  "homepage": "https://github.com/herschel666/selectize-scss",
+  "_release": "0.8.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.8.7",
+    "commit": "a72b5e7747a1e5d13a1a8f1a2939a3b27cf07d57"
+  },
+  "_source": "git://github.com/herschel666/selectize-scss.git",
+  "_target": "*",
+  "_originalSource": "selectize-scss"
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rivets-backbone-adapter",
+  "version": "1.3.0",
+  "main": "rivets-backbone.js",
+  "description": "Backbone.js adapter for Rivets.js data-bind with nested models and collections support.",
+  "license": "MIT",
+  "ignore": [
+    ".jshintrc",
+    ".gitignore",
+    "README.md",
+    "example"
+  ],
+  "dependencies": {
+    "backbone": "*",
+    "rivets": "*"
+  },
+  "homepage": "https://github.com/azproduction/rivets-backbone-adapter",
+  "_release": "1.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.3.0",
+    "commit": "d66313eb887bf43ddc244f2b339b01b104dc3a40"
+  },
+  "_source": "git://github.com/azproduction/rivets-backbone-adapter.git",
+  "_target": "*",
+  "_originalSource": "rivets-backbone-adapter"
+}
