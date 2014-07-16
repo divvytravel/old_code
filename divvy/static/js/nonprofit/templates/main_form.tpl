@@ -176,7 +176,7 @@
         </div>
         <div class="general-form-right">
           <div class="mini-select-item clearfix">
-            <select name="priv" style="opacity: 0;" class="set-alert chipin-select" placeholder="Начните вводить..."></select>
+            <select style="opacity: 0;" class="chipin-select" placeholder="Начните вводить..."></select>
           </div>
         </div>
       </div>

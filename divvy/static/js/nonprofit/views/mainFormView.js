@@ -24,6 +24,22 @@ define([
         // }
     });
 
+    function triggerEvent(element, eventName) {
+        // safari, webkit, gecko
+        if (document.createEvent)
+        {
+        var evt = document.createEvent('HTMLEvents');
+        evt.initEvent(eventName, true, true);
+     
+            return element.dispatchEvent(evt);
+        }
+     
+        // Internet Explorer
+        if (element.fireEvent) {
+            return element.fireEvent('on' + eventName);
+        }
+    }
+
     var liveValue = Object.create(Rivets.binders.value);
 
     liveValue.bind = function (el) {
@@ -258,6 +274,7 @@ define([
             }).on('changeDate', function(e){
                 console.log('change val', this);
                 $(this).nativeTrigger( "change" );
+                // triggerEvent(this, "onchange" );
             });
 
         },
@@ -336,7 +353,7 @@ define([
             ];
 
             var select, $select;
-            var selectEl = this.$('.chipin-block .chipin-item:last .chipin-select');
+            var selectEl = this.$('.chipin-block .chipin-item:last select.chipin-select').not('.selectized');
             console.log('sel el', focus, selectEl);
             if (selectEl.length) {
                 $select = selectEl.selectize({
@@ -358,8 +375,6 @@ define([
                 });
 
                 focus && $select[0].selectize.focus();
-                // select.focus();
-                // select.disable();
             }
             
         },
@@ -469,7 +484,6 @@ define([
             // this.bindUIElements();
 
             this.$(this.ui.setAlertSelectize.selector).on('focus', function(e){
-                console.log('TESTYYY 2');
                 var dataId = $(e.currentTarget).parent().parent().prev().data('alertId') || '';
                 var data = _.findWhere(alertData, {id: dataId});
 
