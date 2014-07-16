@@ -285,67 +285,67 @@ define([
             
             var chipinData = [
                 {
-                    id:"1",
+                    id:1,
                     title:"Квартиру",
                     tag:"Шаринг жилья",
                     url:"https://www.airbnb.ru"
                 },
                 {
-                    id:"2",
+                    id:2,
                     title:"Отель",
                     tag:"Шаринг жилья",
                     url:"http://www.booking.com"
                 },
                 {
-                    id:"3",
+                    id:3,
                     title:"Экскурсию",
                     tag:"Экскурсионный тур",
                     url:"http://www.excursiopedia.com/ru"
                 },
                 {
-                    id:"4",
+                    id:4,
                     title:"Авто",
                     tag:"Шаринг авто",
                     url:"https://www.hertz.com/"
                 },
                 {
-                    id:"5",
+                    id:5,
                     title:"Яхту",
                     tag:"Яхтинг",
                     url:"http://www.miramoclub.com"
                 },
                 {
-                    id:"6",
+                    id:6,
                     title:"Шкипера",
                     tag:"Яхтинг",
                     url:""
                 },
                 {
-                    id:"7",
+                    id:7,
                     title:"Языковой тур",
                     tag:"Языки",
                     url:""
                 },
                 {
-                    id:"8",
+                    id:8,
                     title:"Готовый тур от агентства",
                     tag:"Пакетные туры",
                     url:""
                 },
                 {
-                    id:"9",
+                    id:9,
                     title:"Серфинг",
                     tag:"Серф",
                     url:""
                 },
                 {
-                    id:"10",
+                    id:10,
                     title:"Виндсерфинг",
                     tag:"Виндсерфинг",
                     url:""
                 },
                 {
-                    id:"11",
+                    id:11,
                     title:"Гастрономический тур",
                     tag:"Гастро тур",
                     url:""
@@ -360,7 +360,7 @@ define([
                     create: false,
                     dropdownParent: 'body',
                     options: chipinData,
-                    valueField: 'title',
+                    valueField: 'id',
                     labelField: 'title',
                     searchField: 'title',
                     sortField: 'id',
@@ -369,9 +369,13 @@ define([
                         //     return '<div>"' + escape(data.title) + '"</div>';
                         // }
                     },
-                    // onInitialize: function(value) {
-                    //     select.focus();
-                    // } 
+                    onChange: function(value) {
+                        // console.log('Chipin Change', this.$input[0], this, value);
+                        var result = this.options[value] || {},
+                            el = this.$input.parents(":eq(2)").next().find('.chipin-link');
+                            // console.log('rrr', result.url.length );
+                        result.url.length ? el.html('<a target="_blank" href="'+result.url+'">'+result.url+'</a>') : el.html('');
+                    } 
                 });
 
                 focus && $select[0].selectize.focus();

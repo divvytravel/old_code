@@ -6,42 +6,6 @@ define([
 
     var Form = {};
 
-    // Form.PropVal = Backbone.Model.extend({
-    //     defaults: {
-    //         'parent': [{
-    //             'type': 0
-    //         }]
-    //     },
-    //     initialize : function(){
-    //         this.valId = this.get('id');
-    //         this.valName = this.get('name');
-    //     }
-    // });
-
-    // Form.PropVals = Backbone.Collection.extend({ model : Props.PropVal });
-
-    // Form.Prop = Backbone.Model.extend({
-
-    //     initialize : function(){
-    //         this.vals = new Props.PropVals(this.get('vals'));
-    //         this.vals.parent = this;
-    //         this.propId = this.get('id');
-    //         this.propName = this.get('name');
-    //     }
-    // });
-
-    // Form.Props = Backbone.Collection.extend({
-    //     model : Props.Prop,
-    //     url: '/json/props/set_'+Emart.current_category+'.json',
-    //     parse : function(data){
-    //         return data;
-    //     }
-    // });
-
-
-
-
-
     Form.chipinItem = Backbone.Model.extend({
         defaults: {
             'title'       : '',

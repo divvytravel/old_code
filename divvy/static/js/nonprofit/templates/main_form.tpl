@@ -187,7 +187,7 @@
         </div>
         <div class="general-form-right">
           <div class="input-item clearfix">
-            <input placeholder="" class="mini-input set-alert"/>
+            <input placeholder="" class="mini-input set-alert"/> <span class="chipin-link"></span>
           </div>
         </div>
       </div>
