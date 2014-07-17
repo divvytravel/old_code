@@ -99,7 +99,7 @@ define([
         createTrip: function (e) {
             var self = this;
             var _model = this.model.clone();
-            _model.city = "/api/v1/city/1/";
+            _model.set('city', "/api/v1/city/1/");
             var start_date = this.model.get('start_date') || '';
             var end_date = this.model.get('end_date') || '';
             var end_people_date = this.model.get('end_people_date') || '';
@@ -108,6 +108,9 @@ define([
             }
             if (end_date.length) {
                 _model.set('end_date', Moment(end_date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+            }
+            if (end_people_date.length) {
+                _model.set('end_people_date', Moment(end_people_date, "DD-MM-YYYY").format('YYYY-MM-DD'));
             }
             Vent.trigger('global','allReady',false);
             _model.save(null,{
