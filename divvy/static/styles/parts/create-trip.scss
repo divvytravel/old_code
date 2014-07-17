@@ -534,6 +534,12 @@ textarea {
     }
     .submit-block {
       padding: 22px 36px 18px 36px;
+      .error-block {
+        padding: 0 0 22px 0 ;
+        text-align: right;
+        color: #f2555d;
+        font-size: 13px;
+      }
       .left-button {
         width: 48.9%;
         float: left;

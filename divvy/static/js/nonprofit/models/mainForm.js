@@ -1,7 +1,8 @@
 
 define([
-    'backbone'
-], function (Backbone) {
+    'backbone',
+    'moment'
+], function (Backbone, Moment) {
     'use strict';
 
     var Form = {};
@@ -39,11 +40,16 @@ define([
             this.set('chipinItems', new Form.chipinItems( this.get('chipinItems') ));
         },
 
-        blacklist: ['chipinItems'],
+        // blacklist: ['chipinItems'],
 
-        toJSON: function(options) {
-            return _.omit(this.attributes, this.blacklist);
-        },
+        // toJSON: function(options) {
+        //     var attr = this.attributes || {};
+        //     if (attr.start_date) {
+        //         // console.log('Date', attr.start_date, Moment(attr.start_date, "DD-MM-YYYY"));
+        //         // attr.start_date =  Moment(attr.start_date, "DD-MM-YYYY").format('YYYY-MM-DD');
+        //     }
+        //     return _.omit(attr, this.blacklist);
+        // },
 
         addChipinItem: function (e,obj) {
             console.log('Add Chip In', e, obj);

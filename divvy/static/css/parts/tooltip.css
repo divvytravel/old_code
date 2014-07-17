@@ -1,0 +1,55 @@
+/* line 3, ../../styles/parts/tooltip.scss */
+.arrow-up,
+.arrow-down,
+.arrow-down-red {
+  display: inline-block;
+  width: 15px;
+  height: 9px;
+}
+
+/* line 8, ../../styles/parts/tooltip.scss */
+.arrow-up {
+  background-image: url("../img/arrow-up-thin.png");
+}
+
+/* line 11, ../../styles/parts/tooltip.scss */
+.arrow-down {
+  background-image: url("../img/arrow-down-thin.png");
+}
+
+/* line 14, ../../styles/parts/tooltip.scss */
+.arrow-down-red {
+  background-image: url("../img/arrow-down-medium-red.png");
+  background-repeat: no-repeat;
+}
+
+/* line 19, ../../styles/parts/tooltip.scss */
+.help {
+  position: relative;
+  margin-left: 2px;
+}
+
+/* line 23, ../../styles/parts/tooltip.scss */
+.help .help-icon {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.8);
+  font-family: Verdana;
+  font-weight: bold;
+  font-size: 8px;
+  font-style: normal;
+  text-align: center;
+  line-height: 10px;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(49, 185, 218, 0.5);
+  color: rgba(49, 185, 218, 0.8);
+  cursor: pointer;
+}
+
+/* line 40, ../../styles/parts/tooltip.scss */
+.help .help-icon:hover {
+  background: #31b9da;
+  color: #fff;
+}

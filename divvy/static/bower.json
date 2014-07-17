@@ -28,6 +28,7 @@
         "rivets": "latest",
         "rivets-backbone-adapter": "latest",
         "jquery-simulate": "https://github.com/eduardolundgren/jquery-simulate.git#00fc7bb7b3a5d29cb06afcce661405729ffb36b6",
-        "knockback": "latest"
+        "knockback": "latest",
+        "backbone-validation": "latest"
     }
 }

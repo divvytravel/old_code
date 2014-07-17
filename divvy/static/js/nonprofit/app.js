@@ -6,7 +6,7 @@ define(function (require) {
     "use strict";
 
     var Marionette = require('marionette'),
-        Vent = require('../vent'),
+        Vent = require('vent'),
         Rivets = require('rivets'),
 
         /** Collections & Models */
@@ -35,6 +35,11 @@ define(function (require) {
     App.on("initialize:after", function(options){
         App.mainForm.show( new MainFormView({model: mainFormModel}) );
         mainModel.set('allReady',true);
+    });
+
+    // Ловим глобальные события
+    Vent.on('global',function(name,param) {
+        mainModel.set(name,param);
     });
 
     return App;

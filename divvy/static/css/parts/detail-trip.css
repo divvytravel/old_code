@@ -1,0 +1,426 @@
+/* line 3, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-image: none;
+  border-radius: 0 0 5px 5px;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  float: left;
+  width: 672px;
+  min-height: 400px;
+  margin-bottom: 35px;
+}
+/* line 18, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .border-b {
+  border-bottom: 1px solid #E5E5E5;
+}
+/* line 21, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .header-block {
+  text-align: left;
+  padding: 18px 36px 10px 36px;
+}
+/* line 24, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .header-block h1 {
+  font-size: 33px;
+  line-height: 42px;
+  text-align: left;
+  font-family: pragmatica-web;
+  margin: 0;
+  padding: 0 0 6px 0;
+}
+/* line 32, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .header-block .tour {
+  color: rgba(0, 0, 0, 0.7);
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+}
+/* line 39, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .tags-block {
+  padding: 0px 36px 16px 36px;
+}
+/* line 41, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .tags-block .tags {
+  display: block;
+}
+/* line 44, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .tags-block .tags .tag {
+  margin-right: 3px;
+  padding: 2px 5px;
+  background: rgba(49, 185, 218, 0.15);
+  border: 1px solid rgba(49, 185, 218, 0.6);
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 26px;
+  color: #31b9da;
+}
+/* line 53, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .tags-block .tags .tag:hover {
+  border: 1px solid rgba(49, 185, 218, 0.7);
+  background: rgba(49, 185, 218, 0.25);
+}
+/* line 60, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block {
+  padding: 0px 36px 0px 36px;
+}
+/* line 62, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .main-img {
+  width: 600px;
+  height: 399px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  position: relative;
+  margin-bottom: 3px;
+  overflow: hidden;
+}
+/* line 71, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .main-img img {
+  border-radius: 3px;
+  -webkit-transition: all 0.7s ease;
+  -moz-transition: all 0.7s ease;
+  -o-transition: all 0.7s ease;
+  transition: all 0.7s ease;
+}
+/* line 78, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .main-img .recommended {
+  position: absolute;
+  background-image: url("../img/ribbon-hurry.png");
+  background-repeat: no-repeat;
+  width: 84px;
+  height: 84px;
+  top: -3px;
+  left: -3px;
+}
+/* line 89, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .thumb-list .item {
+  float: left;
+  margin: 0px 3px 3px 0;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+/* line 97, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .thumb-list .item:hover {
+  opacity: 0.75;
+}
+/* line 100, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .gallery-block .thumb-list .item img {
+  max-height: 80px;
+  width: auto;
+  border-radius: 3px;
+}
+/* line 108, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .desc-block {
+  padding: 16px 36px 24px 36px;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 21px;
+  font-family: pragmatica-web;
+}
+/* line 114, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .content-layout .desc-block p {
+  margin: 0 0 12px;
+}
+/* line 120, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.37);
+  float: left;
+  margin-bottom: 18px;
+  margin-left: 18px;
+  margin-top: 18px;
+  padding: 0;
+  width: 324px;
+  position: relative;
+}
+/* line 132, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .title {
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+  margin-bottom: 8px;
+}
+/* line 138, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel p {
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 8px;
+}
+/* line 143, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .border-b {
+  border-bottom: 1px solid #E5E5E5;
+}
+/* line 146, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .request-block {
+  padding: 14px 18px 0px 18px;
+}
+/* line 149, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .title {
+  padding-left: 31px;
+  background: url("../img/site-sprites.png") no-repeat 1px -398px;
+  font-size: 21px;
+  line-height: 27px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.9);
+}
+/* line 157, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 10px;
+}
+/* line 165, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .date-block {
+  padding: 10px 18px 10px 18px;
+}
+/* line 167, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .date-block .title {
+  padding-left: 28px;
+  margin-bottom: 4px;
+  background: url("../img/site-sprites.png") no-repeat 0px -355px;
+  font-size: 21px;
+  line-height: 27px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.9);
+}
+/* line 176, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .date-block .info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 0px;
+}
+/* line 183, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block {
+  padding: 12px 10px 12px 18px;
+}
+/* line 185, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .title {
+  margin-bottom: 4px;
+  font-size: 21px;
+  line-height: 27px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.9);
+}
+/* line 192, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 10px;
+}
+/* line 198, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .slider {
+  margin-top: 6px;
+}
+/* line 200, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .slider .ui-slider {
+  width: 266px;
+  display: inline-block;
+  margin-right: 4px;
+}
+/* line 205, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .slider .ui-slider .ui-slider-range {
+  background: -webkit-linear-gradient(left, #24c9f2 20%, #f26161 40%);
+  background: -moz-linear-gradient(left, #24c9f2 20%, #f26161 40%);
+  background: -o-linear-gradient(left, #24c9f2 20%, #f26161 40%);
+  background: -ms-linear-gradient(left, #24c9f2 20%, #f26161 40%);
+  background: linear-gradient(to right, #24c9f2 20%, #f26161 40%);
+}
+/* line 214, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .ratio div:first-child {
+  margin-top: 12px;
+  font-size: 13px;
+}
+/* line 218, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .ratio div:last-child {
+  margin-top: 5px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #c68189;
+}
+/* line 225, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .info {
+  color: rgba(0, 0, 0, 0.9);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 10px;
+}
+/* line 241, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item {
+  cursor: pointer;
+  height: 102px;
+  padding: 6px 0px;
+}
+/* line 246, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .userpic img {
+  width: 90px;
+  height: 90px;
+}
+/* line 251, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .info {
+  float: left;
+  font-size: 13px;
+  padding-left: 12px;
+  width: 174px;
+}
+/* line 256, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .info .info-wrap {
+  display: table;
+  height: 90px;
+}
+/* line 259, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .info .info-wrap .info-wrap-align {
+  display: table-cell;
+  vertical-align: middle;
+  width: 174px;
+}
+/* line 265, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .info a {
+  font-size: 15px;
+}
+/* line 268, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item .info span {
+  color: rgba(0, 0, 0, 0.7);
+  display: block;
+  line-height: 18px;
+}
+/* line 284, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .travellers-block .travellers .item:after {
+  content: "";
+  display: table;
+}
+/* line 290, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block {
+  padding: 10px 18px 10px 18px;
+}
+/* line 292, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .title {
+  margin-bottom: 8px;
+  font-size: 21px;
+  line-height: 27px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.9);
+}
+/* line 299, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 6px;
+}
+/* line 305, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item {
+  cursor: pointer;
+  height: 102px;
+  padding: 6px 0px;
+  margin: 8px 0;
+}
+/* line 311, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .userpic img {
+  width: 90px;
+  height: 90px;
+}
+/* line 316, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .info {
+  float: left;
+  font-size: 13px;
+  padding-left: 12px;
+  width: 174px;
+}
+/* line 321, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .info .info-wrap {
+  display: table;
+  height: 90px;
+}
+/* line 324, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .info .info-wrap .info-wrap-align {
+  display: table-cell;
+  vertical-align: middle;
+  width: 174px;
+}
+/* line 330, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .info a {
+  font-size: 15px;
+}
+/* line 333, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .organizer-item .info span {
+  color: rgba(0, 0, 0, 0.7);
+  display: block;
+  line-height: 18px;
+}
+/* line 349, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .organizer-block .item:after {
+  content: "";
+  display: table;
+}
+/* line 354, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block {
+  padding: 10px 18px 10px 18px;
+}
+/* line 356, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .type {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 17px;
+}
+/* line 361, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .type .help {
+  vertical-align: text-bottom;
+}
+/* line 365, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .sub-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+/* line 371, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .info {
+  color: rgba(0, 0, 0, 0.65);
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 6px;
+}
+/* line 380, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .chip-in {
+  margin-bottom: 8px;
+}
+/* line 382, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .chip-in .items {
+  padding: 0 0 0 0px;
+  margin: 8px 0 14px 0;
+}
+/* line 385, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .chip-in .items .item {
+  font-size: 13px;
+  line-height: 24px;
+  list-style-position: inside;
+  color: #31b9da;
+}
+/* line 391, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .chip-in .items .item span {
+  color: rgba(0, 0, 0, 0.9);
+}
+/* line 397, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .price {
+  margin-bottom: 18px;
+}
+/* line 399, ../../styles/parts/detail-trip.scss */
+.detail-trip-page .side-layout .side-panel .detail-block .price .value {
+  font-size: 38px;
+  line-height: 42px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.9);
+}

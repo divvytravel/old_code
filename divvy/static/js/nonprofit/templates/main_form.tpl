@@ -272,6 +272,9 @@
 
 <div class="general-block submit-block clearfix">
   <div class="clearfix">
+    <div class="error-block" rv-show="errors.isSet">В форме есть ошибки</div>
+  </div>
+  <div class="clearfix">
     <!-- <div class="left-button">
       <a class="button-general button-default" href="javascript:void(0)">
         <span>Предварительный просмотр</span>

@@ -3,26 +3,15 @@ define([
     'marionette',
     'rivets',
     'templates',
+    'vent',
     'dropzone',
     'moment',
     'bootstrap-datepicker',
     'selectize',
     'rivets-adapter',
     'native-trigger',
-], function (Marionette, Rivets, Templates, Dz, Moment) {
+], function (Marionette, Rivets, Templates, Vent, Dz, Moment) {
     'use strict';
-
-    /**
-     * Helper model
-     */
-    var bcItem = Backbone.Model.extend({
-        // defaults: {
-        //     'value': 1,
-        //     'link': 1,
-        //     'active': 0,
-        //     'disabled': 0
-        // }
-    });
 
     function triggerEvent(element, eventName) {
         // safari, webkit, gecko
@@ -39,7 +28,7 @@ define([
             return element.fireEvent('on' + eventName);
         }
     }
-
+    
     var liveValue = Object.create(Rivets.binders.value);
 
     liveValue.bind = function (el) {
@@ -57,12 +46,7 @@ define([
 
     Rivets.binders["live-value"] = liveValue;
 
-    /**
-     * Helper collection
-     */
-    var bcItems = Backbone.Collection.extend({
-        model: bcItem
-    });
+    // +++
 
     var View = Marionette.ItemView.extend({
         template : Templates.mainForm,
@@ -98,6 +82,10 @@ define([
             // this.$el.find('pre').text(this.jsonData());
         },
 
+        errors: {
+            isSet: false
+        },
+
         jsonData: function () {
             return JSON.stringify(this.model.toJSON(), null, '    ');
         },
@@ -109,28 +97,38 @@ define([
         },
 
         createTrip: function (e) {
-            // this.model.save(, {
-            //     // wait:true,
-            //     success:function(model, response) {
-            //         console.log('Successfully saved!');
-            //     },
-            //     error: function(model, error) {
-            //         console.log(model.toJSON());
-            //         console.log('error.responseText');
-            //     }
-            // });
-            this.model.save({
-                'start_date'      : Moment(this.model.get('start_date'), "DD-MM-YYYY").format('YYYY-MM-DD'),
-                'end_date'        : Moment(this.model.get('end_date'), "DD-MM-YYYY").format('YYYY-MM-DD'),
-                'end_people_date' : Moment(this.model.get('end_people_date'), "DD-MM-YYYY").format('YYYY-MM-DD'),
-                'city'            : "/api/v1/city/1/",
+            var self = this;
+            var _model = this.model.clone();
+            _model.city = "/api/v1/city/1/";
+            var start_date = this.model.get('start_date') || '';
+            var end_date = this.model.get('end_date') || '';
+            var end_people_date = this.model.get('end_people_date') || '';
+            if (start_date.length) {
+                _model.set('start_date', Moment(start_date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+            }
+            if (end_date.length) {
+                _model.set('end_date', Moment(end_date, "DD-MM-YYYY").format('YYYY-MM-DD'));
+            }
+            Vent.trigger('global','allReady',false);
+            _model.save(null,{
+                wait: true,
+                success: function(model, response){
+                    // Vent.trigger('allReady',true);
+                    Vent.trigger('global','allReady',true);
+                },
+                error: function(){
+                    self.errors['isSet'] = true;
+                    // Vent.trigger('allReady',true);
+                    Vent.trigger('global','allReady',true);
+                },
+                attrs: _.omit(_model.attributes, ['chipinItems'])
             });
         },
 
         onRender: function() {
             var self = this;
 
-            this.binder = Rivets.bind(this.el, { model: this.model });
+            this.binder = Rivets.bind(this.el, { model: this.model, errors: this.errors });
             // this.model.set( 'output', this.getLinks(this.model) );
             this.startInputDate();
             this.startSelectPriv();
@@ -373,8 +371,8 @@ define([
                         // console.log('Chipin Change', this.$input[0], this, value);
                         var result = this.options[value] || {},
                             el = this.$input.parents(":eq(2)").next().find('.chipin-link');
-                            // console.log('rrr', result.url.length );
-                        result.url.length ? el.html('<a target="_blank" href="'+result.url+'">'+result.url+'</a>') : el.html('');
+                            console.log('rrr', $.isEmptyObject(result) );
+                        !$.isEmptyObject(result) && result.url.length ? el.html('<a target="_blank" href="'+result.url+'">'+result.url+'</a>') : el.html('');
                     } 
                 });
 

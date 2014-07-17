@@ -1,0 +1,594 @@
+/* line 3, ../../styles/parts/create-trip.scss */
+.underline {
+  font-size: 0;
+  line-height: 0;
+  border-bottom: 1px solid;
+  padding-bottom: 0px;
+}
+
+/* line 14, ../../styles/parts/create-trip.scss */
+textarea {
+  resize: none;
+}
+
+/* line 18, ../../styles/parts/create-trip.scss */
+.button-general {
+  border-radius: 3px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 15px;
+  line-height: 27px;
+  padding: 8px 0;
+  text-align: center;
+  width: 100%;
+  background: #31b9da;
+  border: 1px solid #2aa1bf;
+  -webkit-box-shadow: 0px 0px 5px rgba(22, 76, 89, 0.5);
+  box-shadow: 0px 0px 5px rgba(22, 76, 89, 0.5);
+}
+/* line 36, ../../styles/parts/create-trip.scss */
+.button-general:hover, .button-general:focus, .button-general:active {
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+/* line 42, ../../styles/parts/create-trip.scss */
+.button-green {
+  background: #3fbf7f;
+  border-color: #38ab72;
+}
+/* line 45, ../../styles/parts/create-trip.scss */
+.button-green:hover {
+  text-decoration: none;
+}
+
+/* line 50, ../../styles/parts/create-trip.scss */
+.button-default {
+  background: #ffffff;
+  border-color: #ade3f0;
+  color: #31b9da;
+  -webkit-box-shadow: 0px 0px 4px rgba(22, 76, 89, 0.2);
+  box-shadow: 0px 0px 4px rgba(22, 76, 89, 0.2);
+}
+/* line 56, ../../styles/parts/create-trip.scss */
+.button-default:hover {
+  text-decoration: none;
+  color: #31b9da;
+}
+
+/* line 64, ../../styles/parts/create-trip.scss */
+.general-form-left {
+  float: left;
+  width: 194px;
+  max-height: 80px;
+  text-align: right;
+  position: relative;
+  padding-bottom: 24px;
+}
+/* line 71, ../../styles/parts/create-trip.scss */
+.general-form-left label {
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 33px;
+  color: rgba(0, 0, 0, 0.7);
+}
+/* line 77, ../../styles/parts/create-trip.scss */
+.general-form-left .not-req {
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 13px;
+  color: rgba(0, 0, 0, 0.4);
+  display: inline-block;
+  position: relative;
+  top: -4px;
+}
+
+/* line 89, ../../styles/parts/create-trip.scss */
+.general-form-right input {
+  border-radius: 3px;
+  border: 1px solid #c9c9c9;
+  border-bottom-color: rgba(201, 201, 201, 0.45);
+  border-top-color: #c9c9c9;
+  border-left-color: rgba(201, 201, 201, 0.7);
+  border-right-color: rgba(201, 201, 201, 0.7);
+  font-size: 13px;
+  line-height: 17px;
+  padding: 0 10px;
+  color: rgba(0, 0, 0, 0.9);
+  float: left;
+  box-shadow: inset 0px 2px 1px rgba(100, 100, 100, 0.13);
+  width: 298px;
+  height: 33px;
+  padding: 0 8px;
+}
+/* line 108, ../../styles/parts/create-trip.scss */
+.general-form-right input.mini-input {
+  width: 180px !important;
+}
+/* line 114, ../../styles/parts/create-trip.scss */
+.general-form-right input:focus {
+  outline: none;
+  border-bottom-color: rgba(160, 160, 160, 0.45);
+  border-top-color: #a0a0a0;
+  border-left-color: rgba(160, 160, 160, 0.7);
+  border-right-color: rgba(160, 160, 160, 0.7);
+}
+/* line 122, ../../styles/parts/create-trip.scss */
+.general-form-right .chipin-link {
+  display: block;
+  padding-top: 9px;
+  width: 196px;
+  float: right;
+  text-align: left;
+}
+/* line 129, ../../styles/parts/create-trip.scss */
+.general-form-right .selectize-input {
+  width: 298px;
+  float: left;
+}
+/* line 134, ../../styles/parts/create-trip.scss */
+.general-form-right .mini-select-item .selectize-input {
+  width: 180px;
+  float: left;
+}
+/* line 140, ../../styles/parts/create-trip.scss */
+.general-form-right .textarea-item textarea {
+  width: 298px;
+  height: 90px;
+}
+
+/* line 148, ../../styles/parts/create-trip.scss */
+.textarea-item textarea {
+  border-radius: 3px;
+  border: 1px solid #c9c9c9;
+  border-bottom-color: rgba(201, 201, 201, 0.45);
+  border-top-color: #c9c9c9;
+  border-left-color: rgba(201, 201, 201, 0.7);
+  border-right-color: rgba(201, 201, 201, 0.7);
+  font-size: 13px;
+  line-height: 17px;
+  color: rgba(0, 0, 0, 0.9);
+  float: left;
+  box-shadow: inset 0px 2px 1px rgba(100, 100, 100, 0.13);
+  width: 100%;
+  height: 80px;
+  padding: 7px 8px;
+}
+/* line 167, ../../styles/parts/create-trip.scss */
+.textarea-item textarea:focus {
+  outline: none;
+  border-bottom-color: rgba(160, 160, 160, 0.45);
+  border-top-color: #a0a0a0;
+  border-left-color: rgba(160, 160, 160, 0.7);
+  border-right-color: rgba(160, 160, 160, 0.7);
+}
+
+/* line 177, ../../styles/parts/create-trip.scss */
+.general-form-right {
+  float: right;
+  width: 386px;
+  padding-bottom: 24px;
+}
+/* line 181, ../../styles/parts/create-trip.scss */
+.general-form-right .input-item {
+  margin-bottom: 12px;
+}
+/* line 183, ../../styles/parts/create-trip.scss */
+.general-form-right .input-item:last-child {
+  margin-bottom: 0px;
+}
+
+/* line 189, ../../styles/parts/create-trip.scss */
+.general-form-right p {
+  font-size: 12px;
+  color: #8898a4;
+  font-style: italic;
+  margin-top: 4px;
+  position: absolute;
+  margin-top: 35px;
+}
+
+/* line 198, ../../styles/parts/create-trip.scss */
+.general-form-right a:hover {
+  text-decoration: none;
+}
+
+/* line 205, ../../styles/parts/create-trip.scss */
+.general-form-full .textarea-item textarea {
+  width: 100%;
+  height: 110px;
+}
+
+/* line 212, ../../styles/parts/create-trip.scss */
+.input-date {
+  border-color: #ade3f0 !important;
+  background: url(../img/calendar-blue.png) no-repeat 272px 8px;
+  box-shadow: 0px 2px 3px rgba(22, 76, 89, 0.15) !important;
+}
+/* line 216, ../../styles/parts/create-trip.scss */
+.input-date::-moz-placeholder {
+  color: #31b9da !important;
+}
+/* line 219, ../../styles/parts/create-trip.scss */
+.input-date::-webkit-input-placeholder {
+  color: #31b9da !important;
+}
+
+/* line 224, ../../styles/parts/create-trip.scss */
+.input-price {
+  background: url(../img/price-icon.png) no-repeat 162px 9px;
+  padding-right: 22px;
+}
+
+/* line 233, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout {
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+  -moz-border-right-colors: none;
+  -moz-border-top-colors: none;
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-image: none;
+  border-radius: 0 0 5px 5px;
+  border-style: solid;
+  border-width: 0 1px 1px;
+  float: left;
+  width: 672px;
+  min-height: 400px;
+  margin-bottom: 35px;
+}
+/* line 248, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .border-b {
+  border-bottom: 1px solid #E5E5E5;
+}
+/* line 251, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block {
+  text-align: center;
+  padding: 16px 36px;
+}
+/* line 254, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .title {
+  font-size: 21px;
+  line-height: 27px;
+  font-family: pragmatica-web;
+}
+/* line 260, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .title-desc {
+  font-size: 13px;
+  line-height: 18px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.4);
+}
+/* line 266, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .subtitle {
+  font-size: 13px;
+  line-height: 18px;
+  font-family: pragmatica-web;
+}
+/* line 272, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .subtitle-desc {
+  font-size: 13px;
+  line-height: 18px;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.4);
+}
+/* line 278, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block {
+  margin-top: 18px;
+}
+/* line 280, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-item {
+  padding-bottom: 12px;
+}
+/* line 283, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add {
+  opacity: 0.4;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+/* line 289, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add:hover {
+  opacity: 0.9;
+}
+/* line 292, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add .general-form-left {
+  padding-bottom: 2px;
+}
+/* line 295, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add .general-form-right {
+  padding-bottom: 2px;
+}
+/* line 298, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add .input-item {
+  width: 180px;
+  position: relative;
+  float: left;
+}
+/* line 302, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add .input-item:after {
+  content: ' ';
+  display: block;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -3px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: gray transparent transparent transparent;
+}
+/* line 315, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .general-block .form-part-block .chipin-add .input-item input.mini-input {
+  cursor: pointer;
+}
+/* line 335, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .header-block {
+  text-align: center;
+  padding: 18px 36px 18px 36px;
+}
+/* line 338, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .header-block h1 {
+  font-size: 33px;
+  line-height: 42px;
+  text-align: center;
+  font-family: pragmatica-web;
+  margin: 0;
+  padding: 0;
+}
+/* line 349, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .header-block a.underline {
+  font-size: 0;
+  line-height: 0;
+  border-bottom: 1px solid;
+  padding-bottom: 2px;
+}
+/* line 354, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .header-block a.underline .normalize {
+  font-size: 13px;
+  line-height: 26px;
+}
+/* line 361, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .main-block {
+  padding: 16px 36px 0px 36px;
+}
+/* line 364, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .addition-block {
+  padding: 16px 36px 24px 36px;
+}
+/* line 367, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .desc-block {
+  padding: 16px 36px 24px 36px;
+}
+/* line 369, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .desc-block .textarea-item {
+  padding-bottom: 20px;
+}
+/* line 371, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .desc-block .textarea-item textarea {
+  height: 260px;
+}
+/* line 376, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block {
+  padding: 36px 36px 36px 36px;
+}
+/* line 378, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block {
+  border-radius: 3px;
+  border: 1px solid #c9c9c9;
+  border-bottom-color: rgba(201, 201, 201, 0.45);
+  border-top-color: #c9c9c9;
+  border-left-color: rgba(201, 201, 201, 0.7);
+  border-right-color: rgba(201, 201, 201, 0.7);
+  font-size: 13px;
+  line-height: 17px;
+  color: rgba(0, 0, 0, 0.9);
+  float: none;
+  box-shadow: inset 0px 2px 1px rgba(100, 100, 100, 0.13);
+  width: 100%;
+}
+/* line 397, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block:focus {
+  outline: none;
+  border-bottom-color: rgba(160, 160, 160, 0.45);
+  border-top-color: #a0a0a0;
+  border-left-color: rgba(160, 160, 160, 0.7);
+  border-right-color: rgba(160, 160, 160, 0.7);
+}
+/* line 404, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .title {
+  font-size: 21px;
+  line-height: 27px;
+  text-align: center;
+  font-family: pragmatica-web;
+  color: rgba(0, 0, 0, 0.4);
+}
+/* line 411, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .upload-link {
+  text-align: center;
+}
+/* line 414, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .dz-error-message {
+  color: #f2555d;
+  margin-top: 8px;
+}
+/* line 418, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .main-photo-part {
+  background-color: rgba(0, 0, 0, 0.03);
+  width: 100%;
+  height: 340px;
+  background-image: url("/static/img/photo-loader-icon.png");
+  background-position: center 115px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+/* line 426, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .main-photo-part .title {
+  margin-top: 45px;
+}
+/* line 429, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .main-photo-part .total-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  margin-bottom: 0px;
+  opacity: 0;
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+/* line 443, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .main-photo-part .preview-container {
+  margin-top: 24px;
+}
+/* line 447, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .main-photo-part .preview-container .dz-preview .dz-details img {
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+/* line 455, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part {
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: rgba(0, 0, 0, 0.03);
+  width: 100%;
+  min-height: 90px;
+  position: relative;
+}
+/* line 462, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .title {
+  margin-top: 20px;
+}
+/* line 465, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .total-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  margin-bottom: 0px;
+  opacity: 0;
+  -webkit-transition: 0.3s ease-in-out;
+  -moz-transition: 0.3s ease-in-out;
+  -o-transition: 0.3s ease-in-out;
+  transition: 0.3s ease-in-out;
+}
+/* line 479, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container {
+  margin-top: 24px;
+  margin-left: 31px;
+}
+/* line 482, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container .dz-preview {
+  float: left;
+  min-width: 40px;
+  margin: 0px 31px 20px 0px;
+  position: relative;
+}
+/* line 488, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container .dz-preview .dz-details img {
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+}
+/* line 493, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container .dz-preview .dz-progress {
+  position: absolute;
+  top: 80px;
+  left: 3px;
+  right: 3px;
+  height: 3px;
+  background: #d7d7d7;
+  display: none;
+}
+/* line 501, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container .dz-preview .dz-progress .dz-upload {
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  background-color: #8cc657;
+}
+/* line 511, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .photo-block .photo-part-block .addition-photo-part .preview-container .dz-preview .dz-progress .dz-processing .dz-progress {
+  display: block;
+}
+/* line 521, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .chipin-block {
+  padding: 16px 36px 24px 36px;
+}
+/* line 524, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .chipin-block .chipin-item .general-form-left {
+  padding-bottom: 12px;
+}
+/* line 527, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .chipin-block .chipin-item .general-form-right {
+  padding-bottom: 12px;
+}
+/* line 532, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .tags-block {
+  padding: 16px 36px 24px 36px;
+}
+/* line 535, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .submit-block {
+  padding: 22px 36px 18px 36px;
+}
+/* line 537, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .submit-block .left-button {
+  width: 48.9%;
+  float: left;
+}
+/* line 541, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .submit-block .right-button {
+  width: 48.9%;
+  float: right;
+}
+/* line 545, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .submit-block label {
+  font-size: 13px;
+}
+/* line 548, ../../styles/parts/create-trip.scss */
+.create-trip-page .form-layout .submit-block .checkbox-block {
+  margin-top: 12px;
+}
+/* line 555, ../../styles/parts/create-trip.scss */
+.create-trip-page .side-layout .alerts .alert {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.37);
+  float: left;
+  margin-bottom: 18px;
+  margin-left: 18px;
+  margin-top: 18px;
+  padding: 14px 18px 6px 18px;
+  width: 324px;
+  position: relative;
+}
+/* line 566, ../../styles/parts/create-trip.scss */
+.create-trip-page .side-layout .alerts .alert .title {
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+  margin-bottom: 8px;
+}
+/* line 572, ../../styles/parts/create-trip.scss */
+.create-trip-page .side-layout .alerts .alert p {
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 8px;
+}
+/* line 577, ../../styles/parts/create-trip.scss */
+.create-trip-page .side-layout .alerts .alert::after {
+  content: '';
+  position: absolute;
+  left: -23px;
+  top: 15px;
+  border: 12px solid transparent;
+  border-right: 12px solid white;
+}
