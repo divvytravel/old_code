@@ -1,6 +1,6 @@
 <div class="item clearfix">
   <div class="title">
-    <a href="#"><%= title %></a>
+    <a href="<%= absolute_url %>"><%= title %></a>
     <!-- <span class="title-star"></span> -->
   </div>
   <div class="tour">

@@ -7,7 +7,7 @@ from .views import create_nonprofit, detail_nonprofit
 
 urlpatterns = patterns('',
     url(r'^create/nonprofit/$', create_nonprofit, name='trip_create'),
-    url(r'^detail/nonprofit/$', detail_nonprofit, name='trip_detail'),
+    url(r'^detail/nonprofit/(?P<pk>\d+)/$', detail_nonprofit, name='trip_detail'),
     # url(r'^create/(?P<price_type>[\w_-]+)/(?P<category_slug>[\w_-]+)/$',
         # TripCreateStepTwoView.as_view(), name="trip_create_step_two"),
     # url(r'^detail/(?P<pk>\d+)/$', TripRequestFormView.as_view(),

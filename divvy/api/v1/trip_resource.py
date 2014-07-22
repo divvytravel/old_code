@@ -121,6 +121,7 @@ class TripResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = Trip.objects.prefetch_related('people').all()
         allowed_methods = ['get', 'post']
+        include_absolute_url = True
 
         filtering = {
             'price_type': ('exact', ),

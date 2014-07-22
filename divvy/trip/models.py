@@ -217,7 +217,7 @@ class Trip(models.Model):
             trip.save()
 
     def get_absolute_url(self):
-        return reverse('trip_request_detail', args=[str(self.pk)])
+        return reverse('trip_detail', args=[str(self.pk)])
 
     # TODO cache at instance level, but with user
     def is_user_in(self, user, skip_cache=False):

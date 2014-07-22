@@ -36,7 +36,7 @@ def create_nonprofit(request):
     return render(request, 'views/trip/nonprofit/create.html', dict())
 
 
-def detail_nonprofit(request):
+def detail_nonprofit(request, pk=None):
     return render(request, 'views/trip/nonprofit/detail.html', dict())
 
 
