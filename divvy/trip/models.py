@@ -82,8 +82,8 @@ class Trip(models.Model):
     )
 
     PRICE_TYPE = Choices(
-        ('noncom', _(u'некоммерческая')),
-        ('comm', _(u'коммерческая')),
+        ('noncom', _(u'Некоммерческая поездка')),
+        ('comm', _(u'Коммерческая поездка')),
     )
 
     title = models.CharField(u"Название", max_length=200)
@@ -161,7 +161,7 @@ class Trip(models.Model):
                 if 'female' == p.gender:
                     females += 1
 
-            return float(females) / len(people)
+            return str(float(females) * 100 / len(people)).replace(',', '.')
         else:
             return None
 
