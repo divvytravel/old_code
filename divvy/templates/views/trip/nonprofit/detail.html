@@ -84,14 +84,15 @@
                 <div class="general-block header-block">
                   <h1>{{ trip.title }}</h1>
                   <div class="tour">
-                    <span>London</span>&nbsp;<span>(England)</span>
+                    <span>{{ trip.city.name }}</span>&nbsp;<span>({{ trip.city.country }})</span>
                   </div>
                 </div>
 
                 <div class="general-block tags-block">
                   <div class="tags">
-                    <a href="javascript:void(0)" class="tag" data-id="1">Серфинг</a>
-                    <a href="javascript:void(0)" class="tag" data-id="2">Активный отдых</a>
+                    {% for tag in trip.tags.all %}
+                      <a href="javascript:void(0)" class="tag" data-id="{{ tag.pk }}">{{ tag.name }}</a>
+                    {% endfor %}
                   </div>
                 </div>
 
@@ -141,13 +142,13 @@
                 </div>
 
                 <div class="date-block border-b">
-                  <div class="title">13 – 21 июля</div>
-                  <div class="info">Заявки принимаются до 12 сентября</div>
+                  <div class="title">{{ trip.start_date_format }} – {{ trip.end_date_format }}</div>
+                  <div class="info">Заявки принимаются до {{ trip.end_people_date_format }}</div>
                 </div>
 
                 <div class="detail-block border-b">
                   <div class="type">
-                    <span>Некоммерческая поездка</span>
+                    <span>{{ trip.get_price_type_display }}</span>
                     <span class="help">
                       <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
                     </span>
@@ -165,7 +166,7 @@
                   </div>
                   <div class="price">
                     <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
-                    <div class="value">240 €</div>
+                    <div class="value">{{ trip.price_for_one_person }} €</div>
                   </div>
                   <div class="addition">
                     <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
@@ -177,17 +178,17 @@
                   <div class="title">Организатор</div>
                   <div class="organizer-item">
                     <div class="userpic pull-left">
-                      <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
+                      <a href="javascript:void(0)"><img src="{{ trip.owner.get_avatar_url }}"></a>
                     </div>
                     <div class="info">
                       <div class="info-wrap">
                         <span class="info-wrap-align">
-                          <a href="javascript:void(0)">Константина Петрова</a>
+                          <a href="javascript:void(0)">{{ trip.owner.get_full_name }}</a>
                           <span>
-                            <span>28, Москва</span>
+                            <span>{{ trip.owner.get_age }}, {{ trip.owner.city.name }}</span>
                           </span>
                           <span>
-                            Повар
+                            {{ trip.owner.career }}
                           </span>
                         </span>
                       </div>
@@ -201,7 +202,7 @@
                   <div class="slider">
                     <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
                       <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
-                        style="left: 0%; width: 14.285714285714286%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                        style="left: 0%; width: {{ trip.get_sex }}%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
                     </div>
                     <span class="help">
                       <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
@@ -209,70 +210,36 @@
                   </div>
                   <div class="ratio">
                     <div>
-                      <span>Набрано 1 из 7 человек</span>
+                      <span>Набрано {{ trip.count_members }} из 7 человек</span>
                     </div>
                     <div>
                       <span>Только мужчины</span>
                     </div>
                   </div>
                   <div class="info">
-                    Будем рады поехать в путешествие с сёрферами любого уровня, в том числе и новичками — будет инструктор!
+                    {{ trip.descr_company }}
                   </div>
                   <div class="travellers">
-                    <div class="item">
-                      <div class="userpic pull-left">
-                        <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
-                      </div>
-                      <div class="info">
-                        <div class="info-wrap">
-                          <span class="info-wrap-align">
-                            <a href="javascript:void(0)">Константина Петрова</a>
-                            <span>
-                              <span>28, Москва</span>
+                    {% for man in trip.people.all %}
+                      <div class="item">
+                        <div class="userpic pull-left">
+                          <a href="javascript:void(0)"><img src="{{ man.get_avatar_url }}"></a>
+                        </div>
+                        <div class="info">
+                          <div class="info-wrap">
+                            <span class="info-wrap-align">
+                              <a href="javascript:void(0)">{{ man.get_full_name }}</a>
+                              <span>
+                                <span>{{ man.get_age }}, {{ man.city.name }}</span>
+                              </span>
+                              <span>
+                                {{ man.career }}
+                              </span>
                             </span>
-                            <span>
-                              Повар
-                            </span>
-                          </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="item">
-                      <div class="userpic pull-left">
-                        <a href="javascript:void(0)"><img src="/static/img/promo/users/2.png"></a>
-                      </div>
-                      <div class="info">
-                        <div class="info-wrap">
-                          <span class="info-wrap-align">
-                            <a href="javascript:void(0)">Константина Петрова</a>
-                            <span>
-                              <span>28, Москва</span>
-                            </span>
-                            <span>
-                              Музыкант
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="item">
-                      <div class="userpic pull-left">
-                        <a href="javascript:void(0)"><img src="/static/img/promo/users/3.png"></a>
-                      </div>
-                      <div class="info">
-                        <div class="info-wrap">
-                          <span class="info-wrap-align">
-                            <a href="javascript:void(0)">Константина Петрова</a>
-                            <span>
-                              <span>28, Москва</span>
-                            </span>
-                            <span>
-                              Хирург
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
+                    {% endfor %}
 
                   </div>
                 </div>
