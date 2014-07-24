@@ -24,7 +24,7 @@ env.project_user = env.project_name
 env.shell = '/bin/bash -c'
 
 env.hosts = ['%(project_user)s@t.divvy.travel' % env]
-env.repository_url = 'https://indieman@bitbucket.org/divvytravel/divvy.git'
+env.repository_url = 'https://github.com/divvytravel/old_code.git'
 
 env.virtualenv_path = '/usr/local/virtualenvs/%(project_name)s' % env
 env.path = '/srv/sites/%(project_name)s' % env
@@ -141,6 +141,9 @@ def setup():
     remove_default_nginx()
 
     manage('syncdb')
+    manage('migrate geo')
+    manage('migrate users')
+    manage('migrate social_auth')
     manage('migrate')
 
 
