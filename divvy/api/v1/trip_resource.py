@@ -200,6 +200,10 @@ class DateResource(TripResource):
                     'includes', 'price_type', 'recommended', 'title'
                     ]
 
+        filtering = {
+            'end_people_date': ('gte', ),
+        }
+
     def dehydrate(self, bundle):
         return bundle
 

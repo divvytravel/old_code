@@ -28,7 +28,7 @@ define([
             var default_params = {
                 'format': 'json',
                 'limit': 100,
-                'trips__start_date__gte': now
+                'end_people_date__gte': now
             };
 
             var query = {};
