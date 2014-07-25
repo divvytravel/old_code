@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
@@ -42,6 +43,7 @@ urlpatterns = patterns('',
                                form_classes=(WriteFormHideRecipients, AnonymousWriteForm)),
                            name='postman_write'),
                        url(r'^messages/', include('postman.urls')),
+                       url(r'^howitworks/', TemplateView.as_view(template_name='how_does_it_work.html')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
