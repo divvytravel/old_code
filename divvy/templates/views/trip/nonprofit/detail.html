@@ -138,8 +138,7 @@
 
                 <div class="desc-block">
                   <div>
-                    <p>На Гавайях серфинг будет включен в школьную программу. Ученики государственных школ смогут выбирать изучение серфинга на уроках спорта начиная с весны 2012 года.</p>
-                    <p>Когда вы думаете о Гавайях, вы думаете о серфинге — пояснил губернатор решение включить этот вид спорта в школьную программу. Гавайи родина серфинга, напомнил Эберкромби, «этот вид спорта глубоко укоренен в нашей культуре и образе жизни».</p>
+                    {{ trip.descr_main }}
                   </div>
                 </div>
 
@@ -188,10 +187,12 @@
                     <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
                     <div class="value">{{ trip.price_for_one_person }} €</div>
                   </div>
-                  <div class="addition">
-                    <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
-                    <div class="info">Еда и сувениры — около 100 евро на человека, там всё дешево.</div>
-                  </div>
+                  {% if trip.descr_additional %}
+                    <div class="addition">
+                      <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
+                      <div class="info">{{ trip.descr_additional }}</div>
+                    </div>
+                  {% endif %}
                 </div>
 
                 <div class="organizer-block border-b">
