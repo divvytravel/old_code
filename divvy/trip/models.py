@@ -167,6 +167,33 @@ class Trip(models.Model):
         else:
             return None
 
+    def get_sex_status(self):
+        females = 0
+        people = self.people.all()
+        if people:
+            for p in people:
+                if 'female' == p.gender:
+                    females += 1
+
+            sex_float = str(float(females) * 100 / len(people)).replace(',', '.')
+        else:
+            sex_float = None
+
+        status = None
+        if sex_float is None:
+            status = None
+        elif 40 < sex_float < 60:
+            status = u'поровну'
+        elif sex_float > 70:
+            status = u'преимущественно женщины'
+        elif sex_float < 30:
+            status = u'преимущественно мужчины'
+        elif sex_float > 90:
+            status = u'только женщины'
+        elif sex_float < 10:
+            status = u'только мужчины'
+        return status
+
     def format_date(self, date):
         return format(date, "j E")
 

@@ -231,10 +231,10 @@
                   </div>
                   <div class="ratio">
                     <div>
-                      <span>Набрано {{ trip.count_members }} из 7 человек</span>
+                      <span>Набрано {{ trip.count_members }} из {{ trip.people_max_count }} человек</span>
                     </div>
                     <div>
-                      <span>Только мужчины</span>
+                      <span>{{ trip.get_sex_status }}</span>
                     </div>
                   </div>
                   <div class="info">
