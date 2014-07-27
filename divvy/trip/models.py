@@ -142,6 +142,8 @@ class Trip(models.Model):
     age = models.SmallIntegerField(blank=True, null=True, default=None)
     recommended = models.BooleanField(default=False)
 
+    images = generic.GenericRelation(Images)
+
     objects = TripManager()
 
     class Meta:

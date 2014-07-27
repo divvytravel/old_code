@@ -31,6 +31,8 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <link  href="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.css" rel="stylesheet">
   </head>
 
   <body>
@@ -97,16 +99,34 @@
                 </div>
 
                 <div class="general-block gallery-block clearfix">
-                  <div class="main-img">
-                    <img src="/static/img/promo/trips/photo-1.jpg"/>
-                    <div class="recommended"></div>
-                  </div>
-                  <div class="thumb-list">
-                    <div class="item" data-src="/static/img/promo/trips/photo-1.jpg"><img src="/static/img/promo/trips/photo-1.jpg"></div>
-                    <div class="item" data-src="/static/img/promo/trips/photo-2.jpg"><img src="/static/img/promo/trips/photo-2.jpg"></div>
-                    <div class="item" data-src="/static/img/promo/trips/photo-3.jpg"><img src="/static/img/promo/trips/photo-3.jpg"></div>
-                    <div class="item" data-src="/static/img/promo/trips/photo-4.jpg"><img src="/static/img/promo/trips/photo-4.jpg"></div>
-                  </div>
+{#                  <div class="main-img">#}
+{#                    <img src="/static/img/promo/trips/photo-1.jpg"/>#}
+{#                    <div class="recommended"></div>#}
+{#                  </div>#}
+{#                  <div class="thumb-list">#}
+{#                    <div class="item" data-src="/static/img/promo/trips/photo-1.jpg">#}
+{#                      <img src="/static/img/promo/trips/photo-1.jpg">#}
+{#                    </div>#}
+{#                    <div class="item" data-src="/static/img/promo/trips/photo-2.jpg">#}
+{#                      <img src="/static/img/promo/trips/photo-2.jpg">#}
+{#                    </div>#}
+{#                    <div class="item" data-src="/static/img/promo/trips/photo-3.jpg">#}
+{#                      <img src="/static/img/promo/trips/photo-3.jpg">#}
+{#                    </div>#}
+{#                    <div class="item" data-src="/static/img/promo/trips/photo-4.jpg">#}
+{#                      <img src="/static/img/promo/trips/photo-4.jpg">#}
+{#                    </div>#}
+{#                   </div>#}
+
+                    <div class="fotorama"
+                         data-nav="thumbs"
+                         data-thumbheight="70px"
+                         data-allowfullscreen="true">
+                      {% for photo in trip.images.all %}
+                        <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
+                      {% endfor %}
+                    </div>
+
 
                   <!-- <ul class="pgwSlider">
                     <li><img src="/static/img/promo/trips/photo-1.jpg"></li>
@@ -272,5 +292,7 @@
     </div>
 
     <script src="/static/vendor/requirejs/require.js" data-main="/static/js/detail/main"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.js"></script>
   </body>
 </html>
