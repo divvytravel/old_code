@@ -1,0 +1,49 @@
+<div class="header {% if request.user.is_authenticated %}login{% endif %}" id="header_block">
+  <div class="navbar navbar-proj" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-logo" href="/"><img src="/static/img/logo-white.png"></a>
+
+        {% if request.user.is_authenticated %}
+          <div class="navbar-login pull-right">
+            <a href="{% url 'logout' %}">
+              <span class="facebook-button-logo"></span><span>Выйти</span>
+            </a>
+          </div>
+        {% else %}
+          <div class="navbar-login pull-right">
+            <a href="{% url 'social_auth.views.auth' 'facebook' %}">
+              <span class="facebook-button-logo"></span><span>Войти</span>
+            </a>
+          </div>
+        {% endif %}
+
+        <script type="text/javascript">
+          window.Divvy = {};
+          Divvy.is_authenticated = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+        </script>
+
+        <ul class="nav nav-pills nav-proj pull-right">
+          <li><a href="#">Путешествия</a></li>
+          <li><a href="/howitworks/">Как это работает</a></li>
+          <li><a href="#">Создание путешествия</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {# <div class="header-color-layout"></div> #}
+
+  <div class="promo-content">
+    <div class="promo-content-title">Путешествуйте в хорошей компании</div>
+    <div class="promo-content-description">
+      <p>
+        Вы можете <a href="#">организовать своё путешествие</a> и самостоятельно собрать<br> компанию, или к кому-нибудь присоединиться &mdash; <a href="#"> выбирайте поездку, </a><br>
+        и смотрите, куда собираются <a href="#"> интересные вам люди</a>.
+      </p>
+    </div>
+    <div class="godown">
+      <a href="#"><img src="/static/img/arrow-large.png"></a>
+    </div>
+  </div>
+</div>
