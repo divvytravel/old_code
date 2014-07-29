@@ -12,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import post_save, post_delete
 from django.contrib.contenttypes import generic
 
+from sorl.thumbnail import get_thumbnail
+
 from model_utils import Choices
 from utils.helpers import get_today
 from utils.email import send_common_email
@@ -154,6 +156,14 @@ class Trip(models.Model):
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(
             self.title, self.start_date, self.end_date)
+
+    def get_main_image_url(self):
+        try:
+            img_file = self.images.all()[0].image
+            im = get_thumbnail(img_file, '360x360', crop='center', quality=100)
+            return im.url
+        except IndexError:
+            return None
 
     def get_sex(self):
         females = 0

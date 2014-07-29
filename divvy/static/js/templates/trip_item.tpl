@@ -18,7 +18,7 @@
       <% if(recommended) { %>
         <div class="recommended"></div>
       <% } %>
-      <img class="img-rounded" src="<%= image %>">
+      <img class="img-rounded" src="<%= main_image %>">
     </div>
 
     <div class="info">

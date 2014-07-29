@@ -181,6 +181,9 @@ class TripResource(ModelResource, BaseResourceMixin):
             bundle.data['consist'] = u'только женщины'
         elif bundle.obj.sex < 10:
             bundle.data['consist'] = u'только мужчины'
+
+        bundle.data['main_image']= bundle.obj.get_main_image_url()
+
         return bundle
 
 
