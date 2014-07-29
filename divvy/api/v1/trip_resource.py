@@ -8,7 +8,7 @@ from tastypie.constants import ALL_WITH_RELATIONS, ALL
 from .base import BaseResourceMixin, MultipartResource, ModelFormValidation
 
 from trip.models import Trip, TripCategory, Tags, Images, TripPoint, \
-    TripPointType, Image
+    TripPointType, Image, TripRequest
 from trip.forms import TripForm
 
 from geo.models import City
@@ -16,6 +16,12 @@ from geo.models import City
 from .user import UserResource
 from paginator import TripPaginator
 
+try:
+    from django.contrib.auth import get_user_model
+except ImportError:
+    from django.contrib.auth.models import User
+else:
+    User = get_user_model()
 
 class ImagesResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
@@ -217,3 +223,11 @@ class TripPointResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = TripPoint.objects.all()
         allowed_methods = ['get', 'post', 'patch']
+
+class TripRequestResource(ModelResource, BaseResourceMixin):
+    trip = fields.ForeignKey(TripResource, 'trip')
+    user = fields.ForeignKey(UserResource, 'user')
+
+    class Meta(BaseResourceMixin.Meta):
+        queryset = TripRequest.objects.all()
+        allowed_methods = ['get', 'post']
