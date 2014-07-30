@@ -55,7 +55,7 @@ class User(AbstractUser):
         if self.provider == User.PROVIDERS.facebook:
             # also avaliable ?width=100&height=100
             # also avaliable ?type=large
-            avatar_url += "?type=large"
+            avatar_url += "?type=large&width=90&height=90"
         return avatar_url
 
     @property
