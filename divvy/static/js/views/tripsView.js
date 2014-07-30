@@ -167,9 +167,11 @@ define([
 
                     switch (this.price_type) {
                         case "comm": 
-                        output = "Коммерческая поездка";
+                            output = "Коммерческая поездка";
+                            break;
                         case "noncom": 
-                        output = "Некоммерческая поездка";
+                            output = "Некоммерческая поездка";
+                            break;
                     }
 
                     return output;
