@@ -189,9 +189,9 @@ class Trip(models.Model):
         else:
             sex_float = None
 
-        status = None
+        status = ''
         if sex_float is None:
-            status = None
+            status = ''
         elif 40 < sex_float < 60:
             status = u'поровну'
         elif sex_float > 70:
