@@ -55,7 +55,7 @@ class UserResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = User.objects.all()
         allowed_methods = ['get']
-        fields = ['avatar_url', 'date_joined',
+        fields = ['date_joined',
                   'birthday', 'first_name',
                   'gender', 'id', 'last_name',
                   'username', 'city', 'career']
@@ -66,6 +66,7 @@ class UserResource(ModelResource, BaseResourceMixin):
 
     def dehydrate(self, bundle):
         bundle.data['age'] = bundle.obj.get_age()
+        bundle.data['avatar_url'] = bundle.obj.get_avatar_url
         return bundle
 
     def obj_create(self, bundle, request=None, **kwargs):
