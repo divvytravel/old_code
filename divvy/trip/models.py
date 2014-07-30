@@ -234,7 +234,10 @@ class Trip(models.Model):
 
     def price_for_one_person(self):
         if self.is_noncom:
-            return self.price / self.count_members()
+            if self.count_members():
+                return self.price / self.count_members()
+            else:
+                return self.price
         else:
             return self.price
 
