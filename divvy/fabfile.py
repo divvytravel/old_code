@@ -176,7 +176,7 @@ def update():
     sudo('chmod ogu+x %(manage_path)s/manage.py' % env)
 
     # manage('syncdb')
-    manage('migrate')
+    manage('migrate --no-initial-data')
     manage('collectstatic')
     fabtools.supervisor.restart_process('all')
 
