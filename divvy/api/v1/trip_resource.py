@@ -234,3 +234,7 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
     class Meta(BaseResourceMixin.Meta):
         queryset = TripRequest.objects.all()
         allowed_methods = ['get', 'post']
+
+    def hydrate(self, bundle, request=None):
+        bundle.obj.user = User.objects.get(pk = bundle.request.user.id)
+        return bundle
