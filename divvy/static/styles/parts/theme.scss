@@ -66,24 +66,34 @@ a:focus {
   }
 }
 
-.header {
-  // height: 600px;
-  // background-image: url("/static/img/promo.jpg");
-  height: 75%;
-  background-image: url('/static/img/overlay.png'), url('/static/img/photo.jpg');
-  background-size: cover;
-  position: relative;
-  // min-height: 512px;
-  min-height: 450px;
-  max-height: 768px;
-  &.login {
-    background-image: none;
-    height: 72px;
-    min-height: 72px;
-    max-height: 72px;
-    .promo-content {
-      display: none;
+
+.with-promo {
+  .header {
+    height: 75%;
+    background-image: url('/static/img/overlay.png'), url('/static/img/photo.jpg');
+    background-size: cover;
+    position: relative;
+    min-height: 450px;
+    max-height: 768px;
+    &.login {
+      background-image: none;
+      height: 72px;
+      min-height: 72px;
+      max-height: 72px;
+      .promo-content {
+        display: none;
+      }
     }
+  }
+}
+
+.header {
+  background-image: none;
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
+  .promo-content {
+    display: none;
   }
   .navbar-proj {
     background: none repeat scroll 0 0 rgba(72, 69, 69, 0.98);

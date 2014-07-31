@@ -32,7 +32,7 @@
     {# <link  href="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.css" rel="stylesheet"> #}
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
 
     {% include "views/base_blocks/header.html" %}
 

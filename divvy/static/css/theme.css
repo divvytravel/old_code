@@ -6335,7 +6335,7 @@ a:focus {
   width: 100%;
 }
 
-.header {
+.with-promo .header {
   height: 75%;
   background-image: url("/static/img/overlay.png"), url("/static/img/photo.jpg");
   background-size: cover;
@@ -6343,13 +6343,23 @@ a:focus {
   min-height: 450px;
   max-height: 768px;
 }
-.header.login {
+.with-promo .header.login {
   background-image: none;
   height: 72px;
   min-height: 72px;
   max-height: 72px;
 }
-.header.login .promo-content {
+.with-promo .header.login .promo-content {
+  display: none;
+}
+
+.header {
+  background-image: none;
+  height: 72px;
+  min-height: 72px;
+  max-height: 72px;
+}
+.header .promo-content {
   display: none;
 }
 .header .navbar-proj {
