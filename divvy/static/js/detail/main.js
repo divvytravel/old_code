@@ -11,14 +11,7 @@ require.config({
         'tpl'                  : '../../vendor/requirejs-tpl/tpl',
         'marionette'           : '../../vendor/backbone.marionette/lib/backbone.marionette',
         'bootstrap'            : '../../vendor/bootstrap/dist/js/bootstrap.min',
-        'hb'                   : '../../vendor/handlebars/handlebars',
-        'bootstrap-datepicker' : '../../js/vendor_override/bootstrap-datepicker',
-        'typeahead'            : '../../vendor/typeahead.js/dist/typeahead.jquery',
-        'moment'               : '../../vendor/moment/min/moment-with-langs.min',
-        'sifter'               : '../../vendor/sifter/sifter.min',
-        'microplugin'          : '../../vendor/microplugin/src/microplugin',
-        'selectize'            : '../../vendor/selectize/dist/js/selectize',
-        'slider'               : '../../vendor/pgw-slider/pgwslider'
+        'fotorama'             : '../../vendor/fotorama/fotorama'
 
     },
     shim: {
@@ -34,20 +27,27 @@ require.config({
             exports : 'Marionette'
         },
         'bootstrap' : ['jquery'],
-        'selectize' : ['jquery','microplugin','sifter'],
-        'slider'    : ['jquery'],
+        'fotorama'    : ['jquery'],
     }
 });
 
 
 require([
     'jquery',
-    'slider'
+    'fotorama'
 ], function ($) {
 
-    $('.thumb-list > .item').on('click', function(){
-        var imgSrc = $(this).data('src');
-        $('.main-img > img').attr('src',imgSrc);
+    $(function () {
+        $('.fotorama').fotorama({
+            // width: 700,
+            // maxwidth: '100%',
+            // ratio: 16/9,
+            nav: 'thumbs',
+            thumbheight: '60px',
+            transition: 'dissolve',
+            arrows: true,
+            fit: 'cover',
+            allowfullscreen: false
+        });
     });
-
 });

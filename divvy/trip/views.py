@@ -41,6 +41,14 @@ def detail_nonprofit(request, pk=None):
     return render(request, 'views/trip/nonprofit/detail.html', dict(trip=trip))
 
 
+def detail_commerce(request, pk=None):
+    return render(request, 'views/trip/commerce/detail.html', dict())
+
+
+def blog(request, pk=None):
+    return render(request, 'views/blog/list.html', dict())
+
+
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 #     template_name = "views/index/index.html"
 #     form_class = TripFilterForm

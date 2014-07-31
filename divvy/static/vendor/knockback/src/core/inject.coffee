@@ -1,17 +1,22 @@
 ###
-  knockback-inject.js
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.Inject is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
+
+window = if window? then window else global
+
+{_, ko, $} = kb = require './kb'
 
 kb.RECUSIVE_AUTO_INJECT = true
 
 # custom Knockout `inject` binding
 ko.bindingHandlers['inject'] =
   'init': (element, value_accessor, all_bindings_accessor, view_model) ->
-    kb.Inject.inject(_unwrapObservable(value_accessor()), view_model, element, value_accessor, all_bindings_accessor)
+    kb.Inject.inject(ko.utils.unwrapObservable(value_accessor()), view_model, element, value_accessor, all_bindings_accessor)
 
 # Used to inject ViewModels and observables dynamically from your HTML Views. For both the `'kb-inject'` attribute and the data-bind `'inject'` custom binding, the following properties are reserved:
 #
@@ -106,14 +111,7 @@ class kb.Inject
       return view_model
 
     # in recursive calls, we are already protected from propagating dependencies to the template
-    if nested
-      return inject(data)
-
-    # wrap to avoid dependencies propagating to the template since we are editing a ViewModel not binding
-    else
-      result = (wrapper = ko.dependentObservable(-> inject(data)))()
-      wrapper.dispose() # done with the wrapper
-      return result
+    return if nested then inject(data) else kb.ignore(-> inject(data))
 
   # Searches the DOM from root or document for elements with the `'kb-inject'` attribute and create/customizes ViewModels for the DOM tree when encountered. Also, used with the data-bind `'inject'` custom binding.
   # @param [DOM element] root the root DOM element to start searching for `'kb-inject'` attributes.
@@ -128,7 +126,7 @@ class kb.Inject
           results.push({el: el, view_model: {}, binding: attr.value})
       findElements(child_el) for child_el in el.childNodes
       return
-    root = document if not root and document?
+    root = window.document if not root and window?.document
     findElements(root)
 
     # bind the view models
@@ -166,8 +164,8 @@ kb.injectViewModels = kb.Inject.injectViewModels
 #############################
 if document?
   # use DOM library ready function
-  if @$
-    @$(->kb.injectViewModels())
+  if $
+    $(->kb.injectViewModels())
 
   # use simple ready check
   else

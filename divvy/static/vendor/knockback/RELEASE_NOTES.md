@@ -1,5 +1,23 @@
 Please refer to the following release notes when upgrading your version of Knockback.js.
 
+## 0.19.1
+* BREAKING API CHANGE: kb.observable now splits share options out to the second parameter to give a new signature: kb.observable(model, key, share_options, view_model)
+* BREAKING API CHANGE: kb.ViewModel::mapObservables is now aliased to kb.ViewModel::createObservables. Also, kb.ViewModel::createObservables now respected the excludes option. Use kb.observable(model, key_or_options, share_options, vm) to manually add observables to a view model.
+* Removed support for Knockout version < 2.1.0.
+* Patched Knockout extend to release observables: https://github.com/kmalakoff/knockback/issues/124
+* Fixed event emitter not being updated when model changed: https://github.com/kmalakoff/knockback/issues/108
+* Fixed defaults considering 0 as empty: https://github.com/kmalakoff/knockback/issues/114
+* Fixed setting array attribute to null: https://github.com/kmalakoff/knockback/issues/103
+* Fixed events being cleaned up: https://github.com/kmalakoff/knockback/issues/101
+* Fixed dynamic adding of keys: https://github.com/kmalakoff/knockback/issues/121
+* Added kb.configure to manually set the ORM solution: kb.configure({orm: 'backbone-relational'}). Knockback will try to infer the ORM solution of your choice, but if it is not loaded before Knockback, you can select it manally.
+
+## 0.19.1
+* Removed standalone plugins. Just choose knockback if you need one or more plugins.
+* Change library building to use webpack.
+* Avoid creating dependencies in collectionObservable's destroy: https://github.com/kmalakoff/knockback/pull/120
+* Improved server support (Node.js tested with jsdom)
+
 ## 0.18.6
 * Put AMD loader first due to webpack imcompatibity
 

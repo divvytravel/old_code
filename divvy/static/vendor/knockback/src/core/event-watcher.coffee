@@ -1,10 +1,13 @@
 ###
-  knockback_event_watcher.js
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.Observable is fremitterly distributable under the MIT license.
-  Semitter the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
+
+{_, ko} = kb = require './kb'
 
 # Used to provide a central place to aggregate registered Model events rather than having all kb.Observables register for updates independently.
 #
@@ -22,7 +25,7 @@ class kb.EventWatcher
   # @option options [String] key the optional key to filter update attribute events.
   @useOptionsOrCreate: (options, emitter, obj, callback_options) ->
     if options.event_watcher
-      _throwUnexpected(@, 'emitter not matching') unless (options.event_watcher.emitter() is emitter or (options.event_watcher.model_ref is emitter))
+      kb._throwUnexpected(@, 'emitter not matching') unless (options.event_watcher.emitter() is emitter or (options.event_watcher.model_ref is emitter))
       return kb.utils.wrappedEventWatcher(obj, options.event_watcher).registerCallbacks(obj, callback_options)
     else
       kb.utils.wrappedEventWatcherIsOwned(obj, true)
@@ -31,12 +34,10 @@ class kb.EventWatcher
   constructor: (emitter, obj, callback_options) ->
     @__kb or= {}
     @__kb.callbacks = {}
-    @__kb._onModelLoaded = _.bind(@_onModelLoaded, @)
-    @__kb._onModelUnloaded = _.bind(@_onModelUnloaded, @)
 
+    @ee = null
     @registerCallbacks(obj, callback_options) if callback_options
-
-    if emitter then @emitter(emitter) else (@ee = null)
+    @emitter(emitter) if emitter
 
   # Required clean up function to break cycles, release view emitters, etc.
   # Can be called directly, via kb.release(object) or as a consequence of ko.releaseNode(element).
@@ -54,33 +55,26 @@ class kb.EventWatcher
   #   @param [Model|ModelRef] new_emitter the emitter whose attributes will be observed (can be null)
   emitter: (new_emitter) ->
     # get or no change
-    return @ee if (arguments.length is 0) or (@ee == new_emitter)
+    return @ee if (arguments.length is 0) or (@ee is new_emitter)
 
     # clear and unbind previous
     if @model_ref
-      @model_ref.unbind('loaded', @__kb._onModelLoaded)
-      @model_ref.unbind('unloaded', @__kb._onModelUnloaded)
+      @model_ref.unbind('loaded', @_onModelLoaded)
+      @model_ref.unbind('unloaded', @_onModelUnloaded)
       @model_ref.release(); @model_ref = null
 
     # set up current
     if kb.Backbone and kb.Backbone.ModelRef and (new_emitter instanceof kb.Backbone.ModelRef)
       @model_ref = new_emitter; @model_ref.retain()
-      @model_ref.bind('loaded', @__kb._onModelLoaded)
-      @model_ref.bind('unloaded', @__kb._onModelUnloaded)
-      new_emitter = @model_ref.model()
+      @model_ref.bind('loaded', @_onModelLoaded)
+      @model_ref.bind('unloaded', @_onModelUnloaded)
+      new_emitter = @model_ref.model() or null
     else
       delete @model_ref
-    previous_emitter = @ee
-    @ee = new_emitter
 
     # switch bindings
-    for event_name, callbacks of @__kb.callbacks
-      previous_emitter.unbind(event_name, callbacks.fn) if previous_emitter
-      @ee.bind(event_name, callbacks.fn) if new_emitter
-
-      # notify
-      list = callbacks.list
-      (info.emitter(@ee) if info.emitter) for info in list
+    if @ee isnt new_emitter
+      if new_emitter then @_onModelLoaded(new_emitter) else @_onModelUnloaded(@ee)
     return new_emitter
 
   # Used to register callbacks for an emitter.
@@ -92,90 +86,66 @@ class kb.EventWatcher
   # @option options [String] emitter_name the name of the emitter.
   # @option options [String] key the optional key to filter update attribute events.
   registerCallbacks: (obj, callback_info) ->
-    obj or _throwMissing(this, 'obj')
-    callback_info or _throwMissing(this, 'info')
-    event_selector = if callback_info.event_selector then callback_info.event_selector else 'change'
-    event_names = event_selector.split(' ')
+    obj or kb._throwMissing(this, 'obj')
+    callback_info or kb._throwMissing(this, 'callback_info')
+    event_names = if callback_info.event_selector then callback_info.event_selector.split(' ') else ['change']
+    model = @ee
+
     for event_name in event_names
       continue unless event_name # extra spaces
-      callbacks = @__kb.callbacks[event_name]
-
-      # register new
-      unless callbacks
-        list = []
-        callbacks = {
-          list: list
-          fn: (model) =>
-            for info in list
-              if info.update and not info.rel_fn
-
-                # key doesn't match
-                continue if model and info.key and (model.hasChanged and not model.hasChanged(_unwrapObservable(info.key)))
-
-                # trigger update
+      do (event_name) =>
+        unless callbacks = @__kb.callbacks[event_name]
+          callbacks = @__kb.callbacks[event_name] = {
+            model: null
+            list: []
+            fn: (model) =>
+              for info in callbacks.list
+                continue unless  info.update
+                continue if model and info.key and (model.hasChanged and not model.hasChanged(ko.utils.unwrapObservable(info.key))) # key doesn't match
                 not kb.statistics or kb.statistics.addModelEvent({name: event_name, model: model, key: info.key, path: info.path})
-                info.update()
+                info.update() # trigger update
+              return null
+            }
 
-            return null
-        }
-        @__kb.callbacks[event_name] = callbacks
-        @ee.bind(event_name, callbacks.fn) if @ee # register for the new event type
-
-      # add the callback information
-      info = _.defaults({obj: obj}, callback_info)
-      callbacks.list.push(info)
-
-    if @ee # loaded
-      info.unbind_fn = kb.orm.bind(@ee, info.key, info.update, info.path) if 'change' in event_names
-
-      # trigger now
-      info.emitter(@ee) and info.emitter
-    return
+        callbacks.list.push(info = _.defaults({obj: obj}, callback_info)) # store the callback information
+        @_onModelLoaded(model) if model
+    return @
 
   releaseCallbacks: (obj) ->
-    return if not @__kb.callbacks or not @ee # already destroyed
-
-    for event_name, callbacks of @__kb.callbacks
-      for index, info of callbacks.list
-        continue unless info.obj is obj
-        callbacks.list.splice(index, 1)
-
-        # unbind relational updates
-        (info.unbind_fn(); info.unbind_fn = null) if info.unbind_fn
-        info.emitter(null) if not kb.wasReleased(obj) and info.emitter # not desirable if an object has bemittern released
-        return
+    @ee = null
+    @_unbindCallbacks(event_name, callbacks, kb.wasReleased(obj)) for event_name, callbacks of @__kb.callbacks # unbind all events
+    delete @__kb.callbacks
 
   ####################################################
   # Internal
   ####################################################
 
   # @private
+  # NOTE: this is called by registerCallbacks so the model could already be bound and we just want to bind the new info
+  # NOTE: this is called by emitter so it may be used to clear a previous emitter without triggering an intermediate change
   _onModelLoaded: (model) =>
     @ee = model
+    for event_name, callbacks of @__kb.callbacks # bind all events
+      @_unbindCallbacks(event_name, callbacks, true) if callbacks.model and (callbacks.model isnt model)
 
-    # bind all events
-    for event_name, callbacks of @__kb.callbacks
-      model.bind(event_name, callbacks.fn)
-
-      # bind and notify
+      (callbacks.model = model; model.bind(event_name, callbacks.fn)) unless callbacks.model
       for info in callbacks.list
-        info.unbind_fn = kb.orm.bind(model, info.key, info.update, info.path)
+        info.unbind_fn or= kb.orm?.bind(model, info.key, info.update, info.path)
         (info.emitter(model) if info.emitter)
     return
 
   # @private
   _onModelUnloaded: (model) =>
+    return if @ee isnt model
     @ee = null
+    @_unbindCallbacks(event_name, callbacks) for event_name, callbacks of @__kb.callbacks # unbind all events
+    return
 
-    # unbind all events
-    for event_name, callbacks of @__kb.callbacks
-      model.unbind(event_name, callbacks.fn)
-
-      # notify
-      list = callbacks.list
-      for info in list
-        (info.unbind_fn(); info.unbind_fn = null) if info.unbind_fn
-        info.emitter(null) if info.emitter
+  _unbindCallbacks: (event_name, callbacks, skip_emitter) =>
+    (callbacks.model.unbind(event_name, callbacks.fn); callbacks.model = null) if callbacks.model
+    for info in callbacks.list
+      (info.unbind_fn(); info.unbind_fn = null) if info.unbind_fn
+      info.emitter(null) if info.emitter and not skip_emitter and not kb.wasReleased(info.obj)
     return
 
 # factory function

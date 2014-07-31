@@ -1,12 +1,15 @@
 ###
-  knockback-triggered-observable.js 0.18.6
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.Observable is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
 
-_publishMethods = kb._publishMethods
+{_, ko} = kb = require '../core/kb'
+
+KEYS_PUBLISH = ['destroy']
 
 # Class for observing emitter events.
 #
@@ -19,14 +22,14 @@ _publishMethods = kb._publishMethods
 #   var view_emitter = {
 #     triggered_observable: kb.triggeredObservable(emitter, 'change')
 #   };
-#   view_emitter.counter = ko.dependentObservable(function() {
+#   view_emitter.counter = ko.computed(function() {
 #     view_emitter.triggered_observable() // add a dependency
 #     return trigger_count++
 #   });
 #   emitter.set(name: 'bob');       # trigger_count: 1
 #   emitter.set(name: 'george');    # trigger_count: 2
 #   emitter.set(last: 'smith');     # trigger_count: 3
-class kb.TriggeredObservable
+module.exports = class kb.TriggeredObservable
 
   # Used to create a new kb.Observable.
   #
@@ -35,15 +38,15 @@ class kb.TriggeredObservable
   # @return [ko.observable] the constructor does not return 'this' but a ko.observable
   # @note the constructor does not return 'this' but a ko.observable
   constructor: (emitter, @event_selector) ->
-    emitter or _throwMissing(this, 'emitter')
-    @event_selector or _throwMissing(this, 'event_selector')
+    emitter or kb._throwMissing(this, 'emitter')
+    @event_selector or kb._throwMissing(this, 'event_selector')
 
     # internal state
     @vo = ko.observable()
-    observable = kb.utils.wrappedObservable(@, ko.dependentObservable(=> @vo()))
+    observable = kb.utils.wrappedObservable(@, ko.computed(=> @vo()))
 
     # publish public interface on the observable and return instead of this
-    _publishMethods(observable, @, ['destroy'])
+    kb.publishMethods(observable, @, KEYS_PUBLISH)
 
     # create emitter observable
     kb.utils.wrappedEventWatcher(@, new kb.EventWatcher(emitter, @, {emitter: _.bind(@emitter, @), update: _.bind(@update, @), event_selector: @event_selector}))

@@ -1,10 +1,13 @@
 ###
-  knockback_store.js
-  (c) 2012 Kevin Malakoff.
-  Knockback.Store is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
+
+{_, ko} = kb = require './kb'
 
 # Used to share and manage the persistence of ViewModels and observables. ks.Store can be used to break relationship cycles between models, to reduce memory usage, and to share view models between kb.CollectionObservables (for example, when using Knockout.js selectedOptions).
 #
@@ -13,7 +16,7 @@
 #   var co_selected_options = kb.collectionObservable(new Backbone.Collection(), {
 #     store: kb.utils.wrappedStore(co)
 #   });
-class kb.Store
+module.exports = class kb.Store
   # Used to either register yourself with the existing store or to create a new store.
   #
   # @param [Object] options please pass the options from your constructor to the register method. For example, constructor(model, options)
@@ -40,14 +43,17 @@ class kb.Store
 
   # Manually clear the store.
   clear: ->
-    kb.release(record.observable) for record in @observable_records.splice(0, @observable_records.length)
-    kb.release(@replaced_observables)
+    [observable_records, @observable_records] = [@observable_records, []]
+    kb.release(record.observable) for record in observable_records
+
+    [replaced_observables, @replaced_observables] = [@replaced_observables, []]
+    kb.release(replaced_observables)
     return
 
   # Manually compact the store by searching for released view models.
   compact: ->
     removals = []
-    removals.push(record) for index, record of @observable_records when record.observable?.__kb_released
+    removals.push(record) for record in @observable_records when record.observable?.__kb_released
     @observable_records = _.difference(@observable_records, removals) if removals.length
     return
 
@@ -61,7 +67,7 @@ class kb.Store
   # @option options [kb.Store] store a store used to cache and share view models.
   # @option options [kb.Factory] factory a factory used to create view models.
   #
-  # @example register an observable with th store
+  # @example register an observable with the store
   #   store.registerObservable(obj, observable, {creator: creator});
   register: (obj, observable, options) ->
     return unless observable # nothing to register
@@ -77,7 +83,7 @@ class kb.Store
     creator = if options.creator then options.creator else (if (options.path and options.factory) then options.factory.creatorForPath(obj, options.path) else null)
     creator = observable.constructor unless creator # default is to use the constructor
     @observable_records.push({obj: obj, observable: observable, creator: creator})
-    observable
+    return observable
 
   # @private
   findIndex: (obj, creator) ->
@@ -154,14 +160,14 @@ class kb.Store
 
   # @private
   findOrReplace: (obj, creator, observable) ->
-    obj or _throwUnexpected(@, 'obj missing')
+    obj or kb._throwUnexpected(@, 'obj missing')
     if (index = @findIndex(obj, creator)) < 0
       return @register(obj, observable, {creator: creator})
     else
       record = @observable_records[index]
-      (kb.utils.wrappedObject(record.observable) is obj) or _throwUnexpected(@, 'different object') # same object
+      (kb.utils.wrappedObject(record.observable) is obj) or kb._throwUnexpected(@, 'different object') # same object
       if (record.observable isnt observable) # a change
-        (record.observable.constructor is observable.constructor) or _throwUnexpected(@, 'replacing different type')
+        (record.observable.constructor is observable.constructor) or kb._throwUnexpected(@, 'replacing different type')
 
         # put the previous observable on the destroy list (but don't release until the store is released)
         @replaced_observables.push(record.observable)

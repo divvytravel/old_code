@@ -1,12 +1,19 @@
 ###
-  knockback-localized-observable.js 0.18.6
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.LocalizedObservable is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
 
-_publishMethods = kb._publishMethods
+{_, ko} = kb = require '../core/kb'
+
+KEYS_PUBLISH = ['destroy', 'observedValue', 'resetToCurrent']
+
+# Locale Manager - if you are using localization, set this property.
+# It must have Backbone.Events mixed in and implement a get method like Backbone.Model, eg. get: (attribute_name) -> return somthing
+kb.locale_manager or= undefined
 
 # @abstract You must provide the following two methods:
 #   * read: function(value, observable) called to get the value and each time the locale changes
@@ -53,7 +60,7 @@ _publishMethods = kb._publishMethods
 #          return kb.LocalizedObservable.prototype.constructor.apply(this, arguments);
 #        }
 #     });
-class kb.LocalizedObservable
+module.exports = class kb.LocalizedObservable
   @extend = kb.extend # for Backbone non-Coffeescript inheritance (use "kb.SuperClass.extend({})" in Javascript instead of "class MyClass extends kb.SuperClass")
 
   # Used to create a new kb.LocalizedObservable. This an abstract class.
@@ -66,8 +73,8 @@ class kb.LocalizedObservable
   # @note the constructor does not return 'this' but a ko.observable
   constructor: (@value, options, @vm) -> # @vm is view_model
     options or= {}; @vm or= {}
-    @read or _throwMissing(this, 'read')
-    kb.locale_manager or _throwMissing(this, 'kb.locale_manager')
+    @read or kb._throwMissing(this, 'read')
+    kb.locale_manager or kb._throwMissing(this, 'kb.locale_manager')
 
     # bind callbacks
     @__kb or= {}
@@ -75,25 +82,25 @@ class kb.LocalizedObservable
     @__kb._onChange = options.onChange
 
     # internal state
-    value = _unwrapObservable(@value) if @value
+    value = ko.utils.unwrapObservable(@value) if @value
     @vo = ko.observable(if not value then null else @read(value, null))
-    observable = kb.utils.wrappedObservable(@, ko.dependentObservable({
+    observable = kb.utils.wrappedObservable @, ko.computed {
       read: =>
-        _unwrapObservable(@value) if @value
+        ko.utils.unwrapObservable(@value) if @value
         @vo() # create a depdenency
-        return @read(_unwrapObservable(@value))
+        return @read(ko.utils.unwrapObservable(@value))
 
       write: (value) =>
-        @write or _throwUnexpected(@, 'writing to read-only')
-        @write(value, _unwrapObservable(@value))
+        @write or kb._throwUnexpected(@, 'writing to read-only')
+        @write(value, ko.utils.unwrapObservable(@value))
         @vo(value)
         @__kb._onChange(value) if @__kb._onChange
 
       owner: @vm
-    }))
+    }
 
     # publish public interface on the observable and return instead of this
-    _publishMethods(observable, @, ['destroy', 'observedValue', 'resetToCurrent'])
+    kb.publishMethods(observable, @, KEYS_PUBLISH)
 
     # start
     kb.locale_manager.bind('change', @__kb._onLocaleChange)
@@ -113,7 +120,7 @@ class kb.LocalizedObservable
   # Used to reset the value if localization is not possible.
   resetToCurrent: ->
     observable = kb.utils.wrappedObservable(@)
-    current_value = if @value then @read(_unwrapObservable(@value)) else null
+    current_value = if @value then @read(ko.utils.unwrapObservable(@value)) else null
     return if observable() is current_value
     observable(current_value)
 
@@ -129,7 +136,7 @@ class kb.LocalizedObservable
 
   # @private
   _onLocaleChange: ->
-    value = @read(_unwrapObservable(@value))
+    value = @read(ko.utils.unwrapObservable(@value))
     @vo(value)
     @__kb._onChange(value) if @__kb._onChange
 

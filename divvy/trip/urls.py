@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
-from .views import create_nonprofit, detail_nonprofit
+from .views import create_nonprofit, detail_nonprofit, blog, detail_commerce
 
 # from .views import TripCreateStepOneView, TripRequestFormView, TripUpdateView,\
 #     TripDeleteView, TripRequestApproveView, TripCreateStepTwoView
@@ -8,6 +8,10 @@ from .views import create_nonprofit, detail_nonprofit
 urlpatterns = patterns('',
     url(r'^create/nonprofit/$', create_nonprofit, name='trip_create'),
     url(r'^detail/nonprofit/(?P<pk>\d+)/$', detail_nonprofit, name='trip_detail'),
+
+    url(r'^blog/$', blog, name='blog'),
+    url(r'^detail/commerce/$', detail_commerce, name='trip_detail_commerce'),
+    
     # url(r'^create/(?P<price_type>[\w_-]+)/(?P<category_slug>[\w_-]+)/$',
         # TripCreateStepTwoView.as_view(), name="trip_create_step_two"),
     # url(r'^detail/(?P<pk>\d+)/$', TripRequestFormView.as_view(),

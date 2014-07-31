@@ -1,0 +1,408 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="detail-trip-page" id="detail_trip_page">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-layout">
+            <div class="content-layout-block">
+
+              <div class="general-block header-block">
+                <h1>Сёрфинг на Гавайях</h1>
+                <div class="tour">
+                  <span>London</span>&nbsp;<span>(England)</span>
+                </div>
+              </div>
+
+              <div class="general-block tags-block">
+                <div class="tags">
+                  <a href="javascript:void(0)" class="tag" data-id="1">Серфинг</a>
+                  <a href="javascript:void(0)" class="tag" data-id="2">Активный отдых</a>
+                </div>
+              </div>
+
+              <div class="general-block gallery-block clearfix">
+
+                <div class="fotorama">
+                  {% comment %}
+                  {% for photo in trip.images.all %}
+                    <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
+                  {% endfor %}
+                  {% endcomment %}
+                  <img src="/static/img/promo/trips/photo-1.jpg" width="600" height="399">
+                  <img src="/static/img/promo/trips/photo-2.jpg" width="604" height="400">
+                  <img src="/static/img/promo/trips/photo-3.jpg" width="761" height="400">
+                  <img src="/static/img/promo/trips/photo-4.jpg" width="600" height="565">
+                </div>
+
+              </div>
+
+              <div class="tabs-container">
+                <div class="trigger-items">
+                  <div class="item active" data-tab-id="1">
+                    Суть
+                  </div><div class="item" data-tab-id="2">
+                    Карта
+                  </div><div class="item" data-tab-id="3">
+                    Питание и проживание
+                  </div>
+                </div>
+
+                <div class="tab-block" data-id="1">
+                  <div class="desc-block">
+                    <div>
+                      <p>На Гавайях серфинг будет включен в школьную программу. Ученики государственных школ смогут выбирать изучение серфинга на уроках спорта начиная с весны 2012 года.</p>
+                      <div class="video-block">
+                        <iframe width="598" height="315" src="//www.youtube.com/embed/gEPmA3USJdI?rel=0" frameborder="0" allowfullscreen></iframe>
+                      </div>
+                      <p>Когда вы думаете о Гавайях, вы думаете о серфинге — пояснил губернатор решение включить этот вид спорта в школьную программу. Гавайи родина серфинга, напомнил Эберкромби, «этот вид спорта глубоко укоренен в нашей культуре и образе жизни».</p>
+                    </div>
+                  </div>
+
+                  <div class="big-blue-block">
+                    Уже через неделю вы будете уверенно стоять на доске и плыть верхом на волнах гавайского пляжа.
+                  </div>
+
+                  <div class="desc-block">
+                    <div class="subtitle">Дополнительные расходы</div>
+                    <p>Перелёт в среднем <strong>от 1000 евро</strong>, билеты по ссылке справа. Еда и сувениры — около 100 евро на человека, там всё дешево.</p>
+                    <div class="subtitle">Что нам нравится</div>
+                    <ul class="list-items">
+                      <li>
+                        <span>Варианты с жильём</span>
+                      </li>
+                      <li>
+                        <span>Инструктор по сёрфу</span>
+                      </li>
+                      <li>
+                        <span>Достопримечательности Гонолулу</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="side-layout">
+            <div class="side-panel" id="alerts_block">
+              
+              <div class="request-block border-b">
+                <div class="request-cons">
+                  <div class="title">Заявка рассматривается</div>
+                  <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
+                </div>
+                
+              </div>
+
+              <div class="date-block border-b">
+                <div class="title">13 – 21 июля</div>
+                <div class="info">Заявки принимаются до 12 сентября</div>
+              </div>
+
+              <div class="detail-block border-b">
+                <div class="full-price">
+                  <span>40 000 руб.</span>
+                </div>
+                <div class="type">
+                  <span>Коммерческая поездка</span>
+                  <span class="help">
+                    <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                  </span>
+                </div>
+                <div class="include">
+                  <div class="sub-title">В СТОИМОСТЬ ВХОДИТ</div>
+                  <ul class="items">
+                    <li class="item">
+                      <span>Перелёт из Москвы</span>
+                    </li>
+                    <li class="item">
+                      <span>Проживание в отеле</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="organizer-block border-b">
+                <div class="title">Организатор</div>
+                <div class="organizer-item">
+                  <div class="userpic pull-left">
+                    <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
+                  </div>
+                  <div class="info">
+                    <div class="info-wrap">
+                      <span class="info-wrap-align">
+                        <a href="javascript:void(0)">Paroo</a>
+                        <span>
+                          <span>Агентство</span>
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="travellers-block">
+                <div class="title">Компания</div>
+                <div class="slider">
+                  <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                    <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
+                      style="left: 0%; width: 14.285714285714286%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                  </div>
+                  <span class="help">
+                    <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                  </span>
+                </div>
+                <div class="ratio">
+                  <div>
+                    <span>Набрано 1 из 7 человек</span>
+                  </div>
+                  <div>
+                    <span>Только мужчины</span>
+                  </div>
+                </div>
+                <div class="info">
+                  Будем рады поехать в путешествие с сёрферами любого уровня, в том числе и новичками — будет инструктор!
+                </div>
+                <div class="travellers">
+                  <div class="item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="/static/img/promo/users/1.png"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">Константина Петрова</a>
+                          <span>
+                            <span>28, Москва</span>
+                          </span>
+                          <span>
+                            Повар
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="/static/img/promo/users/2.png"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">Константина Петрова</a>
+                          <span>
+                            <span>28, Москва</span>
+                          </span>
+                          <span>
+                            Музыкант
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="/static/img/promo/users/3.png"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">Константина Петрова</a>
+                          <span>
+                            <span>28, Москва</span>
+                          </span>
+                          <span>
+                            Хирург
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  <script src="/static/vendor/requirejs/require.js" data-main="/static/js/detail/main"></script>
+{% endblock %}
+
+{% comment %}
+<div class="detail-trip-page" id="detail_trip_page">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="content-layout">
+          <div class="content-layout-block">
+
+            <div class="general-block header-block">
+              <h1>{{ trip.title }}</h1>
+              <div class="tour">
+                <span>{{ trip.city.name }}</span>&nbsp;<span>({{ trip.city.country }})</span>
+              </div>
+            </div>
+
+            <div class="general-block tags-block">
+              <div class="tags">
+                {% for tag in trip.tags.all %}
+                  <a href="javascript:void(0)" class="tag" data-id="{{ tag.pk }}">{{ tag.name }}</a>
+                {% endfor %}
+              </div>
+            </div>
+
+            <div class="general-block gallery-block clearfix">
+
+                <div class="fotorama">
+                  
+                  <img src="/static/img/promo/trips/photo-1.jpg" width="600" height="399">
+                  <img src="/static/img/promo/trips/photo-2.jpg" width="604" height="400">
+                  <img src="/static/img/promo/trips/photo-3.jpg" width="761" height="400">
+                  <img src="/static/img/promo/trips/photo-4.jpg" width="600" height="565">
+                </div>
+
+            </div>
+
+            <div class="desc-block">
+              <div>
+                {{ trip.descr_main }}
+              </div>
+            </div>
+
+            <div class="links-block">
+              
+            </div>
+
+          </div>
+        </div>
+
+        <div class="side-layout">
+          <div class="side-panel" id="alerts_block">
+            
+            <div class="request-block border-b">
+              <div class="request-cons">
+                <div class="title">Заявка рассматривается</div>
+                <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
+              </div>
+              
+            </div>
+
+            <div class="date-block border-b">
+              <div class="title">{{ trip.start_date_format }} – {{ trip.end_date_format }}</div>
+              <div class="info">Заявки принимаются до {{ trip.end_people_date_format }}</div>
+            </div>
+
+            <div class="detail-block border-b">
+              <div class="type">
+                <span>{{ trip.get_price_type_display }}</span>
+                <span class="help">
+                  <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                </span>
+              </div>
+              <div class="chip-in">
+                <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
+                <ul class="items">
+                  <li class="item">
+                    <a href="#">Бунгало на неделю</a>: <span>600 &euro;</span>
+                  </li>
+                  <li class="item">
+                    <a href="#">Инструктор по сёрфу</a>: <span>800 &euro;</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="price">
+                <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
+                <div class="value">{{ trip.price_for_one_person }} €</div>
+              </div>
+              {% if trip.descr_additional %}
+                <div class="addition">
+                  <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
+                  <div class="info">{{ trip.descr_additional }}</div>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="organizer-block border-b">
+              <div class="title">Организатор</div>
+              <div class="organizer-item">
+                <div class="userpic pull-left">
+                  <a href="javascript:void(0)"><img src="{{ trip.owner.get_avatar_url }}"></a>
+                </div>
+                <div class="info">
+                  <div class="info-wrap">
+                    <span class="info-wrap-align">
+                      <a href="javascript:void(0)">{{ trip.owner.get_full_name }}</a>
+                      <span>
+                        <span>{{ trip.owner.get_age }}, {{ trip.owner.city.name }}</span>
+                      </span>
+                      <span>
+                        {{ trip.owner.career }}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="info">Организаторы некоммерческих поездок принимают участие в путешествии и делят расходы наравне с другими.</div>
+            </div>
+
+            <div class="travellers-block">
+              <div class="title">Компания</div>
+              <div class="slider">
+                <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                  <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
+                    style="left: 0%; width: {{ trip.get_sex }}%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                </div>
+                <span class="help">
+                  <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                </span>
+              </div>
+              <div class="ratio">
+                <div>
+                  <span>Набрано {{ trip.count_members }} из {{ trip.people_max_count }} человек</span>
+                </div>
+                <div>
+                  <span>{{ trip.get_sex_status }}</span>
+                </div>
+              </div>
+              <div class="info">
+                {{ trip.descr_company }}
+              </div>
+              <div class="travellers">
+                {% for man in trip.people.all %}
+                  <div class="item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="{{ man.get_avatar_url }}"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">{{ man.get_full_name }}</a>
+                          <span>
+                            <span>{{ man.get_age }}, {{ man.city.name }}</span>
+                          </span>
+                          <span>
+                            {{ man.career }}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endcomment %}

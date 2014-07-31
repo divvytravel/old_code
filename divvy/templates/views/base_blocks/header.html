@@ -33,17 +33,18 @@
   </div>
 
   {# <div class="header-color-layout"></div> #}
-
-  <div class="promo-content">
-    <div class="promo-content-title">Путешествуйте в хорошей компании</div>
-    <div class="promo-content-description">
-      <p>
-        Вы можете <a href="#">организовать своё путешествие</a> и самостоятельно собрать<br> компанию, или к кому-нибудь присоединиться &mdash; <a href="#"> выбирайте поездку, </a><br>
-        и смотрите, куда собираются <a href="#"> интересные вам люди</a>.
-      </p>
+  {% block promo %}
+    <div class="promo-content">
+      <div class="promo-content-title">Путешествуйте в хорошей компании</div>
+      <div class="promo-content-description">
+        <p>
+          Вы можете <a href="#">организовать своё путешествие</a> и самостоятельно собрать<br> компанию, или к кому-нибудь присоединиться &mdash; <a href="#"> выбирайте поездку, </a><br>
+          и смотрите, куда собираются <a href="#"> интересные вам люди</a>.
+        </p>
+      </div>
+      <div class="godown">
+        <a href="#"><img src="/static/img/arrow-large.png"></a>
+      </div>
     </div>
-    <div class="godown">
-      <a href="#"><img src="/static/img/arrow-large.png"></a>
-    </div>
-  </div>
+  {% endblock %}
 </div>

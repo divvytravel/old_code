@@ -11,9 +11,6 @@
 
     <title>Divvy</title>
 
-    <!-- Bootstrap core CSS -->
-    <!-- <link href="/static/vendor/bootstrap.min.css" rel="stylesheet"> -->
-
     <!-- Custom styles for this template -->
     <script src="//use.typekit.net/ndu1ixv.js"></script>
     <script type="text/javascript">
@@ -32,7 +29,7 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <link  href="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.css" rel="stylesheet">
+    {# <link  href="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.css" rel="stylesheet"> #}
   </head>
 
   <body>
@@ -43,10 +40,11 @@
 
     {% include "views/base_blocks/footer.html" %}
 
-    <!--script src="/static/vendor/requirejs/require.js" data-main="/static/js/main-built"></script-->
-    <script src="/static/vendor/requirejs/require.js" data-main="/static/js/main"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.js"></script>
+    {% block js %}
+        <script src="/static/vendor/requirejs/require.js" data-main="/static/js/main"></script>
+        {# <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> #}
+        {# <script src="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.js"></script> #}
+    {% endblock %}
 
     {% include "views/base_blocks/counters.html" %}
   </body>

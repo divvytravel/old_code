@@ -1,10 +1,13 @@
 ###
-  knockback-formatted-observable.js 0.18.6
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.FormattedObservable is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
+
+{_, ko} = kb = require '../core/kb'
 
 arraySlice = Array.prototype.slice
 
@@ -12,7 +15,7 @@ kb.toFormattedString = (format) ->
   result = format.slice()
   args = arraySlice.call(arguments, 1)
   for index, arg of args
-    value = _unwrapObservable(arg)
+    value = ko.utils.unwrapObservable(arg)
     value = '' if _.isUndefined(value) or _.isNull(value)
 
     parameter_index = format.indexOf("\{#{index}\}")
@@ -60,7 +63,7 @@ kb.parseFormattedString = (string, format) ->
 #
 # @example change the formatted name whenever a model's name attribute changes
 #   var observable = kb.formattedObservable("{0} and {1}", arg1, arg2);
-class kb.FormattedObservable
+module.exports = class kb.FormattedObservable
 
   # Used to create a new kb.FormattedObservable.
   #
@@ -76,19 +79,19 @@ class kb.FormattedObservable
     else
       observable_args = arraySlice.call(arguments, 1)
 
-    observable = kb.utils.wrappedObservable(@, ko.dependentObservable({
+    observable = kb.utils.wrappedObservable @, ko.computed {
       read: ->
-        args = [_unwrapObservable(format)]
-        args.push(_unwrapObservable(arg)) for arg in observable_args
+        args = [ko.utils.unwrapObservable(format)]
+        args.push(ko.utils.unwrapObservable(arg)) for arg in observable_args
         return kb.toFormattedString.apply(null, args)
       write: (value) ->
-        matches = kb.parseFormattedString(value, _unwrapObservable(format))
+        matches = kb.parseFormattedString(value, ko.utils.unwrapObservable(format))
         max_count = Math.min(observable_args.length, matches.length); index = 0
         while (index<max_count)
           observable_args[index](matches[index])
           index++
         return
-    }))
+    }
 
     return observable
 

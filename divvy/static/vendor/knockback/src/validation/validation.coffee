@@ -1,14 +1,19 @@
 ###
-  knockback-validation.js 0.18.6
-  (c) 2011-2013 Kevin Malakoff.
-  Knockback.Observable is freely distributable under the MIT license.
-  See the following for full license details:
-    https://github.com/kmalakoff/knockback/blob/master/LICENSE
+  knockback.js 0.18.6
+  Copyright (c)  2011-2014 Kevin Malakoff.
+  License: MIT (http://www.opensource.org/licenses/mit-license.php)
+  Source: https://github.com/kmalakoff/knockback
+  Dependencies: Knockout.js, Backbone.js, and Underscore.js (or LoDash.js).
+  Optional dependencies: Backbone.ModelRef.js and BackboneORM.
 ###
+
+{_, ko, $} = kb = require '../core/kb'
+
+require './validators'
 
 # internal helper
 callOrGet = (value) ->
-  value = _unwrapObservable(value)
+  value = ko.utils.unwrapObservable(value)
   return if typeof(value) is 'function' then value.apply(null, Array.prototype.slice.call(arguments, 1)) else value
 
 # Helpers for validating forms, inputs, and values.
@@ -120,16 +125,16 @@ callOrGet = (value) ->
 #   Used to combine conditions.
 #   @note Called using `kb.untilFalseFn` (not  kb.Validation.untilFalseFn)
 #   @return [Function] Validator function bound with stand_in value before condition is met, validator function, and optionally model (will reset if the model changes).
-class kb.Validation
+module.exports = class kb.Validation
 
 #############################
 # Aliases
 #############################
 kb.valueValidator = (value, bindings, validation_options={}) ->
   (validation_options and not (typeof(validation_options) is 'function')) or (validation_options = {})
-  return ko.dependentObservable(->
+  return ko.computed(->
     results = {$error_count: 0}
-    current_value = _unwrapObservable(value)
+    current_value = ko.utils.unwrapObservable(value)
     not ('disable' of validation_options) or (disabled = callOrGet(validation_options.disable))
     not ('enable' of validation_options) or (disabled = not callOrGet(validation_options.enable))
     priorities = validation_options.priorities or []
@@ -199,22 +204,20 @@ kb.formValidator = (view_model, el) ->
     not validator or validators.push(results[name] = validator)
 
   # collect stats, error count and valid
-  results.$error_count = ko.dependentObservable(->
+  results.$error_count = ko.computed ->
     error_count = 0
     for validator in validators
       error_count += validator().$error_count
     return error_count
-  )
-  results.$valid = ko.dependentObservable(-> return results.$error_count() is 0)
+  results.$valid = ko.computed(-> return results.$error_count() is 0)
 
   # enabled and disabled
-  results.$enabled = ko.dependentObservable(->
+  results.$enabled = ko.computed ->
     enabled = true
     for validator in validators
       enabled &= validator().$enabled
     return enabled
-  )
-  results.$disabled = ko.dependentObservable(-> return not results.$enabled())
+  results.$disabled = ko.computed(-> return not results.$enabled())
 
   # if there is a name, add to the view_model with $scoping
   view_model["$#{form_name}"] = results if form_name
