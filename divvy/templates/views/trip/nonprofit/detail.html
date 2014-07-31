@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <div class="detail-trip-page" id="detail_trip_page">
+  <div class="detail-trip-page require-js-app" data-params='{"name":"details"}' id="detail_trip_page">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -173,8 +173,4 @@
       </div>
     </div>
   </div>
-{% endblock %}
-
-{% block js %}
-  <script src="/static/vendor/requirejs/require.js" data-main="/static/js/detail/main"></script>
 {% endblock %}
