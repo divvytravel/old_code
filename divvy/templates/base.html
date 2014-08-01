@@ -17,6 +17,13 @@
       try{Typekit.load();}catch(e){}
     </script>
 
+    <script type="text/javascript">
+      window.DDATA = {};
+      window.DDATA.csrftoken = "";
+    </script>
+    {% block extrahead %}
+    {% endblock %}
+
     <link href="/static/vendor/jquery-ui/themes/start/jquery-ui.min.css" rel="stylesheet">
     <link href="/static/css/theme.css" rel="stylesheet">
 
@@ -32,7 +39,7 @@
     {# <link  href="http://fotorama.s3.amazonaws.com/4.5.2/fotorama.css" rel="stylesheet"> #}
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
 
     <div id="fb-root"></div>
     <script>(function(d, s, id) {
