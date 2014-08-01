@@ -111,10 +111,9 @@ define([
             if (factTotal > 1) {
                 maleTotalProc = (100 / factTotal) * maleTotal;
                 femaleTotalProc = 100 - maleTotalProc;
-                // console.log(maleTotal,femaleTotal);
 
                 var min = Math.min.apply(null, [maleTotalProc, femaleTotalProc]);
-                min = min/2;
+                // min = min/2;
                 leftPercent = maleTotalProc - min; rightPercent = maleTotalProc + min;
 
             }

@@ -75,6 +75,9 @@ a:focus {
     position: relative;
     min-height: 450px;
     max-height: 768px;
+    .promo-content {
+      display: block;
+    }
     &.login {
       background-image: none;
       height: 72px;

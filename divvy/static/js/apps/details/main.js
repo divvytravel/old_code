@@ -14,26 +14,6 @@ require([
         }
     };
 
-    // Rivets.binders.checked = {
-    //     publishes: true,
-    //     bind: function(el) {
-    //       return Rivets.Util.bindEvent(el, 'change', this.publish);
-    //     },
-    //     unbind: function(el) {
-    //       return Rivets.Util.unbindEvent(el, 'change', this.publish);
-    //     },
-    //     routine: function(el, value) {
-    //       var _ref1;
-    //       if (el.type === 'radio') {
-    //         return el.checked = ((_ref1 = el.value) != null ? _ref1.toString() : void 0) === (value != null ? value.toString() : void 0);
-    //       } else {
-    //         return el.checked = !!value;
-    //       }
-    //     }
-    //   };
-
-    console.log( Rivets );
-
     // Rivets.binders.stepshow = {
     //     // publishes: true,
     //     bind: function(el) {
