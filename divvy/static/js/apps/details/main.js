@@ -70,12 +70,26 @@ require([
             $(el).hide();
     };
 
+    Rivets.binders['status-*'] = function(el, value){
+        // el.style.setProperty(this.args[0], value);
+        if ( this.args[0] == value )
+            $(el).show();
+        else 
+            $(el).hide();
+    };
+
     var RequestClass = function (data) {
         this.id = data.get('tripId') || 0;
+        this.triprequestStatus = data.get('triprequestStatus') || '';
         this.resource_uri = "/api/v1/trip/"+this.id+"/";
         this.requestSend = true;
         this.requestCons = false;
-        this.requestStep = 'send';
+        this.requestStep = '';
+        if (this.triprequestStatus == '') {
+            this.requestStep = 'send';
+        } else if (this.triprequestStatus == 'pending') { 
+            this.requestStep = 'cons';
+        }
         this.____ = RequestClass;
     };
     RequestClass.prototype = {

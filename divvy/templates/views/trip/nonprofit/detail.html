@@ -66,7 +66,7 @@
           <div class="side-layout">
             <div class="alerts">
               
-              <div class="alert alert-bal" style="display:block;">
+              <div class="alert alert-bal" rv-status-approved="scope.triprequestStatus" style="display:none;">
                 <div class="title">Помогите собрать группу, рассказав о путешествии:</div>
                 <span class="fb-button">
                   <span class="icon"></span>
@@ -79,7 +79,7 @@
               
               <div class="request-block border-b">
 
-                <div class="request-general request-send" rv-stepshow-sendw="scope.requestStep">
+                <div class="request-general request-send" rv-stepshow-send="scope.requestStep">
                   <div class="button">
                     <a class="button-general button-green action-send" href="javascript:void(0)" rv-on-click="scope.goSend">
                       <span>Подать заявку</span>
@@ -97,7 +97,7 @@
                   <div class="info">В этом путешествии заявку подтверждает организатор, а путешествие оплачивается после того, как наберется группа.</div>
                 </div>
 
-                <div class="request-general request-cons" rv-stepshow-send="scope.requestStep">
+                <div class="request-general request-cons" rv-stepshow-cons="scope.requestStep">
                   <div class="title">Заявка рассматривается</div>
                   <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
                   <div class="if-rethink">
@@ -108,12 +108,17 @@
                   </div>
                 </div>
 
-                <div class="request-general request-dismiss" rv-stepshow-dismiss="scope.requestStep">
+                <div class="request-general request-dismiss" rv-status-denied="scope.triprequestStatus">
                   <div class="title">Заявка отклонена :-(</div>
                   <div class="info">Ваша заявка отклонена организатором. Попробуйте поискать <a href="javascript:void(0)">похожие путешествия</a>.</div>
                 </div>
 
-                <div class="request-general request-approve" rv-stepshow-approve="scope.requestStep">
+                <div class="request-general request-dismiss" rv-status-cancelled="scope.triprequestStatus">
+                  <div class="title">Заявка отменена :-(</div>
+                  <div class="info">Ваша заявка отменена организатором или вами. Попробуйте поискать <a href="javascript:void(0)">похожие путешествия</a>.</div>
+                </div>
+
+                <div class="request-general request-approve" rv-status-approved="scope.triprequestStatus">
                   <div class="title">Заявка подтверждена</div>
                   <div class="info">Когда наберется еще 3 человека, вам придет письмо со ссылкой на оплату. Путешествие отменяется, если группа не наберется. Помогите собрать группу, рассказав друзьям:</div>
                 </div>
