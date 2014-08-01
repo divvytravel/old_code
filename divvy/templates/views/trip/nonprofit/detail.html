@@ -32,73 +32,105 @@
               </div>
 
               <div class="general-block gallery-block clearfix">
-                <div class="fotorama"
-                     data-nav="thumbs"
-                     data-thumbheight="70px"
-                     data-allowfullscreen="true">
+                <div class="fotorama">
                   {% for photo in trip.images.all %}
                     <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
                   {% endfor %}
+                  <!-- <img src="/static/img/promo/trips/photo-1.jpg" width="600" height="399">
+                  <img src="/static/img/promo/trips/photo-2.jpg" width="604" height="400">
+                  <img src="/static/img/promo/trips/photo-3.jpg" width="761" height="400">
+                  <img src="/static/img/promo/trips/photo-4.jpg" width="600" height="565"> -->
                 </div>
               </div>
 
-              <div class="desc-block">
+              <div class="desc-block border-b">
                 <div>
                   {{ trip.descr_main }}
                 </div>
               </div>
 
-              <div class="links-block">
+              <!-- <div class="links-block">
                 
-              </div>
+              </div> -->
 
-              <div class="fb-comments"
-                   data-href="{{ request.build_absolute_uri }}"
-                   data-numposts="5" data-width="100%"
-                   data-colorscheme="light"></div>
+              <div class="general-block comments-block clearfix">
+                <div class="fb-comments"
+                     data-href="{{ request.build_absolute_uri }}"
+                     data-numposts="5" data-width="100%"
+                     data-colorscheme="light"></div>
+              </div>
 
             </div>
           </div>
 
           <div class="side-layout">
-            <div class="side-panel" id="alerts_block">
+            <div class="alerts">
+              
+              <div class="alert alert-bal" rv-status-approved="scope.triprequestStatus" style="display:none;">
+                <div class="title">Помогите собрать группу, рассказав о путешествии:</div>
+                <span class="fb-button">
+                  <span class="icon"></span>
+                  <span class="content">Поделиться в Facebook</span>
+                </span>
+              </div>
+
+            </div>
+            <div class="side-panel">
               
               <div class="request-block border-b">
 
-                <div class="request-general request-send" rv-class-show="scope.requestSend">
+                <div class="request-general request-send" rv-stepshow-send="scope.requestStep">
                   <div class="button">
-                    <a class="button-general button-green action-send" href="javascript:void(0)" rv-on-click="scope.send">
+                    <a class="button-general button-green action-send" href="javascript:void(0)" rv-on-click="scope.goSend">
                       <span>Подать заявку</span>
                     </a>
                   </div>
                   <div class="info">В этом путешествии заявку подтверждает организатор, а путешествие оплачивается после того, как наберется группа.</div>
                 </div>
 
-                <!-- <div class="request-general request-send">
+                <div class="request-general request-send-approve" rv-stepshow-send-approve="scope.requestStep">
                   <div class="button">
-                    <a class="button-general button-red action-send" href="javascript:void(0)">
+                    <a class="button-general button-red action-send" href="javascript:void(0)" rv-on-click="scope.send">
                       <span>Я уверен, что поеду</span>
                     </a>
                   </div>
                   <div class="info">В этом путешествии заявку подтверждает организатор, а путешествие оплачивается после того, как наберется группа.</div>
-                </div> -->
-
-                <div class="request-general request-cons" rv-class-show="scope.requestCons">
-                  <div class="title">Заявка рассматривается</div>
-                  <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
                 </div>
 
-                <!-- <div class="request-general request-dismiss">
+                <div class="request-general request-cons" rv-stepshow-cons="scope.requestStep">
+                  <div class="title">Заявка рассматривается</div>
+                  <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
+                  <div class="if-rethink">
+                    <div class="slogan">
+                      <span>Если вы передумали ехать</span>
+                    </div>
+                    <div class="desc"><a href="javascript:void(0)">Отмените заявку</a>, пока её не рассмотрел организатор. Это не отобразится в вашей <u>истории путешествий</u>.</div>
+                  </div>
+                </div>
+
+                <div class="request-general request-dismiss" rv-status-denied="scope.triprequestStatus">
                   <div class="title">Заявка отклонена :-(</div>
                   <div class="info">Ваша заявка отклонена организатором. Попробуйте поискать <a href="javascript:void(0)">похожие путешествия</a>.</div>
-                </div> -->
+                </div>
 
-                <!-- <div class="request-general request-approve">
+                <div class="request-general request-dismiss" rv-status-cancelled="scope.triprequestStatus">
+                  <div class="title">Заявка отменена :-(</div>
+                  <div class="info">Ваша заявка отменена организатором или вами. Попробуйте поискать <a href="javascript:void(0)">похожие путешествия</a>.</div>
+                </div>
+
+                <div class="request-general request-approve" rv-status-approved="scope.triprequestStatus">
                   <div class="title">Заявка подтверждена</div>
                   <div class="info">Когда наберется еще 3 человека, вам придет письмо со ссылкой на оплату. Путешествие отменяется, если группа не наберется. Помогите собрать группу, рассказав друзьям:</div>
-                </div> -->
+                </div>
                 
               </div>
+
+              <!-- <div class="date-block border-b">
+                <div class="title">Тестирование UI</div>
+                <div class="container">
+                  
+                </div>
+              </div> -->
 
               <div class="date-block border-b">
                 <div class="title">{{ trip.start_date_format }} – {{ trip.end_date_format }}</div>

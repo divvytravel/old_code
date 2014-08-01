@@ -6376,7 +6376,7 @@ a:focus {
   padding: 27px 15px;
   line-height: 14px;
   height: 72px;
-  margin-left: -15px;
+  margin-left: -13px;
 }
 .header .navbar-proj .navbar-logo:hover, .header .navbar-proj .navbar-logo:focus {
   text-decoration: none;
@@ -7331,6 +7331,7 @@ textarea {
 .button-general:hover, .button-general:focus, .button-general:active {
   text-decoration: none;
   color: #FFFFFF;
+  opacity: 0.88;
 }
 
 .button-green {
@@ -8009,6 +8010,79 @@ textarea {
 .detail-trip-page .content-layout .tabs-container .video-block {
   padding: 4px 0 12px 0;
 }
+.detail-trip-page .content-layout .comments-block {
+  padding: 36px 36px 10px 36px;
+}
+.detail-trip-page .side-layout .alerts .alert {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.37);
+  float: left;
+  margin-bottom: 0px;
+  margin-left: 18px;
+  margin-top: 18px;
+  padding: 14px 18px 18px 18px;
+  width: 324px;
+  position: relative;
+  text-align: center;
+}
+.detail-trip-page .side-layout .alerts .alert .title {
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.detail-trip-page .side-layout .alerts .alert .fb-button {
+  font-weight: bold;
+  margin-bottom: 0px;
+  border-radius: 3px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  padding: 7px 11px 7px 7px;
+  text-align: center;
+  vertical-align: top;
+  background-color: #3b55a0;
+  background: -moz-linear-gradient(top, #4c69ba, #3b55a0);
+  background: -ms-linear-gradient(top, #4c69ba, #3b55a0);
+  background: -webkit-linear-gradient(top, #4c69ba, #3b55a0);
+  border: 0px solid #2b4170;
+  text-shadow: 0 -1px -1px #1f2f52;
+}
+.detail-trip-page .side-layout .alerts .alert .fb-button .icon {
+  display: inline-block;
+  height: 31px;
+  width: 31px;
+  margin-right: 6px;
+  background-image: url("../img/fb-big-sprite.png");
+  background-position: 0px 0px;
+  vertical-align: top;
+}
+.detail-trip-page .side-layout .alerts .alert .fb-button .content {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 31px;
+  height: 31px;
+  vertical-align: top;
+}
+.detail-trip-page .side-layout .alerts .alert .fb-button:hover, .detail-trip-page .side-layout .alerts .alert .fb-button:focus, .detail-trip-page .side-layout .alerts .alert .fb-button:active {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.88);
+  background-position: 10px;
+  opacity: 0.88;
+}
+.detail-trip-page .side-layout .alerts .alert .fb-button:hover .icon, .detail-trip-page .side-layout .alerts .alert .fb-button:focus .icon, .detail-trip-page .side-layout .alerts .alert .fb-button:active .icon {
+  opacity: 0.88;
+}
+.detail-trip-page .side-layout .alerts .alert::after {
+  content: '';
+  position: absolute;
+  left: 149px;
+  bottom: -22px;
+  border: 12px solid transparent;
+  border-top: 12px solid white;
+}
 .detail-trip-page .side-layout .side-panel {
   background: none repeat scroll 0 0 #ffffff;
   border-radius: 5px;
@@ -8053,7 +8127,7 @@ textarea {
 .detail-trip-page .side-layout .side-panel .request-block .request-general.show {
   display: block;
 }
-.detail-trip-page .side-layout .side-panel .request-block .request-cons .title {
+.detail-trip-page .side-layout .side-panel .request-block .request-cons > .title {
   padding-left: 31px;
   background: url("../img/site-sprites.png") no-repeat 1px -396px;
   font-size: 21px;
@@ -8061,10 +8135,37 @@ textarea {
   font-family: pragmatica-web;
   color: rgba(0, 0, 0, 0.9);
 }
-.detail-trip-page .side-layout .side-panel .request-block .request-send {
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink {
+  background: #f7f7f7;
+  margin-left: -18px;
+  margin-right: -18px;
+  padding-left: 18px;
+  padding-right: 18px;
+  padding-top: 12px;
+}
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink .slogan {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 18px;
+  display: inline-block;
+  color: #000000;
+  background: url("../img/arrow-down-small-black.png") no-repeat right 8px;
+  padding-right: 14px;
+}
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink .slogan span {
+  border-bottom: 1px dotted #000000;
+}
+.detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink .desc {
+  padding: 8px 0px 16px 0px;
+  font-size: 13px;
+  line-height: 18px;
+  color: #000000;
+}
+.detail-trip-page .side-layout .side-panel .request-block .request-send, .detail-trip-page .side-layout .side-panel .request-block .request-send-approve {
   padding-top: 4px;
 }
-.detail-trip-page .side-layout .side-panel .request-block .request-send .button {
+.detail-trip-page .side-layout .side-panel .request-block .request-send .button, .detail-trip-page .side-layout .side-panel .request-block .request-send-approve .button {
   margin-bottom: 10px;
 }
 .detail-trip-page .side-layout .side-panel .request-block .request-confirm {
