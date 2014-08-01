@@ -8047,6 +8047,12 @@ textarea {
 .detail-trip-page .side-layout .side-panel .request-block .button-general {
   font-size: 21px;
 }
+.detail-trip-page .side-layout .side-panel .request-block .request-general {
+  display: none;
+}
+.detail-trip-page .side-layout .side-panel .request-block .request-general.show {
+  display: block;
+}
 .detail-trip-page .side-layout .side-panel .request-block .request-cons .title {
   padding-left: 31px;
   background: url("../img/site-sprites.png") no-repeat 1px -396px;

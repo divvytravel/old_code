@@ -1091,6 +1091,12 @@
       .button-general {
         font-size: 21px;
       }
+      .request-general {
+        display: none;
+        &.show {
+          display: block;
+        }
+      }
       .request-cons {
         .title {
           padding-left: 31px;
