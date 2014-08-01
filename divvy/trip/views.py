@@ -23,7 +23,7 @@ from geo.forms import CheapestFlightForm
 from .forms import TripForm, TripRequestForm, TripFilterForm, TripUpdateForm,\
     TripProcessForm, TripCreateStepOne, TripPointForm
 from .formsets import TripPointInlineFormSet, TripPointInlinesWrapper
-from .models import Trip, TripCategory, TripPoint
+from .models import Trip, TripRequest, TripCategory, TripPoint
 from .serializers import TripSerializer, TripCategorySerializer
 
 
@@ -38,7 +38,11 @@ def create_nonprofit(request):
 
 def detail_nonprofit(request, pk=None):
     trip = get_object_or_404(Trip, pk=pk)
-    return render(request, 'views/trip/nonprofit/detail.html', dict(trip=trip))
+    try:
+        triprequest = TripRequest.objects.get(trip=trip, user=request.user)
+    except TripRequest.DoesNotExist:
+        triprequest = None
+    return render(request, 'views/trip/nonprofit/detail.html', dict(trip=trip, triprequest=triprequest))
 
 
 def detail_commerce(request, pk=None):

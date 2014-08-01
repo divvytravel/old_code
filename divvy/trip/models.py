@@ -488,6 +488,7 @@ class TripRequest(models.Model):
         verbose_name = u"Запрос в поездку"
         verbose_name_plural = u"Запросы в поездку"
         ordering = '-date_created',
+        unique_together = ("trip", "user")
 
     def approve(self, by_user):
         approved = False
