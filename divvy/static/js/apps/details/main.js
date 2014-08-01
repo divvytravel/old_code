@@ -81,6 +81,7 @@ require([
     var RequestClass = function (data) {
         this.id = data.get('tripId') || 0;
         this.triprequestStatus = data.get('triprequestStatus') || '';
+        this.userId = data.get('userId') || null;
         this.resource_uri = "/api/v1/trip/"+this.id+"/";
         this.requestSend = true;
         this.requestCons = false;
@@ -114,8 +115,11 @@ require([
         },
         goSend: function (Event, TargetEle) {
             var self = this;
-            console.log('goSend');
-            self.requestStep = 'send-approve';
+            if (this.userId == null) {
+                alert('Анука авторизуйся немедленно!');
+            } else {
+                self.requestStep = 'send-approve';
+            }
         },
         currentStep: function (Event, TargetEle) {
             console.log(Event, TargetEle);
