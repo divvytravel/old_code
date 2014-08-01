@@ -30,19 +30,14 @@
               </div>
 
               <div class="general-block gallery-block clearfix">
-
-                  <div class="fotorama">
-                    {% comment %}
-                    {% for photo in trip.images.all %}
-                      <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
-                    {% endfor %}
-                    {% endcomment %}
-                    <img src="/static/img/promo/trips/photo-1.jpg" width="600" height="399">
-                    <img src="/static/img/promo/trips/photo-2.jpg" width="604" height="400">
-                    <img src="/static/img/promo/trips/photo-3.jpg" width="761" height="400">
-                    <img src="/static/img/promo/trips/photo-4.jpg" width="600" height="565">
-                  </div>
-
+                <div class="fotorama"
+                     data-nav="thumbs"
+                     data-thumbheight="70px"
+                     data-allowfullscreen="true">
+                  {% for photo in trip.images.all %}
+                    <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
+                  {% endfor %}
+                </div>
               </div>
 
               <div class="desc-block">
