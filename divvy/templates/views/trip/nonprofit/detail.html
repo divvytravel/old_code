@@ -4,6 +4,7 @@
   <script type="text/javascript">
     window.DDATA.tripId = {{ trip.id }};
     window.DDATA.triprequestStatus = '{{ triprequest.status }}';
+    window.DDATA.userId = {{ request.user.id }};
   </script>
 {% endblock %}
 
