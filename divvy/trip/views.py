@@ -39,7 +39,10 @@ def create_nonprofit(request):
 def detail_nonprofit(request, pk=None):
     trip = get_object_or_404(Trip, pk=pk)
     try:
-        triprequest = TripRequest.objects.get(trip=trip, user=request.user)
+        if request.user.id:
+            triprequest = TripRequest.objects.get(trip=trip, user=request.user)
+        else:
+            triprequest = None
     except TripRequest.DoesNotExist:
         triprequest = None
     return render(request, 'views/trip/nonprofit/detail.html', dict(trip=trip, triprequest=triprequest))
