@@ -5,34 +5,10 @@ require([
     'fotorama'
 ], function ($,Rivets,DataProvider) {
 
-    // Rivets.adapters[':'] = {
-    //     subscribe: function(obj, keypath, callback) {
-    //         obj.on('change:' + keypath, callback)
-    //     },
-    //     unsubscribe: function(obj, keypath, callback) {
-    //         obj.off('change:' + keypath, callback)
-    //     },
-    //     read: function(obj, keypath) {
-    //         return obj.get(keypath)
-    //     },
-    //     publish: function(obj, keypath, value) {
-    //         obj.set(keypath, value)
-    //     }
-    // }
-
-    // ///////////   Modify the Soruce Code for Rivets //////////
-    // Rivets.config.handler = function (context, ev, binding) {
-    //     console.log(binding.model.constructor);
-    //     if (binding.model instanceof binding.model.__theSecrectLinkForClass__) {
-    //         return this.call(binding.model, ev, context); //Event Target !!
-    //     } else {
-    //         return this.call(context, ev, binding.view.models);
-    //     }
-    // };
-    ///====== Skip This Part, this is configuration =============
+    // Configuration for rivets
     Rivets.config.handler = function (context, ev, binding) {
         if (binding.model instanceof binding.model.____) {
-            return this.call(binding.model, ev, context); // Event Target !!
+            return this.call(binding.model, ev, context); // Event Target!
         } else {
             return this.call(context, ev, binding.view.models);
         }
@@ -48,13 +24,10 @@ require([
     RequestClass.prototype = {
         send: function (Event, TargetEle) {
             var self = this;
-            console.log(this);
             $.ajax({
                 type: "POST",
                 url: "/api/v1/triprequest/",
-                // data: {trip: self.resource_uri},
-                // data: JSON.stringify( {trip: self.resource_uri} ),
-                data: JSON.stringify({ "trip": "/api/v1/trip/19/" }),
+                data: JSON.stringify({ "trip": self.resource_uri }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {
