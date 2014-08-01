@@ -3,6 +3,7 @@
 {% block extrahead %}
   <script type="text/javascript">
     window.DDATA.tripId = {{ trip.id }};
+    window.DDATA.triprequestStatus = '{{ triprequest.status }}';
   </script>
 {% endblock %}
 
