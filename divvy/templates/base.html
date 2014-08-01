@@ -17,6 +17,13 @@
       try{Typekit.load();}catch(e){}
     </script>
 
+    <script type="text/javascript">
+      window.DDATA = {};
+      window.DDATA.csrftoken = "";
+    </script>
+    {% block extrahead %}
+    {% endblock %}
+
     <link href="/static/vendor/jquery-ui/themes/start/jquery-ui.min.css" rel="stylesheet">
     <link href="/static/css/theme.css" rel="stylesheet">
 

@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  <!-- Fade helper -->
+    <div class="fade-helper" rv-hide="mainModel:allReady" data-bind="visible:fadeHelperDisplay,style: {'opacity':allReady()?'0':'1'}" style="">
+      <div class="fade-helper-inner">
+        {% include "views/base_blocks/spinner.html" %}
+      </div>
+    </div>
+  <!-- / -->
+
   <div class="create-trip-page require-js-app" data-params='{"name":"create"}' id="create_trip_page">
     <div class="container">
       <div class="row">
