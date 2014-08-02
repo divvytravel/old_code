@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
-from .views import create_nonprofit, detail_nonprofit, blog, detail_commerce
+from .views import create_nonprofit, detail, blog, detail_commerce
 
 # from .views import TripCreateStepOneView, TripRequestFormView, TripUpdateView,\
 #     TripDeleteView, TripRequestApproveView, TripCreateStepTwoView
 
 urlpatterns = patterns('',
     url(r'^create/nonprofit/$', create_nonprofit, name='trip_create'),
-    url(r'^detail/nonprofit/(?P<pk>\d+)/$', detail_nonprofit, name='trip_detail'),
+    url(r'^(?P<pk>\d+)/$', detail, name='trip_detail'),
 
     url(r'^blog/$', blog, name='blog'),
     url(r'^detail/commerce/$', detail_commerce, name='trip_detail_commerce'),

@@ -36,7 +36,7 @@ def create_nonprofit(request):
     return render(request, 'views/trip/nonprofit/create.html', dict())
 
 
-def detail_nonprofit(request, pk=None):
+def detail(request, pk=None):
     trip = get_object_or_404(Trip, pk=pk)
     try:
         if request.user.id:
