@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <script type="text/javascript">
+    window.DDATA.tripId = {{ trip.id }};
+    window.DDATA.triprequestStatus = '{{ triprequest.status }}';
+    window.DDATA.userId = {{ request.user.id }};
+  </script>
+{% endblock %}
+
+{% block content %}
+  <div class="detail-trip-page require-js-app" data-params='{"name":"details"}' id="detail_trip_page">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-layout">
+            <div class="content-layout-block">
+
+              <div class="general-block header-block">
+                <h1>{{ trip.title }}</h1>
+
+                <div class="tour">
+                  <span>{{ trip.city.name }}</span>&nbsp;<span>({{ trip.city.country }})</span>
+                </div>
+              </div>
+
+              <div class="general-block tags-block">
+                <div class="tags">
+                  {% for tag in trip.tags.all %}
+                    <a href="javascript:void(0)" class="tag" data-id="{{ tag.pk }}">{{ tag.name }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="general-block gallery-block clearfix">
+                <div class="fotorama">
+                  {% for photo in trip.images.all %}
+                    <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="desc-block border-b">
+                <div>
+                  {{ trip.descr_main }}
+                </div>
+              </div>
+
+              <!-- <div class="links-block">
+                
+              </div> -->
+
+              <div class="general-block comments-block clearfix">
+                <div class="fb-comments"
+                     data-href="{{ request.build_absolute_uri }}"
+                     data-numposts="5" data-width="100%"
+                     data-colorscheme="light"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-layout">
+            <div class="alerts">
+              <div class="alert alert-bal" rv-status-approved="scope.triprequestStatus" style="display:none;">
+                <div class="title">Помогите собрать группу, рассказав о путешествии:</div>
+
+                <span class="fb-button">
+                  <span class="icon"></span>
+                  <span class="content">Поделиться в Facebook</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="side-panel">
+              <div class="request-block border-b">
+                <div class="request-general request-send" rv-stepshow-send="scope.requestStep">
+                  <div class="button">
+                    <a class="button-general button-green action-send" href="javascript:void(0)" rv-on-click="scope.goSend">
+                      <span>Подать заявку</span>
+                    </a>
+                  </div>
+
+                  <div class="info">Отправьте заявку и получите от организатора подтверждение о включении вас в команду.</div>
+                </div>
+
+                <div class="request-general request-send-approve" rv-stepshow-send-approve="scope.requestStep">
+                  <div class="button">
+                    <a class="button-general button-red action-send" href="javascript:void(0)" rv-on-click="scope.send">
+                      <span>Я уверен, что поеду</span>
+                    </a>
+                  </div>
+
+                  <div class="info">
+                    Подача заявки означает, что вы действительно готовы отправляться в эту поездку и принимаете
+                    предложенные условия. В случае отказа от поездки после того, как вы подадите в нее заявку, ваш
+                    рейтинг на сайте понизится.
+                  </div>
+                </div>
+
+                <div class="request-general request-cons" rv-stepshow-cons="scope.requestStep">
+                  <div class="title">Заявка рассматривается</div>
+                  <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
+                  <div class="if-rethink">
+                    <div class="slogan">
+                      <span>Если вы передумали ехать</span>
+                    </div>
+                    <div class="desc">
+                      <a href="javascript:void(0)">Отмените заявку</a>, пока её не рассмотрел организатор. Это не
+                      отобразится в вашей <u>истории путешествий</u>.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="request-general request-dismiss" rv-status-denied="scope.triprequestStatus">
+                  <div class="title">Заявка отклонена :-(</div>
+
+                  <div class="info">
+                    Ваша заявка отклонена организатором. Попробуйте поискать
+                    <a href="javascript:void(0)">похожие путешествия</a>.
+                  </div>
+                </div>
+
+                <div class="request-general request-dismiss" rv-status-cancelled="scope.triprequestStatus">
+                  <div class="title">Заявка отменена :-(</div>
+
+                  <div class="info">
+                    Ваша заявка отменена организатором или вами. Попробуйте поискать
+                    <a href="javascript:void(0)">похожие путешествия</a>.
+                  </div>
+                </div>
+
+                <div class="request-general request-approve" rv-status-approved="scope.triprequestStatus">
+                  <div class="title">Заявка подтверждена</div>
+
+                  <div class="info">
+                    Когда наберется еще 4 человека, вам придет письмо со ссылкой на оплату. Путешествие будет проведено,
+                    если группа наберется до {{ trip.end_people_date_format }}. Позовите друзей и езжайте вместе!
+                  </div>
+                </div>
+              </div>
+
+              <div class="date-block border-b">
+                <div class="title">{{ trip.start_date_format }} – {{ trip.end_date_format }}</div>
+                <div class="info">Заявки принимаются до {{ trip.end_people_date_format }}</div>
+              </div>
+
+              <div class="detail-block border-b">
+                <div class="type">
+                  <span>{{ trip.get_price_type_display }}</span>
+                  <span class="help">
+                    <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                  </span>
+                </div>
+
+                <div class="chip-in">
+                  <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
+                  <ul class="items">
+                    <li class="item">
+                      <a href="#">Бунгало на неделю</a>: <span>600 &euro;</span>
+                    </li>
+                    <li class="item">
+                      <a href="#">Инструктор по сёрфу</a>: <span>800 &euro;</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div class="price">
+                  <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
+                  <div class="value">{{ trip.price_for_one_person }} €</div>
+                </div>
+
+                {% if trip.descr_additional %}
+                  <div class="addition">
+                    <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
+                    <div class="info">{{ trip.descr_additional }}</div>
+                  </div>
+                {% endif %}
+              </div>
+
+              <div class="organizer-block border-b">
+                <div class="title">Организатор</div>
+                <div class="organizer-item">
+                  <div class="userpic pull-left">
+                    <a href="javascript:void(0)"><img src="{{ trip.owner.get_avatar_url }}"></a>
+                  </div>
+                  <div class="info">
+                    <div class="info-wrap">
+                      <span class="info-wrap-align">
+                        <a href="javascript:void(0)">{{ trip.owner.get_full_name }}</a>
+                        <span>
+                          <span>{{ trip.owner.get_age }}, {{ trip.owner.city.name }}</span>
+                        </span>
+                        <span>
+                          {{ trip.owner.career }}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="info">
+                  Организаторы некоммерческих поездок принимают участие в путешествии и делят расходы наравне с другими.
+                </div>
+              </div>
+
+              <div class="travellers-block">
+                <div class="title">Компания</div>
+
+                <div class="slider">
+                  <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+                    <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
+                      style="left: 0%; width: {{ trip.get_sex }}%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                  </div>
+                  <span class="help">
+                    <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                  </span>
+                </div>
+
+                <div class="ratio">
+                  <div>
+                    <span>Набрано {{ trip.count_members }} из {{ trip.people_max_count }} человек</span>
+                  </div>
+                  <div>
+                    <span>{{ trip.get_sex_status }}</span>
+                  </div>
+                </div>
+
+                <div class="info">
+                  {{ trip.descr_company }}
+                </div>
+
+                <div class="travellers">
+                  {% for man in trip.people.all %}
+                    <div class="item">
+                      <div class="userpic pull-left">
+                        <a href="javascript:void(0)"><img src="{{ man.get_avatar_url }}"></a>
+                      </div>
+                      <div class="info">
+                        <div class="info-wrap">
+                          <span class="info-wrap-align">
+                            <a href="javascript:void(0)">{{ man.get_full_name }}</a>
+                            <span>
+                              <span>{{ man.get_age }}, {{ man.city.name }}</span>
+                            </span>
+                            <span>
+                              {{ man.career }}
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  {% endfor %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -45,7 +45,7 @@ def detail_nonprofit(request, pk=None):
             triprequest = None
     except TripRequest.DoesNotExist:
         triprequest = None
-    return render(request, 'views/trip/nonprofit/detail.html', dict(trip=trip, triprequest=triprequest))
+    return render(request, 'views/trip/detail.html', dict(trip=trip, triprequest=triprequest))
 
 
 def detail_commerce(request, pk=None):
