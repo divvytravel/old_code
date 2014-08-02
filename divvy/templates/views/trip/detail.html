@@ -39,16 +39,17 @@
               <div class="general-block gallery-block clearfix">
                 <div class="fotorama">
                   {% for photo in trip.images.all %}
-                    <img src="{{ photo.image.url }}" width="{{ photo.image.width }}" height="{{ photo.image.height }}">
+                    <img src="{{ photo.image.url }}"
+                         width="{{ photo.image.width }}" height="{{ photo.image.height }}">
                   {% endfor %}
                 </div>
               </div>
 
-              <div class="desc-block border-b">
-                <div>
-                  {{ trip.descr_main }}
-                </div>
-              </div>
+              {% if trip.is_comm %}
+                {% include "views/trip/desc_commerce.html" %}
+              {% else %}
+                {% include "views/trip/desc_nonprofit.html" %}
+              {% endif %}
 
               <!-- <div class="links-block">
                 
