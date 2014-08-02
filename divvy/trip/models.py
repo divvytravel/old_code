@@ -185,22 +185,22 @@ class Trip(models.Model):
                 if 'female' == p.gender:
                     females += 1
 
-            sex_float = str(float(females) * 100 / len(people)).replace(',', '.')
+            sex_float = (float(females) * 100) / len(people)
         else:
             sex_float = None
 
         status = ''
         if sex_float is None:
             status = ''
-        elif 40 < sex_float < 60:
-            status = u'поровну'
-        elif sex_float > 70:
-            status = u'преимущественно женщины'
-        elif sex_float < 30:
-            status = u'преимущественно мужчины'
-        elif sex_float > 90:
+        elif sex_float >= 90:
             status = u'только женщины'
-        elif sex_float < 10:
+        elif 70 <= sex_float < 90:
+            status = u'преимущественно женщины'
+        elif 40 <= sex_float < 70:
+            status = u'поровну'
+        elif 10 <= sex_float < 40:
+            status = u'преимущественно мужчины'
+        elif sex_float <= 10:
             status = u'только мужчины'
         return status
 
