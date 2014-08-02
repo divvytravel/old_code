@@ -8,6 +8,10 @@
   </script>
 {% endblock %}
 
+{% block title %}
+  {{ trip.title }} - {{ block.super }}
+{% endblock %}
+
 {% block content %}
   <div class="detail-trip-page require-js-app" data-params='{"name":"details"}' id="detail_trip_page">
     <div class="container">
