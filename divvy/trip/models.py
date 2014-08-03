@@ -162,7 +162,10 @@ class Trip(models.Model):
             self.title, self.start_date, self.end_date)
 
     def get_include_list(self):
-        include_list = self.descr_include.split(u'\n')
+        if self.descr_include.strip():
+            include_list = self.descr_include.split(u'\n')
+        else:
+            include_list = None
         return include_list
 
     def get_main_image_url(self):
