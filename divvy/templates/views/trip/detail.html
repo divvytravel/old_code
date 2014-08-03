@@ -207,30 +207,32 @@
                 {% endif %}
               </div>
 
-              <div class="organizer-block border-b">
-                <div class="title">Организатор</div>
-                <div class="organizer-item">
-                  <div class="userpic pull-left">
-                    <a href="javascript:void(0)"><img src="{{ trip.owner.get_avatar_url }}"></a>
-                  </div>
-                  <div class="info">
-                    <div class="info-wrap">
-                      <span class="info-wrap-align">
-                        <a href="javascript:void(0)">{{ trip.owner.get_full_name }}</a>
-                        <span>
-                          <span>{{ trip.owner.get_age }}, {{ trip.owner.city.name }}</span>
+              {% if trip.is_noncom %}
+                <div class="organizer-block border-b">
+                  <div class="title">Организатор</div>
+                  <div class="organizer-item">
+                    <div class="userpic pull-left">
+                      <a href="javascript:void(0)"><img src="{{ trip.owner.get_avatar_url }}"></a>
+                    </div>
+                    <div class="info">
+                      <div class="info-wrap">
+                        <span class="info-wrap-align">
+                          <a href="javascript:void(0)">{{ trip.owner.get_full_name }}</a>
+                          <span>
+                            <span>{{ trip.owner.get_age }}, {{ trip.owner.city.name }}</span>
+                          </span>
+                          <span>
+                            {{ trip.owner.career }}
+                          </span>
                         </span>
-                        <span>
-                          {{ trip.owner.career }}
-                        </span>
-                      </span>
+                      </div>
                     </div>
                   </div>
+                  <div class="info">
+                    Организаторы некоммерческих поездок принимают участие в путешествии и делят расходы наравне с другими.
+                  </div>
                 </div>
-                <div class="info">
-                  Организаторы некоммерческих поездок принимают участие в путешествии и делят расходы наравне с другими.
-                </div>
-              </div>
+              {% endif %}
 
               <div class="travellers-block">
                 <div class="title">Компания</div>
