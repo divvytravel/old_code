@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'indieman'
 
+from django.conf.urls import url
+
 from tastypie.resources import ModelResource
 from tastypie import fields
+from tastypie.utils import trailing_slash
 from tastypie.constants import ALL_WITH_RELATIONS, ALL
 
 from .base import BaseResourceMixin, MultipartResource, ModelFormValidation
@@ -228,3 +231,24 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
 
     def obj_create(self, bundle, **kwargs):
         return super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user)
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/(?P<pk>.*?)/cancel%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('cancel'), name="api_triprequest_cancel"),
+        ]
+
+    def cancel(self, request, **kwargs):
+         self.method_check(request, allowed=['post',])
+
+         basic_bundle = self.build_bundle(request=request)
+
+         triprequest = self.cached_obj_get(
+             bundle=basic_bundle,
+             **self.remove_api_resource_names(kwargs))
+
+         if triprequest.user == request.user:
+             return self.create_response(request, triprequest.cancel())
+         else:
+             return self.create_response(request, {"success": False, "error": u"It's not your request"})

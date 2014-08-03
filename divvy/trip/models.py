@@ -569,8 +569,12 @@ class TripRequest(models.Model):
         return self.save()
 
     def cancel(self):
-        self.status = TripRequest.STATUS.cancelled
-        return self.save()
+        try:
+            self.status = TripRequest.STATUS.cancelled
+            self.save()
+            return {"success": True}
+        except:
+            return {"success": False, "error": u""}
 
     def is_approved(self):
         return self.status == TripRequest.STATUS.approved
