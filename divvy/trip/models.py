@@ -120,6 +120,9 @@ class Trip(models.Model):
     descr_company = models.TextField(
         u"Требования к компании (кого вы хотели бы видеть в качестве соседей)",
         blank=True)
+    descr_include = models.TextField(
+        u"В стоимость входят",
+        blank=True)
     trip_type = models.CharField(u"Участие", max_length=10, choices=TRIP_TYPE,
                                  default=TRIP_TYPE.open)
     price_type = models.CharField(
@@ -156,6 +159,10 @@ class Trip(models.Model):
     def __unicode__(self):
         return u"{0}, [{1} - {2}]".format(
             self.title, self.start_date, self.end_date)
+
+    def get_include_list(self):
+        include_list = self.descr_include.split(u'\n')
+        return include_list
 
     def get_main_image_url(self):
         try:

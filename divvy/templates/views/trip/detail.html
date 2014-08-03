@@ -150,29 +150,54 @@
               </div>
 
               <div class="detail-block border-b">
-                <div class="type">
-                  <span>{{ trip.get_price_type_display }}</span>
-                  <span class="help">
-                    <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
-                  </span>
-                </div>
+                {% if trip.is_comm %}
+                  <div class="full-price">
+                    <span>{{ trip.price_for_one_person }} €</span>
+                  </div>
 
-                <div class="chip-in">
-                  <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
-                  <ul class="items">
-                    <li class="item">
-                      <a href="#">Бунгало на неделю</a>: <span>600 &euro;</span>
-                    </li>
-                    <li class="item">
-                      <a href="#">Инструктор по сёрфу</a>: <span>800 &euro;</span>
-                    </li>
-                  </ul>
-                </div>
+                  <div class="type">
+                    <span>{{ trip.get_price_type_display }}</span>
+                    <span class="help">
+                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                    </span>
+                  </div>
 
-                <div class="price">
-                  <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
-                  <div class="value">{{ trip.price_for_one_person }} €</div>
-                </div>
+                  {% if trip.get_include_list %}
+                    <div class="include">
+                      <div class="sub-title">В СТОИМОСТЬ ВХОДИТ:</div>
+
+                      <ul class="items">
+                        {% for include_item in trip.get_include_list %}
+                          <li class="item">{{ include_item }}</li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {% endif %}
+                {% else %}
+                  <div class="type">
+                    <span>{{ trip.get_price_type_display }}</span>
+                    <span class="help">
+                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
+                    </span>
+                  </div>
+
+                  <div class="chip-in">
+                    <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
+                    <ul class="items">
+                      <li class="item">
+                        <a href="#">Бунгало на неделю</a>: <span>600 &euro;</span>
+                      </li>
+                      <li class="item">
+                        <a href="#">Инструктор по сёрфу</a>: <span>800 &euro;</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div class="price">
+                    <div class="sub-title">СТОИМОСТЬ НА ЧЕЛОВЕКА</div>
+                    <div class="value">{{ trip.price_for_one_person }} €</div>
+                  </div>
+                {% endif %}
 
                 {% if trip.descr_additional %}
                   <div class="addition">
