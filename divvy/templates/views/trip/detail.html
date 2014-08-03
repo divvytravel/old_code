@@ -238,7 +238,11 @@
                 <div class="slider">
                   <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
                     <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
-                      style="left: 0%; width: {{ trip.get_sex }}%; background: linear-gradient(to right, rgb(36, 201, 242) 0%, rgb(242, 97, 97) 0%);"></div>
+                      style="left: 0%;
+                             width: {{ trip.get_peoples_ratio }}%;
+                             background: linear-gradient(to right, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);">
+
+                    </div>
                   </div>
                   <span class="help">
                     <i class="help-icon help-tooltip" data-original-title="" title="">?</i>

@@ -188,6 +188,40 @@ class Trip(models.Model):
         else:
             return None
 
+    def get_female_ratio(self):
+        females = 0
+        people = self.people.all()
+        if people:
+            for p in people:
+                if 'female' == p.gender:
+                    females += 1
+
+            return str(float(females) * 100 / len(people)).replace(',', '.')
+        else:
+            return 0
+
+    def get_male_ratio(self):
+        males = 0
+        people = self.people.all()
+        if people:
+            for p in people:
+                if 'female' != p.gender:
+                    males += 1
+
+            return str(float(males) * 100 / len(people)).replace(',', '.')
+        else:
+            return 0
+
+    def get_peoples_ratio(self):
+        people = self.people.all()
+        if people and self.people_count:
+            if len(people) > self.people_count:
+                return 100
+            else:
+                return str((len(people) * 100) / float(self.people_count)).replace(',', '.')
+        else:
+            return 0
+
     def get_sex_status(self):
         females = 0
         people = self.people.all()

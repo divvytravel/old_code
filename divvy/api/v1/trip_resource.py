@@ -168,20 +168,11 @@ class TripResource(ModelResource, BaseResourceMixin):
         return qs
 
     def dehydrate(self, bundle):
+        bundle.data['male_ratio'] = bundle.obj.get_male_ratio()
+        bundle.data['female_ratio'] = bundle.obj.get_female_ratio()
+        bundle.data['peoples_ratio'] = bundle.obj.get_peoples_ratio()
 
-        if bundle.obj.sex is None:
-            bundle.data['consist'] = None
-        elif 40 < bundle.obj.sex < 60:
-            bundle.data['consist'] = u'поровну'
-        elif bundle.obj.sex > 70:
-            bundle.data['consist'] = u'преимущественно женщины'
-        elif bundle.obj.sex < 30:
-            bundle.data['consist'] = u'преимущественно мужчины'
-        elif bundle.obj.sex > 90:
-            bundle.data['consist'] = u'только женщины'
-        elif bundle.obj.sex < 10:
-            bundle.data['consist'] = u'только мужчины'
-
+        bundle.data['sex_status'] = bundle.obj.get_sex_status()
         bundle.data['main_image']= bundle.obj.get_main_image_url()
 
         return bundle
@@ -235,6 +226,5 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
         queryset = TripRequest.objects.all()
         allowed_methods = ['get', 'post']
 
-    def hydrate(self, bundle, request=None):
-        bundle.obj.user = User.objects.get(pk = bundle.request.user.id)
-        return bundle
+    def obj_create(self, bundle, **kwargs):
+        return super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user)
