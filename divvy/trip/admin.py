@@ -41,9 +41,14 @@ class TripCategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("title",)}
 
 
+def make_approved(modeladmin, request, queryset):
+    for item in queryset.all():
+        item.approve(request.user)
+make_approved.short_description = "Approve selected requests"
+
 class TripRequestAdmin(admin.ModelAdmin):
     list_display = 'trip', 'user', 'date_created', 'status'
-
+    actions = [make_approved]
 
 admin.site.register(Trip, TripAdmin)
 admin.site.register(TripRequest, TripRequestAdmin)
