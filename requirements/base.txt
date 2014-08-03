@@ -38,3 +38,6 @@ django-oauth2-provider==0.2.6
 django-tastypie==0.11.0
 
 django-extensions
+
+markdown
+django-markupfield

@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/dev/ref/settings/
 import os
 from os.path import join
 
+import markdown
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
 
@@ -162,7 +164,8 @@ THIRD_PARTY_APPS = (
     'tastypie',
     'provider',
     'provider.oauth2',
-    'django_extensions'
+    'django_extensions',
+    'markupfield',
 )
 
 # Apps specific for this project go here.
@@ -380,6 +383,9 @@ else:
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ########## END TEMPLATE CONFIGURATION
 
+MARKUP_FIELD_TYPES = (
+    ('markdown', markdown.markdown),
+)
 
 ########## LOGGING CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#logging

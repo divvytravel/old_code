@@ -13,6 +13,7 @@ from django.db.models.signals import post_save, post_delete
 from django.contrib.contenttypes import generic
 
 from sorl.thumbnail import get_thumbnail
+from markupfield.fields import MarkupField
 
 from model_utils import Choices
 from utils.helpers import get_today
@@ -111,7 +112,7 @@ class Trip(models.Model):
         u"Минимальное количество человек")
     people_max_count = models.PositiveIntegerField(
         u"Максимальное количество человек")
-    descr_main = models.TextField(u"Опишите суть поездки")
+    descr_main = MarkupField(u"Опишите суть поездки")
     descr_share = models.TextField(
         u"Опишите, что вы хотите разделить (или зачем вам компания)",
         blank=True)
