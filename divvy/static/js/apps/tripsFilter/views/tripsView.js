@@ -118,8 +118,14 @@ define([
 
             }
 
-            leftPercent = this.model.get('male_ratio');
-            rightPercent = this.model.get('female_ratio');
+            maleTotalProc = this.model.get('male_ratio');
+            femaleTotalProc = this.model.get('female_ratio');
+
+            min = Math.min.apply(null, [maleTotalProc, femaleTotalProc]);
+
+            leftPercent = maleTotalProc - min;
+            rightPercent = maleTotalProc + min;
+
             sliderWidth = this.model.get('peoples_ratio');
 
             this.ui.sexSlider
