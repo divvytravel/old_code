@@ -1,7 +1,6 @@
-sormcrew
+Divvy Travel
 ==============================
 
-yacht journeys
 
 Deployment
 ----------
