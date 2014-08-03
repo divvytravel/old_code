@@ -118,12 +118,16 @@ define([
 
             }
 
+            leftPercent = this.model.get('male_ratio');
+            rightPercent = this.model.get('female_ratio');
+            sliderWidth = this.model.get('peoples_ratio');
+
             this.ui.sexSlider
                 .css('background', '-webkit-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('background', '-moz-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('background', '-o-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('background', '-ms-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
-                .css('background', 'linear-gradient(to right, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', 'linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('left', '0%')
                 .css('width', sliderWidth+'%');
 
