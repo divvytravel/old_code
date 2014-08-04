@@ -28,12 +28,7 @@
       </div>
       <div class="detail">
         <div class="price"><%= price %> &euro;</div>
-        <div class="type">
-          <span><%= showTripType() %></span>
-          <span class="help">
-            <i class="help-icon help-tooltip">?</i>
-          </span>
-        </div>
+
         <div class="avia">
           <p>
             <span>Перелет из </span>
