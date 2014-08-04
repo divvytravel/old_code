@@ -155,12 +155,12 @@
                     <span>{{ trip.price_for_one_person }}</span> &euro;</i>
                   </div>
 
-                  <div class="type">
-                    <span>{{ trip.get_price_type_display }}</span>
-                    <span class="help">
-                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
-                    </span>
-                  </div>
+{#                  <div class="type">#}
+{#                    <span>{{ trip.get_price_type_display }}</span>#}
+{#                    <span class="help">#}
+{#                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>#}
+{#                    </span>#}
+{#                  </div>#}
 
                   {% if trip.get_include_list %}
                     <div class="include">
@@ -174,12 +174,12 @@
                     </div>
                   {% endif %}
                 {% else %}
-                  <div class="type">
-                    <span>{{ trip.get_price_type_display }}</span>
-                    <span class="help">
-                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>
-                    </span>
-                  </div>
+{#                  <div class="type">#}
+{#                    <span>{{ trip.get_price_type_display }}</span>#}
+{#                    <span class="help">#}
+{#                      <i class="help-icon help-tooltip" data-original-title="" title="">?</i>#}
+{#                    </span>#}
+{#                  </div>#}
 
                   <div class="chip-in">
                     <div class="sub-title">СКИДЫВАЕМСЯ НА...</div>
