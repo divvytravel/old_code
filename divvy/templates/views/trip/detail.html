@@ -31,7 +31,8 @@
               <div class="general-block tags-block">
                 <div class="tags">
                   {% for tag in trip.tags.all %}
-                    <a href="/#tags={{ tag.pk }}" class="tag" data-id="{{ tag.pk }}">{{ tag.name }}</a>
+                    <a href="/#tags={{ tag.pk }}" class="tag" target="_blank"
+                       data-id="{{ tag.pk }}">{{ tag.name }}</a>
                   {% endfor %}
                 </div>
               </div>
