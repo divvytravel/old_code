@@ -6,13 +6,13 @@
 
         {% if request.user.is_authenticated %}
           <div class="navbar-login pull-right">
-            <a href="{% url 'logout' %}">
+            <a href="{% url 'logout' %}?next={{request.get_full_path}}">
               <span class="facebook-button-logo"></span><span>Выйти</span>
             </a>
           </div>
         {% else %}
           <div class="navbar-login pull-right">
-            <a href="{% url 'social_auth.views.auth' 'facebook' %}">
+            <a href="{% url 'social_auth.views.auth' 'facebook' %}?next={{request.get_full_path}}">
               <span class="facebook-button-logo"></span><span>Войти</span>
             </a>
           </div>
