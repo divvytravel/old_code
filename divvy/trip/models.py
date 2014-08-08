@@ -223,9 +223,12 @@ class Trip(models.Model):
             return 0
 
     def update_search_fields(self):
-        self.sex = self.get_male_ratio()
+        self.sex = float(self.get_male_ratio())
         people_ages = [p.get_age() for p in self.people.all()]
-        self.age = sorted(people_ages)[len(people_ages)//2]
+        if people_ages:
+            self.age = sorted(people_ages)[len(people_ages)//2]
+        else:
+            self.age = 0
         self.save()
 
     def get_sex_status(self):
