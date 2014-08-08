@@ -222,6 +222,12 @@ class Trip(models.Model):
         else:
             return 0
 
+    def update_search_fields(self):
+        self.sex = self.get_male_ratio()
+        people_ages = [p.get_age() for p in self.people.all()]
+        self.age = sorted(people_ages)[len(people_ages)//2]
+        self.save()
+
     def get_sex_status(self):
         females = 0
         people = self.people.all()
@@ -558,6 +564,7 @@ class TripRequest(models.Model):
             self.save()
             self.user.notify_about_approve(self.trip)
             self.user.post_approve_on_fb_wall(self.trip)
+            self.trip.update_search_fields()
 
         return approved
 
