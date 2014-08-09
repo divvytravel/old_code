@@ -67,7 +67,7 @@
 
           <div class="side-layout">
             <div class="alerts">
-              <div class="alert alert-bal" rv-status-approved="scope.triprequestStatus" style="display:none;">
+              <div class="alert alert-bal alert-top" rv-status-approved="scope.triprequestStatus" style="display:none;">
                 <div class="title">Помогите собрать группу, рассказав о путешествии:</div>
 
                 <span class="fb-button">
@@ -96,6 +96,11 @@
                     </a>
                   </div>
 
+                  <div class="checkbox-block">
+                    <input type="checkbox" id="post_to_fb_checkox"/>
+                    <label for="post_to_fb_checkox">Рассказать друзьям в Facebook</label>
+                  </div>
+
                   <div class="info">
                     Подача заявки означает, что вы действительно готовы отправляться в эту поездку и принимаете
                     предложенные условия. В случае отказа от поездки после того, как вы подадите в нее заявку, ваш
@@ -107,12 +112,14 @@
                   <div class="title">Заявка рассматривается</div>
                   <div class="info">Ожидайте подтверждения заявки организатором. Путешествие оплачивается после того, как наберется группа.</div>
                   <div class="if-rethink">
-                    <div class="slogan">
+                    <div class="slogan" rv-togglenext-="collapse" rv-on-click="scope.toggleNext">
                       <span>Если вы передумали ехать</span>
                     </div>
-                    <div class="desc">
-                      <a href="javascript:void(0)">Отмените заявку</a>, пока её не рассмотрел организатор. Это не
-                      отобразится в вашей <u>истории путешествий</u>.
+                    <div class="desc collapse">
+                      <div class="desc-inner">
+                        <a href="javascript:void(0)">Отмените заявку</a>, пока её не рассмотрел организатор. Это не
+                        отобразится в вашей <u>истории путешествий</u>.
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -153,7 +160,7 @@
               <div class="detail-block border-b">
                 {% if trip.is_comm %}
                   <div class="full-price">
-                    <span>{{ trip.price_for_one_person }}</span> &euro;</i>
+                    <span>{{ trip.price_for_one_person }}</span> &euro;
                   </div>
 
 {#                  <div class="type">#}
@@ -274,7 +281,8 @@
                       <div class="info">
                         <div class="info-wrap">
                           <span class="info-wrap-align">
-                            <a href="javascript:void(0)">{{ man.get_full_name }}</a>
+
+                            <a href="javascript:void(0)"><span class="fb-icon"></span>{{ man.get_full_name }}</a>
                             <span>
                               <span>{{ man.get_age }}, {{ man.city.name }}</span>
                             </span>
@@ -288,6 +296,17 @@
                   {% endfor %}
 
                 </div>
+              </div>
+            </div>
+            <div class="alerts">
+              <div class="alert alert-bottom" rv-status-approved="scope.triprequestStatus" style="display:none;">
+                <div class="title">Нужно еще 4 человека</div>
+                <div class="desc">Расскажите друзьям, чтобы путешествие состоялось</div>
+
+                <span class="fb-button">
+                  <span class="icon"></span>
+                  <span class="content">Поделиться в Facebook</span>
+                </span>
               </div>
             </div>
           </div>

@@ -21,12 +21,12 @@ input[type="radio"] + label {
 
 input[type="checkbox"] + label:before,
 input[type="radio"] + label:before {
-    background: url("../img/site-sprites.png") no-repeat scroll 0 -40px transparent;
+    background: url("../img/site-sprites.png") no-repeat scroll 0 -80px transparent;
     content: "";
     display: inline-block;
     height: 20px;
-    margin-left: 2px;
-    margin-right: 4px;
+    margin-left: 0px;
+    margin-right: 5px;
     width: 17px;
     vertical-align: middle;
 }
@@ -38,7 +38,7 @@ input[type="radio"] + label:hover {
 }
 
 input[type="checkbox"] + label:before {
-    background-position: 0 -40px;
+    background-position: 0 -80px;
 }
 
 input[type="checkbox"] + label:active:before,
@@ -51,20 +51,20 @@ input[type="checkbox"]:checked + label:before {
 }
 
 input[type="radio"] + label:before {
-    background-position: 0px -120px;
+    background-position: 0px -240px;
 }
 
 input[type="radio"]:checked + label:before {
-    background-position: 0px -80px;
+    background-position: 0px -160px;
 }
 
 input[type="radio"] + label:active:before,
 input[type="radio"]:checked + label:active:before {
-    background-position: 0px -80px;
+    background-position: 0px -160px;
 }
 
 input[type="radio"]:checked + label:before {
-    background-position: 0px -80px;
+    background-position: 0px -160px;
 }
 
 /* +++ */
@@ -89,16 +89,16 @@ input[type="checkbox"][checked] + label:hover:before {
 }
  
 input[type="radio"] + label:before {
-    background-position: 0px -120px;
+    background-position: 0px -240px;
     content: "";
 }
  
 input[type="radio"][checked] + label:before {
-    background-position: 0px -80px;
+    background-position: 0px -160px;
     content: " ";
 }
  
 input[type="radio"][checked] + label:before {
-    background-position: 0px -80px;
+    background-position: 0px -160px;
     content: " ";
 }

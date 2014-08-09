@@ -41,6 +41,10 @@ require([
     //         $(el).hide(100);
     // }
 
+    Rivets.binders.togglenext = function(el, value) {
+        $(el).next().toggleClass( value );
+    }
+
     Rivets.binders['stepshow-*'] = function(el, value){
         // el.style.setProperty(this.args[0], value);
         console.log('Op',this.args[0] );
@@ -103,6 +107,23 @@ require([
         },
         currentStep: function (Event, TargetEle) {
             console.log(Event, TargetEle);
+        },
+        toggleNext: function (Event, TargetEle) {
+            var className = 'collapse';
+            $(TargetEle).next().toggleClass( className );
+            // $(TargetEle).next().slideToggle( "fast", function() {
+            //     // Animation complete.
+            // });
+            // $(TargetEle).next().toggle(function() {
+            //     $(this).animate({
+            //      // style change
+            //     }, 500);
+            // },
+            // function() {
+            //     $(this).animate({ 
+            //      // style change back
+            //     }, 500);
+            // });
         }
     };
 
