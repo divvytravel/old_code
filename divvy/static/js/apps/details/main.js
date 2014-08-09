@@ -41,10 +41,6 @@ require([
     //         $(el).hide(100);
     // }
 
-    Rivets.binders.togglenext = function(el, value) {
-        $(el).next().toggleClass( value );
-    }
-
     Rivets.binders['stepshow-*'] = function(el, value){
         // el.style.setProperty(this.args[0], value);
         console.log('Op',this.args[0] );
@@ -65,6 +61,7 @@ require([
     var RequestClass = function (data) {
         this.id = data.get('tripId') || 0;
         this.triprequestStatus = data.get('triprequestStatus') || '';
+        this.triprequestId = data.get('triprequestId') || null;
         this.userId = data.get('userId') || null;
         this.resource_uri = "/api/v1/trip/"+this.id+"/";
         this.requestSend = true;
@@ -72,13 +69,15 @@ require([
         this.requestStep = '';
         if (this.triprequestStatus == '') {
             this.requestStep = 'send';
+        } else if (this.triprequestStatus == 'cancelled') { 
+            this.requestStep = 'send';
         } else if (this.triprequestStatus == 'pending') { 
             this.requestStep = 'cons';
         }
         this.____ = RequestClass;
     };
     RequestClass.prototype = {
-        send: function (Event, TargetEle) {
+        send: function (e, el) {
             var self = this;
             $.ajax({
                 type: "POST",
@@ -97,7 +96,27 @@ require([
                 console.log('Deferred promise',data);
             });
         },
-        goSend: function (Event, TargetEle) {
+        cancel: function (e, el) {
+            var self = this;
+            var url = '/api/v1/triprequest/'+self.triprequestId+'/cancel/';
+            $.ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                success: function(data) {
+                    console.log('Success',data);
+                    self.requestStep = 'send';
+                },
+                error: function(data) {
+                    console.log('Error',data);
+                    alert('Произошла ошибка!');
+                }
+            }).then(function(data) {
+                console.log('Deferred promise',data);
+            });
+        },
+        goSend: function (e, el) {
             var self = this;
             if (this.userId == null) {
                 alert('Анука авторизуйся немедленно!');
@@ -105,25 +124,12 @@ require([
                 self.requestStep = 'send-approve';
             }
         },
-        currentStep: function (Event, TargetEle) {
-            console.log(Event, TargetEle);
+        currentStep: function (e, el) {
+            console.log(e, el);
         },
-        toggleNext: function (Event, TargetEle) {
+        toggleNext: function (e, el) {
             var className = 'collapse';
-            $(TargetEle).next().toggleClass( className );
-            // $(TargetEle).next().slideToggle( "fast", function() {
-            //     // Animation complete.
-            // });
-            // $(TargetEle).next().toggle(function() {
-            //     $(this).animate({
-            //      // style change
-            //     }, 500);
-            // },
-            // function() {
-            //     $(this).animate({ 
-            //      // style change back
-            //     }, 500);
-            // });
+            $(el).next().toggleClass( className );
         }
     };
 

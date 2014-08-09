@@ -4,7 +4,8 @@
   <script type="text/javascript">
     window.DDATA.tripId = {{ trip.id }};
     window.DDATA.triprequestStatus = '{{ triprequest.status }}';
-    window.DDATA.userId = {{ request.user.id }};
+    window.DDATA.triprequestId = {{ triprequest.id|default:"0" }};
+    window.DDATA.userId = {{ request.user.id|default:"0" }};
   </script>
 {% endblock %}
 
@@ -86,6 +87,7 @@
                     </a>
                   </div>
 
+                  <div class="info" rv-status-cancelled="scope.triprequestStatus">Вы уже подавали заявку в это путешествие.</div>
                   <div class="info">Отправьте заявку и получите от организатора подтверждение о включении вас в команду.</div>
                 </div>
 
@@ -117,7 +119,7 @@
                     </div>
                     <div class="desc collapse">
                       <div class="desc-inner">
-                        <a href="javascript:void(0)">Отмените заявку</a>, пока её не рассмотрел организатор. Это не
+                        <a href="javascript:void(0)" rv-on-click="scope.cancel">Отмените заявку</a>, пока её не рассмотрел организатор. Это не
                         отобразится в вашей <u>истории путешествий</u>.
                       </div>
                     </div>
@@ -129,15 +131,6 @@
 
                   <div class="info">
                     Ваша заявка отклонена организатором. Попробуйте поискать
-                    <a href="javascript:void(0)">похожие путешествия</a>.
-                  </div>
-                </div>
-
-                <div class="request-general request-dismiss" rv-status-cancelled="scope.triprequestStatus">
-                  <div class="title">Заявка отменена :-(</div>
-
-                  <div class="info">
-                    Ваша заявка отменена организатором или вами. Попробуйте поискать
                     <a href="javascript:void(0)">похожие путешествия</a>.
                   </div>
                 </div>
