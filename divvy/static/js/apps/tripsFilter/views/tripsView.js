@@ -118,8 +118,8 @@ define([
 
             }
 
-            maleTotalProc = this.model.get('male_ratio');
-            femaleTotalProc = this.model.get('female_ratio');
+            maleTotalProc = Number( this.model.get('male_ratio') );
+            femaleTotalProc = Number( this.model.get('female_ratio') );
 
             min = Math.min.apply(null, [maleTotalProc, femaleTotalProc]);
 
@@ -133,7 +133,7 @@ define([
                 .css('background', '-moz-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('background', '-o-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('background', '-ms-linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
-                .css('background', 'linear-gradient(left, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
+                .css('background', 'linear-gradient(to right, #24c9f2 '+leftPercent+'%, #f26161 '+rightPercent+'%)')
                 .css('left', '0%')
                 .css('width', sliderWidth+'%');
 

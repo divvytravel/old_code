@@ -7,6 +7,7 @@ require([
 
     // Configuration for rivets
     Rivets.config.handler = function (context, ev, binding) {
+        console.log(binding);
         if (binding.model instanceof binding.model.____) {
             return this.call(binding.model, ev, context); // Event Target!
         } else {
@@ -40,6 +41,13 @@ require([
     //     else 
     //         $(el).hide(100);
     // }
+
+    Rivets.binders.showalert = function(el, value) {
+        if ( $(el).data('type') == value )
+            $(el).show(100);
+        else 
+            $(el).hide(100);
+    }
 
     Rivets.binders['stepshow-*'] = function(el, value){
         // el.style.setProperty(this.args[0], value);
@@ -119,7 +127,8 @@ require([
         goSend: function (e, el) {
             var self = this;
             if (this.userId == null) {
-                alert('Анука авторизуйся немедленно!');
+                // alert('Анука авторизуйся немедленно!');
+                self.popup();
             } else {
                 self.requestStep = 'send-approve';
             }
@@ -130,6 +139,20 @@ require([
         toggleNext: function (e, el) {
             var className = 'collapse';
             $(el).next().toggleClass( className );
+        },
+        popup: function (e, el) {
+            var h = $(document).height();
+            $('.fade-alert').height(h);
+            $('.fade-alert').fadeIn(300);
+
+            // Скрытие при клике вне области блока
+            $('.fade-alert').click(function (e) {
+                var itemEl = $('.fade-alert .alert');
+
+                if ( e.target != itemEl[0] && $('.fade-alert .alert').has(e.target).length === 0 ){
+                    $('.fade-alert').fadeOut(300);
+                }
+            });
         }
     };
 

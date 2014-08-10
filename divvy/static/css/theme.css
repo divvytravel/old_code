@@ -7326,6 +7326,7 @@ textarea {
   padding: 8px 0;
   text-align: center;
   width: 100%;
+  font-family: pragmatica-web;
   background: #31b9da;
   border: 1px solid #2aa1bf;
   -webkit-box-shadow: 0px 1px 3px rgba(21, 64, 42, 0.5);
@@ -7827,6 +7828,104 @@ textarea {
   top: 15px;
   border: 12px solid transparent;
   border-right: 12px solid white;
+}
+
+.fade-alert {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 999;
+}
+.fade-alert .fade-alert-inner {
+  width: 1032px;
+  margin: 0 auto;
+}
+.fade-alert .fade-alert-inner .alert {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.37);
+  float: right;
+  margin-left: 18px;
+  margin-right: 342px;
+  padding: 14px 18px 18px 18px;
+  width: 276px;
+  position: relative;
+  text-align: left;
+}
+.fade-alert .fade-alert-inner .alert .title {
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.fade-alert .fade-alert-inner .alert .desc {
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.fade-alert .fade-alert-inner .alert .fb-button {
+  font-weight: bold;
+  margin-bottom: 0px;
+  border-radius: 3px;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  padding: 7px 11px 7px 7px;
+  text-align: center;
+  width: 100%;
+  vertical-align: top;
+  white-space: nowrap;
+  word-wrap: normal;
+  background-color: #3b55a0;
+  background: -moz-linear-gradient(top, #4c69ba, #3b55a0);
+  background: -ms-linear-gradient(top, #4c69ba, #3b55a0);
+  background: -webkit-linear-gradient(top, #4c69ba, #3b55a0);
+  border: 0px solid #2b4170;
+  text-shadow: 0 -1px -1px #1f2f52;
+}
+.fade-alert .fade-alert-inner .alert .fb-button .icon {
+  display: inline-block;
+  height: 31px;
+  width: 31px;
+  margin-right: 6px;
+  background-image: url("../img/fb-big-sprite.png");
+  background-position: 0px 0px;
+  vertical-align: top;
+}
+.fade-alert .fade-alert-inner .alert .fb-button .content {
+  display: inline-block;
+  font-size: 14px;
+  line-height: 31px;
+  height: 31px;
+  vertical-align: top;
+}
+.fade-alert .fade-alert-inner .alert .fb-button:hover, .fade-alert .fade-alert-inner .alert .fb-button:focus, .fade-alert .fade-alert-inner .alert .fb-button:active {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.88);
+  background-position: 10px;
+  opacity: 0.88;
+}
+.fade-alert .fade-alert-inner .alert .fb-button:hover .icon, .fade-alert .fade-alert-inner .alert .fb-button:focus .icon, .fade-alert .fade-alert-inner .alert .fb-button:active .icon {
+  opacity: 0.88;
+}
+.fade-alert .fade-alert-inner .alert-left {
+  margin-top: 96px;
+  margin-bottom: 0px;
+}
+.fade-alert .fade-alert-inner .alert-left::after {
+  content: '';
+  position: absolute;
+  right: -22px;
+  top: 22px;
+  border: 12px solid transparent;
+  border-left: 12px solid white;
 }
 
 .detail-trip-page .content-layout {

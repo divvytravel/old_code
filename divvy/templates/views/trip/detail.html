@@ -14,6 +14,23 @@
 {% endblock %}
 
 {% block content %}
+
+  <!-- Fade helper -->
+    <div class="fade-alert" rvv-showalert="show" style="display:none;">
+      <div class="fade-alert-inner">
+        <div class="alert alert-left" style="display:block;">
+          <div class="title">Вход</div>
+          <div class="desc">В путешествиях участвуют только зарегистрированные пользователи.</div>
+
+          <a class="fb-button" href="{% url 'social_auth.views.auth' 'facebook' %}?next={{request.get_full_path}}">
+            <span class="icon"></span>
+            <span class="content">Войдите через Facebook</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  <!-- / -->
+
   <div class="detail-trip-page require-js-app" data-params='{"name":"details"}' id="detail_trip_page">
     <div class="container">
       <div class="row">
@@ -80,6 +97,7 @@
 
             <div class="side-panel">
               <div class="request-block border-b">
+
                 <div class="request-general request-send" rv-stepshow-send="scope.requestStep">
                   <div class="button">
                     <a class="button-general button-green action-send" href="javascript:void(0)" rv-on-click="scope.goSend">
@@ -243,7 +261,12 @@
                     <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
                       style="left: 0%;
                              width: {{ trip.get_peoples_ratio }}%;
-                             background: linear-gradient(to right, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);">
+                             background: -webkit-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             background: -moz-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             background: -o-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             background: -ms-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             background: linear-gradient(to right, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             ">
 
                     </div>
                   </div>

@@ -42,8 +42,7 @@
         <div class="travellers-title">Компания</div>
         <div class="slider">
           <div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider"
-                 style="left:0%;width:<%= peoples_ratio %>;background: linear-gradient(left, rgb(36, 201, 242) <%= male_ratio %>%, rgb(242, 97, 97) <%= female_ratio %>%);"></div>
+            <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" style="left:0%;width:50%;"></div>
           </div>
           <span class="help">
             <i class="help-icon help-tooltip">?</i>
