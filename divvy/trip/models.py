@@ -226,13 +226,13 @@ class Trip(models.Model):
         male_proc = float(self.get_male_ratio())
         female_proc = float(self.get_female_ratio())
         min_proc = min(male_proc, female_proc)
-        return male_proc - min_proc
+        return str(male_proc - min_proc).replace(',','.')
 
     def slider_right(self):
         male_proc = float(self.get_male_ratio())
         female_proc = float(self.get_female_ratio())
         min_proc = min(male_proc, female_proc)
-        return male_proc + min_proc
+        return str(male_proc + min_proc).replace(',','.')
 
     def update_search_fields(self):
         self.sex = float(self.get_male_ratio())
