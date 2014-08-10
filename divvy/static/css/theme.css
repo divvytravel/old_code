@@ -7347,6 +7347,16 @@ textarea {
   text-decoration: none;
 }
 
+.button-b-green {
+  background: white !important;
+  border-color: #38ab72;
+  color: #38ab72 !important;
+  font-weight: 600;
+}
+.button-b-green:hover {
+  text-decoration: none;
+}
+
 .button-red {
   background: #f2555d;
   border-color: #d14950;
@@ -7354,6 +7364,18 @@ textarea {
   box-shadow: 0px 1px 3px rgba(99, 35, 38, 0.5);
 }
 .button-red:hover {
+  text-decoration: none;
+}
+
+.button-b-red {
+  background: white !important;
+  border-color: #d14950;
+  -webkit-box-shadow: 0px 1px 3px rgba(99, 35, 38, 0.5);
+  box-shadow: 0px 1px 3px rgba(99, 35, 38, 0.5);
+  color: #d14950 !important;
+  font-weight: 600;
+}
+.button-b-red:hover {
   text-decoration: none;
 }
 
@@ -7829,6 +7851,56 @@ textarea {
   top: 15px;
   border: 12px solid transparent;
   border-right: 12px solid white;
+}
+
+.popup-layout {
+  margin: 0;
+  padding: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(49, 185, 218, 0.9);
+  z-index: 999;
+}
+.popup-layout .popup-layout-inner {
+  width: 380px;
+  margin: 0 auto;
+}
+.popup-layout .popup-layout-inner .popup {
+  background: none repeat scroll 0 0 #FFFFFF;
+  border-radius: 5px;
+  box-shadow: 0 2px 18px rgba(0, 0, 0, 0.37);
+  float: right;
+  margin-left: 18px;
+  margin-right: 18px;
+  margin-top: 30%;
+  padding: 14px 18px 18px 18px;
+  width: 100%;
+  position: relative;
+  text-align: left;
+}
+.popup-layout .popup-layout-inner .popup .title {
+  font-family: pragmatica-web;
+  font-size: 21px;
+  line-height: 27px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.popup-layout .popup-layout-inner .popup .desc {
+  font-size: 13px;
+  line-height: 18px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.popup-layout .popup-layout-inner .popup .buttons .left-button {
+  width: 47.5%;
+  float: left;
+}
+.popup-layout .popup-layout-inner .popup .buttons .right-button {
+  width: 47.5%;
+  float: right;
 }
 
 .fade-alert {
@@ -8540,7 +8612,7 @@ textarea {
   font-size: 38px;
   line-height: 42px;
   color: rgba(0, 0, 0, 0.9);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .full-service-price .value {
   font-family: pragmatica-web;
@@ -8618,6 +8690,7 @@ textarea {
   font-size: 38px;
   line-height: 42px;
   font-family: pragmatica-web;
+  font-weight: 200;
   color: rgba(0, 0, 0, 0.9);
 }
 

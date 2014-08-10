@@ -154,6 +154,20 @@ require([
                     $('.fade-alert').fadeOut(300);
                 }
             });
+        },
+        getPopup: function (e, el) {
+            var h = $(document).height();
+            $('.popup-layout').height(h);
+            $('.popup-layout').fadeIn(300);
+
+            // Скрытие при клике вне области блока
+            $('.popup-layout').click(function (e) {
+                var itemEl = $('.popup-layout .popup');
+
+                if ( e.target != itemEl[0] && $('.popup-layout .popup').has(e.target).length === 0 ){
+                    $('.popup-layout').fadeOut(300);
+                }
+            });
         }
     };
 
