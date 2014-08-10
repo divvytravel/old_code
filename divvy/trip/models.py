@@ -223,14 +223,14 @@ class Trip(models.Model):
             return 0
 
     def slider_left(self):
-        male_proc = float(bundle.obj.get_male_ratio())
-        female_proc = float(bundle.obj.get_female_ratio())
+        male_proc = self.get_male_ratio()
+        female_proc = self.get_female_ratio()
         min_proc = min(male_proc, female_proc)
         return male_proc - min_proc
 
     def slider_right(self):
-        male_proc = float(bundle.obj.get_male_ratio())
-        female_proc = float(bundle.obj.get_female_ratio())
+        male_proc = self.get_male_ratio()
+        female_proc = self.get_female_ratio()
         min_proc = min(male_proc, female_proc)
         return male_proc + min_proc
 
