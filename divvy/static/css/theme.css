@@ -6485,6 +6485,7 @@ a:focus {
 .blog-anons .title {
   font-size: 33px;
   padding-bottom: 12px;
+  font-weight: 200;
 }
 .blog-anons .post-title {
   font-size: 15px;
@@ -7956,6 +7957,7 @@ textarea {
   line-height: 42px;
   text-align: left;
   font-family: pragmatica-web;
+  font-weight: 200;
   margin: 0;
   padding: 0 0 6px 0;
 }
@@ -8042,7 +8044,6 @@ textarea {
   font-size: 15px;
   color: rgba(0, 0, 0, 0.9);
   line-height: 21px;
-  font-family: pragmatica-web;
 }
 .detail-trip-page .content-layout .desc-block p {
   margin: 0 0 12px;
@@ -8300,10 +8301,10 @@ textarea {
   line-height: 18px;
   color: #000000;
   overflow: hidden;
-  -webkit-transition: max-height 0.35s ease-in-out;
-  -moz-transition: max-height 0.35s ease-in-out;
-  -o-transition: max-height 0.35s ease-in-out;
-  transition: max-height 0.35s ease-in-out;
+  -webkit-transition: max-height 0.5s ease;
+  -moz-transition: max-height 0.5s ease;
+  -o-transition: max-height 0.5s ease;
+  transition: max-height 0.5s ease;
   max-height: 100px;
   display: block;
 }
@@ -8312,10 +8313,10 @@ textarea {
 }
 .detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink .desc.collapse {
   max-height: 0px;
-  -webkit-transition: max-height 0.35s ease-in-out;
-  -moz-transition: max-height 0.35s ease-in-out;
-  -o-transition: max-height 0.35s ease-in-out;
-  transition: max-height 0.35s ease-in-out;
+  -webkit-transition: max-height 0.5s ease;
+  -moz-transition: max-height 0.5s ease;
+  -o-transition: max-height 0.5s ease;
+  transition: max-height 0.5s ease;
 }
 .detail-trip-page .side-layout .side-panel .request-block .request-send, .detail-trip-page .side-layout .side-panel .request-block .request-send-approve {
   padding-top: 4px;
@@ -8514,13 +8515,43 @@ textarea {
   display: table;
 }
 .detail-trip-page .side-layout .side-panel .detail-block {
-  padding: 10px 18px 10px 18px;
+  padding: 16px 18px 10px 18px;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .full-price {
-  font-size: 38px;
-  line-height: 54px;
+  font-size: 21px;
+  line-height: 27px;
+  color: #f2555d;
+  margin-bottom: 16px;
+}
+.detail-trip-page .side-layout .side-panel .detail-block .full-price .value {
+  text-decoration: line-through;
   font-family: pragmatica-web;
+  font-weight: 300;
+}
+.detail-trip-page .side-layout .side-panel .detail-block .full-price .sub-title {
+  color: #f2555d;
+  font-weight: bold;
+  font-size: 9px;
+  line-height: 9px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.detail-trip-page .side-layout .side-panel .detail-block .full-service-price {
+  font-size: 38px;
+  line-height: 42px;
   color: rgba(0, 0, 0, 0.9);
+  margin-bottom: 14px;
+}
+.detail-trip-page .side-layout .side-panel .detail-block .full-service-price .value {
+  font-family: pragmatica-web;
+  font-weight: 200;
+}
+.detail-trip-page .side-layout .side-panel .detail-block .full-service-price .sub-title {
+  font-weight: bold;
+  font-size: 9px;
+  line-height: 9px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .type {
   color: rgba(0, 0, 0, 0.65);
@@ -8532,7 +8563,7 @@ textarea {
   vertical-align: text-bottom;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .sub-title {
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
   font-weight: bold;
   margin-bottom: 4px;
@@ -8562,19 +8593,23 @@ textarea {
 }
 .detail-trip-page .side-layout .side-panel .detail-block .include {
   margin-bottom: 8px;
+  color: rgba(0, 0, 0, 0.9);
 }
 .detail-trip-page .side-layout .side-panel .detail-block .include .items {
-  padding: 0 0 0 0px;
-  margin: 8px 0 14px 0;
+  padding: 0 0 0 15px;
+  margin: 10px 0 10px 0;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .include .items .item {
+  padding-top: 6px;
   font-size: 13px;
-  line-height: 24px;
-  list-style-position: inside;
+  line-height: 18px;
   color: rgba(0, 0, 0, 0.9);
 }
 .detail-trip-page .side-layout .side-panel .detail-block .include .items .item span {
   color: rgba(0, 0, 0, 0.9);
+}
+.detail-trip-page .side-layout .side-panel .detail-block .include .items .item:first-child {
+  padding-top: 0px;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .price {
   margin-bottom: 18px;

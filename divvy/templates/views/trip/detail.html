@@ -170,9 +170,18 @@
 
               <div class="detail-block border-b">
                 {% if trip.is_comm %}
+
                   <div class="full-price">
-                    <span>{{ trip.price_for_one_person }}</span> &euro;
+                    <div class="sub-title">ОБЫЧНАЯ ЦЕНА</div>
+                    <div class="value">{{ trip.price_for_one_person }} &euro;</div>
                   </div>
+                  <div class="full-service-price">
+                    <div class="sub-title">ЕСЛИ НАБЕРЕТСЯ ГРУППА ИЗ 10 ЧЕЛОВЕК:</div>
+                    <div class="value">{{ trip.price_for_one_person }} &euro;</div>
+                  </div>
+                  <!-- <div class="full-service-price">
+                    <div class="value">{{ trip.price_for_one_person }} &euro;</div>
+                  </div> -->
 
 {#                  <div class="type">#}
 {#                    <span>{{ trip.get_price_type_display }}</span>#}

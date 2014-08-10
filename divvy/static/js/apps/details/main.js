@@ -129,7 +129,7 @@ require([
             var self = this;
             if (this.userId == null) {
                 // alert('Анука авторизуйся немедленно!');
-                self.popup();
+                self.authPopup();
             } else {
                 self.requestStep = 'send-approve';
             }
@@ -141,7 +141,7 @@ require([
             var className = 'collapse';
             $(el).next().toggleClass( className );
         },
-        popup: function (e, el) {
+        authPopup: function (e, el) {
             var h = $(document).height();
             $('.fade-alert').height(h);
             $('.fade-alert').fadeIn(300);
