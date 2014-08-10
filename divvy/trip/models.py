@@ -535,6 +535,8 @@ class TripRequest(models.Model):
 
     objects = TripRequestManager()
 
+    allow_post_fb = models.BooleanField(verbose_name=u'Разрешен постинг на стену Facebook')
+
     def __unicode__(self):
         return u"{0}, {1}".format(self.trip, self.user)
 
@@ -566,7 +568,10 @@ class TripRequest(models.Model):
             self.status = TripRequest.STATUS.approved
             self.save()
             self.user.notify_about_approve(self.trip)
-            self.user.post_approve_on_fb_wall(self.trip)
+
+            if self.allow_post_fb:
+                self.user.post_approve_on_fb_wall(self.trip)
+
             self.trip.update_search_fields()
 
         return approved
