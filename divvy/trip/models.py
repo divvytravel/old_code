@@ -222,6 +222,18 @@ class Trip(models.Model):
         else:
             return 0
 
+    def slider_left(self):
+        male_proc = float(bundle.obj.get_male_ratio())
+        female_proc = float(bundle.obj.get_female_ratio())
+        min_proc = min(male_proc, female_proc)
+        return male_proc - min_proc
+
+    def slider_right(self):
+        male_proc = float(bundle.obj.get_male_ratio())
+        female_proc = float(bundle.obj.get_female_ratio())
+        min_proc = min(male_proc, female_proc)
+        return male_proc + min_proc
+
     def update_search_fields(self):
         self.sex = float(self.get_male_ratio())
         people_ages = [p.get_age() for p in self.people.all()]
