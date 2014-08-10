@@ -71,7 +71,8 @@ require([
         this.triprequestStatus = data.get('triprequestStatus') || '';
         this.triprequestId = data.get('triprequestId') || null;
         this.userId = data.get('userId') || null;
-        this.resource_uri = "/api/v1/trip/"+this.id+"/";
+        this.resourceUri = "/api/v1/trip/"+this.id+"/";
+        this.allowPost = true;
         this.requestSend = true;
         this.requestCons = false;
         this.requestStep = '';
@@ -90,7 +91,7 @@ require([
             $.ajax({
                 type: "POST",
                 url: "/api/v1/triprequest/",
-                data: JSON.stringify({ "trip": self.resource_uri }),
+                data: JSON.stringify({ "trip": self.resourceUri,"allow_post_fb": self.allowPost }),
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 success: function(data) {

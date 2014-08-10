@@ -117,7 +117,7 @@
                   </div>
 
                   <div class="checkbox-block">
-                    <input type="checkbox" id="post_to_fb_checkox"/>
+                    <input type="checkbox" id="post_to_fb_checkox" rv-checked="scope.allowPost">
                     <label for="post_to_fb_checkox">Рассказать друзьям в Facebook</label>
                   </div>
 
@@ -261,11 +261,11 @@
                     <div class="ui-slider-range ui-widget-header ui-corner-all sex-slider" 
                       style="left: 0%;
                              width: {{ trip.get_peoples_ratio }}%;
-                             background: -webkit-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
-                             background: -moz-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
-                             background: -o-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
-                             background: -ms-linear-gradient(left, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
-                             background: linear-gradient(to right, rgb(36, 201, 242) {{ trip.get_male_ratio }}%, rgb(242, 97, 97) {{ trip.get_female_ratio }}%);
+                             background: -webkit-linear-gradient(left, rgb(36, 201, 242) {{ trip.slider_left }}%, rgb(242, 97, 97) {{ trip.slider_right }}%);
+                             background: -moz-linear-gradient(left, rgb(36, 201, 242) {{ trip.slider_left }}%, rgb(242, 97, 97) {{ trip.slider_right }}%);
+                             background: -o-linear-gradient(left, rgb(36, 201, 242) {{ trip.slider_left }}%, rgb(242, 97, 97) {{ trip.slider_right }}%);
+                             background: -ms-linear-gradient(left, rgb(36, 201, 242) {{ trip.slider_left }}%, rgb(242, 97, 97) {{ trip.slider_right }}%);
+                             background: linear-gradient(to right, rgb(36, 201, 242) {{ trip.slider_left }}%, rgb(242, 97, 97) {{ trip.slider_right }}%);
                              ">
 
                     </div>
