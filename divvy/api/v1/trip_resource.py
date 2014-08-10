@@ -236,15 +236,17 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
         queryset = TripRequest.objects.all()
         allowed_methods = ['get', 'post']
 
-    def obj_create(self, bundle, **kwargs):
-        return super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user)
-
     def prepend_urls(self):
         return [
             url(r"^(?P<resource_name>%s)/(?P<pk>.*?)/cancel%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('cancel'), name="api_triprequest_cancel"),
         ]
+
+    def obj_create(self, bundle, **kwargs):
+        bundle = super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user, **kwargs)
+        bundle.obj.trip.notify_owner_about_request(bundle.request.user)
+        return bundle
 
     def cancel(self, request, **kwargs):
          self.method_check(request, allowed=['post',])
