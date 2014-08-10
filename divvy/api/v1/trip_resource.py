@@ -175,6 +175,13 @@ class TripResource(ModelResource, BaseResourceMixin):
         bundle.data['female_ratio'] = bundle.obj.get_female_ratio()
         bundle.data['peoples_ratio'] = bundle.obj.get_peoples_ratio()
 
+        male_proc = float(bundle.obj.get_male_ratio())
+        female_proc = float(bundle.obj.get_female_ratio())
+        min_proc = min(male_proc, female_proc)
+
+        bundle.data['slider_left'] = male_proc - min_proc
+        bundle.data['slider_right'] = male_proc + min_proc
+
         bundle.data['sex_status'] = bundle.obj.get_sex_status()
         bundle.data['main_image']= bundle.obj.get_main_image_url()
 
