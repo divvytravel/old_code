@@ -55,6 +55,10 @@ def detail_commerce(request, pk=None):
 def blog(request, pk=None):
     return render(request, 'views/blog/list.html', dict())
 
+    
+def blogpost(request, pk=None):
+    return render(request, 'views/blog/post.html', dict())
+
 
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 #     template_name = "views/index/index.html"

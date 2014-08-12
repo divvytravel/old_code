@@ -32,6 +32,7 @@
         "jquery-simulate"           : "https://github.com/eduardolundgren/jquery-simulate.git#00fc7bb7b3a5d29cb06afcce661405729ffb36b6",
         "backbone-validation"       : "latest",
         "fotorama"                  : "~4.5.2",
-        "fotorama-repo"             : "https://github.com/artpolikarpov/fotorama.git#4.5.2"
+        "fotorama-repo"             : "https://github.com/artpolikarpov/fotorama.git#4.5.2",
+        "bourbon"                   : "latest"
     }
 }
