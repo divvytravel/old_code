@@ -16,9 +16,13 @@
   <div class="content">
     <div class="preview">
       <% if(recommended) { %>
-        <div class="recommended"></div>
+        <a href="<%= absolute_url %>">
+          <div class="recommended"></div>
+        </a>
       <% } %>
-      <img class="img-rounded" src="<%= main_image %>">
+      <a href="<%= absolute_url %>">
+        <img class="img-rounded" src="<%= main_image %>">
+      </a>
     </div>
 
     <div class="info">
