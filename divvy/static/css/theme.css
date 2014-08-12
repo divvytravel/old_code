@@ -8373,10 +8373,10 @@ textarea {
   line-height: 18px;
   color: #000000;
   overflow: hidden;
-  -webkit-transition: max-height 0.5s ease;
-  -moz-transition: max-height 0.5s ease;
-  -o-transition: max-height 0.5s ease;
-  transition: max-height 0.5s ease;
+  -webkit-transition: max-height 1.5s ease-in-out;
+  -moz-transition: max-height 1.5s ease-in-out;
+  -o-transition: max-height 1.5s ease-in-out;
+  transition: max-height 1.5s ease-in-out;
   max-height: 100px;
   display: block;
 }
@@ -8385,10 +8385,10 @@ textarea {
 }
 .detail-trip-page .side-layout .side-panel .request-block .request-cons .if-rethink .desc.collapse {
   max-height: 0px;
-  -webkit-transition: max-height 0.5s ease;
-  -moz-transition: max-height 0.5s ease;
-  -o-transition: max-height 0.5s ease;
-  transition: max-height 0.5s ease;
+  -webkit-transition: max-height 1.5s ease-in-out;
+  -moz-transition: max-height 1.5s ease-in-out;
+  -o-transition: max-height 1.5s ease-in-out;
+  transition: max-height 1.5s ease-in-out;
 }
 .detail-trip-page .side-layout .side-panel .request-block .request-send, .detail-trip-page .side-layout .side-panel .request-block .request-send-approve {
   padding-top: 4px;
