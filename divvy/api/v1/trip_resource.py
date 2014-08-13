@@ -240,7 +240,20 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
         ]
 
     def obj_create(self, bundle, **kwargs):
-        bundle = super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user, **kwargs)
+        if bundle.data['trip']:
+            trip = TripResource()
+            trip = trip.get_via_uri(bundle.data['trip'])
+            triprequest = TripRequest.objects.get(trip=trip, user=bundle.request.user)
+
+            if triprequest.status == 'cancelled':
+                triprequest.allow_post_fb = bundle.data['allow_post_fb']
+                triprequest.status = 'pending'
+                triprequest.save()
+
+            bundle.obj = triprequest
+        else:
+            bundle = super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user, **kwargs)
+
         bundle.obj.trip.notify_owner_about_request(bundle.request.user)
         return bundle
 
