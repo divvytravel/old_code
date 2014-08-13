@@ -101,6 +101,8 @@ class Trip(models.Model):
     price = models.PositiveIntegerField(u"Бюджет",
                                         help_text=u"примерный бюджет",
                                         blank=True, null=True)
+    general_price = models.PositiveIntegerField(u"Обычная цена",
+                                        blank=True, null=True)
     city = models.ForeignKey('geo.City', verbose_name=u'Город',
                              help_text=u"если несколько, то первый",
                              related_name='trips')
