@@ -240,9 +240,9 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
         ]
 
     def obj_create(self, bundle, **kwargs):
-        if bundle.data['trip']:
-            trip = TripResource()
-            trip = trip.get_via_uri(bundle.data['trip'])
+        trip = TripResource()
+        trip = trip.get_via_uri(bundle.data['trip'])
+        try:
             triprequest = TripRequest.objects.get(trip=trip, user=bundle.request.user)
 
             if triprequest.status == 'cancelled':
@@ -251,7 +251,7 @@ class TripRequestResource(ModelResource, BaseResourceMixin):
                 triprequest.save()
 
             bundle.obj = triprequest
-        else:
+        except TripRequest.DoesNotExist:
             bundle = super(TripRequestResource, self).obj_create(bundle, user=bundle.request.user, **kwargs)
 
         bundle.obj.trip.notify_owner_about_request(bundle.request.user)
