@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import uuid
+import numpy
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -237,10 +238,11 @@ class Trip(models.Model):
         return str(male_proc + min_proc).replace(',','.')
 
     def update_search_fields(self):
-        self.sex = float(self.get_male_ratio())
+        self.sex = float(self.get_female_ratio())
+
         people_ages = [p.get_age() for p in self.people.all()]
         if people_ages:
-            self.age = sorted(people_ages)[len(people_ages)//2]
+            self.age = numpy.median(people_ages)
         else:
             self.age = 0
         self.save()
