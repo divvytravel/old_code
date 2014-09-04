@@ -11,11 +11,6 @@ class Migration(SchemaMigration):
         # Deleting field 'Trip.image'
         db.delete_column(u'trip_trip', 'image_id')
 
-        # Adding field 'Trip.general_price'
-        db.add_column(u'trip_trip', 'general_price',
-                      self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True),
-                      keep_default=False)
-
         # Removing M2M table for field gallery on 'Trip'
         db.delete_table(db.shorten_name(u'trip_trip_gallery'))
 
@@ -25,9 +20,6 @@ class Migration(SchemaMigration):
         db.add_column(u'trip_trip', 'image',
                       self.gf('django.db.models.fields.related.ForeignKey')(related_name='trip_images', null=True, to=orm['trip.Image'], blank=True),
                       keep_default=False)
-
-        # Deleting field 'Trip.general_price'
-        db.delete_column(u'trip_trip', 'general_price')
 
         # Adding M2M table for field gallery on 'Trip'
         m2m_table_name = db.shorten_name(u'trip_trip_gallery')
