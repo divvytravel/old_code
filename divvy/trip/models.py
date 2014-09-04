@@ -120,7 +120,7 @@ class Trip(models.Model):
         u"Опишите, что вы хотите разделить (или зачем вам компания)",
         blank=True)
     descr_additional = models.TextField(
-        u"Укажите дополнительную информацию (авиаперелет и т.п.)", blank=True)
+        u"Укажите дополнительные расходы (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(
         u"Требования к компании (кого вы хотели бы видеть в качестве соседей)",
         blank=True)
