@@ -141,10 +141,10 @@ class Trip(models.Model):
         Tags, related_name='trips', blank=True, verbose_name=u'Теги')
 
     # image = models.ImageField(upload_to=get_file_path, blank=True, null=True, max_length=255)
-    image = models.ForeignKey(
-        'trip.Image', related_name='trip_images', blank=True, null=True)
-    gallery = models.ManyToManyField(
-        'trip.Image', related_name='trip_galleries', blank=True, null=True)
+    # image = models.ForeignKey(
+    #     'trip.Image', related_name='trip_images', blank=True, null=True)
+    # gallery = models.ManyToManyField(
+    #     'trip.Image', related_name='trip_galleries', blank=True, null=True)
     # images = generic.GenericRelation('trip.Images', object_id_field='object_id', content_type_field='content_type')
 
     sex = models.FloatField(blank=True, null=True, default=None)
