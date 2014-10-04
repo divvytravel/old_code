@@ -186,7 +186,7 @@
 
                       <ul class="items">
                         {% for include_item in trip.get_include_list %}
-                          <li class="item">{{ include_item }}</li>
+                          <li class="item">{{ include_item|safe }}</li>
                         {% endfor %}
                       </ul>
                     </div>
