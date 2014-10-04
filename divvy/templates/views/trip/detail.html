@@ -220,7 +220,12 @@
                 {% if trip.descr_additional %}
                   <div class="addition">
                     <div class="sub-title">ДОПОЛНИТЕЛЬНЫЕ РАСХОДЫ</div>
-                    <div class="info">{{ trip.descr_additional }}</div>
+
+                    <ul class="items">
+                      {% for additional_item in trip.get_additional_list %}
+                        <li class="item">{{ additional_item|safe }}</li>
+                      {% endfor %}
+                    </ul>
                   </div>
                 {% endif %}
               </div>

@@ -8660,11 +8660,14 @@ textarea {
   margin-bottom: 8px;
   color: rgba(0, 0, 0, 0.9);
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items {
+.detail-trip-page .side-layout .side-panel .detail-block .include .items,
+.detail-trip-page .side-layout .side-panel .detail-block .addition .items
+{
   padding: 0 0 0 15px;
   margin: 10px 0 10px 0;
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items .item {
+.detail-trip-page .side-layout .side-panel .detail-block .include .items .item,
+.detail-trip-page .side-layout .side-panel .detail-block .addition .items .item{
   padding-top: 6px;
   font-size: 13px;
   line-height: 18px;

@@ -167,6 +167,13 @@ class Trip(models.Model):
             include_list = None
         return include_list
 
+    def get_additional_list(self):
+        if self.descr_additional.strip():
+            additional_list = self.descr_additional.split(u'\n')
+        else:
+            additional_list = None
+        return additional_list
+
     def get_main_image_url(self):
         try:
             img_file = self.images.all()[0].image
