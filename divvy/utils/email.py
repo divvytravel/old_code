@@ -31,7 +31,7 @@ def send_common_email(user, trip, subject, template_base_name, email_to, context
     context = base_context
     template_html = "emails/{0}.html".format(template_base_name)
     template_txt = "emails/{0}.txt".format(template_base_name)
-    text_content = render_to_string(template_html, context)
-    html_content = render_to_string(template_txt, context)
+    text_content = render_to_string(template_txt, context)
+    html_content = render_to_string(template_html, context)
     send_email_alternatives(
         subject, text_content, html_content, from_email, email_to)
