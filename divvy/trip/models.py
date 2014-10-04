@@ -110,15 +110,11 @@ class Trip(models.Model):
 
     currency = models.CharField(u"Валюта", max_length=10, choices=CURRENCY,
                                 default=CURRENCY.euro)
-    includes = models.CharField(u"Что входит", max_length=200)
     people_count = models.PositiveIntegerField(
         u"Минимальное количество человек")
     people_max_count = models.PositiveIntegerField(
         u"Максимальное количество человек")
     descr_main = MarkupField(u"Опишите суть поездки")
-    descr_share = models.TextField(
-        u"Опишите, что вы хотите разделить (или зачем вам компания)",
-        blank=True)
     descr_additional = models.TextField(
         u"Укажите дополнительные расходы (авиаперелет и т.п.)", blank=True)
     descr_company = models.TextField(
