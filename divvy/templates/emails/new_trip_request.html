@@ -5,10 +5,15 @@
 <div>Здравствуйте, {{ trip.owner.get_full_name }}!</div>
 <br/>
 <div>
-    На вашу поездку <a href="{{domain}}{{trip.get_absolute_url}}">"{{ trip }}"</a> была подана заявка на участие от пользователя <a href="{{domain}}{{user_requested.get_absolute_url}}">{{user_requested.get_full_name}}</a>.
+  На вашу поездку <a href="{{domain}}{{trip.get_absolute_url}}">"{{ trip }}"</a> была подана
+  заявка на участие от пользователя
+  <a href="{{domain}}{{user_requested.get_absolute_url}}">{{user_requested.get_full_name}}</a>.
 </div>
 {% if not trip.is_open %}
-    <div>Вы можете одобрить заявку по <a href="{{domain}}{% url 'users:cabinet' %}">ссылке</a>.</div>
+    <div>
+      Вы можете одобрить заявку по
+      <a href="{{domain}}{% url "trip_request" trip_pk=trip.pk user_pk=user_requested.pk %}">ссылке</a>.
+    </div>
 {% endif %}
 
 {% endblock content %}

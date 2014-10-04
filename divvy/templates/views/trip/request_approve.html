@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="detail-trip-page">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="content-layout">
+            <div class="content-layout-block">
+
+              {{ triprequest.user }}<br>
+              {{ triprequest.trip }}<br>
+              <br>
+              <a href="{% url "approve_request" trip_pk=triprequest.trip.pk user_pk=triprequest.user.pk %}">Approve</a>
+              <br>
+              <a href="{% url "deny_request" trip_pk=triprequest.trip.pk user_pk=triprequest.user.pk %}">Deny</a>
+
+            </div>
+          </div>
+
+          <div class="side-layout">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

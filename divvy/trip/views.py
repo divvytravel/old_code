@@ -60,6 +60,32 @@ def blogpost(request, pk=None):
     return render(request, 'views/blog/post.html', dict())
 
 
+def trip_request(request, trip_pk=None, user_pk=None):
+    trip = get_object_or_404(Trip, pk=trip_pk)
+    user = get_object_or_404(User, pk=user_pk)
+    triprequest = get_object_or_404(TripRequest, trip=trip, user=user)
+    return render(request, 'views/trip/request_approve.html', dict(triprequest=triprequest))
+
+
+def approve_request(request, trip_pk=None, user_pk=None):
+    trip = get_object_or_404(Trip, pk=trip_pk)
+    user = get_object_or_404(User, pk=user_pk)
+    triprequest = get_object_or_404(TripRequest, trip=trip, user=user)
+    approved = triprequest.approve(request.user)
+    if approved:
+        return HttpResponseRedirect(reverse('trip_detail', args=[str(triprequest.trip.pk)]))
+    else:
+        return render(request, 'views/trip/request_approve.html', dict(triprequest=triprequest))
+
+
+def deny_request(request, trip_pk=None, user_pk=None):
+    trip = get_object_or_404(Trip, pk=trip_pk)
+    user = get_object_or_404(User, pk=user_pk)
+    triprequest = get_object_or_404(TripRequest, trip=trip, user=user)
+    denied = triprequest.deny(request.user)
+    return HttpResponseRedirect(reverse('trip_detail', args=[str(triprequest.trip.pk)]))
+
+
 # class TripFilterFormView(JSONResponseMixin, AjaxResponseMixin, FormView):
 #     template_name = "views/index/index.html"
 #     form_class = TripFilterForm
