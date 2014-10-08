@@ -221,7 +221,7 @@ FACEBOOK_APP_ID = '468815346560812'
 FACEBOOK_API_SECRET = 'c97a93f204897bfa896c6bd0df41ad2e'
 FACEBOOK_SKIP_POST_ON_WALL = os.environ.get('FACEBOOK_SKIP_POST_ON_WALL', False)
 
-FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'user_birthday', 'publish_stream']
+FACEBOOK_EXTENDED_PERMISSIONS = ['email', 'user_birthday', 'publish_stream', 'user_work_history', ]
 FACEBOOK_PROFILE_EXTRA_PARAMS = {'locale': 'ru_RU'}
 
 # TODO
