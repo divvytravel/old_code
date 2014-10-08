@@ -38,16 +38,29 @@ def store_additional_fields(*args, **kwargs):
     response = kwargs['response']
     if isinstance(backend, FacebookBackend):
         try:
-            position = u'%s в %s' % (response['work'][0]['position']['name'],
-                                    response['work'][0]['employer']['name'])
+            position = response['work'][0]['position']['name']
         except (IndexError, KeyError):
             position = ''
+
+        try:
+            employer = response['work'][0]['employer']['name']
+        except (IndexError, KeyError):
+            employer = ''
+
+        if position and employer:
+            career = u'%s в %s' % (position, employer)
+        elif position:
+            career = position
+        elif employer:
+            career = u'работает в %s' % (employer)
+        else:
+            career = ' '
 
         details.update({
             'avatar_url': get_facebook_avatar_url(kwargs['uid']),
             'social_auth_response': response,
             'provider': User.PROVIDERS.facebook,
-            'career': position,
+            'career': career,
         })
         birthday = get_facebook_birthday(response)
         if birthday:
