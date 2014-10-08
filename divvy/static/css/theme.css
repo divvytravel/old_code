@@ -6242,43 +6242,37 @@ input[type="radio"]:checked + label:before {
 
 /* +++ */
 input[type="checkbox"] + label:before {
-      content: "";
+  content: "";
 }
 
- 
 input[type="checkbox"][checked] + label:before {
-      background-position: 0px 0px;
-      content: " ";
+  background-position: 0px 0px;
+  content: " ";
 }
 
- 
 input[type="checkbox"][checked] + label:hover:before {
-      background-position: 0px 0px;
-      content: " ";
+  background-position: 0px 0px;
+  content: " ";
 }
 
- 
 input[type="checkbox"][checked] + label:hover:before {
-      background-position: 0px 0px;
-      content: " ";
+  background-position: 0px 0px;
+  content: " ";
 }
 
- 
 input[type="radio"] + label:before {
-      background-position: 0px -240px;
-      content: "";
+  background-position: 0px -240px;
+  content: "";
 }
 
- 
 input[type="radio"][checked] + label:before {
-      background-position: 0px -160px;
-      content: " ";
+  background-position: 0px -160px;
+  content: " ";
 }
 
- 
 input[type="radio"][checked] + label:before {
-      background-position: 0px -160px;
-      content: " ";
+  background-position: 0px -160px;
+  content: " ";
 }
 
 body, html {
@@ -8036,7 +8030,7 @@ textarea {
   line-height: 27px;
 }
 .detail-trip-page .content-layout .tags-block {
-  padding: 0px 36px 16px 36px;
+  padding: 0px 36px 16px 32px;
 }
 .detail-trip-page .content-layout .tags-block .tags {
   display: block;
@@ -8634,7 +8628,6 @@ textarea {
   letter-spacing: 1px;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .info {
-  word-wrap: break-word;
   color: rgba(0, 0, 0, 0.65);
   font-size: 13px;
   line-height: 18px;
@@ -8656,27 +8649,25 @@ textarea {
 .detail-trip-page .side-layout .side-panel .detail-block .chip-in .items .item span {
   color: rgba(0, 0, 0, 0.9);
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include {
+.detail-trip-page .side-layout .side-panel .detail-block .include, .detail-trip-page .side-layout .side-panel .detail-block .addition {
   margin-bottom: 8px;
   color: rgba(0, 0, 0, 0.9);
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items,
-.detail-trip-page .side-layout .side-panel .detail-block .addition .items
-{
+.detail-trip-page .side-layout .side-panel .detail-block .include .items, .detail-trip-page .side-layout .side-panel .detail-block .addition .items {
   padding: 0 0 0 15px;
   margin: 10px 0 10px 0;
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items .item,
-.detail-trip-page .side-layout .side-panel .detail-block .addition .items .item{
+.detail-trip-page .side-layout .side-panel .detail-block .include .items .item, .detail-trip-page .side-layout .side-panel .detail-block .addition .items .item {
   padding-top: 6px;
   font-size: 13px;
   line-height: 18px;
   color: rgba(0, 0, 0, 0.9);
+  word-wrap: break-word;
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items .item span {
+.detail-trip-page .side-layout .side-panel .detail-block .include .items .item span, .detail-trip-page .side-layout .side-panel .detail-block .addition .items .item span {
   color: rgba(0, 0, 0, 0.9);
 }
-.detail-trip-page .side-layout .side-panel .detail-block .include .items .item:first-child {
+.detail-trip-page .side-layout .side-panel .detail-block .include .items .item:first-child, .detail-trip-page .side-layout .side-panel .detail-block .addition .items .item:first-child {
   padding-top: 0px;
 }
 .detail-trip-page .side-layout .side-panel .detail-block .price {
@@ -10795,7 +10786,7 @@ fieldset[disabled] .datepicker table tr td span.active.disabled.active, fieldset
   background-image: -o-linear-gradient(top, #fefefe, #f2f2f2);
   background-image: linear-gradient(to bottom, #fefefe, #f2f2f2);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefefe', endColorstr='#f2f2f2', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fefefe', endColorstr='#f2f2f2', GradientType=0);
 }
 
 .selectize-control.single .selectize-input,

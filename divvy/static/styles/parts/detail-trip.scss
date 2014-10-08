@@ -194,7 +194,7 @@
       }
     }
     .tags-block {
-      padding: 0px 36px 16px 36px;
+      padding: 0px 36px 16px 32px;
       .tags {
         display: block;
         .tag {
@@ -832,7 +832,7 @@
             }
           }
         }
-        .include {
+        .include, .addition {
           margin-bottom: 8px;
           color: rgba(0, 0, 0, 0.9);
           .items {
@@ -844,6 +844,7 @@
               line-height: 18px;
               // list-style-position: inside;
               color: rgba(0, 0, 0, 0.9);
+              word-wrap: break-word;
               span {
                 color: rgba(0, 0, 0, 0.9);
               }

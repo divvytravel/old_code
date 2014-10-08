@@ -70,35 +70,35 @@ input[type="radio"]:checked + label:before {
 /* +++ */
 
 input[type="checkbox"] + label:before {
-    content: "";
+    content: "";
 }
- 
+
 input[type="checkbox"][checked] + label:before {
-    background-position: 0px 0px;
-    content: " ";
+    background-position: 0px 0px;
+    content: " ";
 }
- 
+
 input[type="checkbox"][checked] + label:hover:before {
-    background-position: 0px 0px;
-    content: " ";
+    background-position: 0px 0px;
+    content: " ";
 }
- 
+
 input[type="checkbox"][checked] + label:hover:before {
-    background-position: 0px 0px;
-    content: " ";
+    background-position: 0px 0px;
+    content: " ";
 }
- 
+
 input[type="radio"] + label:before {
-    background-position: 0px -240px;
-    content: "";
+    background-position: 0px -240px;
+    content: "";
 }
- 
+
 input[type="radio"][checked] + label:before {
-    background-position: 0px -160px;
-    content: " ";
+    background-position: 0px -160px;
+    content: " ";
 }
- 
+
 input[type="radio"][checked] + label:before {
-    background-position: 0px -160px;
-    content: " ";
+    background-position: 0px -160px;
+    content: " ";
 }
