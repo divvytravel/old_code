@@ -303,7 +303,7 @@ class Trip(models.Model):
         return cnt_members
 
     def count_free_slots(self):
-        return self.people_max_count - self.count_members()
+        return self.people_count - self.count_members()
 
     def price_for_one_person(self):
         if self.is_noncom:

@@ -141,7 +141,7 @@
                   <div class="title">Заявка подтверждена</div>
 
                   <div class="info">
-                    Когда наберется еще 4 человека, вам придет письмо со ссылкой на оплату. Путешествие будет проведено,
+                    Когда наберется еще {{ trip.count_free_slots }} человека, вам придет письмо со ссылкой на оплату. Путешествие будет проведено,
                     если группа наберется до {{ trip.end_people_date_format }}. Позовите друзей и езжайте вместе!
                   </div>
                 </div>
@@ -281,7 +281,7 @@
 
                 <div class="ratio">
                   <div>
-                    <span>Набрано {{ trip.count_members }} из {{ trip.people_max_count }} человек</span>
+                    <span>Набрано {{ trip.count_members }} из {{ trip.people_count }} человек</span>
                   </div>
                   <div>
                     <span>{{ trip.get_sex_status }}</span>
@@ -323,7 +323,7 @@
             </div>
             <div class="alerts">
               <div class="alert alert-bottom" rv-status-approved="scope.triprequestStatus" style="display:none;">
-                <div class="title">Нужно еще 4 человека</div>
+                <div class="title">Нужно еще {{ trip.count_free_slots }} человека</div>
                 <div class="desc">Расскажите друзьям, чтобы путешествие состоялось</div>
                 <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-type="button"></div>
                 <!-- <span class="fb-button">
