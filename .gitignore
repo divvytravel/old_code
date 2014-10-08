@@ -24,3 +24,4 @@ log/
 *.sublime-project
 *.sublime-workspace
 .sass-cache/
+divvy/static/node_modules/
