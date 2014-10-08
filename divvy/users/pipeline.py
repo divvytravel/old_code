@@ -38,7 +38,7 @@ def store_additional_fields(*args, **kwargs):
     response = kwargs['response']
     if isinstance(backend, FacebookBackend):
         try:
-            position = '%s (%s)' % (response['work'][0]['position']['name'],
+            position = u'%s в %s' % (response['work'][0]['position']['name'],
                                     response['work'][0]['employer']['name'])
         except (IndexError, KeyError):
             position = ''
