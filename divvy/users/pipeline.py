@@ -37,10 +37,17 @@ def store_additional_fields(*args, **kwargs):
     details = kwargs.get('details', {})
     response = kwargs['response']
     if isinstance(backend, FacebookBackend):
+        try:
+            position = '%s (%s)' % (response['work'][0]['position']['name'],
+                                    response['work'][0]['employer']['name'])
+        except (IndexError, KeyError):
+            position = ''
+
         details.update({
             'avatar_url': get_facebook_avatar_url(kwargs['uid']),
             'social_auth_response': response,
             'provider': User.PROVIDERS.facebook,
+            'career': position,
         })
         birthday = get_facebook_birthday(response)
         if birthday:
